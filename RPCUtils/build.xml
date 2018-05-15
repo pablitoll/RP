@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="CSCUtils">
+	<property environment="env" />
+	<property name="CSCCliente.location" value="../CSCCliente" />
+	<property name="CSCDatabaseManagerService.location" value="../CSCDatabaseManagerService" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
+
+	<property name="project.lib" value="..\External\CSC" />
+	<property name="project.bin" value="\bin" />
+	<property name="builder" value="${user.name}" />
+	<property name="version" value="1.0" />
+	<buildnumber file="mybuild.number" />
+
+	<tstamp>
+		<format property="TODAY_AR" pattern="dd/MM/yyyy hh:mm aa" locale="es,AR" />
+	</tstamp>
+
+	<path id="CSCUtils.classpath">
+		<pathelement location="bin" />	
+		 <fileset dir="..\External\metricas" includes="**/*.jar" />		 
+		<fileset dir="..\External\jars" includes="**/guava-20.0.jar" />
+	</path>
+	<target name="init">
+		<mkdir dir="bin" />
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.launch" />
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="bin" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="build-subprojects,build-project" name="build" />
+	<target name="build-subprojects" />
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+			<src path="src" />
+			<classpath refid="CSCUtils.classpath" />
+		</javac>
+	</target>
+
+	<target depends="build" name="build-jar">
+		<jar destfile="${project.lib}/${ant.project.name}-${version}.${build.number}.jar">
+			<manifest>
+				<attribute name="Built-By" value="${builder}" />
+				<attribute name="Built-On" value="${TODAY_AR}" />
+			</manifest>
+			<fileset dir="bin" />
+		</jar>
+	</target>
+	<target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
+		<ant antfile="build.xml" dir="${CSCCliente.location}" inheritAll="false" target="clean" />
+		<ant antfile="build.xml" dir="${CSCCliente.location}" inheritAll="false" target="build" />
+		<ant antfile="build.xml" dir="${CSCDatabaseManagerService.location}" inheritAll="false" target="clean" />
+		<ant antfile="build.xml" dir="${CSCDatabaseManagerService.location}" inheritAll="false" target="build" />
+	</target>
+
+	<target name="CreateJar" description="Create Jar file">
+		<jar jarfile="${ant.project.name}.jar" basedir="." includes="*.class" />
+	</target>
+	
+	
+</project>
