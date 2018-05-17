@@ -38,7 +38,6 @@ public class Main extends MainFramework {
 						}
 					}
 
-					
 					// inicializo coneccion a la BD local
 					splashMsg("Cargando Base de Datos Local");
 

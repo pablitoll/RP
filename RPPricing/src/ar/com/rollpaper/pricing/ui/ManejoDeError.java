@@ -45,23 +45,5 @@ public class ManejoDeError {
 
 	}
 
-	public static void showErrorIfExist(ReturnOperacionSAFE msgRetorno, String titulo, String detalle, Exception errorInterno) {
-		if (msgRetorno.getCodigoRetorno() != 0) {
-			if (msgRetorno.getCodigoRetorno().equals(CodRespuestaSAFE.DEFAULT.getCodError())) { // si es un errro mio interno, muestro el trace
-				if (errorInterno != null) {
-					ManejoDeError.showError(errorInterno, titulo, detalle);
-				} else {
-					ManejoDeError.showError(new Exception(msgRetorno.getDescripcionError()), titulo, detalle);
-				}
-			} else {
-				if (msgRetorno.getCodigoRetorno().equals(CodRespuestaSAFE.TIMEOUT.getCodError())) {
-					Dialog.showMessageDialog(null, "TIME OUT. La transaccion no fue confirmada.", titulo, JOptionPane.ERROR_MESSAGE);
-				} else {
-					Dialog.showMessageDialog(null, detalle, titulo, JOptionPane.ERROR_MESSAGE);
-				}
-			}
-
-		}
-	}
 
 }

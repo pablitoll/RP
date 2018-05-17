@@ -14,6 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonBarraBotonesRP;
@@ -27,11 +28,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 	private static final long serialVersionUID = 1L;
 
 	public String textImprimirTicket = "Imprimir Ticket";
-
-	public JLabel lblTellerA = new JLabel("lblEstCaja");
-	public JLabel lblTellerB = new JLabel("lblTellerB", SwingConstants.CENTER);
 	public JLabel lblUsr = new JLabel("lblUsr");
-	public JLabel lblLblestadoonline = new JLabel("lblEstadoOnline");
 	public JLabel lblAmbiente = new JLabel("lblAmbiente");
 
 	public JPanel pnlOnline = new JPanel();
@@ -47,7 +44,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private final JMenuItem mntmSalir = new JMenuItem("Salir de la Aplicacion");
 
-	private final JMenuItem mntmVerConsulta = new JMenuItem("Consulta XX");
+	private final JMenuItem mntmConsulta1 = new JMenuItem("Consulta XX");
 
 	private final JMenuItem mnuVersion = new JMenuItem("Version");
 
@@ -56,7 +53,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		super(null);
 
 		setTitle("Roll Paper");
-		setIconImage(CommonUtils.loadImage(ConstantesRP.IMG_ICONO_APP, 80, 80));
+		setIconImage(CommonUtils.loadImage(Main.class.getResource(ConstantesRP.IMG_ICONO_APP), 80, 80));
+		toolBarSuperior.setVisible(false);
 
 		pnlBotton.add(pnlCentral, BorderLayout.CENTER);
 		pnlCentral.setLayout(new BorderLayout(0, 0));
@@ -66,25 +64,18 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		pnlTeller.setBorder(null);
 		pnlTeller.setMinimumSize(new Dimension(10, 10));
 		pnlTeller.setLayout(new BorderLayout(0, 0));
-		lblTellerA.setHorizontalAlignment(SwingConstants.CENTER);
-		pnlTeller.add(lblTellerA, BorderLayout.WEST);
-		pnlTeller.add(lblTellerB, BorderLayout.CENTER);
 		pnlCentral.add(lblUsr, BorderLayout.SOUTH);
 		lblUsr.setBorder(null);
 
 		pnlOnline.setLayout(new BorderLayout(0, 0));
-		pnlOnline.add(lblLblestadoonline);
-		lblLblestadoonline.setBorder(new EmptyBorder(0, 0, 0, 20));
-
-		lblLblestadoonline.setFont(Common.getStandarFont(22));
 
 		mnMantenimiento.setFont(Common.getStandarFontMenu());
 
 		mnConsulta.setFont(Common.getStandarFontMenu());
 		menuBar.add(mnConsulta);
 		mnConsulta.setFont(Common.getStandarFontMenu());
-		mnConsulta.add(mntmVerConsulta);
-		mntmVerConsulta.setFont(Common.getStandarFontMenu());
+		mnConsulta.add(mntmConsulta1);
+		mntmConsulta1.setFont(Common.getStandarFontMenu());
 		mnConsulta.addSeparator();
 
 		menuBar.add(mnMantenimiento);
@@ -98,7 +89,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mnSalir.setFont(Common.getStandarFontMenu());
 		menuBar.add(mnSalir);
 		mntmSalir.setFont(Common.getStandarFontMenu());
-		mntmSalir.setIcon(Common.loadIconMenu(ConstantesRP.IMG_EXIT));
+		mntmSalir.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_EXIT)));
 		mnSalir.add(mntmSalir);
 
 		// Barra lateral
@@ -107,7 +98,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 		toolBarBotones.add(Box.createVerticalGlue()); // De aca en adelante los mando para abajo
 
-		agregarBotonStd2Barra(btnCalculadora, ConstantesRP.IMG_CAL);
+		agregarBotonStd2Barra(btnCalculadora, Main.class.getResource(ConstantesRP.IMG_CAL));
 		btnCalculadora.setMnemonicControl(true);
 		btnCalculadora.setMnemonic(KeyEvent.VK_A);
 	}
@@ -116,8 +107,9 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 	public void asignarBotones() {
 		asignarBotonAccion(mntmSalir, ConstantesRP.Acciones.SALIR.toString());
 		asignarBotonAccion(btnCalculadora, ConstantesRP.Acciones.CALCULADORA.toString());
-		//asignarBotonAccion(mntmVerConsulta, ConstantesRP.Acciones.VER_LOG_OPERACIONES_DIARIA_B.toString());
-		//asignarBotonAccion(mnuVersion, ConstantesRP.Acciones.VERSION.toString());
+		asignarBotonAccion(mntmConsulta1, ConstantesRP.Acciones.CONSULTA1.toString());
+		// ConstantesRP.Acciones.VER_LOG_OPERACIONES_DIARIA_B.toString());
+		// asignarBotonAccion(mnuVersion, ConstantesRP.Acciones.VERSION.toString());
 	}
 
 }

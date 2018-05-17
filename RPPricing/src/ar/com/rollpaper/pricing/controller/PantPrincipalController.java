@@ -5,9 +5,11 @@ import javax.swing.SwingUtilities;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.LogBusiness;
+import ar.com.rollpaper.pricing.model.Consulta1Model;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
 import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
+import ar.com.rollpaper.pricing.view.Consulta1View;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.VentanaCalculadora;
@@ -35,27 +37,10 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 
 		// Lanzo panalla principal
 		super.iniciar();
+		
+		getView().lblUsr.setText(System.getProperty("user.name"));
 	}
 
-//	private void agregarBotones() {
-//		int valorF1 = KeyEvent.VK_F1;
-//		int i = 0;
-//		for (codigosAccesoRapido func : codigosAccesoRapido.values()) {
-//			JButtonCSC btn = new JButtonCSC(func.getDescripcion(), "Acceso Directo a cod. " + func.getCodigo());
-//			btn.setFont(Common.getStandarFont(10));
-//			btn.setFocusable(false);
-//			btn.setMnemonic(valorF1 + i);
-//			btn.setToolTipText(func.getDescripcionCompleta());
-//			btn.setVerticalTextPosition(SwingConstants.BOTTOM);
-//			btn.setHorizontalTextPosition(SwingConstants.CENTER);
-//			btn.setActionCommand(ConstantesC.Acciones.BUSCAR_COD_PARTICULAR.toString() + func.getCodigo() + ";"
-//					+ func.getCodigoOffline());
-//			btn.setIcon(Common.loadIcon(func.getIcono()));
-//			btn.addActionListener(this);
-//			getView().toolBarSuperior.add(btn);
-//			i++;
-//		}
-//	}
 
 	@Override
 	public void ejecuarAccion(String accion) {
@@ -70,6 +55,26 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		if (accion.equals(ConstantesRP.Acciones.SALIR.toString())) {
 			salir();
 		}
+		
+		if (accion.equals(ConstantesRP.Acciones.CONSULTA1.toString())) {
+			if (!cmGestordeVentanas.isAlreadyCreated("consulta1")) {
+				// Creo los controladores de VerLogOperacionesDiaria
+				try {
+					Consulta1View vista = new Consulta1View();
+					Consulta1Model modelo = new Consulta1Model();
+					Consulta1Controller consulta1 = new Consulta1Controller(this, vista, modelo);
+					cmGestordeVentanas.add(consulta1, "consulta1");
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al crear pantalla de consulta 1");
+				}
+			}
+			try {
+				cmGestordeVentanas.findOrCreated("consulta1");
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "No se puede acceder a la pantalla de consulta 1");
+			}
+		}
+
 
 	}
 
