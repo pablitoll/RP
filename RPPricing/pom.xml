@@ -28,6 +28,22 @@
 			<artifactId>mssql-jdbc</artifactId>
 			<version>6.1.0.jre8</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/de.sciss/weblaf -->
+		<!-- https://mvnrepository.com/artifact/de.sciss/weblaf -->
+		<dependency>
+			<groupId>de.sciss</groupId>
+			<artifactId>weblaf</artifactId>
+			<version>1.28</version>
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/de.sciss/weblaf-ui -->
+		<dependency>
+			<groupId>de.sciss</groupId>
+			<artifactId>weblaf-ui</artifactId>
+			<version>1.28</version>
+		</dependency>
+
 
 	</dependencies>
 </project>

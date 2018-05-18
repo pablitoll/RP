@@ -32,17 +32,15 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.jdatepicker.DateComponentFormatter;
 import org.jdatepicker.DateModel;
 import org.jdatepicker.JDatePanel;
-import org.jdatepicker.JDatePicker;
-import org.jdatepicker.impl.DateComponentFormatter;
-import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.UtilDateModel;
+import org.jdatepicker.UtilDateModel;
 
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 
-public class DatePickerCSC extends JPanel implements JDatePicker {
+public class DatePickerCSC extends JPanel  {
 
 	private static final long serialVersionUID = 2814777654384974503L;
 
@@ -50,7 +48,7 @@ public class DatePickerCSC extends JPanel implements JDatePicker {
 	private JFormattedTextField formattedTextField;
 	private JButton button;
 
-	private JDatePanelImpl datePanel;
+	private JDatePanel datePanel;
 	private InternalEventHandler internalEventHandler;
 	private InternalComponentListener internalComponentListener;
 	private UtilDateModel model = new UtilDateModel();
@@ -63,7 +61,7 @@ public class DatePickerCSC extends JPanel implements JDatePicker {
 		p.put("text.month", "Mes");
 		p.put("text.year", "Año");
 
-		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+		JDatePanel datePanel = new JDatePanel(model);
 		this.datePanel = datePanel;
 
 		// Initialise Variables
@@ -280,7 +278,6 @@ public class DatePickerCSC extends JPanel implements JDatePicker {
 
 		private static final long serialVersionUID = 1L;
 
-		@Override
 		public Object stringToValue(String text) throws ParseException {
 			text = FechaManagerUtil.formatearFecha(text);
 
