@@ -52,7 +52,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 			UnsupportedLookAndFeelException {
 		super(null);
 
-		setTitle("Roll Paper");
+		setTitle("RollPaper Pricing");
 		setIconImage(CommonUtils.loadImage(Main.class.getResource(ConstantesRP.IMG_ICONO_APP), 80, 80));
 		toolBarSuperior.setVisible(false);
 

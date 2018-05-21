@@ -6,6 +6,8 @@ import java.net.ServerSocket;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import com.alee.laf.WebLookAndFeel;
+
 import ar.com.rp.ui.common.Common;
 
 public abstract class MainFramework {
@@ -19,23 +21,23 @@ public abstract class MainFramework {
 	private static Splash splash = null;
 
 	public static void inicializarFont() throws Exception{
-		System.setProperty("com.sun.xml.bind.v2.runtime.JAXBContextImpl.fastBoot", "true");
-
-		splashMsg("Interface");
-		try {
-			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (Exception e) {
-			// If Nimbus is not available, you can set the GUI to
-			// another look and feel.
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		}
-		// Esto es para que el boton por default sea el que esta
-		// seleccionado
+//		splashMsg("Interface");
+//		try {
+//			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//				if ("Nimbus".equals(info.getName())) {
+//					UIManager.setLookAndFeel(info.getClassName());
+//					break;
+//				}
+//			}
+//		} catch (Exception e) {
+//			// If Nimbus is not available, you can set the GUI to
+//			// another look and feel.
+//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+//		}
+//		// Esto es para que el boton por default sea el que esta
+//		// seleccionado
+		
+		WebLookAndFeel.install ();
 		UIManager.put("Button.defaultButtonFollowsFocus", Boolean.TRUE);
 
 		splashMsg("Cargando tipo de letra");

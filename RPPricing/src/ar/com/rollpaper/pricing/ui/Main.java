@@ -22,9 +22,14 @@ public class Main extends MainFramework {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
+					
 					// Inicializo el font
-					inicializarFont();
-
+					inicializarFont();		
+					
+					
+					
+					
 					// Cargo un log
 					splashMsg("Cargando archivo de Log");
 					LogBusiness.inicializarLogManager();
