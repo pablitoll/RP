@@ -46,6 +46,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private final JMenuItem mntmConsulta1 = new JMenuItem("Consulta XX");
 
+	private final JMenuItem mntmCargaPrecioCliente = new JMenuItem("Carga de Precio de Cliente");
+
 	private final JMenuItem mnuVersion = new JMenuItem("Version");
 
 	public PantPrincipalView() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
@@ -77,6 +79,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mnConsulta.add(mntmConsulta1);
 		mntmConsulta1.setFont(Common.getStandarFontMenu());
 		mnConsulta.addSeparator();
+		mntmCargaPrecioCliente.setFont(Common.getStandarFont());
+		mnConsulta.add(mntmCargaPrecioCliente);
 
 		menuBar.add(mnMantenimiento);
 
@@ -108,6 +112,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		asignarBotonAccion(mntmSalir, ConstantesRP.Acciones.SALIR.toString());
 		asignarBotonAccion(btnCalculadora, ConstantesRP.Acciones.CALCULADORA.toString());
 		asignarBotonAccion(mntmConsulta1, ConstantesRP.Acciones.CONSULTA1.toString());
+		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		// ConstantesRP.Acciones.VER_LOG_OPERACIONES_DIARIA_B.toString());
 		// asignarBotonAccion(mnuVersion, ConstantesRP.Acciones.VERSION.toString());
 	}

@@ -5,10 +5,12 @@ import javax.swing.SwingUtilities;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.LogBusiness;
+import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.model.Consulta1Model;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
 import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
+import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rollpaper.pricing.view.Consulta1View;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
@@ -74,6 +76,26 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 				ManejoDeError.showError(e, "No se puede acceder a la pantalla de consulta 1");
 			}
 		}
+		
+		if (accion.equals(ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString())) {
+			if (!cmGestordeVentanas.isAlreadyCreated("CargaPrecioController")) {
+				// Creo los controladores de VerLogOperacionesDiaria
+				try {
+					CargaPrecioView vista = new CargaPrecioView();
+					CargaPrecioModel modelo = new CargaPrecioModel();
+					CargaPrecioController controlador = new CargaPrecioController(this, vista, modelo);
+					cmGestordeVentanas.add(controlador, "CargaPrecioController");
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al crear pantalla de carga de precio por cliente");
+				}
+			}
+			try {
+				cmGestordeVentanas.findOrCreated("CargaPrecioController");
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "No se puede acceder a la pantalla de carga de precio por clietne");
+			}
+		}
+
 
 
 	}

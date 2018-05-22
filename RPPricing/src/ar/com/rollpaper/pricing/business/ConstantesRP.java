@@ -4,7 +4,7 @@ package ar.com.rollpaper.pricing.business;
 public class ConstantesRP {
 
 	public enum Acciones {
-		CALCULADORA, SALIR, CONSULTA1
+		CALCULADORA, SALIR, CONSULTA1, CARGA_PRECIO_CLIENTE
 	}
 
 	public static String IMG_ICONO_APP = "/resource/vector.png";
