@@ -1,5 +1,5 @@
-package generatedHB;
-// Generated 18/05/2018 07:33:44 by Hibernate Tools 5.3.0.Beta2
+package ar.com.rollpaper.pricing.dao;
+// Generated 21/05/2018 20:09:26 by Hibernate Tools 5.3.0.Beta2
 
 import java.util.List;
 import javax.naming.InitialContext;
@@ -9,14 +9,17 @@ import org.hibernate.LockMode;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
+import ar.com.rollpaper.pricing.beans.VentArpc;
+import ar.com.rollpaper.pricing.beans.VentArpcId;
+
 /**
- * Home object for domain model class StocArts.
- * @see ar.com.rollpaper.pricing.beans.rpdb.StocArts
+ * Home object for domain model class VentArpc.
+ * @see ar.com.rollpaper.pricing.beans.VentArpc
  * @author Hibernate Tools
  */
-public class StocArtsHome {
+public class VentArpcDAO {
 
-	private static final Log log = LogFactory.getLog(StocArtsHome.class);
+	private static final Log log = LogFactory.getLog(VentArpcDAO.class);
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
@@ -29,8 +32,8 @@ public class StocArtsHome {
 		}
 	}
 
-	public void persist(StocArts transientInstance) {
-		log.debug("persisting StocArts instance");
+	public void persist(VentArpc transientInstance) {
+		log.debug("persisting VentArpc instance");
 		try {
 			sessionFactory.getCurrentSession().persist(transientInstance);
 			log.debug("persist successful");
@@ -40,8 +43,8 @@ public class StocArtsHome {
 		}
 	}
 
-	public void attachDirty(StocArts instance) {
-		log.debug("attaching dirty StocArts instance");
+	public void attachDirty(VentArpc instance) {
+		log.debug("attaching dirty VentArpc instance");
 		try {
 			sessionFactory.getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -51,8 +54,8 @@ public class StocArtsHome {
 		}
 	}
 
-	public void attachClean(StocArts instance) {
-		log.debug("attaching clean StocArts instance");
+	public void attachClean(VentArpc instance) {
+		log.debug("attaching clean VentArpc instance");
 		try {
 			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -62,8 +65,8 @@ public class StocArtsHome {
 		}
 	}
 
-	public void delete(StocArts persistentInstance) {
-		log.debug("deleting StocArts instance");
+	public void delete(VentArpc persistentInstance) {
+		log.debug("deleting VentArpc instance");
 		try {
 			sessionFactory.getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
@@ -73,10 +76,10 @@ public class StocArtsHome {
 		}
 	}
 
-	public StocArts merge(StocArts detachedInstance) {
-		log.debug("merging StocArts instance");
+	public VentArpc merge(VentArpc detachedInstance) {
+		log.debug("merging VentArpc instance");
 		try {
-			StocArts result = (StocArts) sessionFactory.getCurrentSession().merge(detachedInstance);
+			VentArpc result = (VentArpc) sessionFactory.getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -85,11 +88,11 @@ public class StocArtsHome {
 		}
 	}
 
-	public StocArts findById(int id) {
-		log.debug("getting StocArts instance with id: " + id);
+	public VentArpc findById(VentArpcId id) {
+		log.debug("getting VentArpc instance with id: " + id);
 		try {
-			StocArts instance = (StocArts) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.StocArts", id);
+			VentArpc instance = (VentArpc) sessionFactory.getCurrentSession()
+					.get("ar.com.rollpaper.pricing.beans.VentArpc", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -102,11 +105,11 @@ public class StocArtsHome {
 		}
 	}
 
-	public List findByExample(StocArts instance) {
-		log.debug("finding StocArts instance by example");
+	public List findByExample(VentArpc instance) {
+		log.debug("finding VentArpc instance by example");
 		try {
 			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.StocArts").add(Example.create(instance))
+					.createCriteria("ar.com.rollpaper.pricing.beans.VentArpc").add(Example.create(instance))
 					.list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

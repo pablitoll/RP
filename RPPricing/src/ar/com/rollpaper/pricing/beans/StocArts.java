@@ -1,7 +1,6 @@
 package ar.com.rollpaper.pricing.beans;
 // Generated 18/05/2018 07:33:39 by Hibernate Tools 5.3.0.Beta2
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,12 +9,16 @@ import java.util.Date;
  */
 public class StocArts implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5727210041861499322L;
 	private int artsArticulo;
 	private String artsNombre;
 	private String artsArticuloEmp;
 	private String artsArticuloImp;
 	private String artsTipoArt;
-	private Serializable artsDescripcion;
+	private String artsDescripcion;
 	private String artsClasif1;
 	private String artsClasif2;
 	private String artsClasif3;
@@ -125,7 +128,7 @@ public class StocArts implements java.io.Serializable {
 	}
 
 	public StocArts(int artsArticulo, String artsNombre, String artsArticuloEmp, String artsArticuloImp,
-			String artsTipoArt, Serializable artsDescripcion, String artsClasif1, String artsClasif2,
+			String artsTipoArt, String artsDescripcion, String artsClasif1, String artsClasif2,
 			String artsClasif3, String artsClasif4, String artsClasif5, String artsClasif6, String artsClasif7,
 			String artsClasif8, String artsUnimedStock, String artsCodbarStock, boolean artsControlStock,
 			boolean artsConPartidas, boolean artsNrosSerie, boolean artsConTalles, boolean artsSeVende,
@@ -250,11 +253,11 @@ public class StocArts implements java.io.Serializable {
 		this.artsTipoArt = artsTipoArt;
 	}
 
-	public Serializable getArtsDescripcion() {
+	public String getArtsDescripcion() {
 		return this.artsDescripcion;
 	}
 
-	public void setArtsDescripcion(Serializable artsDescripcion) {
+	public void setArtsDescripcion(String artsDescripcion) {
 		this.artsDescripcion = artsDescripcion;
 	}
 

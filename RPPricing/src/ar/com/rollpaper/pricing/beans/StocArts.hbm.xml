@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 21/05/2018 20:09:21 by Hibernate Tools 5.3.0.Beta2 --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="RPAPER" dynamic-insert="false" dynamic-update="false" mutable="true" name="ar.com.rollpaper.pricing.beans.StocArts" optimistic-lock="version" polymorphism="implicit" schema="dbo" select-before-update="false" table="STOC_ARTS">
+        <id name="artsArticulo" type="int">
+            <column name="ARTS_ARTICULO"/>
+            <generator class="assigned"/>
+        </id>
+    
+        <property generated="never" lazy="false" name="artsNombre" optimistic-lock="true" type="string" unique="false">
+            <column length="70" name="ARTS_NOMBRE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsArticuloEmp" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="ARTS_ARTICULO_EMP" not-null="true" unique="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsArticuloImp" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="ARTS_ARTICULO_IMP" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsTipoArt" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="ARTS_TIPO_ART" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsDescripcion" optimistic-lock="true" type="string" unique="false">
+            <column name="ARTS_DESCRIPCION"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif2" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_2"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif3" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_3"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif4" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_4"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif5" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_5"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif6" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_6"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif7" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_7"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif8" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_8"/>
+        </property>
+        <property generated="never" lazy="false" name="artsUnimedStock" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="ARTS_UNIMED_STOCK" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsCodbarStock" optimistic-lock="true" type="string" unique="false">
+            <column length="16" name="ARTS_CODBAR_STOCK"/>
+        </property>
+        <property generated="never" lazy="false" name="artsControlStock" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_CONTROL_STOCK" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsConPartidas" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_CON_PARTIDAS" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsNrosSerie" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_NROS_SERIE" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsConTalles" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_CON_TALLES" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsSeVende" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_SE_VENDE" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsSeCompra" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_SE_COMPRA" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsFechaAlta" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="ARTS_FECHA_ALTA" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsFechaBaja" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="ARTS_FECHA_BAJA"/>
+        </property>
+        <property generated="never" lazy="false" name="artsBloqueoMost" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_BLOQUEO_MOST" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsPesoEmbUms" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_PESO_EMB_UMS" not-null="true" precision="14" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="artsCantBultUms" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_CANT_BULT_UMS" not-null="true" precision="14" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="artsUnimedHomsto" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="ARTS_UNIMED_HOMSTO"/>
+        </property>
+        <property generated="never" lazy="false" name="artsFactorHomsto" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_FACTOR_HOMSTO" not-null="true" precision="20" scale="12"/>
+        </property>
+        <property generated="never" lazy="false" name="artsCuenta" optimistic-lock="true" type="string" unique="false">
+            <column length="15" name="ARTS_CUENTA" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsSeProduce" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_SE_PRODUCE" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsConsumoCom" optimistic-lock="true" type="short" unique="false">
+            <column name="ARTS_CONSUMO_COM" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsModoStocMin" optimistic-lock="true" type="short" unique="false">
+            <column name="ARTS_MODO_STOC_MIN" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsStockMinimo" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_STOCK_MINIMO" not-null="true" precision="14" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="artsGeneraMovstk" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_GENERA_MOVSTK" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasifUmArt" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_UM_ART"/>
+        </property>
+        <property generated="never" lazy="false" name="artsPorcDmaxcaof" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_PORC_DMAXCAOF" not-null="true" precision="5"/>
+        </property>
+        <property generated="never" lazy="false" name="artsHabilPpp" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_HABIL_PPP" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsAjusCantUms" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_AJUS_CANT_UMS" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsPorcmaxAjums" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_PORCMAX_AJUMS" not-null="true" precision="5"/>
+        </property>
+        <property generated="never" lazy="false" name="artsCosteoCiemes" optimistic-lock="true" type="boolean" unique="false">
+            <column name="ARTS_COSTEO_CIEMES" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="artsTalle" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="ARTS_TALLE"/>
+        </property>
+        <property generated="never" lazy="false" name="artsColor" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="ARTS_COLOR"/>
+        </property>
+        <property generated="never" lazy="false" name="artsDiviAsiCm" optimistic-lock="true" type="java.lang.Short" unique="false">
+            <column name="ARTS_DIVI_ASI_CM"/>
+        </property>
+        <property generated="never" lazy="false" name="artsEspecieGrano" optimistic-lock="true" type="java.lang.Short" unique="false">
+            <column name="ARTS_ESPECIE_GRANO"/>
+        </property>
+        <property generated="never" lazy="false" name="artsTipoGrano" optimistic-lock="true" type="java.lang.Short" unique="false">
+            <column name="ARTS_TIPO_GRANO"/>
+        </property>
+        <property generated="never" lazy="false" name="artsVariedadGrano" optimistic-lock="true" type="java.lang.Short" unique="false">
+            <column name="ARTS_VARIEDAD_GRANO"/>
+        </property>
+        <property generated="never" lazy="false" name="artsCuentaAnticipoLiq" optimistic-lock="true" type="string" unique="false">
+            <column length="15" name="ARTS_CUENTA_ANTICIPO_LIQ"/>
+        </property>
+        <property generated="never" lazy="false" name="artsCodigoProdCot" optimistic-lock="true" type="string" unique="false">
+            <column length="6" name="ARTS_CODIGO_PROD_COT"/>
+        </property>
+        <property generated="never" lazy="false" name="artsCodigoUmCot" optimistic-lock="true" type="java.lang.Character" unique="false">
+            <column length="1" name="ARTS_CODIGO_UM_COT"/>
+        </property>
+        <property generated="never" lazy="false" name="artsFactorUmCot" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_FACTOR_UM_COT" not-null="true" precision="20" scale="12"/>
+        </property>
+        <property generated="never" lazy="false" name="artsVolumenEmbUms" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_VOLUMEN_EMB_UMS" not-null="true" precision="14" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="artsUnimedDim" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="ARTS_UNIMED_DIM"/>
+        </property>
+        <property generated="never" lazy="false" name="artsLargoDim" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_LARGO_DIM" precision="14" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="artsAnchoDim" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_ANCHO_DIM" precision="14" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="artsAltoDim" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_ALTO_DIM" precision="14" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="artsDiasExisAntesUso" optimistic-lock="true" type="short" unique="false">
+            <column name="ARTS_DIAS_EXIS_ANTES_USO" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsUmsEsUcmi" optimistic-lock="true" type="byte" unique="false">
+            <column name="ARTS_UMS_ES_UCMI" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="artsUmUcmi" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="ARTS_UM_UCMI"/>
+        </property>
+        <property generated="never" lazy="false" name="artsFactorUmUcmi" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARTS_FACTOR_UM_UCMI" not-null="true" precision="20" scale="12"/>
+        </property>
+        <property generated="never" lazy="false" name="artsCodbarUcmi" optimistic-lock="true" type="string" unique="false">
+            <column length="16" name="ARTS_CODBAR_UCMI"/>
+        </property>
+        <property generated="never" lazy="false" name="artsDescripcionWsAfip" optimistic-lock="true" type="string" unique="false">
+            <column length="70" name="ARTS_DESCRIPCION_WS_AFIP"/>
+        </property>
+        <property generated="never" lazy="false" name="artsDposConsumoComp" optimistic-lock="true" type="java.lang.Integer" unique="false">
+            <column name="ARTS_DPOS_CONSUMO_COMP"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif1Cad1" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_1_CAD1"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif2Cad2" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_2_CAD2"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif3Cad3" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_3_CAD3"/>
+        </property>
+        <property generated="never" lazy="false" name="artsClasif4Cad4" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_4_CAD4"/>
+        </property>
+    </class>
+</hibernate-mapping>

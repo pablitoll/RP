@@ -29,21 +29,21 @@ public class SplashScreen extends JWindow {
         JPanel panel = new JPanel();
         panel.setBorder(new javax.swing.border.EtchedBorder());
         panel.setBackground(new Color(255, 255, 255));
-        panel.setBounds(10, 10, 348, 159);
+        panel.setBounds(10, 10, 528, 308);
         panel.setLayout(null);
         container.add(panel);
        
         WebImage webImage3 = new WebImage (Toolkit.getDefaultToolkit().getImage(SplashScreen.class.getResource("/images/rpLogo.PNG")) );
+        webImage3.setDisplayType(DisplayType.fitComponent);
         webImage3.setImage(Toolkit.getDefaultToolkit().getImage(SplashScreen.class.getResource("/images/rpLogo.PNG")));
-        webImage3.setDisplayType ( DisplayType.fitComponent );
-        webImage3.setBounds(0, 5, 348, 150);
+        webImage3.setBounds(0, 0, 525, 312);
         panel.add(webImage3);
       
         progressBar.setMaximum(50);
-        progressBar.setBounds(55, 180, 250, 15);
+        progressBar.setBounds(10, 329, 528, 38);
         container.add(progressBar);
         loadProgressBar();
-        setSize(370, 215);
+        setSize(548, 378);
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -71,7 +71,7 @@ public class SplashScreen extends JWindow {
 
             private void createFrame() throws HeadlessException {
                 JFrame frame = new JFrame();
-                frame.setSize(500, 500);
+                frame.setSize(300, 300);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setVisible(true);
             }

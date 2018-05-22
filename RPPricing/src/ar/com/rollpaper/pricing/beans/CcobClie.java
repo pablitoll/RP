@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public class CcobClie implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 258013046715367268L;
 	private int clieCliente;
 	private String clieNombre;
 	private String clieNombreLegal;
