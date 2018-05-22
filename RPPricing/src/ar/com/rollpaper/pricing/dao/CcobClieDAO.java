@@ -1,4 +1,4 @@
-package generatedHB;
+package ar.com.rollpaper.pricing.dao;
 // Generated 18/05/2018 07:33:44 by Hibernate Tools 5.3.0.Beta2
 
 import java.util.List;
@@ -9,14 +9,16 @@ import org.hibernate.LockMode;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
+import ar.com.rollpaper.pricing.beans.CcobClie;
+
 /**
- * Home object for domain model class StocArts.
- * @see ar.com.rollpaper.pricing.beans.rpdb.StocArts
+ * Home object for domain model class CcobClie.
+ * @see ar.com.rollpaper.pricing.beans.CcobClie
  * @author Hibernate Tools
  */
-public class StocArtsHome {
+public class CcobClieDAO {
 
-	private static final Log log = LogFactory.getLog(StocArtsHome.class);
+	private static final Log log = LogFactory.getLog(CcobClieDAO.class);
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
@@ -29,8 +31,8 @@ public class StocArtsHome {
 		}
 	}
 
-	public void persist(StocArts transientInstance) {
-		log.debug("persisting StocArts instance");
+	public void persist(CcobClie transientInstance) {
+		log.debug("persisting CcobClie instance");
 		try {
 			sessionFactory.getCurrentSession().persist(transientInstance);
 			log.debug("persist successful");
@@ -40,8 +42,8 @@ public class StocArtsHome {
 		}
 	}
 
-	public void attachDirty(StocArts instance) {
-		log.debug("attaching dirty StocArts instance");
+	public void attachDirty(CcobClie instance) {
+		log.debug("attaching dirty CcobClie instance");
 		try {
 			sessionFactory.getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -51,8 +53,8 @@ public class StocArtsHome {
 		}
 	}
 
-	public void attachClean(StocArts instance) {
-		log.debug("attaching clean StocArts instance");
+	public void attachClean(CcobClie instance) {
+		log.debug("attaching clean CcobClie instance");
 		try {
 			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -62,8 +64,8 @@ public class StocArtsHome {
 		}
 	}
 
-	public void delete(StocArts persistentInstance) {
-		log.debug("deleting StocArts instance");
+	public void delete(CcobClie persistentInstance) {
+		log.debug("deleting CcobClie instance");
 		try {
 			sessionFactory.getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
@@ -73,10 +75,10 @@ public class StocArtsHome {
 		}
 	}
 
-	public StocArts merge(StocArts detachedInstance) {
-		log.debug("merging StocArts instance");
+	public CcobClie merge(CcobClie detachedInstance) {
+		log.debug("merging CcobClie instance");
 		try {
-			StocArts result = (StocArts) sessionFactory.getCurrentSession().merge(detachedInstance);
+			CcobClie result = (CcobClie) sessionFactory.getCurrentSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -85,11 +87,11 @@ public class StocArtsHome {
 		}
 	}
 
-	public StocArts findById(int id) {
-		log.debug("getting StocArts instance with id: " + id);
+	public CcobClie findById(int id) {
+		log.debug("getting CcobClie instance with id: " + id);
 		try {
-			StocArts instance = (StocArts) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.StocArts", id);
+			CcobClie instance = (CcobClie) sessionFactory.getCurrentSession()
+					.get("ar.com.rollpaper.pricing.beans.CcobClie", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -102,11 +104,11 @@ public class StocArtsHome {
 		}
 	}
 
-	public List findByExample(StocArts instance) {
-		log.debug("finding StocArts instance by example");
+	public List findByExample(CcobClie instance) {
+		log.debug("finding CcobClie instance by example");
 		try {
 			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.StocArts").add(Example.create(instance))
+					.createCriteria("ar.com.rollpaper.pricing.beans.CcobClie").add(Example.create(instance))
 					.list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

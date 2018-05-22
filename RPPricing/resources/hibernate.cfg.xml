@@ -9,7 +9,16 @@
 		<property name="hibernate.connection.url">jdbc:sqlserver://127.0.0.1:1433;databaseName=RPAPER;instanceName=SQLEXPRESS;</property>
 		<property name="hibernate.connection.username">sa</property>
 		<property name="hibernate.connection.password">udc77</property>
-		<property name="hibernate.dialect">org.hibernate.dialect.SQLServer2012Dialect</property>		
-        <mapping resource="ar/com/rollpaper/pricing/beans/CcobClie.hbm.xml"/>
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServer2012Dialect</property>
+		<mapping
+			resource="ar/com/rollpaper/pricing/beans/CcobClie.hbm.xml" />
+		<mapping
+			resource="ar/com/rollpaper/pricing/beans/StocArts.hbm.xml" />
+		<mapping
+			resource="ar/com/rollpaper/pricing/beans/StocCa01.hbm.xml" />
+		<mapping
+			resource="ar/com/rollpaper/pricing/beans/VentArpc.hbm.xml" />
+		<mapping
+			resource="ar/com/rollpaper/pricing/beans/VentCliv.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

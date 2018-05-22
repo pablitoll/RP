@@ -4,4 +4,7 @@
 <hibernate-reverse-engineering>
 	<table-filter match-name="CCOB_CLIE" match-catalog="RPAPER"></table-filter>	
 	<table-filter match-name="STOC_ARTS" match-catalog="RPAPER"></table-filter>
+	<table-filter match-name="VENT_CLIV" match-catalog="RPAPER"></table-filter>
+	<table-filter match-name="STOC_CA01" match-catalog="RPAPER"></table-filter>
+	<table-filter match-name="VENT_ARPC" match-catalog="RPAPER"></table-filter>
 </hibernate-reverse-engineering>

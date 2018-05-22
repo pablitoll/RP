@@ -1,4 +1,4 @@
-package ar.com.rollpaper.pricing.beans;
+package ar.com.rollpaper.pricing.dao;
 // Generated 18/05/2018 07:33:44 by Hibernate Tools 5.3.0.Beta2
 
 import java.util.List;
@@ -9,14 +9,16 @@ import org.hibernate.LockMode;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
+import ar.com.rollpaper.pricing.beans.StocArts;
+
 /**
  * Home object for domain model class StocArts.
- * @see ar.com.rollpaper.pricing.beans.rpdb.StocArts
+ * @see ar.com.rollpaper.pricing.beans.StocArts
  * @author Hibernate Tools
  */
-public class StocArtsHome {
+public class StocArtsDAO {
 
-	private static final Log log = LogFactory.getLog(StocArtsHome.class);
+	private static final Log log = LogFactory.getLog(StocArtsDAO.class);
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
@@ -89,7 +91,7 @@ public class StocArtsHome {
 		log.debug("getting StocArts instance with id: " + id);
 		try {
 			StocArts instance = (StocArts) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.rpdb.StocArts", id);
+					.get("ar.com.rollpaper.pricing.beans.StocArts", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -106,7 +108,7 @@ public class StocArtsHome {
 		log.debug("finding StocArts instance by example");
 		try {
 			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.rpdb.StocArts").add(Example.create(instance))
+					.createCriteria("ar.com.rollpaper.pricing.beans.StocArts").add(Example.create(instance))
 					.list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

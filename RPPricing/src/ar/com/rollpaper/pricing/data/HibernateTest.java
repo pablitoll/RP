@@ -7,6 +7,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.beans.StocArts;
 
 
 public class HibernateTest {
@@ -37,6 +38,26 @@ public class HibernateTest {
 
 		}
 
+
+		
+		
+		CriteriaQuery<StocArts> criteriaQuery1 = session.getCriteriaBuilder().createQuery(StocArts.class);
+		criteriaQuery1.from(StocArts.class);
+
+		List<StocArts> stock = session.createQuery(criteriaQuery1).getResultList();
+	
+		Iterator itr1 = stock.iterator();
+	    i = 0;
+		while (itr1.hasNext()) {
+
+			StocArts emp = (StocArts) itr1.next();
+			System.out.println(emp.getArtsDescripcion()+"-"+ i++);
+
+		}
+
+		
+		
+		
 		session.getTransaction().commit();
 		session.close();
 
