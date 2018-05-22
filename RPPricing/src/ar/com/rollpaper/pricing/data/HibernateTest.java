@@ -8,6 +8,9 @@ import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.StocArts;
+import ar.com.rollpaper.pricing.beans.VentCliv;
+import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.dao.VentClivDAO;
 
 
 public class HibernateTest {
@@ -50,6 +53,28 @@ public class HibernateTest {
 		}
 
 		
+		// VentClivDAO
+		
+		CriteriaQuery<VentCliv> criteriaQuery11 = session.getCriteriaBuilder().createQuery(VentCliv.class);
+		criteriaQuery11.from(VentCliv.class);
+
+		List<VentCliv> ListaLP = session.createQuery(criteriaQuery11).getResultList();
+	
+		Iterator itr11 = ListaLP.iterator();
+	    i = 0;
+		while (itr11.hasNext()) {
+
+			VentCliv listaprecios = (VentCliv) itr11.next();
+			System.out.println(listaprecios.getClivCliente()+"-"+ i++);
+
+		}
+		
+
+		VentClivDAO listaPrecio = new VentClivDAO();		
+		VentCliv x = listaPrecio.findById(28);
+		
+		VentClivDAO listaPrecio1 = new VentClivDAO();		
+		List<VentCliv> x1 = listaPrecio1.getListaPreciosByCliente(CcobClieDAO.findById(28));
 		
 		
 		session.getTransaction().commit();

@@ -2,7 +2,6 @@ package ar.com.rollpaper.pricing.beans;
 // Generated 21/05/2018 20:09:21 by Hibernate Tools 5.3.0.Beta2
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 

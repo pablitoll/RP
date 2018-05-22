@@ -1,6 +1,7 @@
 package ar.com.rollpaper.pricing.ui;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionListener;
@@ -8,6 +9,13 @@ import javax.swing.*;
 
 import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
+
+import ar.com.rollpaper.pricing.business.LogBusiness;
+import ar.com.rollpaper.pricing.controller.PantPrincipalController;
+import ar.com.rollpaper.pricing.model.PantPrincipalModel;
+import ar.com.rollpaper.pricing.view.PantPrincipalView;
+import ar.com.rp.ui.main.MainFramework;
+
 import java.awt.Toolkit;
 
 public class SplashScreen extends JWindow {
@@ -21,6 +29,9 @@ public class SplashScreen extends JWindow {
     private static SplashScreen execute;
     private static int count;
     private static Timer timer1;
+
+	private static final int PORT = 12395; // random large port number
+
 
     public SplashScreen() {
 
@@ -70,13 +81,42 @@ public class SplashScreen extends JWindow {
             }
 
             private void createFrame() throws HeadlessException {
-                JFrame frame = new JFrame();
-                frame.setSize(300, 300);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setVisible(true);
+        		EventQueue.invokeLater(new Runnable() {
+        			public void run() {
+        				try {					
+        					
+        					// Inicializo el font
+        					MainFramework.inicializarFont();					
+        					
+        					// Cargo un log
+        				
+        					LogBusiness.inicializarLogManager();
+
+        					if (MainFramework.isRunning(PORT)) {
+        						String[] option = { "Si", "No" };
+        						Object confirm = Dialog.showConfirmDialogObject("<html>Ya hay una instancia del Cliente ejecutandose en este Puesto <br>Desea Abrir otra instancia?</html>",
+        								"Nueva Instancia Cliente", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
+        						if (confirm == option[1]) {
+        							System.exit(1);
+        						}
+        					}
+
+        				
+        					PantPrincipalView vista = new PantPrincipalView();
+        					PantPrincipalModel model = new PantPrincipalModel();
+        					PantPrincipalController controller = new PantPrincipalController(vista, model);
+
+        					controller.iniciar();
+
+        				} catch (Exception e) {
+        					ManejoDeError.showError(e, "Error al iniciar");
+        					System.exit(-1);
+        				}
+        			}
+        		});
             }
         };
-        timer1 = new Timer(10, al);
+        timer1 = new Timer(7, al);
         timer1.start();
     }
 

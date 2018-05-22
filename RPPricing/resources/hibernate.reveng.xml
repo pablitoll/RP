@@ -2,9 +2,5 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-	<table-filter match-name="CCOB_CLIE" match-catalog="RPAPER"></table-filter>	
-	<table-filter match-name="STOC_ARTS" match-catalog="RPAPER"></table-filter>
-	<table-filter match-name="VENT_CLIV" match-catalog="RPAPER"></table-filter>
-	<table-filter match-name="STOC_CA01" match-catalog="RPAPER"></table-filter>
-	<table-filter match-name="VENT_ARPC" match-catalog="RPAPER"></table-filter>
+	<table-filter match-name="PRIC_PRECIOS_ESPECIALES" match-catalog="RPAPER"></table-filter>	
 </hibernate-reverse-engineering>

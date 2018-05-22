@@ -1,22 +1,25 @@
 package ar.com.rollpaper.pricing.dao;
 // Generated 21/05/2018 20:09:26 by Hibernate Tools 5.3.0.Beta2
 
-import java.util.Iterator;
 import java.util.List;
-import javax.naming.InitialContext;
+
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
-import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.VentCliv;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class VentCliv.
+ * 
  * @see ar.com.rollpaper.pricing.beans.VentCliv
  * @author Hibernate Tools
  */
@@ -24,21 +27,10 @@ public class VentClivDAO {
 
 	private static final Log log = LogFactory.getLog(VentClivDAO.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
-
-	protected SessionFactory getSessionFactory() {
-		try {
-			return (SessionFactory) new InitialContext().lookup("SessionFactory");
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
-		}
-	}
-
 	public void persist(VentCliv transientInstance) {
 		log.debug("persisting VentCliv instance");
 		try {
-			sessionFactory.getCurrentSession().persist(transientInstance);
+			HibernateUtil.getSession().persist(transientInstance);
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
@@ -49,7 +41,7 @@ public class VentClivDAO {
 	public void attachDirty(VentCliv instance) {
 		log.debug("attaching dirty VentCliv instance");
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			HibernateUtil.getSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -60,7 +52,7 @@ public class VentClivDAO {
 	public void attachClean(VentCliv instance) {
 		log.debug("attaching clean VentCliv instance");
 		try {
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			HibernateUtil.getSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -71,7 +63,7 @@ public class VentClivDAO {
 	public void delete(VentCliv persistentInstance) {
 		log.debug("deleting VentCliv instance");
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			HibernateUtil.getSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -82,7 +74,7 @@ public class VentClivDAO {
 	public VentCliv merge(VentCliv detachedInstance) {
 		log.debug("merging VentCliv instance");
 		try {
-			VentCliv result = (VentCliv) sessionFactory.getCurrentSession().merge(detachedInstance);
+			VentCliv result = (VentCliv) HibernateUtil.getSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -94,8 +86,8 @@ public class VentClivDAO {
 	public VentCliv findById(int id) {
 		log.debug("getting VentCliv instance with id: " + id);
 		try {
-			VentCliv instance = (VentCliv) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.VentCliv", id);
+			VentCliv instance = (VentCliv) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.VentCliv",
+					id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -108,12 +100,11 @@ public class VentClivDAO {
 		}
 	}
 
-	public List findByExample(VentCliv instance) {
+	public List<VentCliv> findByExample(VentCliv instance) {
 		log.debug("finding VentCliv instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.VentCliv").add(Example.create(instance))
-					.list();
+			List<VentCliv> results = HibernateUtil.getSession()
+					.createCriteria("ar.com.rollpaper.pricing.beans.VentCliv").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -122,5 +113,15 @@ public class VentClivDAO {
 		}
 	}
 
-		
+	public static List<VentCliv> getListaPreciosByCliente(CcobClie cliente) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+		CriteriaQuery<VentCliv> criteriaQuery = session.getCriteriaBuilder().createQuery(VentCliv.class);
+		Root<VentCliv> i = criteriaQuery.from(VentCliv.class);
+		criteriaQuery.where(cb.equal(i.get("clivCliente"), cliente.getClieCliente()));
+		List<VentCliv> listaLP = session.createQuery(criteriaQuery).getResultList();
+		return listaLP;
+
+	}
+
 }

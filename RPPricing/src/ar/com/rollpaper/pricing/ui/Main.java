@@ -21,14 +21,10 @@ public class Main extends MainFramework {
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					
+				try {					
 					
 					// Inicializo el font
-					inicializarFont();		
-					
-					
-					
+					inicializarFont();					
 					
 					// Cargo un log
 					splashMsg("Cargando archivo de Log");
@@ -45,9 +41,6 @@ public class Main extends MainFramework {
 
 					// inicializo coneccion a la BD local
 					splashMsg("Cargando Base de Datos Local");
-
-					splashMsg("Obteniendo Usuario de Windows");
-					// Security.inicializar(errorSEI != null);
 
 					// Cargo pantalla pricipal
 					splashMsg("Cargando Pantalla Principal");

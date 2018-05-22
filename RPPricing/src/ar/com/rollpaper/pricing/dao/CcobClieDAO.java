@@ -29,41 +29,6 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
 public class CcobClieDAO {
 
 	private static final Log log = LogFactory.getLog(CcobClieDAO.class);
-
-//	private final static SessionFactory sessionFactory = null; // getSessionFactory();
-//
-//	protected static SessionFactory getSessionFactory() {
-//		try {
-//			return HibernateUtil.getSessionFactory();
-//		} catch (Exception e) {
-//			log.error("Could not locate SessionFactory in JNDI", e);
-//			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
-//		}
-//	}
-//
-	
-//	public void attachDirty(CcobClie instance) {
-//		log.debug("attaching dirty CcobClie instance");
-//		try {
-//			sessionFactory.getCurrentSession().saveOrUpdate(instance);
-//			log.debug("attach successful");
-//		} catch (RuntimeException re) {
-//			log.error("attach failed", re);
-//			throw re;
-//		}
-//	}
-//
-//	public void attachClean(CcobClie instance) {
-//		log.debug("attaching clean CcobClie instance");
-//		try {
-//			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
-//			log.debug("attach successful");
-//		} catch (RuntimeException re) {
-//			log.error("attach failed", re);
-//			throw re;
-//		}
-//	}
-
 	
 	public static CcobClie findById(int id) {
 		log.debug("getting CcobClie instance with id: " + id);
@@ -95,18 +60,6 @@ public class CcobClieDAO {
 
 		return clientes;
 
-		// Session session = HibernateUtil.getSessionFactory().openSession();
-		// session.beginTransaction();
-		//
-		//
-		//
-		// CriteriaQuery<CcobClie> criteriaQuery =
-		// session.getCriteriaBuilder().createQuery(CcobClie.class);
-		// criteriaQuery.from(CcobClie.class);
-		//
-		// List<CcobClie> clientes = session.createQuery(criteriaQuery).getResultList();
-
-		// return clientes;
-	}
+		}
 
 }

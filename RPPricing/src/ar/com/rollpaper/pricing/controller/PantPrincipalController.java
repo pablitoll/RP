@@ -3,8 +3,11 @@ package ar.com.rollpaper.pricing.controller;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.hibernate.Hibernate;
+
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.LogBusiness;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.model.Consulta1Model;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
@@ -107,11 +110,11 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere salir de la aplicacion?",
 					"Confirmacion de Salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null,
 					null);
-
+			
 			if (confirm == JOptionPane.YES_OPTION) {
 
 				LogBusiness.forzarEscrituraLogs();
-
+				HibernateUtil.shutdown();
 				System.exit(0);
 			}
 		} catch (Exception e) {
