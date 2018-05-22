@@ -1,5 +1,5 @@
-package generatedHB;
-// Generated 18/05/2018 07:33:44 by Hibernate Tools 5.3.0.Beta2
+package ar.com.rollpaper.pricing.dao;
+// Generated 22/05/2018 19:11:08 by Hibernate Tools 5.3.0.Beta2
 
 import java.util.List;
 import javax.naming.InitialContext;
@@ -9,14 +9,16 @@ import org.hibernate.LockMode;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
+import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
+
 /**
- * Home object for domain model class CcobClie.
- * @see ar.com.rollpaper.pricing.beans.rpdb.CcobClie
+ * Home object for domain model class PricPreciosEspeciales.
+ * @see ar.com.rollpaper.pricing.beans.rpdb.PricPreciosEspeciales
  * @author Hibernate Tools
  */
-public class CcobClieHome {
+public class PreciosEspecialesDAO {
 
-	private static final Log log = LogFactory.getLog(CcobClieHome.class);
+	private static final Log log = LogFactory.getLog(PreciosEspecialesDAO.class);
 
 	private final SessionFactory sessionFactory = getSessionFactory();
 
@@ -29,8 +31,8 @@ public class CcobClieHome {
 		}
 	}
 
-	public void persist(CcobClie transientInstance) {
-		log.debug("persisting CcobClie instance");
+	public void persist(PreciosEspeciales transientInstance) {
+		log.debug("persisting PricPreciosEspeciales instance");
 		try {
 			sessionFactory.getCurrentSession().persist(transientInstance);
 			log.debug("persist successful");
@@ -40,8 +42,8 @@ public class CcobClieHome {
 		}
 	}
 
-	public void attachDirty(CcobClie instance) {
-		log.debug("attaching dirty CcobClie instance");
+	public void attachDirty(PreciosEspeciales instance) {
+		log.debug("attaching dirty PricPreciosEspeciales instance");
 		try {
 			sessionFactory.getCurrentSession().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -51,8 +53,8 @@ public class CcobClieHome {
 		}
 	}
 
-	public void attachClean(CcobClie instance) {
-		log.debug("attaching clean CcobClie instance");
+	public void attachClean(PreciosEspeciales instance) {
+		log.debug("attaching clean PricPreciosEspeciales instance");
 		try {
 			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
@@ -62,8 +64,8 @@ public class CcobClieHome {
 		}
 	}
 
-	public void delete(CcobClie persistentInstance) {
-		log.debug("deleting CcobClie instance");
+	public void delete(PreciosEspeciales persistentInstance) {
+		log.debug("deleting PricPreciosEspeciales instance");
 		try {
 			sessionFactory.getCurrentSession().delete(persistentInstance);
 			log.debug("delete successful");
@@ -73,10 +75,11 @@ public class CcobClieHome {
 		}
 	}
 
-	public CcobClie merge(CcobClie detachedInstance) {
-		log.debug("merging CcobClie instance");
+	public PreciosEspeciales merge(PreciosEspeciales detachedInstance) {
+		log.debug("merging PricPreciosEspeciales instance");
 		try {
-			CcobClie result = (CcobClie) sessionFactory.getCurrentSession().merge(detachedInstance);
+			PreciosEspeciales result = (PreciosEspeciales) sessionFactory.getCurrentSession()
+					.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -85,11 +88,11 @@ public class CcobClieHome {
 		}
 	}
 
-	public CcobClie findById(int id) {
-		log.debug("getting CcobClie instance with id: " + id);
+	public PreciosEspeciales findById(int id) {
+		log.debug("getting PricPreciosEspeciales instance with id: " + id);
 		try {
-			CcobClie instance = (CcobClie) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.rpdb.CcobClie", id);
+			PreciosEspeciales instance = (PreciosEspeciales) sessionFactory.getCurrentSession()
+					.get("ar.com.rollpaper.pricing.beans.rpdb.PricPreciosEspeciales", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -102,12 +105,12 @@ public class CcobClieHome {
 		}
 	}
 
-	public List findByExample(CcobClie instance) {
-		log.debug("finding CcobClie instance by example");
+	public List findByExample(PreciosEspeciales instance) {
+		log.debug("finding PricPreciosEspeciales instance by example");
 		try {
 			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.rpdb.CcobClie").add(Example.create(instance))
-					.list();
+					.createCriteria("ar.com.rollpaper.pricing.beans.rpdb.PricPreciosEspeciales")
+					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {

@@ -21,21 +21,7 @@ public abstract class MainFramework {
 	private static Splash splash = null;
 
 	public static void inicializarFont() throws Exception{
-//		splashMsg("Interface");
-//		try {
-//			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-//				if ("Nimbus".equals(info.getName())) {
-//					UIManager.setLookAndFeel(info.getClassName());
-//					break;
-//				}
-//			}
-//		} catch (Exception e) {
-//			// If Nimbus is not available, you can set the GUI to
-//			// another look and feel.
-//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-//		}
-//		// Esto es para que el boton por default sea el que esta
-//		// seleccionado
+
 		
 		WebLookAndFeel.install ();
 		UIManager.put("Button.defaultButtonFollowsFocus", Boolean.TRUE);
@@ -86,7 +72,7 @@ public abstract class MainFramework {
 		UIManager.getLookAndFeelDefaults().put("InternalFrame.titleFont", Common.getStandarFontBold());
 	}
 
-	protected static boolean isRunning(int puerto) {
+	public static boolean isRunning(int puerto) {
 		boolean retorno = true;
 		try {
 			if (s == null) {
