@@ -1,5 +1,6 @@
 package ar.com.rollpaper.pricing.data;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -12,6 +13,15 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 public class HibernateUtil {
 	private static StandardServiceRegistry registry;
 	private static SessionFactory sessionFactory;
+	private static Session session;
+
+	public static Session getSession() {
+		if(session == null) {
+			session = getSessionFactory().openSession();
+		}
+		
+		return session;
+	}
 
 	public static SessionFactory getSessionFactory() {
 		if (sessionFactory == null) {
@@ -43,4 +53,5 @@ public class HibernateUtil {
 			StandardServiceRegistryBuilder.destroy(registry);
 		}
 	}
+	
 }

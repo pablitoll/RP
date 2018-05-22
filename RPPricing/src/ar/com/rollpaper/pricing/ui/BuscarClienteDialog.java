@@ -10,9 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import com.alee.laf.table.WebTable;
 
+import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
@@ -25,7 +29,7 @@ public class BuscarClienteDialog extends DialogBase {
 	 */
 	private static final long serialVersionUID = 1L;
 	private WebTable tableCliente;
-	private JTextField descCliente;
+	private JTextField txtDescCliente;
 	private JButtonRP btnSeleccionar;
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
@@ -37,7 +41,8 @@ public class BuscarClienteDialog extends DialogBase {
 
 	public BuscarClienteDialog(BasePantallaPrincipal<?, ?> pantPrincipal) {
 		super(pantPrincipal);
-		setBounds(100, 100, 500, 600);
+		setBounds(100, 100, 600, 600);
+		setModal(true);
 		nroCliente = null;
 		JPanel panel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
@@ -70,12 +75,17 @@ public class BuscarClienteDialog extends DialogBase {
 		lblNombreDelCliente.setFont(Common.getStandarFont());
 		panel_1.add(lblNombreDelCliente);
 
-		descCliente = new JTextField();
-		descCliente.setFont(Common.getStandarFont());
-		panel_1.add(descCliente);
-		descCliente.setColumns(25);
+		txtDescCliente = new JTextField();
+		txtDescCliente.setFont(Common.getStandarFont());
+		panel_1.add(txtDescCliente);
+		txtDescCliente.setColumns(25);
 
 		btnBuscar = new JButtonRP("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				buscar();
+			}
+		});
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
 
@@ -84,9 +94,21 @@ public class BuscarClienteDialog extends DialogBase {
 
 		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal" };
 		String[][] data = {};
-		tableCliente = new WebTable(data, header);
+		//tableCliente = new WebTable(data, header);
+		tableCliente = new WebTable();
+		tableCliente.setModel(new DefaultTableModel(data, header));
 		tableCliente.setEditable(false);
 		scrollPane.setViewportView(tableCliente);
+	}
+
+	protected void buscar() {
+		DefaultTableModel tableModel = (DefaultTableModel) tableCliente.getModel();
+		tableModel.getDataVector().removeAllElements();
+		
+		for(CcobClie clie : CcobClieDAO.getListaCliente(txtDescCliente.getText())) {
+			tableModel.addRow(new Object[] {clie.getClieCliente(), clie.getClieNombre(), clie.getClieNombreLegal()});
+		}
+		
 	}
 
 	@Override

@@ -1,14 +1,18 @@
 package ar.com.rollpaper.pricing.dao;
 // Generated 21/05/2018 20:09:26 by Hibernate Tools 5.3.0.Beta2
 
+import java.util.Iterator;
 import java.util.List;
 import javax.naming.InitialContext;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
+import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 
 /**
@@ -117,4 +121,6 @@ public class VentClivDAO {
 			throw re;
 		}
 	}
+
+		
 }

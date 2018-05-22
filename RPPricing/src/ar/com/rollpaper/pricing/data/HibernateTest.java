@@ -16,13 +16,7 @@ public class HibernateTest {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 
-		// Check database version
-		String sql = "SELECT \r\n"
-				+ "substring(replace(replace(replace(replace(cast(CAST(GETDATE() AS datetime2) as \r\n"
-				+ "varchar(50)),'-',''),' ',''),':',''),'.',''),1,18)";
-
-		String result = (String) session.createNativeQuery(sql).getSingleResult();
-		System.out.println(result);
+		
 
 		CriteriaQuery<CcobClie> criteriaQuery = session.getCriteriaBuilder().createQuery(CcobClie.class);
 		criteriaQuery.from(CcobClie.class);

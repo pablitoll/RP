@@ -1,30 +1,40 @@
 package ar.com.rollpaper.pricing.dao;
 // Generated 18/05/2018 07:33:44 by Hibernate Tools 5.3.0.Beta2
 
+import java.util.Iterator;
 import java.util.List;
 import javax.naming.InitialContext;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bouncycastle.jcajce.provider.symmetric.AES.CBC;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class CcobClie.
+ * 
  * @see ar.com.rollpaper.pricing.beans.CcobClie
  * @author Hibernate Tools
  */
 public class CcobClieDAO {
 
-	private static final Log log = LogFactory.getLog(CcobClieDAO.class);
+	private static final Log log = null;// LogFactory.getLog(CcobClieDAO.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
+	private final static SessionFactory sessionFactory = null; // getSessionFactory();
 
-	protected SessionFactory getSessionFactory() {
+	protected static SessionFactory getSessionFactory() {
 		try {
-			return (SessionFactory) new InitialContext().lookup("SessionFactory");
+			return HibernateUtil.getSessionFactory();
 		} catch (Exception e) {
 			log.error("Could not locate SessionFactory in JNDI", e);
 			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
@@ -107,9 +117,8 @@ public class CcobClieDAO {
 	public List findByExample(CcobClie instance) {
 		log.debug("finding CcobClie instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.CcobClie").add(Example.create(instance))
-					.list();
+			List results = sessionFactory.getCurrentSession().createCriteria("ar.com.rollpaper.pricing.beans.CcobClie")
+					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -117,4 +126,31 @@ public class CcobClieDAO {
 			throw re;
 		}
 	}
+
+	public static List<CcobClie> getListaCliente(String nombre) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<CcobClie> criteriaQuery = session.getCriteriaBuilder().createQuery(CcobClie.class);
+		Root<CcobClie> i = criteriaQuery.from(CcobClie.class);
+		criteriaQuery.where(cb.like(i.get("clieNombre"), "%" + nombre + "%"));
+
+		List<CcobClie> clientes = session.createQuery(criteriaQuery).getResultList();
+
+		return clientes;
+
+		// Session session = HibernateUtil.getSessionFactory().openSession();
+		// session.beginTransaction();
+		//
+		//
+		//
+		// CriteriaQuery<CcobClie> criteriaQuery =
+		// session.getCriteriaBuilder().createQuery(CcobClie.class);
+		// criteriaQuery.from(CcobClie.class);
+		//
+		// List<CcobClie> clientes = session.createQuery(criteriaQuery).getResultList();
+
+		// return clientes;
+	}
+
 }
