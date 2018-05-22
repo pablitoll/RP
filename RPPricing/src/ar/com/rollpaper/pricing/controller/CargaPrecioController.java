@@ -1,21 +1,73 @@
 package ar.com.rollpaper.pricing.controller;
 
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.security.acl.Owner;
 
+import javax.swing.JLabel;
+
+import com.alee.laf.optionpane.WebOptionPane;
+
+import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
-import ar.com.rollpaper.pricing.model.Consulta1Model;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
-import ar.com.rollpaper.pricing.view.Consulta1View;
+import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class CargaPrecioController
 		extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
 
+	private CcobClie clienteCargado;
+
 	public CargaPrecioController(PantPrincipalController pantPrincipal, CargaPrecioView view, CargaPrecioModel model)
 			throws Exception {
 		super(pantPrincipal, view, model, null);
+
+		view.txtNroCliente.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent e) {
+				perdioFocoCliente();
+			}
+		});
+
+	}
+
+	protected void perdioFocoCliente() {
+		CcobClie cliente = null;
+
+		if (!getView().txtNroCliente.getText().equals("")) {
+			String id = getView().txtNroCliente.getText();
+			if (CommonUtils.isNumeric(id)) {
+				cliente = CcobClieDAO.findById(Integer.valueOf(id));				
+			}
+		}
+
+		if (cliente != null) {
+			if((clienteCargado == null) || (clienteCargado.getClieCliente() != cliente.getClieCliente())) {
+				if((clienteCargado == null) || (WebOptionPane.showConfirmDialog(getView(), "Esta cargando otro Cliente, ¿Cancelamos la carga del actual?", "Cambio de Cliente", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0)) {
+					getView().lblNombreCliente.setText(cliente.getClieNombre());
+					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+					clienteCargado = cliente;
+					setModoPantalla(false);
+				} else {
+					getView().txtNroCliente.setText(String.valueOf(clienteCargado.getClieCliente()));
+				}
+			}
+								
+		} else {
+			getView().lblNombreCliente.setText("S/D");
+			getView().lblNombreLegal.setText("S/D");
+			clienteCargado = cliente; //es decir null;
+			setModoPantalla(true);
+		}		
+	}
+
+	private void setModoPantalla(boolean sinDatos) {
+		getView().txtNroLista.setEnabled(!sinDatos);
+		
 	}
 
 	@Override
@@ -25,8 +77,9 @@ public class CargaPrecioController
 
 	@Override
 	protected void resetearPantalla() throws Exception {
-		// TODO Auto-generated method stub
-
+		getView().lblNombreLista.setText("S/D");
+		getView().lblNombreLegal.setText("S/D");
+		getView().lblNombreCliente.setText("S/D");
 	}
 
 	@Override
@@ -49,7 +102,7 @@ public class CargaPrecioController
 		BuscarClienteDialog buscarClienteDialog = new BuscarClienteDialog(getPantallaPrincipal());
 		buscarClienteDialog.iniciar();
 		if (buscarClienteDialog.getNroCliente() != null) {
-			getView().txtNroCliente.setImporte(new Double(buscarClienteDialog.getNroCliente()));
+			getView().txtNroCliente.setValue(buscarClienteDialog.getNroCliente());
 		}
 	}
 

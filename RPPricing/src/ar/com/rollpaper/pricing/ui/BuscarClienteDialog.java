@@ -11,8 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
 import com.alee.laf.table.WebTable;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
@@ -52,7 +50,7 @@ public class BuscarClienteDialog extends DialogBase {
 		btnSeleccionar = new JButtonRP("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nroCliente = 1000;
+				nroCliente = (Integer) tableCliente.getModel().getValueAt(tableCliente.getSelectedRow(), 0);
 				cerrar();
 			}
 		});
@@ -94,27 +92,34 @@ public class BuscarClienteDialog extends DialogBase {
 
 		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal" };
 		String[][] data = {};
-		//tableCliente = new WebTable(data, header);
 		tableCliente = new WebTable();
 		tableCliente.setModel(new DefaultTableModel(data, header));
 		tableCliente.setEditable(false);
 		scrollPane.setViewportView(tableCliente);
+		cambioCliente();
+	}
+
+	private void cambioCliente() {
+		btnSeleccionar.setEnabled(tableCliente.getRowCount() > 0);
 	}
 
 	protected void buscar() {
 		DefaultTableModel tableModel = (DefaultTableModel) tableCliente.getModel();
 		tableModel.getDataVector().removeAllElements();
-		
-		for(CcobClie clie : CcobClieDAO.getListaCliente(txtDescCliente.getText())) {
-			tableModel.addRow(new Object[] {clie.getClieCliente(), clie.getClieNombre(), clie.getClieNombreLegal()});
+
+		for (CcobClie clie : CcobClieDAO.getListaCliente(txtDescCliente.getText())) {
+			tableModel.addRow(new Object[] { clie.getClieCliente(), clie.getClieNombre(), clie.getClieNombreLegal() });
 		}
-		
+
+		if (tableCliente.getRowCount() > 0) {
+			tableCliente.setSelectedRow(0);
+		}
+
+		cambioCliente();
 	}
 
 	@Override
 	protected void cargaPantalla() throws Exception {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -122,8 +127,14 @@ public class BuscarClienteDialog extends DialogBase {
 		boolean retorno = super.presionoTecla(ke);
 		if (!retorno) {
 			if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-				retorno = true;
-				btnBuscar.doClick();
+				if (txtDescCliente.hasFocus()) {
+					retorno = true;
+					btnBuscar.doClick();
+				}
+				if (tableCliente.hasFocus()) {
+					retorno = true;
+					btnSeleccionar.doClick();
+				}
 			}
 		}
 		return retorno;

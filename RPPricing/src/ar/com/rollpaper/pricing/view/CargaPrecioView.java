@@ -11,9 +11,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
+import com.alee.laf.text.WebFormattedTextField;
+
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import javax.swing.SwingConstants;
 
 public class CargaPrecioView extends BaseViewMVCExtendida {
 
@@ -21,12 +25,15 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public RPImporte txtNroCliente;
+	public WebFormattedTextField txtNroCliente;
 	public JTable tableDescEspecifico;
 	public JTable tableDescLista;
 	public RPImporte txtNroLista;
 	public JButtonRP btnBorrar;
 	public JButtonRP btnGrabar;
+	public JLabel lblNombreLista;
+	public JLabel lblNombreLegal;
+	public JLabel lblNombreCliente;
 
 	public CargaPrecioView() throws Exception {
 		super();
@@ -50,9 +57,13 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel.gridy = 0;
 		panel.add(lblcliente, gbc_lblNewLabel);
 
-		txtNroCliente = new RPImporte();
-		txtNroCliente.setSoloEnteros(true);
+		txtNroCliente = new WebFormattedTextField();
 		txtNroCliente.setFont(Common.getStandarFont());
+		txtNroCliente.setInputPrompt("ingrese nro. cliente");
+		txtNroCliente.setInputPromptFont(Common.getStandarFontItalic());
+		txtNroCliente.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtNroCliente.setColumns(10);
+		txtNroCliente.clear();
 		GridBagConstraints gbc_txtNroCliente = new GridBagConstraints();
 		gbc_txtNroCliente.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtNroCliente.anchor = GridBagConstraints.NORTH;
@@ -62,7 +73,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panel.add(txtNroCliente, gbc_txtNroCliente);
 		txtNroCliente.setColumns(10);
 
-		JLabel lblNombreCliente = new JLabel("New label");
+		lblNombreCliente = new JLabel("New label");
 		lblNombreCliente.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNombreCliente = new GridBagConstraints();
 		gbc_lblNombreCliente.anchor = GridBagConstraints.WEST;
@@ -71,7 +82,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNombreCliente.gridy = 0;
 		panel.add(lblNombreCliente, gbc_lblNombreCliente);
 
-		JLabel lblNombreLegal = new JLabel("New label");
+		lblNombreLegal = new JLabel("New label");
 		lblNombreLegal.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNombreLegal = new GridBagConstraints();
 		gbc_lblNombreLegal.insets = new Insets(0, 0, 5, 0);
@@ -100,7 +111,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panel.add(txtNroLista, gbc_txtNroLista);
 		txtNroLista.setColumns(10);
 
-		JLabel lblNombreLista = new JLabel("New label");
+		lblNombreLista = new JLabel("New label");
 		lblNombreLista.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNombreLista = new GridBagConstraints();
 		gbc_lblNombreLista.insets = new Insets(0, 0, 0, 5);
