@@ -1,34 +1,60 @@
 package ar.com.rollpaper.pricing.ui;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+import com.alee.laf.table.WebTable;
+
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.DialogBase;
-import javax.swing.JPanel;
-import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import java.awt.FlowLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class BuscarClienteDialog extends DialogBase {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private WebTable tableCliente;
+	private JTextField descCliente;
+	private JButtonRP btnSeleccionar;
+	private JButtonRP btnCancelar;
+	private JButtonRP btnBuscar;
+	private Integer nroCliente = null;
+
+	public Integer getNroCliente() {
+		return nroCliente;
+	}
+
 	public BuscarClienteDialog(BasePantallaPrincipal<?, ?> pantPrincipal) {
 		super(pantPrincipal);
-		
+		setBounds(100, 100, 500, 600);
+		nroCliente = null;
 		JPanel panel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		getContentPane().add(panel, BorderLayout.SOUTH);
-		
-		JButtonRP btnSeleccionar = new JButtonRP("Seleccionar");
+
+		btnSeleccionar = new JButtonRP("Seleccionar");
+		btnSeleccionar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				nroCliente = 1000;
+				cerrar();
+			}
+		});
 		btnSeleccionar.setFont(Common.getStandarFont());
 		panel.add(btnSeleccionar);
-		
-		JButtonRP btnCancelar = new JButtonRP("Cancelar");
+
+		btnCancelar = new JButtonRP("Cancelar");
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -36,40 +62,49 @@ public class BuscarClienteDialog extends DialogBase {
 			}
 		});
 		panel.add(btnCancelar);
-		
+
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.NORTH);
-		
+
 		JLabel lblNombreDelCliente = new JLabel("Nombre del Cliente:");
 		lblNombreDelCliente.setFont(Common.getStandarFont());
 		panel_1.add(lblNombreDelCliente);
-		
+
 		descCliente = new JTextField();
 		descCliente.setFont(Common.getStandarFont());
 		panel_1.add(descCliente);
 		descCliente.setColumns(25);
-		
-		JButtonRP btnBuscar = new JButtonRP("Buscar");
+
+		btnBuscar = new JButtonRP("Buscar");
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		
-		table = new JTable();
-		scrollPane.setViewportView(table);
-	}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JTable table;
-	private JTextField descCliente;
+		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal" };
+		String[][] data = {};
+		tableCliente = new WebTable(data, header);
+		tableCliente.setEditable(false);
+		scrollPane.setViewportView(tableCliente);
+	}
 
 	@Override
 	protected void cargaPantalla() throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
+
+	@Override
+	public boolean presionoTecla(KeyEvent ke) {
+		boolean retorno = super.presionoTecla(ke);
+		if (!retorno) {
+			if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
+				retorno = true;
+				btnBuscar.doClick();
+			}
+		}
+		return retorno;
+	}
+
 }

@@ -1,5 +1,6 @@
 package ar.com.rollpaper.pricing.view;
 
+import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPImporte;
@@ -133,8 +134,8 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 	@Override
 	public void asignarBotonesPantExtendida() {
-		// TODO Auto-generated method stub
-
+		asignarBotonAccion(btnBorrar, ConstantesRP.PantCarPrecio.BORRAR.toString());
+		asignarBotonAccion(btnGrabar, ConstantesRP.PantCarPrecio.GRABAR.toString());
 	}
 
 }
