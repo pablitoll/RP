@@ -12,12 +12,15 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import com.alee.laf.scroll.WebScrollPane;
+import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebFormattedTextField;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 public class CargaPrecioView extends BaseViewMVCExtendida {
 
@@ -26,9 +29,9 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	 */
 	private static final long serialVersionUID = 1L;
 	public WebFormattedTextField txtNroCliente;
-	public JTable tableDescEspecifico;
-	public JTable tableDescLista;
-	public RPImporte txtNroLista;
+	public WebTable tableDescEspecifico;
+	public WebTable tableDescLista;
+	public WebFormattedTextField txtNroLista;
 	public JButtonRP btnBorrar;
 	public JButtonRP btnGrabar;
 	public JLabel lblNombreLista;
@@ -59,7 +62,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 		txtNroCliente = new WebFormattedTextField();
 		txtNroCliente.setFont(Common.getStandarFont());
-		txtNroCliente.setInputPrompt("ingrese nro. cliente");
+		txtNroCliente.setInputPrompt("Ingrese nro. Cliente");
 		txtNroCliente.setInputPromptFont(Common.getStandarFontItalic());
 		txtNroCliente.setHorizontalAlignment(SwingConstants.RIGHT);
 		txtNroCliente.setColumns(10);
@@ -100,9 +103,14 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel_1.gridy = 1;
 		panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
-		txtNroLista = new RPImporte();
-		txtNroLista.setSoloEnteros(true);
+		txtNroLista = new WebFormattedTextField();
 		txtNroLista.setFont(Common.getStandarFont());
+		txtNroLista.setInputPrompt("Ingrese nro. Lista");
+		txtNroLista.setInputPromptFont(Common.getStandarFontItalic());
+		txtNroLista.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtNroLista.setColumns(10);
+		txtNroLista.clear();
+
 		GridBagConstraints gbc_txtNroLista = new GridBagConstraints();
 		gbc_txtNroLista.insets = new Insets(0, 0, 0, 5);
 		gbc_txtNroLista.fill = GridBagConstraints.HORIZONTAL;
@@ -122,17 +130,35 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
-		JScrollPane spDescLista = new JScrollPane();
+		tableDescLista = new WebTable();
+		WebScrollPane spDescLista = new WebScrollPane(tableDescLista);
 		tabbedPane.addTab("Descuento por Lista", null, spDescLista, null);
 
-		tableDescLista = new JTable();
-		spDescLista.setViewportView(tableDescLista);
+		String[] header = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Precio", "Moneda",
+				"Desde", "Hasta", "Referencia" };
+		String[][] data = { {} };
 
-		JScrollPane spDescEspecifico = new JScrollPane();
+		tableDescEspecifico = new WebTable();
+		tableDescEspecifico.setModel(new DefaultTableModel(data, header) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override 
+			public boolean isCellEditable(int row, int col) {
+				return col >= 4;
+			}
+			
+			@Override
+			public Class getColumnClass(int c) {
+				return Double.class;
+			}
+		});
+		tableDescEspecifico.setFont(Common.getStandarFont());
+
+		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
 		tabbedPane.addTab("Descuentos y Precios Especificos", null, spDescEspecifico, null);
-
-		tableDescEspecifico = new JTable();
-		spDescEspecifico.setViewportView(tableDescEspecifico);
 
 		btnBorrar = new JButtonRP("Borrar");
 		btnBorrar.setFont(Common.getStandarFont());

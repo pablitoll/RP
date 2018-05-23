@@ -4,13 +4,16 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.security.acl.Owner;
+import java.util.List;
 
 import javax.swing.JLabel;
 
 import com.alee.laf.optionpane.WebOptionPane;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
@@ -28,14 +31,18 @@ public class CargaPrecioController
 		super(pantPrincipal, view, model, null);
 
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
-			public void focusLost(FocusEvent e) {
-				perdioFocoCliente();
+			public void focusLost(FocusEvent evento) {
+				try {
+					perdioFocoCliente();
+				} catch (Exception e1) {
+					ManejoDeError.showError(e1, "Error al buscar cliente");
+				}
 			}
 		});
 
 	}
 
-	protected void perdioFocoCliente() {
+	protected void perdioFocoCliente() throws Exception {
 		CcobClie cliente = null;
 
 		if (!getView().txtNroCliente.getText().equals("")) {
@@ -51,7 +58,8 @@ public class CargaPrecioController
 					getView().lblNombreCliente.setText(cliente.getClieNombre());
 					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
 					clienteCargado = cliente;
-					setModoPantalla(false);
+					cargarLista(cliente);
+					setModoPantalla();
 				} else {
 					getView().txtNroCliente.setText(String.valueOf(clienteCargado.getClieCliente()));
 				}
@@ -61,12 +69,30 @@ public class CargaPrecioController
 			getView().lblNombreCliente.setText("S/D");
 			getView().lblNombreLegal.setText("S/D");
 			clienteCargado = cliente; //es decir null;
-			setModoPantalla(true);
+			setModoPantalla();
 		}		
 	}
 
-	private void setModoPantalla(boolean sinDatos) {
-		getView().txtNroLista.setEnabled(!sinDatos);
+	private void cargarLista(CcobClie cliente) throws Exception {
+		List<VentCliv> listas = VentClivDAO.getListaPreciosByCliente(cliente);
+		if(listas.size() > 1) {
+			throw new Exception("El Cliente tiene mas de una lista asociada");
+		}
+		
+		if(listas.size() == 1) {
+			getView().txtNroLista.setText(String.valueOf(listas.get(0).getClivListaPrecvta()));
+			getView().lblNombreLista.setText("FALTA EL NOMBRE DE LA LISTA");
+		}
+		
+		setModoPantalla();
+	}
+
+	private void setModoPantalla() {
+		Boolean tieneCli = !getView().lblNombreCliente.getText().equals("S/D");
+		Boolean tieneLista = !getView().lblNombreLista.getText().equals("S/D");
+		
+		getView().txtNroLista.setEnabled(tieneCli);
+		//getView().txtNroLista.setEnabled(!sinDatos);
 		
 	}
 

@@ -11,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
+import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
@@ -87,15 +89,13 @@ public class BuscarClienteDialog extends DialogBase {
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
 
-		JScrollPane scrollPane = new JScrollPane();
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
-
 		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal" };
 		String[][] data = {};
 		tableCliente = new WebTable();
 		tableCliente.setModel(new DefaultTableModel(data, header));
 		tableCliente.setEditable(false);
-		scrollPane.setViewportView(tableCliente);
+		WebScrollPane scrollPane = new WebScrollPane(tableCliente);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioCliente();
 	}
 
