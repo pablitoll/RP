@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 24/05/2018 09:03:27 by Hibernate Tools 5.3.0.Beta2 --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="RPAPER" dynamic-insert="false" dynamic-update="false" mutable="true" name="ar.com.rollpaper.pricing.beans.rpdb.PricMaestroEsclavo" optimistic-lock="version" polymorphism="implicit" schema="dbo" select-before-update="false" table="PRIC_MAESTRO_ESCLAVO">
+        <id name="pricMaestroEsclavoId" type="int">
+            <column name="PRIC_MAESTRO_ESCLAVO_ID"/>
+            <generator class="assigned"/>
+        </id>
+        <property generated="never" lazy="false" name="pricMaestroCliente" optimistic-lock="true" type="int" unique="false">
+            <column name="PRIC_MAESTRO_CLIENTE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="pricMEListaPrecvta" optimistic-lock="true" type="int" unique="false">
+            <column name="PRIC_M_E_LISTA_PRECVTA" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="pricEsclavoCliente" optimistic-lock="true" type="int" unique="false">
+            <column name="PRIC_ESCLAVO_CLIENTE" not-null="true"/>
+        </property>
+    </class>
+</hibernate-mapping>

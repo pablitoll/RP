@@ -2,5 +2,8 @@
 <!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-	<table-filter match-name="PRIC_PRECIOS_ESPECIALES" match-catalog="RPAPER"></table-filter>	
+	<table-filter match-name="SIST_MONE" match-catalog="RPAPER"></table-filter>
+	<table-filter match-name="VENT_ARPV" match-catalog="RPAPER"></table-filter>
+	<table-filter match-name="VENT_LIPV" match-catalog="RPAPER"></table-filter>	
+		
 </hibernate-reverse-engineering>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 24/05/2018 09:15:54 by Hibernate Tools 5.3.0.Beta2 --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="RPAPER" dynamic-insert="false" dynamic-update="false" mutable="true" name="ar.com.rollpaper.pricing.beans.rpdb.VentArpv" optimistic-lock="version" polymorphism="implicit" schema="dbo" select-before-update="false" table="VENT_ARPV">
+        <composite-id class="ar.com.rollpaper.pricing.beans.rpdb.VentArpvId" mapped="false" name="id" unsaved-value="undefined">
+            <key-property name="arpvArticulo" type="int">
+                <column name="ARPV_ARTICULO"/>
+            </key-property>
+            <key-property name="arpvListaPrecvta" type="int">
+                <column name="ARPV_LISTA_PRECVTA"/>
+            </key-property>
+        </composite-id>
+        <many-to-one class="ar.com.rollpaper.pricing.beans.rpdb.SistMone" embed-xml="true" fetch="select" insert="true" name="sistMoneByArpvMoneda" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column length="3" name="ARPV_MONEDA" not-null="true"/>
+        </many-to-one>
+        <many-to-one class="ar.com.rollpaper.pricing.beans.rpdb.SistMone" embed-xml="true" fetch="select" insert="true" name="sistMoneByArpvMonedaAnt" not-found="exception" optimistic-lock="true" unique="false" update="true">
+            <column length="3" name="ARPV_MONEDA_ANT"/>
+        </many-to-one>
+        <many-to-one class="ar.com.rollpaper.pricing.beans.rpdb.VentLipv" embed-xml="true" fetch="select" insert="false" name="ventLipv" not-found="exception" optimistic-lock="true" unique="false" update="false">
+            <column name="ARPV_LISTA_PRECVTA" not-null="true"/>
+        </many-to-one>
+        <property generated="never" lazy="false" name="arpvPrecioVta" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARPV_PRECIO_VTA" not-null="true" precision="14" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="arpvPrecioVtaAn" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARPV_PRECIO_VTA_AN" not-null="true" precision="14" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="arpvFechaUltAct" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="ARPV_FECHA_ULT_ACT" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="arpvClaseRefLp" optimistic-lock="true" type="java.lang.Short" unique="false">
+            <column name="ARPV_CLASE_REF_LP"/>
+        </property>
+        <property generated="never" lazy="false" name="arpvValorRef" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARPV_VALOR_REF" precision="14" scale="3"/>
+        </property>
+        <property generated="never" lazy="false" name="arpvFactor" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="ARPV_FACTOR" precision="12" scale="6"/>
+        </property>
+        <property generated="never" lazy="false" name="arpvCpbteRef" optimistic-lock="true" type="string" unique="false">
+            <column length="50" name="ARPV_CPBTE_REF"/>
+        </property>
+    </class>
+</hibernate-mapping>
