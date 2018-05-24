@@ -2,10 +2,15 @@ package ar.com.rollpaper.pricing.ui;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.HeadlessException;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
-import javax.swing.*;
+
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JWindow;
+import javax.swing.Timer;
 
 import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
@@ -15,8 +20,6 @@ import ar.com.rollpaper.pricing.controller.PantPrincipalController;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
 import ar.com.rp.ui.main.MainFramework;
-
-import java.awt.Toolkit;
 
 public class SplashScreen extends JWindow {
 

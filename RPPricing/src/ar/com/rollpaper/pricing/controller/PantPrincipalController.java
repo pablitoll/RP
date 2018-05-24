@@ -3,8 +3,6 @@ package ar.com.rollpaper.pricing.controller;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import org.hibernate.Hibernate;
-
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.LogBusiness;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
@@ -39,7 +37,6 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		//refreshBarraDeEstadoYBotonos();
 
 		// Agrego los botones de acceso rapido de codigo
-		//agregarBotones();
 		cargarPermisos();
 
 		// Lanzo panalla principal
@@ -120,7 +117,6 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 				ManejoDeError.showError(e, "No se puede acceder a la pantalla de carga de precio por clietne");
 			}
 		}
-
 
 
 	}

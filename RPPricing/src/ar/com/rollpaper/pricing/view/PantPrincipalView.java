@@ -4,15 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.EmptyBorder;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.ui.Main;
@@ -30,13 +27,12 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	public String textImprimirTicket = "Imprimir Ticket";
 	public JLabel lblUsr = new JLabel("lblUsr");
-	public JLabel lblAmbiente = new JLabel("lblAmbiente");
 
 	public JPanel pnlOnline = new JPanel();
 	public JPanel pnlCentral = new JPanel();
 	public JPanel pnlTeller = new JPanel();
 
-	public JButtonBarraBotonesRP btnCalculadora = new JButtonBarraBotonesRP("Calculadora");
+	private JButtonBarraBotonesRP btnCalculadora = new JButtonBarraBotonesRP("Calculadora");
 
 	private final JMenu mnCarga = new JMenu("Carga");
 	private final JMenu mnConsulta = new JMenu("Consulta");
@@ -53,6 +49,10 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 	private final JMenuItem mnuVersion = new JMenuItem("Version");
 
 	private final JMenuItem mntmCargaClienteEsclavo = new JMenuItem("Carga Cliente/Esclavo");
+
+	private JButtonBarraBotonesRP btnCargaPrecio = new JButtonBarraBotonesRP("Carga de Precio");
+
+	private JButtonBarraBotonesRP btnClienteEsclavo = new JButtonBarraBotonesRP("Carga de Cliente/Esclavo");
 
 	public PantPrincipalView() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException {
@@ -77,20 +77,19 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 		mntmCargaPrecioCliente.setFont(Common.getStandarFont());
 		mnCarga.add(mntmCargaPrecioCliente);
-		mntmCargaClienteEsclavo.setFont(Common.getStandarFont());		
+		mntmCargaClienteEsclavo.setFont(Common.getStandarFont());
 		mnCarga.add(mntmCargaClienteEsclavo);
 
 		mnCarga.setFont(Common.getStandarFont());
-		
+
 		menuBar.add(mnCarga);
-		
+
 		mnConsulta.setFont(Common.getStandarFontMenu());
 		menuBar.add(mnConsulta);
 		mnConsulta.setFont(Common.getStandarFontMenu());
 		mnConsulta.add(mntmConsulta1);
 		mntmConsulta1.setFont(Common.getStandarFontMenu());
 
-				
 		mnMantenimiento.setFont(Common.getStandarFontMenu());
 		menuBar.add(mnMantenimiento);
 
@@ -106,9 +105,13 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mntmSalir.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_EXIT)));
 		mnSalir.add(mntmSalir);
 
-		// Barra lateral
-		lblAmbiente.setVisible(false);
-		toolBarBotones.add(lblAmbiente);
+		agregarBotonStd2Barra(btnCargaPrecio, Main.class.getResource(ConstantesRP.IMG_CAL));
+		btnCalculadora.setMnemonicControl(true);
+		btnCalculadora.setMnemonic(KeyEvent.VK_P);
+
+		agregarBotonStd2Barra(btnClienteEsclavo, Main.class.getResource(ConstantesRP.IMG_CAL));
+		btnCalculadora.setMnemonicControl(true);
+		btnCalculadora.setMnemonic(KeyEvent.VK_C);
 
 		toolBarBotones.add(Box.createVerticalGlue()); // De aca en adelante los mando para abajo
 
@@ -124,9 +127,9 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		asignarBotonAccion(mntmConsulta1, ConstantesRP.Acciones.CONSULTA1.toString());
 		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		asignarBotonAccion(mntmCargaClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
-		
-		// ConstantesRP.Acciones.VER_LOG_OPERACIONES_DIARIA_B.toString());
-		// asignarBotonAccion(mnuVersion, ConstantesRP.Acciones.VERSION.toString());
+
+		asignarBotonAccion(btnClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
+		asignarBotonAccion(btnCargaPrecio, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 	}
 
 }

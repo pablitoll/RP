@@ -1,21 +1,15 @@
 package ar.com.rollpaper.pricing.dao;
 // Generated 18/05/2018 07:33:44 by Hibernate Tools 5.3.0.Beta2
 
-import java.util.Iterator;
 import java.util.List;
-import javax.naming.InitialContext;
-import javax.persistence.EntityManager;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.bouncycastle.jcajce.provider.symmetric.AES.CBC;
-import org.hibernate.LockMode;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.data.HibernateUtil;

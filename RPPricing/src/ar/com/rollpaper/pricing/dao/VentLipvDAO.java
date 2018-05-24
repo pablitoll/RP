@@ -2,18 +2,16 @@ package ar.com.rollpaper.pricing.dao;
 // Generated 24/05/2018 09:16:17 by Hibernate Tools 5.3.0.Beta2
 
 import java.util.List;
+
 import javax.naming.InitialContext;
-import javax.persistence.criteria.CriteriaBuilder;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.VentLipv;
-import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class VentLipv.

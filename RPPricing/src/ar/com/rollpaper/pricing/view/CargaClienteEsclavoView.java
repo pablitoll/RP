@@ -1,30 +1,24 @@
 package ar.com.rollpaper.pricing.view;
 
-import ar.com.rollpaper.pricing.business.ConstantesRP;
-import ar.com.rp.ui.common.Common;
-import ar.com.rp.ui.componentes.JButtonRP;
-import ar.com.rp.ui.componentes.RPImporte;
-import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.JTabbedPane;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebFormattedTextField;
 
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableModel;
-import java.awt.Font;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import javax.swing.JTextField;
+import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rp.ui.common.Common;
+import ar.com.rp.ui.componentes.JButtonRP;
+import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
 
 public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
@@ -35,15 +29,15 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	public static final int COL_DESC = 1;
 	public static final int COL_DESC_LEGAL = 2;
 	public static final int COL_ID = 0;
-	
+
 	public WebFormattedTextField txtNroCliente;
 	public WebTable tableEsclavo;
 	public JButtonRP btnGrabar;
 	public JLabel lblNombreLista;
 	public JLabel lblNombreLegal;
 	public JLabel lblNombreCliente;
-	private JButtonRP btnImprimir;
-	private JButtonRP btnImprimirTodo;
+	public JButtonRP btnImprimir;
+	public JButtonRP btnImprimirTodo;
 	private JPanel pnlCentral;
 	private JPanel panel;
 	public JButtonRP btnAgregar;
@@ -52,6 +46,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
+	public JButtonRP btnCancelar;
 
 	public CargaClienteEsclavoView() throws Exception {
 		super();
@@ -90,7 +85,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_txtNroCliente.gridy = 0;
 		pnlSuperior.add(txtNroCliente, gbc_txtNroCliente);
 		txtNroCliente.setColumns(10);
-		
+
 		lblNewLabel = new JLabel("Nombre:");
 		lblNewLabel.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -108,7 +103,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNombreCliente.gridx = 3;
 		gbc_lblNombreCliente.gridy = 0;
 		pnlSuperior.add(lblNombreCliente, gbc_lblNombreCliente);
-		
+
 		lblNewLabel_3 = new JLabel("Nombre Legal:");
 		lblNewLabel_3.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
@@ -135,15 +130,16 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel_1.gridx = 0;
 		gbc_lblNewLabel_1.gridy = 1;
 		pnlSuperior.add(lblNewLabel_1, gbc_lblNewLabel_1);
-		
+
 		lblNroLista = new JLabel("New label");
 		lblNroLista.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNroListaShow = new GridBagConstraints();
+		gbc_lblNroListaShow.anchor = GridBagConstraints.EAST;
 		gbc_lblNroListaShow.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNroListaShow.gridx = 1;
 		gbc_lblNroListaShow.gridy = 1;
 		pnlSuperior.add(lblNroLista, gbc_lblNroListaShow);
-		
+
 		lblNewLabel_2 = new JLabel("Nombre Lista");
 		lblNewLabel_2.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
@@ -156,6 +152,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		lblNombreLista = new JLabel("New label");
 		lblNombreLista.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNombreLista = new GridBagConstraints();
+		gbc_lblNombreLista.anchor = GridBagConstraints.WEST;
 		gbc_lblNombreLista.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNombreLista.gridx = 3;
 		gbc_lblNombreLista.gridy = 1;
@@ -164,78 +161,87 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia" };
 		String[][] data = { {} };
 
+		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlInferiorBotones.add(btnCancelar);
+
 		btnGrabar = new JButtonRP("Grabar");
 		btnGrabar.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnGrabar);
-		
+
 		btnImprimir = new JButtonRP("Imprimir");
 		btnImprimir.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnImprimir);
-		
+
 		btnImprimirTodo = new JButtonRP("Imprimir Todo");
 		btnImprimirTodo.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnImprimirTodo);
-		
+
 		pnlCentral = new JPanel();
 		getContentPane().add(pnlCentral, BorderLayout.CENTER);
-		
-				tableEsclavo = new WebTable();
-				tableEsclavo.setModel(new DefaultTableModel(data, header) {
-					/**
-					 * 
-					 */
-					private static final long serialVersionUID = 1L;
 
-					@Override
-					public boolean isCellEditable(int row, int col) {
-						return col == COL_ID;
-					}
+		tableEsclavo = new WebTable();
+		tableEsclavo.setModel(new DefaultTableModel(data, header) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 
-					@Override
-					public Class getColumnClass(int c) {
-						return Integer.class;
-					}
-				});
-				tableEsclavo.setFont(Common.getStandarFont());
-						pnlCentral.setLayout(new BorderLayout(0, 0));
-				
-						WebScrollPane spEsclavo = new WebScrollPane(tableEsclavo);
-						pnlCentral.add(spEsclavo);
-						
-						panel = new JPanel();
-						getContentPane().add(panel, BorderLayout.EAST);
-						GridBagLayout gbl_panel = new GridBagLayout();
-						gbl_panel.columnWidths = new int[]{89, 0};
-						gbl_panel.rowHeights = new int[]{23, 0, 0};
-						gbl_panel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-						gbl_panel.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-						panel.setLayout(gbl_panel);
-						
-						btnAgregar = new JButtonRP("Agregar");
-						btnAgregar.setFont(Common.getStandarFont());
-						GridBagConstraints gbc_btnAgregar = new GridBagConstraints();
-						gbc_btnAgregar.anchor = GridBagConstraints.NORTH;
-						gbc_btnAgregar.insets = new Insets(0, 0, 5, 0);
-						gbc_btnAgregar.gridx = 0;
-						gbc_btnAgregar.gridy = 0;
-						panel.add(btnAgregar, gbc_btnAgregar);
-						
-						btnEliminar = new JButtonRP("Eliminar");
-						btnEliminar.setFont(Common.getStandarFont());
-						GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
-						gbc_btnEliminar.anchor = GridBagConstraints.NORTH;
-						gbc_btnEliminar.gridx = 0;
-						gbc_btnEliminar.gridy = 1;
-						panel.add(btnEliminar, gbc_btnEliminar);
+			@Override
+			public boolean isCellEditable(int row, int col) {
+				return col == COL_ID;
+			}
+
+			@Override
+			public Class<?> getColumnClass(int c) {
+				return Integer.class;
+			}
+		});
+		tableEsclavo.setFont(Common.getStandarFont());
+		pnlCentral.setLayout(new BorderLayout(0, 0));
+
+		WebScrollPane spEsclavo = new WebScrollPane(tableEsclavo);
+		pnlCentral.add(spEsclavo);
+
+		panel = new JPanel();
+		getContentPane().add(panel, BorderLayout.EAST);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[] { 89, 0 };
+		gbl_panel.rowHeights = new int[] { 23, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		panel.setLayout(gbl_panel);
+
+		btnAgregar = new JButtonRP("Agregar");
+		btnAgregar.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_btnAgregar = new GridBagConstraints();
+		gbc_btnAgregar.anchor = GridBagConstraints.NORTH;
+		gbc_btnAgregar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnAgregar.gridx = 0;
+		gbc_btnAgregar.gridy = 0;
+		panel.add(btnAgregar, gbc_btnAgregar);
+
+		btnEliminar = new JButtonRP("Eliminar");
+		btnEliminar.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
+		gbc_btnEliminar.anchor = GridBagConstraints.NORTH;
+		gbc_btnEliminar.gridx = 0;
+		gbc_btnEliminar.gridy = 1;
+		panel.add(btnEliminar, gbc_btnEliminar);
 	}
 
 	@Override
 	public void asignarBotonesPantExtendida() {
 		asignarBotonAccion(btnAgregar, ConstantesRP.PantCarClienteEsclabo.AGREGAR.toString());
 		asignarBotonAccion(btnEliminar, ConstantesRP.PantCarClienteEsclabo.BORRAR.toString());
+		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString());
 		asignarBotonAccion(btnGrabar, ConstantesRP.PantCarClienteEsclabo.GRABAR.toString());
 		asignarBotonAccion(btnImprimir, ConstantesRP.PantCarClienteEsclabo.IMPRIMIR.toString());
 		asignarBotonAccion(btnImprimirTodo, ConstantesRP.PantCarClienteEsclabo.IMPRIMIR_TODO.toString());
+	}
+
+	public void setCerrarVisible(Boolean visible) {
+		btnCerrar.setVisible(visible);
 	}
 
 }

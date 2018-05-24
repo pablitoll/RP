@@ -2,7 +2,9 @@ package ar.com.rollpaper.pricing.dao;
 // Generated 22/05/2018 19:11:08 by Hibernate Tools 5.3.0.Beta2
 
 import java.util.List;
+
 import javax.naming.InitialContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;

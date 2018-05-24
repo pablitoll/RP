@@ -114,7 +114,13 @@ public class CargaClienteEsclavoController
 		getView().tableEsclavo.setEnabled(tieneCli);
 		getView().btnAgregar.setEnabled(tieneCli);
 		getView().btnEliminar.setEnabled(tieneCli);
-		getView().btnGrabar.setEnabled(tieneCli);
+		
+		getView().btnGrabar.setVisible(tieneCli);
+		getView().btnCancelar.setVisible(tieneCli);
+		getView().btnImprimir.setVisible(tieneCli);
+		getView().btnImprimirTodo.setVisible(tieneCli);
+		
+		getView().setCerrarVisible(!tieneCli);
 	}
 
 	@Override
@@ -135,6 +141,7 @@ public class CargaClienteEsclavoController
 		clienteCargado = null;
 		getView().txtNroCliente.clear();
 		getView().txtNroCliente.requestFocus();
+		setModoPantalla();
 	}
 
 	@Override
@@ -205,6 +212,19 @@ public class CargaClienteEsclavoController
 
 	@Override
 	public void ejecuarAccion(String accion) {
+		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString())) {
+			if(WebOptionPane.showConfirmDialog(getView(),
+					"¿Cancelamos la carga Actual?", "Cancelacion de Carga",
+					WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0) {
+				try {
+					resetearPantalla();
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al cancelar");
+				}
+			}
+		}
+
+		
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.AGREGAR.toString())) {
 			DefaultTableModel model = (DefaultTableModel) getView().tableEsclavo.getModel();
 			model.addRow(new Object[] { null, "", "" });
