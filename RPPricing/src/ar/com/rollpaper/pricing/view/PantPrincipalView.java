@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -37,6 +38,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	public JButtonBarraBotonesRP btnCalculadora = new JButtonBarraBotonesRP("Calculadora");
 
+	private final JMenu mnCarga = new JMenu("Carga");
 	private final JMenu mnConsulta = new JMenu("Consulta");
 	private final JMenu mmAyuda = new JMenu("Ayuda");
 	private final JMenu mnMantenimiento = new JMenu("Mantenimiento");
@@ -49,6 +51,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 	private final JMenuItem mntmCargaPrecioCliente = new JMenuItem("Carga de Precio de Cliente");
 
 	private final JMenuItem mnuVersion = new JMenuItem("Version");
+
+	private final JMenuItem mntmCargaClienteEsclavo = new JMenuItem("Carga Cliente/Esclavo");
 
 	public PantPrincipalView() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException {
@@ -71,17 +75,23 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 		pnlOnline.setLayout(new BorderLayout(0, 0));
 
-		mnMantenimiento.setFont(Common.getStandarFontMenu());
+		mntmCargaPrecioCliente.setFont(Common.getStandarFont());
+		mnCarga.add(mntmCargaPrecioCliente);
+		mntmCargaClienteEsclavo.setFont(Common.getStandarFont());		
+		mnCarga.add(mntmCargaClienteEsclavo);
 
+		mnCarga.setFont(Common.getStandarFont());
+		
+		menuBar.add(mnCarga);
+		
 		mnConsulta.setFont(Common.getStandarFontMenu());
 		menuBar.add(mnConsulta);
 		mnConsulta.setFont(Common.getStandarFontMenu());
 		mnConsulta.add(mntmConsulta1);
 		mntmConsulta1.setFont(Common.getStandarFontMenu());
-		mnConsulta.addSeparator();
-		mntmCargaPrecioCliente.setFont(Common.getStandarFont());
-		mnConsulta.add(mntmCargaPrecioCliente);
 
+				
+		mnMantenimiento.setFont(Common.getStandarFontMenu());
 		menuBar.add(mnMantenimiento);
 
 		mmAyuda.setFont(Common.getStandarFontMenu());
@@ -113,6 +123,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		asignarBotonAccion(btnCalculadora, ConstantesRP.Acciones.CALCULADORA.toString());
 		asignarBotonAccion(mntmConsulta1, ConstantesRP.Acciones.CONSULTA1.toString());
 		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
+		asignarBotonAccion(mntmCargaClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
+		
 		// ConstantesRP.Acciones.VER_LOG_OPERACIONES_DIARIA_B.toString());
 		// asignarBotonAccion(mnuVersion, ConstantesRP.Acciones.VERSION.toString());
 	}

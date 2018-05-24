@@ -8,11 +8,13 @@ import org.hibernate.Hibernate;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.LogBusiness;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
+import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.model.Consulta1Model;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
 import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
+import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rollpaper.pricing.view.Consulta1View;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
@@ -94,6 +96,26 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 			}
 			try {
 				cmGestordeVentanas.findOrCreated("CargaPrecioController");
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "No se puede acceder a la pantalla de carga de precio por clietne");
+			}
+		}
+		
+
+		if (accion.equals(ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString())) {
+			if (!cmGestordeVentanas.isAlreadyCreated("CargaClienteEsclavoController")) {
+				// Creo los controladores de VerLogOperacionesDiaria
+				try {
+					CargaClienteEsclavoView vista = new CargaClienteEsclavoView();
+					CargaClienteEsclavoModel modelo = new CargaClienteEsclavoModel();
+					CargaClienteEsclavoController controlador = new CargaClienteEsclavoController(this, vista, modelo);
+					cmGestordeVentanas.add(controlador, "CargaClienteEsclavoController");
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al crear pantalla de carga de precio por cliente");
+				}
+			}
+			try {
+				cmGestordeVentanas.findOrCreated("CargaClienteEsclavoController");
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "No se puede acceder a la pantalla de carga de precio por clietne");
 			}
