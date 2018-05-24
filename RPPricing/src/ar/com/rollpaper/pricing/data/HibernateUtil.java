@@ -24,6 +24,8 @@ public class HibernateUtil {
 	}
 
 	public static SessionFactory getSessionFactory() {
+		
+		
 		if (sessionFactory == null) {
 			try {
 				// Create registry

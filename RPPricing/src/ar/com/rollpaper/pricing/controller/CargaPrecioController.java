@@ -5,11 +5,17 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.swing.table.DefaultTableModel;
+
+import org.hibernate.mapping.Array;
+
 import com.alee.laf.optionpane.WebOptionPane;
+import com.alee.laf.table.WebTable;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
@@ -81,13 +87,15 @@ public class CargaPrecioController
 		}
 
 		if (listas.size() == 1) {
-			getView().txtNroLista.setText(String.valueOf(listas.get(0).getClivListaPrecvta()));
+			if (listas.get(0).getClivListaPrecvta() != null) {
+				getView().txtNroLista.setText(String.valueOf(listas.get(0).getClivListaPrecvta()));
 
-			VentLipv lista = VentLipvDAO.findById(listas.get(0).getClivListaPrecvta());
-			if (lista != null) {
-				getView().lblNombreLista.setText(lista.getLipvNombre());
-			} else {
-				throw new Exception("No existe la lista " + listas.get(0).getClivListaPrecvta());
+				VentLipv lista = VentLipvDAO.findById(listas.get(0).getClivListaPrecvta());
+				if (lista != null) {
+					getView().lblNombreLista.setText(lista.getLipvNombre());
+				} else {
+					throw new Exception("No existe la lista " + listas.get(0).getClivListaPrecvta());
+				}
 			}
 
 		}
@@ -143,6 +151,39 @@ public class CargaPrecioController
 
 	@Override
 	public void ejecuarAccion(String accion) {
-		/// if(accion.equals(arg0))
+		if (accion.equals(ConstantesRP.PantCarPrecio.AGREGAR.toString())) {
+			DefaultTableModel model = getModelActivo();
+			
+			Object[] registroVacio = new Object[getTableActivo().getColumnCount()];
+			for(int i = 0; i < getTableActivo().getColumnCount(); i++) {
+				registroVacio[i] = null;
+			}
+			
+			model.addRow(registroVacio);
+			getTableActivo().setSelectedRow(getTableActivo().getRowCount() - 1);
+		}
+
+		if (accion.equals(ConstantesRP.PantCarPrecio.ELIMINAR.toString())) {
+			if (getTableActivo().getSelectedRow() >= 0) {
+				DefaultTableModel dm = getModelActivo();
+				dm.removeRow(getTableActivo().getSelectedRow());
+			}
+		}
+	}
+
+	private WebTable getTableActivo() {
+		if (getView().tabPanel.getSelectedIndex() == 0) {
+			return getView().tableDescFamilia;
+		} else {
+			return getView().tableDescEspecifico;
+		}
+	}
+
+	private DefaultTableModel getModelActivo() {
+		if (getView().tabPanel.getSelectedIndex() == 0) {
+			return (DefaultTableModel) getView().tableDescFamilia.getModel();
+		} else {
+			return (DefaultTableModel) getView().tableDescEspecifico.getModel();
+		}
 	}
 }

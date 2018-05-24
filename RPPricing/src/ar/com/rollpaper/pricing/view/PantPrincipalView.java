@@ -106,12 +106,12 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mnSalir.add(mntmSalir);
 
 		agregarBotonStd2Barra(btnCargaPrecio, Main.class.getResource(ConstantesRP.IMG_CAL));
-		btnCalculadora.setMnemonicControl(true);
-		btnCalculadora.setMnemonic(KeyEvent.VK_P);
+		btnCargaPrecio.setMnemonicControl(true);
+		btnCargaPrecio.setMnemonic(KeyEvent.VK_P);
 
 		agregarBotonStd2Barra(btnClienteEsclavo, Main.class.getResource(ConstantesRP.IMG_CAL));
-		btnCalculadora.setMnemonicControl(true);
-		btnCalculadora.setMnemonic(KeyEvent.VK_C);
+		btnClienteEsclavo.setMnemonicControl(true);
+		btnClienteEsclavo.setMnemonic(KeyEvent.VK_C);
 
 		toolBarBotones.add(Box.createVerticalGlue()); // De aca en adelante los mando para abajo
 

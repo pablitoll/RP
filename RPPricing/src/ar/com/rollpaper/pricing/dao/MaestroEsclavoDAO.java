@@ -8,10 +8,12 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class PricMaestroEsclavo.
@@ -22,21 +24,21 @@ public class MaestroEsclavoDAO {
 
 	private static final Log log = LogFactory.getLog(MaestroEsclavoDAO.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
+//	private final static SessionFactory sessionFactory = getSessionFactory();
+//
+//	protected SessionFactory getSessionFactory() {
+//		try {
+//			return (SessionFactory) new InitialContext().lookup("SessionFactory");
+//		} catch (Exception e) {
+//			log.error("Could not locate SessionFactory in JNDI", e);
+//			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
+//		}
+//	}
 
-	protected SessionFactory getSessionFactory() {
-		try {
-			return (SessionFactory) new InitialContext().lookup("SessionFactory");
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
-		}
-	}
-
-	public void persist(MaestroEsclavo transientInstance) {
+	public static void persist(MaestroEsclavo transientInstance) {
 		log.debug("persisting PricMaestroEsclavo instance");
 		try {
-			sessionFactory.getCurrentSession().persist(transientInstance);
+			HibernateUtil.getSession().persist(transientInstance);
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);

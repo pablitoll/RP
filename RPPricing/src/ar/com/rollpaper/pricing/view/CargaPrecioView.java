@@ -4,14 +4,15 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.sql.Date;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
+import com.alee.laf.tabbedpane.WebTabbedPane;
 import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebFormattedTextField;
 
@@ -26,15 +27,21 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	protected static final int COL_NOMBRE_FAMILIA = 1;
+	protected static final int COL_NOMRE_ESPECIFICO = 1;
 	public WebFormattedTextField txtNroCliente;
 	public WebTable tableDescEspecifico;
-	public WebTable tableDescLista;
+	public WebTable tableDescFamilia;
 	public WebFormattedTextField txtNroLista;
 	public JButtonRP btnBorrar;
 	public JButtonRP btnGrabar;
 	public JLabel lblNombreLista;
 	public JLabel lblNombreLegal;
 	public JLabel lblNombreCliente;
+	private JPanel pnlBotonesTabla;
+	private JButtonRP btnAgregar;
+	private JButtonRP btnEliminar;
+	public WebTabbedPane tabPanel;
 
 	public CargaPrecioView() throws Exception {
 		super();
@@ -125,38 +132,93 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNombreLista.gridy = 1;
 		panel.add(lblNombreLista, gbc_lblNombreLista);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		pnlBotonesTabla = new JPanel();
+		getContentPane().add(pnlBotonesTabla, BorderLayout.EAST);
+		GridBagLayout gbl_pnlBotonesTabla = new GridBagLayout();
+		gbl_pnlBotonesTabla.columnWidths = new int[] { 89, 0 };
+		gbl_pnlBotonesTabla.rowHeights = new int[] { 23, 0, 0 };
+		gbl_pnlBotonesTabla.columnWeights = new double[] { 0.0, Double.MIN_VALUE };
+		gbl_pnlBotonesTabla.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		pnlBotonesTabla.setLayout(gbl_pnlBotonesTabla);
 
-		tableDescLista = new WebTable();
-		WebScrollPane spDescLista = new WebScrollPane(tableDescLista);
-		tabbedPane.addTab("Descuento por Lista", null, spDescLista, null);
+		btnAgregar = new JButtonRP("Agregar");
+		btnAgregar.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_buttonRP = new GridBagConstraints();
+		gbc_buttonRP.anchor = GridBagConstraints.NORTH;
+		gbc_buttonRP.insets = new Insets(0, 0, 5, 0);
+		gbc_buttonRP.gridx = 0;
+		gbc_buttonRP.gridy = 0;
+		pnlBotonesTabla.add(btnAgregar, gbc_buttonRP);
 
-		String[] header = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Precio", "Moneda",
-				"Desde", "Hasta", "Referencia" };
-		String[][] data = { {} };
+		btnEliminar = new JButtonRP("Eliminar");
+		btnEliminar.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_buttonRP_1 = new GridBagConstraints();
+		gbc_buttonRP_1.anchor = GridBagConstraints.NORTH;
+		gbc_buttonRP_1.gridx = 0;
+		gbc_buttonRP_1.gridy = 1;
+		pnlBotonesTabla.add(btnEliminar, gbc_buttonRP_1);
 
-		tableDescEspecifico = new WebTable();
-		tableDescEspecifico.setModel(new DefaultTableModel(data, header) {
+		tabPanel = new WebTabbedPane();
+		tabPanel.setTabPlacement(WebTabbedPane.TOP);
+		tabPanel.setFont(Common.getStandarFont());
+		getContentPane().add(tabPanel, BorderLayout.CENTER);
+
+		tableDescFamilia = new WebTable();
+		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta" };
+		Class<?>[] tipoDescFamilia = { Integer.class, String.class, Double.class, Double.class, Date.class,
+				Date.class };
+		String[][] dataDesFamilia = { {} };
+
+		tableDescFamilia = new WebTable();
+		tableDescFamilia.setFont(Common.getStandarFont());
+		tableDescFamilia.setModel(new DefaultTableModel(dataDesFamilia, headerDescFamilia) {
 			/**
 			 * 
 			 */
 			private static final long serialVersionUID = 1L;
 
-			@Override 
-			public boolean isCellEditable(int row, int col) {
-				return col >= 4;
-			}
-			
 			@Override
-			public Class getColumnClass(int c) {
-				return Double.class;
+			public boolean isCellEditable(int row, int col) {
+				return (col != COL_NOMBRE_FAMILIA);
+			}
+
+			@Override
+			public Class<?> getColumnClass(int c) {
+				return tipoDescFamilia[c];
+			}
+		});
+
+		WebScrollPane spDescLista = new WebScrollPane(tableDescFamilia);
+
+		tabPanel.addTab("Descuento por Familia", spDescLista);
+
+		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2",
+				"Precio", "Moneda", "Desde", "Hasta", "Referencia" };
+		Class<?>[] tipoDescEspecifico = { Integer.class, String.class, String.class, Integer.class, Double.class,
+				Double.class, Double.class, String.class, Date.class, Date.class, String.class };
+		String[][] dataDesEspecifico = { {} };
+
+		tableDescEspecifico = new WebTable();
+		tableDescEspecifico.setModel(new DefaultTableModel(dataDesEspecifico, headerDescEspecifico) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int col) {
+				return col != COL_NOMRE_ESPECIFICO;
+			}
+
+			@Override
+			public Class<?> getColumnClass(int c) {
+				return tipoDescEspecifico[c];
 			}
 		});
 		tableDescEspecifico.setFont(Common.getStandarFont());
 
 		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
-		tabbedPane.addTab("Descuentos y Precios Especificos", null, spDescEspecifico, null);
+		tabPanel.addTab("Descuentos y Precios Especificos", spDescEspecifico);
 
 		btnBorrar = new JButtonRP("Borrar");
 		btnBorrar.setFont(Common.getStandarFont());
@@ -171,6 +233,8 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public void asignarBotonesPantExtendida() {
 		asignarBotonAccion(btnBorrar, ConstantesRP.PantCarPrecio.BORRAR.toString());
 		asignarBotonAccion(btnGrabar, ConstantesRP.PantCarPrecio.GRABAR.toString());
+		asignarBotonAccion(btnAgregar, ConstantesRP.PantCarPrecio.AGREGAR.toString());
+		asignarBotonAccion(btnEliminar, ConstantesRP.PantCarPrecio.ELIMINAR.toString());
 	}
 
 }

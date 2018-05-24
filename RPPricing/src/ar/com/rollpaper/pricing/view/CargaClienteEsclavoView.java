@@ -55,7 +55,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		JPanel pnlSuperior = new JPanel();
 		getContentPane().add(pnlSuperior, BorderLayout.NORTH);
 		GridBagLayout gbl_pnlSuperior = new GridBagLayout();
-		gbl_pnlSuperior.columnWidths = new int[] { 76, 100, 50, 46, 150, 0, 0 };
+		gbl_pnlSuperior.columnWidths = new int[] { 76, 100, 100, 46, 150, 0, 0 };
 		gbl_pnlSuperior.rowHeights = new int[] { 0, 0, 0 };
 		gbl_pnlSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_pnlSuperior.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
@@ -194,7 +194,11 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
 			@Override
 			public Class<?> getColumnClass(int c) {
-				return Integer.class;
+				if(c == COL_ID) {
+					return Integer.class;
+				} else {
+					return String.class;
+				}
 			}
 		});
 		tableEsclavo.setFont(Common.getStandarFont());

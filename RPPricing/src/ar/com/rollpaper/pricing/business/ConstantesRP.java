@@ -7,7 +7,7 @@ public class ConstantesRP {
 	}
 
 	public enum PantCarPrecio {
-		BORRAR, GRABAR
+		BORRAR, GRABAR, AGREGAR, ELIMINAR
 	}
 
 	public enum PantCarClienteEsclabo {

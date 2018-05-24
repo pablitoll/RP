@@ -8,10 +8,12 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class VentLipv.
@@ -21,18 +23,18 @@ import ar.com.rollpaper.pricing.beans.VentLipv;
  */
 public class VentLipvDAO {
 
-	private static final Log log = LogFactory.getLog(VentLipvDAO.class);
-
-	private final SessionFactory sessionFactory = getSessionFactory();
-
-	protected SessionFactory getSessionFactory() {
-		try {
-			return (SessionFactory) new InitialContext().lookup("SessionFactory");
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
-		}
-	}
+//	private static final Log log = LogFactory.getLog(VentLipvDAO.class);
+//
+//	private final SessionFactory sessionFactory = getSessionFactory();
+//
+//	protected SessionFactory getSessionFactory() {
+//		try {
+//			return (SessionFactory) new InitialContext().lookup("SessionFactory");
+//		} catch (Exception e) {
+//			log.error("Could not locate SessionFactory in JNDI", e);
+//			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
+//		}
+//	}
 
 	public void persist(VentLipv transientInstance) {
 		log.debug("persisting VentLipv instance");
@@ -89,9 +91,9 @@ public class VentLipvDAO {
 			throw re;
 		}
 	}
-
+	
 	public static VentLipv findById(int id) {
-		// TODO VER PORQUE NO ANDA
+		// TODO FALLA ACA
 		return null;
 		// log.debug("getting VentLipv instance with id: " + id);
 		// try {
