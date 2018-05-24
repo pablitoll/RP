@@ -9,9 +9,11 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 
+import com.alee.laf.button.WebButton;
+
 import ar.com.rp.ui.interfaces.LoguerInterface;
 
-public class JButtonRP extends JButton {
+public class JButtonRP extends WebButton {
 
 	private static final long serialVersionUID = 1L;
 	private boolean tienePermisos = true;

@@ -10,6 +10,10 @@ import java.util.Set;
  */
 public class VentLipv implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int lipvListaPrecvta;
 	private SistMone sistMone;
 	private String lipvNombre;

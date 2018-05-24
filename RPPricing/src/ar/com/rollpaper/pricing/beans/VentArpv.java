@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public class VentArpv implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private VentArpvId id;
 	private SistMone sistMoneByArpvMoneda;
 	private SistMone sistMoneByArpvMonedaAnt;

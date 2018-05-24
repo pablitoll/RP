@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generated 24/05/2018 09:15:54 by Hibernate Tools 5.3.0.Beta2 --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
-    <class catalog="RPAPER" dynamic-insert="false" dynamic-update="false" mutable="true" name="ar.com.rollpaper.pricing.beans.rpdb.VentArpv" optimistic-lock="version" polymorphism="implicit" schema="dbo" select-before-update="false" table="VENT_ARPV">
-        <composite-id class="ar.com.rollpaper.pricing.beans.rpdb.VentArpvId" mapped="false" name="id" unsaved-value="undefined">
+    <class catalog="RPAPER" dynamic-insert="false" dynamic-update="false" mutable="true" name="ar.com.rollpaper.pricing.beans.VentArpv" optimistic-lock="version" polymorphism="implicit" schema="dbo" select-before-update="false" table="VENT_ARPV">
+        <composite-id class="ar.com.rollpaper.pricing.beans.VentArpvId" mapped="false" name="id" unsaved-value="undefined">
             <key-property name="arpvArticulo" type="int">
                 <column name="ARPV_ARTICULO"/>
             </key-property>
@@ -10,13 +10,13 @@
                 <column name="ARPV_LISTA_PRECVTA"/>
             </key-property>
         </composite-id>
-        <many-to-one class="ar.com.rollpaper.pricing.beans.rpdb.SistMone" embed-xml="true" fetch="select" insert="true" name="sistMoneByArpvMoneda" not-found="exception" optimistic-lock="true" unique="false" update="true">
+        <many-to-one class="ar.com.rollpaper.pricing.beans.SistMone" embed-xml="true" fetch="select" insert="true" name="sistMoneByArpvMoneda" not-found="exception" optimistic-lock="true" unique="false" update="true">
             <column length="3" name="ARPV_MONEDA" not-null="true"/>
         </many-to-one>
-        <many-to-one class="ar.com.rollpaper.pricing.beans.rpdb.SistMone" embed-xml="true" fetch="select" insert="true" name="sistMoneByArpvMonedaAnt" not-found="exception" optimistic-lock="true" unique="false" update="true">
+        <many-to-one class="ar.com.rollpaper.pricing.beans.SistMone" embed-xml="true" fetch="select" insert="true" name="sistMoneByArpvMonedaAnt" not-found="exception" optimistic-lock="true" unique="false" update="true">
             <column length="3" name="ARPV_MONEDA_ANT"/>
         </many-to-one>
-        <many-to-one class="ar.com.rollpaper.pricing.beans.rpdb.VentLipv" embed-xml="true" fetch="select" insert="false" name="ventLipv" not-found="exception" optimistic-lock="true" unique="false" update="false">
+        <many-to-one class="ar.com.rollpaper.pricing.beans.VentLipv" embed-xml="true" fetch="select" insert="false" name="ventLipv" not-found="exception" optimistic-lock="true" unique="false" update="false">
             <column name="ARPV_LISTA_PRECVTA" not-null="true"/>
         </many-to-one>
         <property generated="never" lazy="false" name="arpvPrecioVta" optimistic-lock="true" type="big_decimal" unique="false">

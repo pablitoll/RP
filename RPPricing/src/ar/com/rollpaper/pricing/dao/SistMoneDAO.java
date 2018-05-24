@@ -13,7 +13,7 @@ import ar.com.rollpaper.pricing.beans.SistMone;
 
 /**
  * Home object for domain model class SistMone.
- * @see ar.com.rollpaper.pricing.beans.rpdb.SistMone
+ * @see ar.com.rollpaper.pricing.beans.SistMone
  * @author Hibernate Tools
  */
 public class SistMoneDAO {
@@ -91,7 +91,7 @@ public class SistMoneDAO {
 		log.debug("getting SistMone instance with id: " + id);
 		try {
 			SistMone instance = (SistMone) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.rpdb.SistMone", id);
+					.get("ar.com.rollpaper.pricing.beans.SistMone", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -108,7 +108,7 @@ public class SistMoneDAO {
 		log.debug("finding SistMone instance by example");
 		try {
 			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.rpdb.SistMone").add(Example.create(instance))
+					.createCriteria("ar.com.rollpaper.pricing.beans.SistMone").add(Example.create(instance))
 					.list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

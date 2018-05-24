@@ -9,6 +9,10 @@ import java.util.Set;
  */
 public class SistMone implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String moneMoneda;
 	private String moneNombre;
 	private String moneSimbolo;

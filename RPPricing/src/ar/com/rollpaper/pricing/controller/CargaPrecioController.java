@@ -12,8 +12,10 @@ import com.alee.laf.optionpane.WebOptionPane;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.VentCliv;
+import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
+import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
@@ -48,13 +50,15 @@ public class CargaPrecioController
 		if (!getView().txtNroCliente.getText().equals("")) {
 			String id = getView().txtNroCliente.getText();
 			if (CommonUtils.isNumeric(id)) {
-				cliente = CcobClieDAO.findById(Integer.valueOf(id));				
+				cliente = CcobClieDAO.findById(Integer.valueOf(id));
 			}
 		}
 
 		if (cliente != null) {
-			if((clienteCargado == null) || (clienteCargado.getClieCliente() != cliente.getClieCliente())) {
-				if((clienteCargado == null) || (WebOptionPane.showConfirmDialog(getView(), "Esta cargando otro Cliente, ¿Cancelamos la carga del actual?", "Cambio de Cliente", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0)) {
+			if ((clienteCargado == null) || (clienteCargado.getClieCliente() != cliente.getClieCliente())) {
+				if ((clienteCargado == null) || (WebOptionPane.showConfirmDialog(getView(),
+						"Esta cargando otro Cliente, ¿Cancelamos la carga del actual?", "Cambio de Cliente",
+						WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0)) {
 					getView().lblNombreCliente.setText(cliente.getClieNombre());
 					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
 					clienteCargado = cliente;
@@ -64,36 +68,43 @@ public class CargaPrecioController
 					getView().txtNroCliente.setText(String.valueOf(clienteCargado.getClieCliente()));
 				}
 			}
-								
+
 		} else {
 			getView().lblNombreCliente.setText("S/D");
 			getView().lblNombreLegal.setText("S/D");
-			clienteCargado = cliente; //es decir null;
+			clienteCargado = cliente; // es decir null;
 			setModoPantalla();
-		}		
+		}
 	}
 
 	private void cargarLista(CcobClie cliente) throws Exception {
 		List<VentCliv> listas = VentClivDAO.getListaPreciosByCliente(cliente);
-		if(listas.size() > 1) {
+		if (listas.size() > 1) {
 			throw new Exception("El Cliente tiene mas de una lista asociada");
 		}
-		
-		if(listas.size() == 1) {
+
+		if (listas.size() == 1) {
 			getView().txtNroLista.setText(String.valueOf(listas.get(0).getClivListaPrecvta()));
-			getView().lblNombreLista.setText("FALTA EL NOMBRE DE LA LISTA");
+
+			VentLipv lista = VentLipvDAO.findById(listas.get(0).getClivListaPrecvta());
+			if (lista != null) {
+				getView().lblNombreLista.setText(lista.getLipvNombre());
+			} else {
+				throw new Exception("No existe la lista " + listas.get(0).getClivListaPrecvta());
+			}
+
 		}
-		
+
 		setModoPantalla();
 	}
 
 	private void setModoPantalla() {
 		Boolean tieneCli = !getView().lblNombreCliente.getText().equals("S/D");
 		Boolean tieneLista = !getView().lblNombreLista.getText().equals("S/D");
-		
+
 		getView().txtNroLista.setEnabled(tieneCli);
-		//getView().txtNroLista.setEnabled(!sinDatos);
-		
+		// getView().txtNroLista.setEnabled(!sinDatos);
+
 	}
 
 	@Override

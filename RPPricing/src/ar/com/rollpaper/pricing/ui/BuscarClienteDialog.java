@@ -113,6 +113,7 @@ public class BuscarClienteDialog extends DialogBase {
 
 		if (tableCliente.getRowCount() > 0) {
 			tableCliente.setSelectedRow(0);
+			tableCliente.requestFocus();
 		}
 
 		cambioCliente();

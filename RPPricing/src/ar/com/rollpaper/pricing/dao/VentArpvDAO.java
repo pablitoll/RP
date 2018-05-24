@@ -13,7 +13,7 @@ import ar.com.rollpaper.pricing.beans.VentArpv;
 
 /**
  * Home object for domain model class VentArpv.
- * @see ar.com.rollpaper.pricing.beans.rpdb.VentArpv
+ * @see ar.com.rollpaper.pricing.beans.VentArpv
  * @author Hibernate Tools
  */
 public class VentArpvDAO {
@@ -91,7 +91,7 @@ public class VentArpvDAO {
 		log.debug("getting VentArpv instance with id: " + id);
 		try {
 			VentArpv instance = (VentArpv) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.rpdb.VentArpv", id);
+					.get("ar.com.rollpaper.pricing.beans.VentArpv", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -108,7 +108,7 @@ public class VentArpvDAO {
 		log.debug("finding VentArpv instance by example");
 		try {
 			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.rpdb.VentArpv").add(Example.create(instance))
+					.createCriteria("ar.com.rollpaper.pricing.beans.VentArpv").add(Example.create(instance))
 					.list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

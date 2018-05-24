@@ -6,6 +6,10 @@ package ar.com.rollpaper.pricing.beans;
  */
 public class VentArpvId implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int arpvArticulo;
 	private int arpvListaPrecvta;
 

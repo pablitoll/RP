@@ -3,17 +3,22 @@ package ar.com.rollpaper.pricing.dao;
 
 import java.util.List;
 import javax.naming.InitialContext;
+import javax.persistence.criteria.CriteriaBuilder;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class VentLipv.
- * @see ar.com.rollpaper.pricing.beans.rpdb.VentLipv
+ * 
+ * @see ar.com.rollpaper.pricing.beans.VentLipv
  * @author Hibernate Tools
  */
 public class VentLipvDAO {
@@ -87,29 +92,30 @@ public class VentLipvDAO {
 		}
 	}
 
-	public VentLipv findById(int id) {
-		log.debug("getting VentLipv instance with id: " + id);
-		try {
-			VentLipv instance = (VentLipv) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.rpdb.VentLipv", id);
-			if (instance == null) {
-				log.debug("get successful, no instance found");
-			} else {
-				log.debug("get successful, instance found");
-			}
-			return instance;
-		} catch (RuntimeException re) {
-			log.error("get failed", re);
-			throw re;
-		}
+	public static VentLipv findById(int id) {
+		// TODO VER PORQUE NO ANDA
+		return null;
+		// log.debug("getting VentLipv instance with id: " + id);
+		// try {
+		// VentLipv instance = (VentLipv) HibernateUtil.getSession()
+		// .get("ar.com.rollpaper.pricing.beans.VentLipv", id);
+		// if (instance == null) {
+		// log.debug("get successful, no instance found");
+		// } else {
+		// log.debug("get successful, instance found");
+		// }
+		// return instance;
+		// } catch (RuntimeException re) {
+		// log.error("get failed", re);
+		// throw re;
+		// }
 	}
 
 	public List findByExample(VentLipv instance) {
 		log.debug("finding VentLipv instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.rpdb.VentLipv").add(Example.create(instance))
-					.list();
+			List results = sessionFactory.getCurrentSession().createCriteria("ar.com.rollpaper.pricing.beans.VentLipv")
+					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {

@@ -13,9 +13,11 @@ import com.alee.laf.optionpane.WebOptionPane;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.VentCliv;
+import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
+import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
@@ -82,10 +84,7 @@ public class CargaClienteEsclavoController
 			}
 
 		} else {
-			getView().lblNombreCliente.setText("S/D");
-			getView().lblNombreLegal.setText("S/D");
-			clienteCargado = cliente; // es decir null;
-			setModoPantalla();
+			resetearPantalla();
 		}
 	}
 
@@ -96,8 +95,14 @@ public class CargaClienteEsclavoController
 		}
 
 		if (listas.size() == 1) {
-			getView().txtNroLista.setText(String.valueOf(listas.get(0).getClivListaPrecvta()));
-			getView().lblNombreLista.setText("FALTA EL NOMBRE DE LA LISTA");
+			getView().lblNroLista.setText(String.valueOf(listas.get(0).getClivListaPrecvta()));
+
+			VentLipv lista = VentLipvDAO.findById(listas.get(0).getClivListaPrecvta());
+			if (lista != null) {
+				getView().lblNombreLista.setText(lista.getLipvNombre());
+			} else {
+				throw new Exception("No existe la lista " + listas.get(0).getClivListaPrecvta());
+			}
 		}
 
 		setModoPantalla();
@@ -105,11 +110,11 @@ public class CargaClienteEsclavoController
 
 	private void setModoPantalla() {
 		Boolean tieneCli = !getView().lblNombreCliente.getText().equals("S/D");
-		Boolean tieneLista = !getView().lblNombreLista.getText().equals("S/D");
 
-		getView().txtNroLista.setEnabled(tieneCli);
-		// getView().txtNroLista.setEnabled(!sinDatos);
-
+		getView().tableEsclavo.setEnabled(tieneCli);
+		getView().btnAgregar.setEnabled(tieneCli);
+		getView().btnEliminar.setEnabled(tieneCli);
+		getView().btnGrabar.setEnabled(tieneCli);
 	}
 
 	@Override
@@ -122,22 +127,39 @@ public class CargaClienteEsclavoController
 		getView().lblNombreLista.setText("S/D");
 		getView().lblNombreLegal.setText("S/D");
 		getView().lblNombreCliente.setText("S/D");
+		getView().lblNroLista.setText("S/D");
+
+		DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
+		dm.getDataVector().removeAllElements();
+
 		clienteCargado = null;
+		getView().txtNroCliente.clear();
+		getView().txtNroCliente.requestFocus();
 	}
 
 	@Override
 	public boolean presionoTecla(KeyEvent ke) {
 		boolean retorno = super.presionoTecla(ke);
 		if (!retorno) {
+			if ((ke.getKeyCode() == KeyEvent.VK_ENTER) && getView().txtNroCliente.hasFocus()) {
+				try {
+					perdioFocoCliente();
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
+				}
+			}
+
 			if ((ke.getKeyCode() == KeyEvent.VK_F2) && getView().txtNroCliente.hasFocus()) {
 				retorno = true;
 				try {
 					getView().txtNroCliente.setText(buscarCliente());
+					perdioFocoCliente(); // fuerzo la actualizacion
 
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
 				}
 			}
+
 			if ((ke.getKeyCode() == KeyEvent.VK_F2) && getView().tableEsclavo.hasFocus()) {
 				retorno = true;
 				try {
@@ -157,12 +179,13 @@ public class CargaClienteEsclavoController
 		String nombre = "";
 		String nombreLegal = "";
 
-		String id = String
-				.valueOf(getView().tableEsclavo.getModel().getValueAt(selectedRow, CargaClienteEsclavoView.COL_ID));
+		Object id = getView().tableEsclavo.getModel().getValueAt(selectedRow, CargaClienteEsclavoView.COL_ID);
 
-		if (!id.equals("")) {
-			nombre = "cambio";
-			nombreLegal = "cambio";
+		if (id != null) {
+			int idInt = Integer.valueOf((String) id);
+			CcobClie cliente = CcobClieDAO.findById(idInt);
+			nombre = cliente.getClieNombre();
+			nombreLegal = cliente.getClieNombreLegal();
 		}
 
 		getView().tableEsclavo.setValueAt(nombre, selectedRow, CargaClienteEsclavoView.COL_DESC);
@@ -186,5 +209,11 @@ public class CargaClienteEsclavoController
 			DefaultTableModel model = (DefaultTableModel) getView().tableEsclavo.getModel();
 			model.addRow(new Object[] { null, "", "" });
 		}
+
+		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.BORRAR.toString())) {
+			DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
+			dm.removeRow(getView().tableEsclavo.getSelectedRow());
+		}
+
 	}
 }

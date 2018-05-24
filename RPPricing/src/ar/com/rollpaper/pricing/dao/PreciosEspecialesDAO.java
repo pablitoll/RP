@@ -13,7 +13,7 @@ import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 
 /**
  * Home object for domain model class PricPreciosEspeciales.
- * @see ar.com.rollpaper.pricing.beans.rpdb.PricPreciosEspeciales
+ * @see ar.com.rollpaper.pricing.beans.PricPreciosEspeciales
  * @author Hibernate Tools
  */
 public class PreciosEspecialesDAO {
@@ -92,7 +92,7 @@ public class PreciosEspecialesDAO {
 		log.debug("getting PricPreciosEspeciales instance with id: " + id);
 		try {
 			PreciosEspeciales instance = (PreciosEspeciales) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.rpdb.PricPreciosEspeciales", id);
+					.get("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -109,7 +109,7 @@ public class PreciosEspecialesDAO {
 		log.debug("finding PricPreciosEspeciales instance by example");
 		try {
 			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.rpdb.PricPreciosEspeciales")
+					.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

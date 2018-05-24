@@ -91,7 +91,7 @@ public class MaestroEsclavoDAO {
 		log.debug("getting PricMaestroEsclavo instance with id: " + id);
 		try {
 			MaestroEsclavo instance = (MaestroEsclavo) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.rpdb.PricMaestroEsclavo", id);
+					.get("ar.com.rollpaper.pricing.beans.PricMaestroEsclavo", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -108,7 +108,7 @@ public class MaestroEsclavoDAO {
 		log.debug("finding PricMaestroEsclavo instance by example");
 		try {
 			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.rpdb.PricMaestroEsclavo")
+					.createCriteria("ar.com.rollpaper.pricing.beans.PricMaestroEsclavo")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
+import javax.swing.JTextField;
 
 public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
@@ -37,7 +38,6 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	
 	public WebFormattedTextField txtNroCliente;
 	public WebTable tableEsclavo;
-	public WebFormattedTextField txtNroLista;
 	public JButtonRP btnGrabar;
 	public JLabel lblNombreLista;
 	public JLabel lblNombreLegal;
@@ -46,8 +46,12 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	private JButtonRP btnImprimirTodo;
 	private JPanel pnlCentral;
 	private JPanel panel;
-	private JButtonRP btnAgregar;
-	private JButtonRP btnEliminar;
+	public JButtonRP btnAgregar;
+	public JButtonRP btnEliminar;
+	public JLabel lblNroLista;
+	private JLabel lblNewLabel;
+	private JLabel lblNewLabel_2;
+	private JLabel lblNewLabel_3;
 
 	public CargaClienteEsclavoView() throws Exception {
 		super();
@@ -56,7 +60,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		JPanel pnlSuperior = new JPanel();
 		getContentPane().add(pnlSuperior, BorderLayout.NORTH);
 		GridBagLayout gbl_pnlSuperior = new GridBagLayout();
-		gbl_pnlSuperior.columnWidths = new int[] { 76, 100, 50, 46, 46, 0, 0 };
+		gbl_pnlSuperior.columnWidths = new int[] { 76, 100, 50, 46, 150, 0, 0 };
 		gbl_pnlSuperior.rowHeights = new int[] { 0, 0, 0 };
 		gbl_pnlSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_pnlSuperior.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
@@ -64,12 +68,12 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
 		JLabel lblcliente = new JLabel("Nro. de Cliente:");
 		lblcliente.setFont(Common.getStandarFont());
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 0;
-		pnlSuperior.add(lblcliente, gbc_lblNewLabel);
+		GridBagConstraints gbc_lblNroLista = new GridBagConstraints();
+		gbc_lblNroLista.anchor = GridBagConstraints.WEST;
+		gbc_lblNroLista.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNroLista.gridx = 0;
+		gbc_lblNroLista.gridy = 0;
+		pnlSuperior.add(lblcliente, gbc_lblNroLista);
 
 		txtNroCliente = new WebFormattedTextField();
 		txtNroCliente.setFont(Common.getStandarFont());
@@ -86,6 +90,15 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_txtNroCliente.gridy = 0;
 		pnlSuperior.add(txtNroCliente, gbc_txtNroCliente);
 		txtNroCliente.setColumns(10);
+		
+		lblNewLabel = new JLabel("Nombre:");
+		lblNewLabel.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 2;
+		gbc_lblNewLabel.gridy = 0;
+		pnlSuperior.add(lblNewLabel, gbc_lblNewLabel);
 
 		lblNombreCliente = new JLabel("New label");
 		lblNombreCliente.setFont(Common.getStandarFont());
@@ -95,6 +108,15 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNombreCliente.gridx = 3;
 		gbc_lblNombreCliente.gridy = 0;
 		pnlSuperior.add(lblNombreCliente, gbc_lblNombreCliente);
+		
+		lblNewLabel_3 = new JLabel("Nombre Legal:");
+		lblNewLabel_3.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
+		gbc_lblNewLabel_3.anchor = GridBagConstraints.EAST;
+		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_3.gridx = 4;
+		gbc_lblNewLabel_3.gridy = 0;
+		pnlSuperior.add(lblNewLabel_3, gbc_lblNewLabel_3);
 
 		lblNombreLegal = new JLabel("New label");
 		lblNombreLegal.setFont(Common.getStandarFont());
@@ -113,22 +135,23 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel_1.gridx = 0;
 		gbc_lblNewLabel_1.gridy = 1;
 		pnlSuperior.add(lblNewLabel_1, gbc_lblNewLabel_1);
-
-		txtNroLista = new WebFormattedTextField();
-		txtNroLista.setFont(Common.getStandarFont());
-		txtNroLista.setInputPrompt("Ingrese nro. Lista");
-		txtNroLista.setInputPromptFont(Common.getStandarFontItalic());
-		txtNroLista.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtNroLista.setColumns(10);
-		txtNroLista.clear();
-
-		GridBagConstraints gbc_txtNroLista = new GridBagConstraints();
-		gbc_txtNroLista.insets = new Insets(0, 0, 0, 5);
-		gbc_txtNroLista.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtNroLista.gridx = 1;
-		gbc_txtNroLista.gridy = 1;
-		pnlSuperior.add(txtNroLista, gbc_txtNroLista);
-		txtNroLista.setColumns(10);
+		
+		lblNroLista = new JLabel("New label");
+		lblNroLista.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lblNroListaShow = new GridBagConstraints();
+		gbc_lblNroListaShow.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNroListaShow.gridx = 1;
+		gbc_lblNroListaShow.gridy = 1;
+		pnlSuperior.add(lblNroLista, gbc_lblNroListaShow);
+		
+		lblNewLabel_2 = new JLabel("Nombre Lista");
+		lblNewLabel_2.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
+		gbc_lblNewLabel_2.anchor = GridBagConstraints.EAST;
+		gbc_lblNewLabel_2.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel_2.gridx = 2;
+		gbc_lblNewLabel_2.gridy = 1;
+		pnlSuperior.add(lblNewLabel_2, gbc_lblNewLabel_2);
 
 		lblNombreLista = new JLabel("New label");
 		lblNombreLista.setFont(Common.getStandarFont());

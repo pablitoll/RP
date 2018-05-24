@@ -92,7 +92,7 @@ public class DescuentoXFamiliasDAO {
 		log.debug("getting PricDescuentoXFamilias instance with id: " + id);
 		try {
 			DescuentoXFamilias instance = (DescuentoXFamilias) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.rpdb.PricDescuentoXFamilias", id);
+					.get("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -109,7 +109,7 @@ public class DescuentoXFamiliasDAO {
 		log.debug("finding PricDescuentoXFamilias instance by example");
 		try {
 			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.rpdb.PricDescuentoXFamilias")
+					.createCriteria("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
