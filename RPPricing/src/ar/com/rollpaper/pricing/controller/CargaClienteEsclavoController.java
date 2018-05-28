@@ -211,7 +211,7 @@ public class CargaClienteEsclavoController
 				idInt = Integer.valueOf((String) id);
 			}
 			CcobClie cliente = CcobClieDAO.findById(idInt);
-			if( cliente != null) {
+			if (cliente != null) {
 				nombre = cliente.getClieNombre();
 				nombreLegal = cliente.getClieNombreLegal();
 			} else {
@@ -266,8 +266,14 @@ public class CargaClienteEsclavoController
 				MaestroEsclavo maestroEsclavo = new MaestroEsclavo(1,
 						Integer.valueOf(getView().txtNroCliente.getText()), 1, id);
 
-				//TODO FALLA ACA
-				MaestroEsclavoDAO.persist(maestroEsclavo);
+				// TODO FALLA ACA
+				try {
+					MaestroEsclavoDAO.persist(maestroEsclavo);
+
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al gravar");
+				}
+
 			}
 
 		}

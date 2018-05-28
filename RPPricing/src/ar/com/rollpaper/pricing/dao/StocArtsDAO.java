@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.StocArts;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class StocArts.
@@ -89,10 +90,10 @@ public class StocArtsDAO {
 		}
 	}
 
-	public StocArts findById(int id) {
+	public static StocArts findById(int id) {
 		log.debug("getting StocArts instance with id: " + id);
 		try {
-			StocArts instance = (StocArts) sessionFactory.getCurrentSession()
+			StocArts instance = (StocArts) HibernateUtil.getSession()
 					.get("ar.com.rollpaper.pricing.beans.StocArts", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");

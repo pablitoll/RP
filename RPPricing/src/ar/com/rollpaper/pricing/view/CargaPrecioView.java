@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
 import java.sql.Date;
 
 import javax.swing.JLabel;
@@ -27,8 +28,13 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected static final int COL_NOMBRE_FAMILIA = 1;
-	protected static final int COL_NOMRE_ESPECIFICO = 1;
+	public static final int COL_ID_FAMILIA = 0;
+	public static final int COL_NOMBRE_FAMILIA = 1;
+
+	public static final int COL_ID_ESPECIFICO = 0;
+	public static final int COL_NOMBRE_ESPECIFICO = 1;
+	public static final int COL_DESC_ESPECIFICO = 2;
+	
 	public WebFormattedTextField txtNroCliente;
 	public WebTable tableDescEspecifico;
 	public WebTable tableDescFamilia;
@@ -39,9 +45,10 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public JLabel lblNombreLegal;
 	public JLabel lblNombreCliente;
 	private JPanel pnlBotonesTabla;
-	private JButtonRP btnAgregar;
-	private JButtonRP btnEliminar;
+	public JButtonRP btnAgregar;
+	public JButtonRP btnEliminar;
 	public WebTabbedPane tabPanel;
+	public JButtonRP btnCancelar;
 
 	public CargaPrecioView() throws Exception {
 		super();
@@ -142,6 +149,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		pnlBotonesTabla.setLayout(gbl_pnlBotonesTabla);
 
 		btnAgregar = new JButtonRP("Agregar");
+		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);
 		btnAgregar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_buttonRP = new GridBagConstraints();
 		gbc_buttonRP.anchor = GridBagConstraints.NORTH;
@@ -151,6 +159,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		pnlBotonesTabla.add(btnAgregar, gbc_buttonRP);
 
 		btnEliminar = new JButtonRP("Eliminar");
+		btnEliminar.setMnemonic(KeyEvent.VK_MINUS);
 		btnEliminar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_buttonRP_1 = new GridBagConstraints();
 		gbc_buttonRP_1.anchor = GridBagConstraints.NORTH;
@@ -207,7 +216,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 			@Override
 			public boolean isCellEditable(int row, int col) {
-				return col != COL_NOMRE_ESPECIFICO;
+				return col != COL_NOMBRE_ESPECIFICO;
 			}
 
 			@Override
@@ -219,6 +228,11 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
 		tabPanel.addTab("Descuentos y Precios Especificos", spDescEspecifico);
+		
+		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setFont(Common.getStandarFont());
+		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
+		pnlInferiorBotones.add(btnCancelar);
 
 		btnBorrar = new JButtonRP("Borrar");
 		btnBorrar.setFont(Common.getStandarFont());
@@ -235,6 +249,12 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnGrabar, ConstantesRP.PantCarPrecio.GRABAR.toString());
 		asignarBotonAccion(btnAgregar, ConstantesRP.PantCarPrecio.AGREGAR.toString());
 		asignarBotonAccion(btnEliminar, ConstantesRP.PantCarPrecio.ELIMINAR.toString());
+		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarPrecio.CANCELAR.toString());
 	}
+	
+	public void setCerrarVisible(Boolean visible) {
+		btnCerrar.setVisible(visible);
+	}
+
 
 }
