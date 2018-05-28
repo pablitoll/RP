@@ -1,10 +1,10 @@
 package ar.com.rollpaper.pricing.view;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -162,7 +162,8 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		String[][] data = { {} };
 
 		btnCancelar = new JButtonRP("Cancelar");
-		btnCancelar.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnCancelar.setFont(Common.getStandarFont());
+		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);
 
 		btnGrabar = new JButtonRP("Grabar");
@@ -218,6 +219,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
 		btnAgregar = new JButtonRP("Agregar");
 		btnAgregar.setFont(Common.getStandarFont());
+		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);
 		GridBagConstraints gbc_btnAgregar = new GridBagConstraints();
 		gbc_btnAgregar.anchor = GridBagConstraints.NORTH;
 		gbc_btnAgregar.insets = new Insets(0, 0, 5, 0);
@@ -227,6 +229,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
 		btnEliminar = new JButtonRP("Eliminar");
 		btnEliminar.setFont(Common.getStandarFont());
+		btnEliminar.setMnemonic(KeyEvent.VK_MINUS);
 		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
 		gbc_btnEliminar.anchor = GridBagConstraints.NORTH;
 		gbc_btnEliminar.gridx = 0;
