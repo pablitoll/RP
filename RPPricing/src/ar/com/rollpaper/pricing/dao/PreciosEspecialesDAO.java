@@ -25,7 +25,7 @@ public class PreciosEspecialesDAO {
 
 	private static final Log log = LogFactory.getLog(PreciosEspecialesDAO.class);
 
-	public static void persist(PreciosEspeciales transientInstance ) {
+	public static void persist(Object transientInstance ) {
 		log.debug("persisting PricPreciosEspeciales instance");
 	    Session session = HibernateUtil.getSession();
 	    session.beginTransaction();
