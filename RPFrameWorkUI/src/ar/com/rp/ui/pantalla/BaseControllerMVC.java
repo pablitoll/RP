@@ -110,7 +110,7 @@ public abstract class BaseControllerMVC<TipoPatPrincipal extends BasePantallaPri
 
 	protected void callPantPrincipal(String accion) {
 		if (basePantallaPrincipal != null) {
-			basePantallaPrincipal.ejecuarAccion(accion);
+			basePantallaPrincipal.ejecutarAccion(accion);
 		}
 
 	}

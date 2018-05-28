@@ -35,7 +35,7 @@ public class ErrorManagerController extends BaseControllerDialog<BasePantallaPri
 	}
 
 	@Override
-	public void ejecuarAccion(String accion) {
+	public void ejecutarAccion(String accion) {
 		if (accion.equals(mensage.OK.toString())) {
 			getView().setVisible(false);
 		}

@@ -56,7 +56,7 @@ public abstract class BaseControllerDialog<TipoPatPrincipal extends BasePantalla
 
 	protected void callPantPrincipal(String accion) {
 		if (basePantallaPrincipal != null) {
-			basePantallaPrincipal.ejecuarAccion(accion);
+			basePantallaPrincipal.ejecutarAccion(accion);
 		}
 	}
 
