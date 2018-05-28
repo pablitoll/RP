@@ -8,13 +8,16 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class PricPreciosEspeciales.
+ * 
  * @see ar.com.rollpaper.pricing.beans.PricPreciosEspeciales
  * @author Hibernate Tools
  */
@@ -22,32 +25,26 @@ public class PreciosEspecialesDAO {
 
 	private static final Log log = LogFactory.getLog(PreciosEspecialesDAO.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
-
-	protected SessionFactory getSessionFactory() {
-		try {
-			return (SessionFactory) new InitialContext().lookup("SessionFactory");
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
-		}
-	}
-
-	public void persist(PreciosEspeciales transientInstance) {
+	public static void persist(PreciosEspeciales transientInstance ) {
 		log.debug("persisting PricPreciosEspeciales instance");
+	    Session session = HibernateUtil.getSession();
+	    session.beginTransaction();
 		try {
-			sessionFactory.getCurrentSession().persist(transientInstance);
+			session.persist(transientInstance);
+			session.flush();
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
 			throw re;
 		}
+	    finally {session.getTransaction().commit();}
 	}
 
-	public void attachDirty(PreciosEspeciales instance) {
+	public static void attachDirty(PreciosEspeciales instance) {
 		log.debug("attaching dirty PricPreciosEspeciales instance");
+		Session session = HibernateUtil.getSession();
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -55,10 +52,11 @@ public class PreciosEspecialesDAO {
 		}
 	}
 
-	public void attachClean(PreciosEspeciales instance) {
+	public static void attachClean(PreciosEspeciales instance) {
 		log.debug("attaching clean PricPreciosEspeciales instance");
+		Session session = HibernateUtil.getSession();
 		try {
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			session.lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -66,10 +64,11 @@ public class PreciosEspecialesDAO {
 		}
 	}
 
-	public void delete(PreciosEspeciales persistentInstance) {
+	public static void delete(PreciosEspeciales persistentInstance) {
 		log.debug("deleting PricPreciosEspeciales instance");
+		Session session = HibernateUtil.getSession();
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			session.delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -77,11 +76,11 @@ public class PreciosEspecialesDAO {
 		}
 	}
 
-	public PreciosEspeciales merge(PreciosEspeciales detachedInstance) {
+	public static PreciosEspeciales merge(PreciosEspeciales detachedInstance) {
 		log.debug("merging PricPreciosEspeciales instance");
+		Session session = HibernateUtil.getSession();
 		try {
-			PreciosEspeciales result = (PreciosEspeciales) sessionFactory.getCurrentSession()
-					.merge(detachedInstance);
+			PreciosEspeciales result = (PreciosEspeciales) session.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -90,10 +89,11 @@ public class PreciosEspecialesDAO {
 		}
 	}
 
-	public PreciosEspeciales findById(int id) {
+	public static PreciosEspeciales findById(int id) {
 		log.debug("getting PricPreciosEspeciales instance with id: " + id);
+		Session session = HibernateUtil.getSession();
 		try {
-			PreciosEspeciales instance = (PreciosEspeciales) sessionFactory.getCurrentSession()
+			PreciosEspeciales instance = (PreciosEspeciales) session
 					.get("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
@@ -107,11 +107,11 @@ public class PreciosEspecialesDAO {
 		}
 	}
 
-	public List findByExample(PreciosEspeciales instance) {
+	public static List findByExample(PreciosEspeciales instance) {
 		log.debug("finding PricPreciosEspeciales instance by example");
+		Session session = HibernateUtil.getSession();
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales")
+			List results = session.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

@@ -7,7 +7,7 @@
   name="ar.com.rollpaper.pricing.beans.PreciosEspeciales" schema="dbo" table="PRIC_PRECIOS_ESPECIALES">
   <id name="pricPreciosEspecialesId" type="int">
    <column name="PRIC_PRECIOS_ESPECIALES_ID"/>
-   <generator class="assigned"/>
+    <generator class="identity"/>
   </id>
   <property generated="never" lazy="false" name="pricCliente" type="int">
    <column name="PRIC_CLIENTE" not-null="true"/>

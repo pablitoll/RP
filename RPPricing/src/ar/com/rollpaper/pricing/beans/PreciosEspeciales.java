@@ -28,10 +28,11 @@ public class PreciosEspeciales implements java.io.Serializable {
 	public PreciosEspeciales() {
 	}
 
-	public PreciosEspeciales(int pricPreciosEspecialesId, int pricCliente, int pricListaPrecvta, int pricArticulo,
-			BigDecimal pricDescuento1, BigDecimal pricDescuento2, String pricMoneda, BigDecimal pricPrecio,
+	public PreciosEspeciales( int pricCliente, int pricListaPrecvta, int pricArticulo,
+			BigDecimal pricDescuento1, BigDecimal pricDescuento2,
+			String pricMoneda, BigDecimal pricPrecio,
 			Date pricFechaDesde, Date pricFechaHasta) {
-		this.pricPreciosEspecialesId = pricPreciosEspecialesId;
+	//	this.pricPreciosEspecialesId = pricPreciosEspecialesId;
 		this.pricCliente = pricCliente;
 		this.pricListaPrecvta = pricListaPrecvta;
 		this.pricArticulo = pricArticulo;

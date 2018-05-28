@@ -1,5 +1,7 @@
 package ar.com.rollpaper.pricing.data;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -8,9 +10,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 
 
@@ -78,8 +82,13 @@ public class HibernateTest {
 		List<VentCliv> x1 = listaPrecio1.getListaPreciosByCliente(CcobClieDAO.findById(28));
 		
 		
-		//PreciosEspeciales pe = new PreciosEspeciales(1, 28 , 100, 334, 10, 0, "DOL", 1, new Date(2018 ,05,18), new Date(2099,12,31));
+		PreciosEspeciales pe = new PreciosEspeciales( 28 , 100, 10, 
+				new BigDecimal(2.0),new BigDecimal(3.0),
+				"DOL", new BigDecimal(4.0), new Date(2018 ,05,18), new Date(2099,12,31));
 		
+		PreciosEspecialesDAO.persist(pe);
+		//session.flush();
+		//session.save(pe);
 		session.getTransaction().commit();
 		session.close();
 
