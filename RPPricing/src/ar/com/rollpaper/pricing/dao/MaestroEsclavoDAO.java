@@ -3,13 +3,10 @@ package ar.com.rollpaper.pricing.dao;
 
 import java.util.List;
 
-import javax.naming.InitialContext;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
@@ -24,16 +21,7 @@ public class MaestroEsclavoDAO {
 
 	private static final Log log = LogFactory.getLog(MaestroEsclavoDAO.class);
 
-//	private final static SessionFactory sessionFactory = getSessionFactory();
-//
-//	protected SessionFactory getSessionFactory() {
-//		try {
-//			return (SessionFactory) new InitialContext().lookup("SessionFactory");
-//		} catch (Exception e) {
-//			log.error("Could not locate SessionFactory in JNDI", e);
-//			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
-//		}
-//	}
+
 
 	public static void persist(MaestroEsclavo transientInstance) {
 		log.debug("persisting PricMaestroEsclavo instance");
@@ -49,7 +37,8 @@ public class MaestroEsclavoDAO {
 	public void attachDirty(MaestroEsclavo instance) {
 		log.debug("attaching dirty PricMaestroEsclavo instance");
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			Session session = HibernateUtil.getSession();			
+			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -60,7 +49,8 @@ public class MaestroEsclavoDAO {
 	public void attachClean(MaestroEsclavo instance) {
 		log.debug("attaching clean PricMaestroEsclavo instance");
 		try {
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			Session session = HibernateUtil.getSession();	
+			session.lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -71,7 +61,8 @@ public class MaestroEsclavoDAO {
 	public void delete(MaestroEsclavo persistentInstance) {
 		log.debug("deleting PricMaestroEsclavo instance");
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			Session session = HibernateUtil.getSession();	
+			session.delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -82,7 +73,8 @@ public class MaestroEsclavoDAO {
 	public MaestroEsclavo merge(MaestroEsclavo detachedInstance) {
 		log.debug("merging PricMaestroEsclavo instance");
 		try {
-			MaestroEsclavo result = (MaestroEsclavo) sessionFactory.getCurrentSession().merge(detachedInstance);
+			Session session = HibernateUtil.getSession();	
+			MaestroEsclavo result = (MaestroEsclavo) session.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -94,8 +86,8 @@ public class MaestroEsclavoDAO {
 	public MaestroEsclavo findById(int id) {
 		log.debug("getting PricMaestroEsclavo instance with id: " + id);
 		try {
-			MaestroEsclavo instance = (MaestroEsclavo) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.PricMaestroEsclavo", id);
+			Session session = HibernateUtil.getSession();
+			MaestroEsclavo instance = (MaestroEsclavo)session.get("ar.com.rollpaper.pricing.beans.PricMaestroEsclavo", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -111,8 +103,8 @@ public class MaestroEsclavoDAO {
 	public List findByExample(MaestroEsclavo instance) {
 		log.debug("finding PricMaestroEsclavo instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.PricMaestroEsclavo")
+			Session session = HibernateUtil.getSession();
+			List results = session.createCriteria("ar.com.rollpaper.pricing.beans.PricMaestroEsclavo")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

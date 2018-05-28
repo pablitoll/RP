@@ -8,13 +8,16 @@ import javax.naming.InitialContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class PricDescuentoXFamilias.
+ * 
  * @see ar.com.rollpaper.pricing.beans.DescuentoXFamilias.PricDescuentoXFamilias
  * @author Hibernate Tools
  */
@@ -22,21 +25,11 @@ public class DescuentoXFamiliasDAO {
 
 	private static final Log log = LogFactory.getLog(DescuentoXFamiliasDAO.class);
 
-	private final SessionFactory sessionFactory = getSessionFactory();
-
-	protected SessionFactory getSessionFactory() {
-		try {
-			return (SessionFactory) new InitialContext().lookup("SessionFactory");
-		} catch (Exception e) {
-			log.error("Could not locate SessionFactory in JNDI", e);
-			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
-		}
-	}
-
 	public void persist(DescuentoXFamilias transientInstance) {
 		log.debug("persisting PricDescuentoXFamilias instance");
 		try {
-			sessionFactory.getCurrentSession().persist(transientInstance);
+			Session session = HibernateUtil.getSession();
+			session.persist(transientInstance);
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
@@ -47,7 +40,8 @@ public class DescuentoXFamiliasDAO {
 	public void attachDirty(DescuentoXFamilias instance) {
 		log.debug("attaching dirty PricDescuentoXFamilias instance");
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			Session session = HibernateUtil.getSession();
+			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -58,7 +52,8 @@ public class DescuentoXFamiliasDAO {
 	public void attachClean(DescuentoXFamilias instance) {
 		log.debug("attaching clean PricDescuentoXFamilias instance");
 		try {
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			Session session = HibernateUtil.getSession();
+			session.lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -69,7 +64,8 @@ public class DescuentoXFamiliasDAO {
 	public void delete(DescuentoXFamilias persistentInstance) {
 		log.debug("deleting PricDescuentoXFamilias instance");
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			Session session = HibernateUtil.getSession();
+			session.delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -80,8 +76,8 @@ public class DescuentoXFamiliasDAO {
 	public DescuentoXFamilias merge(DescuentoXFamilias detachedInstance) {
 		log.debug("merging PricDescuentoXFamilias instance");
 		try {
-			DescuentoXFamilias result = (DescuentoXFamilias) sessionFactory.getCurrentSession()
-					.merge(detachedInstance);
+			Session session = HibernateUtil.getSession();
+			DescuentoXFamilias result = (DescuentoXFamilias) session.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -93,7 +89,8 @@ public class DescuentoXFamiliasDAO {
 	public DescuentoXFamilias findById(int id) {
 		log.debug("getting PricDescuentoXFamilias instance with id: " + id);
 		try {
-			DescuentoXFamilias instance = (DescuentoXFamilias) sessionFactory.getCurrentSession()
+			Session session = HibernateUtil.getSession();
+			DescuentoXFamilias instance = (DescuentoXFamilias) session
 					.get("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
@@ -110,8 +107,8 @@ public class DescuentoXFamiliasDAO {
 	public List findByExample(DescuentoXFamilias instance) {
 		log.debug("finding PricDescuentoXFamilias instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias")
+			Session session = HibernateUtil.getSession();
+			List results = session.getSession().createCriteria("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;

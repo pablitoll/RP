@@ -23,23 +23,12 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
  */
 public class VentLipvDAO {
 
-//	private static final Log log = LogFactory.getLog(VentLipvDAO.class);
-//
-//	private final SessionFactory sessionFactory = getSessionFactory();
-//
-//	protected SessionFactory getSessionFactory() {
-//		try {
-//			return (SessionFactory) new InitialContext().lookup("SessionFactory");
-//		} catch (Exception e) {
-//			log.error("Could not locate SessionFactory in JNDI", e);
-//			throw new IllegalStateException("Could not locate SessionFactory in JNDI");
-//		}
-//	}
+	private static final Log log = LogFactory.getLog(SistMoneDAO.class);
 
 	public void persist(VentLipv transientInstance) {
 		log.debug("persisting VentLipv instance");
 		try {
-			sessionFactory.getCurrentSession().persist(transientInstance);
+			HibernateUtil.getSession().persist(transientInstance);
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
@@ -50,7 +39,7 @@ public class VentLipvDAO {
 	public void attachDirty(VentLipv instance) {
 		log.debug("attaching dirty VentLipv instance");
 		try {
-			sessionFactory.getCurrentSession().saveOrUpdate(instance);
+			HibernateUtil.getSession().saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -61,7 +50,7 @@ public class VentLipvDAO {
 	public void attachClean(VentLipv instance) {
 		log.debug("attaching clean VentLipv instance");
 		try {
-			sessionFactory.getCurrentSession().lock(instance, LockMode.NONE);
+			HibernateUtil.getSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
 			log.error("attach failed", re);
@@ -72,7 +61,7 @@ public class VentLipvDAO {
 	public void delete(VentLipv persistentInstance) {
 		log.debug("deleting VentLipv instance");
 		try {
-			sessionFactory.getCurrentSession().delete(persistentInstance);
+			HibernateUtil.getSession().delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
 			log.error("delete failed", re);
@@ -83,7 +72,7 @@ public class VentLipvDAO {
 	public VentLipv merge(VentLipv detachedInstance) {
 		log.debug("merging VentLipv instance");
 		try {
-			VentLipv result = (VentLipv) sessionFactory.getCurrentSession().merge(detachedInstance);
+			VentLipv result = (VentLipv) HibernateUtil.getSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -91,30 +80,29 @@ public class VentLipvDAO {
 			throw re;
 		}
 	}
-	
+
 	public static VentLipv findById(int id) {
-		// TODO FALLA ACA
-		return null;
-		// log.debug("getting VentLipv instance with id: " + id);
-		// try {
-		// VentLipv instance = (VentLipv) HibernateUtil.getSession()
-		// .get("ar.com.rollpaper.pricing.beans.VentLipv", id);
-		// if (instance == null) {
-		// log.debug("get successful, no instance found");
-		// } else {
-		// log.debug("get successful, instance found");
-		// }
-		// return instance;
-		// } catch (RuntimeException re) {
-		// log.error("get failed", re);
-		// throw re;
-		// }
+
+		log.debug("getting VentLipv instance with id: " + id);
+		try {
+			VentLipv instance = (VentLipv) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.VentLipv",
+					id);
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+			} else {
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
 	}
 
 	public List findByExample(VentLipv instance) {
 		log.debug("finding VentLipv instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession().createCriteria("ar.com.rollpaper.pricing.beans.VentLipv")
+			List results = HibernateUtil.getSession().createCriteria("ar.com.rollpaper.pricing.beans.VentLipv")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
