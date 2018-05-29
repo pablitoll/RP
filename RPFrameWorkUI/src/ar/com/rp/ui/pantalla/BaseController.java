@@ -16,7 +16,7 @@ public abstract class BaseController implements ActionListener {
 
 	protected abstract Container getContenedor();
 
-	public abstract void ejecuarAccion(String accion);
+	public abstract void ejecutarAccion(String accion);
 
 	protected abstract void cerrarVentana();
 
@@ -46,7 +46,7 @@ public abstract class BaseController implements ActionListener {
 		if (msg.equals("CERRAR_VENTANA_FRAMEWORK")) {
 			cerrarVentana();
 		} else {
-			ejecuarAccion(msg);
+			ejecutarAccion(msg);
 		}
 	}
 
