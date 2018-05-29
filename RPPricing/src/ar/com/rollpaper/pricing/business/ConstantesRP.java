@@ -11,7 +11,12 @@ public class ConstantesRP {
 	}
 
 	public enum PantCarClienteEsclabo {
-		AGREGAR, BORRAR, GRABAR, IMPRIMIR, IMPRIMIR_TODO, CANCELAR};
+		AGREGAR, BORRAR, GRABAR, IMPRIMIR, IMPRIMIR_TODO, CANCELAR
+	};
+
+	public enum AccionesCargaItemFamilia {
+		ACEPTAR, CANCELAR
+	};
 
 	public static String IMG_ICONO_APP = "/resource/vector.png";
 	public static String IMG_EXIT = "/resource/exit.png";

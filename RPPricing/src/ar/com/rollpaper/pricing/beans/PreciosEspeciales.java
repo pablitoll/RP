@@ -44,10 +44,10 @@ public class PreciosEspeciales implements java.io.Serializable {
 		this.pricFechaHasta = pricFechaHasta;
 	}
 
-	public PreciosEspeciales(int pricPreciosEspecialesId, int pricCliente, int pricListaPrecvta, int pricArticulo,
+	public PreciosEspeciales(int pricCliente, int pricListaPrecvta, int pricArticulo,
 			BigDecimal pricDescuento1, BigDecimal pricDescuento2, String pricMoneda, BigDecimal pricPrecio,
 			Date pricFechaDesde, Date pricFechaHasta, String pricReferencia) {
-		this.pricPreciosEspecialesId = pricPreciosEspecialesId;
+//		this.pricPreciosEspecialesId = pricPreciosEspecialesId;
 		this.pricCliente = pricCliente;
 		this.pricListaPrecvta = pricListaPrecvta;
 		this.pricArticulo = pricArticulo;

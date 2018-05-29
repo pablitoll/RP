@@ -3,18 +3,17 @@ package ar.com.rollpaper.pricing.controller;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-
-import org.hibernate.mapping.Array;
-
 import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.laf.table.WebTable;
-
 import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
@@ -23,18 +22,26 @@ import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
+import ar.com.rollpaper.pricing.model.CargaItemEspecialModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
+import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.CommonUtils;
+import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class CargaPrecioController
 		extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
 
 	private CcobClie clienteCargado;
+
+	private CargaItemEspecialModel itemEspecialModel = new CargaItemEspecialModel();
+	private CargaItemEspecialView itemEspecialView = new CargaItemEspecialView();
+	private CargaItemEspecial itemEspecial = new CargaItemEspecial(PantPrincipalController.getPantallaPrincipal(),
+			itemEspecialView, itemEspecialModel, null);
 
 	public CargaPrecioController(PantPrincipalController pantPrincipal, CargaPrecioView view, CargaPrecioModel model)
 			throws Exception {
@@ -50,68 +57,8 @@ public class CargaPrecioController
 			}
 		});
 
-		view.tableDescFamilia.getModel().addTableModelListener(new TableModelListener() {
 
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				if ((e != null) && ((e.getType() == TableModelEvent.INSERT) || ((e.getType() == TableModelEvent.UPDATE)
-						&& e.getColumn() == CargaClienteEsclavoView.COL_ID))) {
-					try {
-						actualizarDescripcionFamilia(e.getLastRow());
-					} catch (Exception e1) {
-						ManejoDeError.showError(e1, "Error al refrescar Tabla");
-					}
-				}
-
-			}
-		});
-
-		view.tableDescEspecifico.getModel().addTableModelListener(new TableModelListener() {
-
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				if ((e != null) && ((e.getType() == TableModelEvent.INSERT) || ((e.getType() == TableModelEvent.UPDATE)
-						&& e.getColumn() == CargaClienteEsclavoView.COL_ID))) {
-					try {
-						actualizarDescripcionEspecifico(e.getLastRow());
-					} catch (Exception e1) {
-						ManejoDeError.showError(e1, "Error al refrescar Tabla");
-					}
-				}
-
-			}
-		});
-	}
-
-	protected void actualizarDescripcionEspecifico(int selectedRow) {
-		// TODO Auto-generated method stub
-		
-		String nombre= "";
-		String descripcion = "";
-		
-
-		Object id = getView().tableDescEspecifico.getModel().getValueAt(selectedRow, CargaPrecioView.COL_ID_ESPECIFICO);
-
-		if (id != null) {
-			int idInt;
-			if (id.getClass() == Integer.class) {
-				idInt = (Integer) id;
-			} else {
-				idInt = Integer.valueOf((String) id);
-			}
-			StocArts articulo = StocArtsDAO.findById(idInt);
-			if (articulo != null) {
-				descripcion = articulo.getArtsDescripcion();
-				//nombreLegal = articulo.getClieNombreLegal();
-			} else {
-				getView().tableDescEspecifico.setValueAt(null, selectedRow, CargaPrecioView.COL_ID_ESPECIFICO);
-			}
-		}
-
-		getView().tableDescEspecifico.setValueAt(descripcion, nombre, CargaPrecioView.COL_NOMBRE_ESPECIFICO);
-		getView().tableDescEspecifico.setValueAt(descripcion, selectedRow, CargaPrecioView.COL_DESC_ESPECIFICO);
-
-
+	
 	}
 
 	protected void actualizarDescripcionFamilia(int lastRow) {
@@ -205,6 +152,9 @@ public class CargaPrecioController
 		clienteCargado = null;
 		getView().txtNroCliente.clear();
 		getView().txtNroLista.clear();
+		getView().lblError.setText("");
+
+		getView().tableDescEspecifico.removeAll();
 
 		// falta borrar lista
 
@@ -258,15 +208,30 @@ public class CargaPrecioController
 		}
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.AGREGAR.toString())) {
-			DefaultTableModel model = getModelActivo();
 
-			Object[] registroVacio = new Object[getTableActivo().getColumnCount()];
-			for (int i = 0; i < getTableActivo().getColumnCount(); i++) {
-				registroVacio[i] = null;
+			String resutlado = "";
+			try {
+				itemEspecial.setRegistro(getModel().getRegistroPedidoEspecialEmpty());
+				resutlado = itemEspecial.iniciar();
+
+				if (!resutlado.equals("")) {
+
+					PreciosEspeciales registro = itemEspecial.getRegistro();
+
+					DefaultTableModel model = getModelActivo();
+
+					model.addRow(new Object[] { registro.getPricArticulo(), itemEspecial.getNombreItem(), itemEspecial.getDescripcionItem(), itemEspecial.getUnidadItem(),
+							registro.getPricDescuento1(), registro.getPricDescuento2(), registro.getPricMoneda(),
+							registro.getPricPrecio(), registro.getPricFechaDesde(), registro.getPricFechaHasta(),
+							registro.getPricReferencia() });
+
+					getTableActivo().setSelectedRow(getTableActivo().getRowCount() - 1);
+				}
+
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al obtener registro");
 			}
 
-			model.addRow(registroVacio);
-			getTableActivo().setSelectedRow(getTableActivo().getRowCount() - 1);
 		}
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.ELIMINAR.toString())) {
@@ -275,6 +240,75 @@ public class CargaPrecioController
 				dm.removeRow(getTableActivo().getSelectedRow());
 			}
 		}
+
+		if (accion.equals(ConstantesRP.PantCarPrecio.GRABAR.toString())) {
+			if (validarTablaEspecifico()) {
+				try {
+					getModel().grabar(getView().tableDescEspecifico);
+					resetearPantalla();
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al Guardar Precios");
+				}
+			}
+		}
+
+	}
+
+	private boolean validarTablaEspecifico() {
+		// Primero valido que los campos esten bien cargados
+		for (int i = 0; i < getView().tableDescEspecifico.getRowCount(); i++) {
+			Object fechaDesde = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_DESDE_ESPECIFICO);
+			Object fechaHasta = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_HASTA_ESPECIFICO);
+
+			if (fechaDesde == null) {
+				getView().lblError.setText("La fecha Desde no puede estar Vacia");
+				getView().tableDescEspecifico.setSelectedRow(i);
+				return false;
+			}
+
+			if (fechaHasta == null) {
+				getView().lblError.setText("La fecha Hasta no puede estar Vacia");
+				getView().tableDescEspecifico.setSelectedRow(i);
+				return false;
+			}
+
+			Date dFechaDesde = FechaManagerUtil.String2Date(fechaDesde.toString());
+			Date dFechaHasta = FechaManagerUtil.String2Date(fechaHasta.toString());
+
+			if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 1) {
+				getView().lblError.setText("La fecha desde debe ser menor a la hasta");
+				getView().tableDescEspecifico.setSelectedRow(i);
+				return false;
+			}
+
+			Object desc1 = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_1DESC_ESPECIFICO);
+			// Object desc2 = getView().tableDescEspecifico.getValueAt(i,
+			// CargaPrecioView.COL_2DESC_ESPECIFICO);
+
+			Object moneda = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_MONEDA_ESPECIFICO);
+			Object precio = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_PRECIO_ESPECIFICO);
+
+			if ((desc1 == null) && (precio == null)) {
+				getView().lblError.setText("Falta cargar el porcentage de descuento o el precio");
+				getView().tableDescEspecifico.setSelectedRow(i);
+				return false;
+			}
+
+			if ((desc1 != null) && (precio != null)) {
+				getView().lblError.setText("No se puede cargar un decuento y precio simultaneamente");
+				getView().tableDescEspecifico.setSelectedRow(i);
+				return false;
+			}
+
+			if ((precio != null) && (moneda == null)) {
+				getView().lblError.setText("Falta cargar la moneda");
+				getView().tableDescEspecifico.setSelectedRow(i);
+				return false;
+			}
+
+		}
+
+		return true;
 	}
 
 	private WebTable getTableActivo() {
@@ -286,10 +320,6 @@ public class CargaPrecioController
 	}
 
 	private DefaultTableModel getModelActivo() {
-		if (getView().tabPanel.getSelectedIndex() == 0) {
-			return (DefaultTableModel) getView().tableDescFamilia.getModel();
-		} else {
-			return (DefaultTableModel) getView().tableDescEspecifico.getModel();
-		}
+		return (DefaultTableModel) getTableActivo().getModel();
 	}
 }
