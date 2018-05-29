@@ -1,12 +1,13 @@
 package ar.com.rollpaper.pricing.model;
 
+import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rp.ui.pantalla.BaseModel;
 
 public class CargaItemEspecialModel extends BaseModel {
 
-	private PreciosEspeciales registro;
+	private Object registro;
 	private String accion = "";
 	private StocArts articuloCargado = null;
 
@@ -15,15 +16,38 @@ public class CargaItemEspecialModel extends BaseModel {
 	}
 
 	public PreciosEspeciales getRegistro() {
-		return registro;
+		if (registro instanceof PreciosEspeciales) {
+			return (PreciosEspeciales) registro;
+
+		}
+		return null;
 	}
 
-	public void setRegistro(PreciosEspeciales registro) {
+	public DescuentoXFamilias getRegistroFamilia() {
+		if (registro instanceof DescuentoXFamilias) {
+			return (DescuentoXFamilias) registro;
+
+		}
+		return null;
+	}
+
+	public void setRegistro(Object registro) {
 		this.registro = registro;
 	}
 
+	public int getArticuloID() {
+		if (registro != null) {
+			if (registro instanceof PreciosEspeciales) {
+				return ((PreciosEspeciales) registro).getPricArticulo();
+			} else {
+				return ((DescuentoXFamilias) registro).getPricFamiliaCliente();
+			}
+		}
+		return -1;
+	}
+
 	public boolean isEdicion() {
-		return (registro != null) && (registro.getPricArticulo() > 0);
+		return (registro != null) && (getArticuloID() > 0);
 	}
 
 	public void setAccion(String accion) {

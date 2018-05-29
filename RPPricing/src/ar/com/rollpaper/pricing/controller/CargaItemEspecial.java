@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
@@ -38,13 +39,29 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 		return registro;
 	}
 
-	public void setRegistro(PreciosEspeciales registro) {
+	public DescuentoXFamilias getRegistroFamilia() throws Exception {
+		DescuentoXFamilias registro = getModel().getRegistroFamilia();
+		if (!getModel().isEdicion()) {
+			registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().txtArticuloID.getText()));
+		} else {
+			registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().lblArticuloID.getText()));
+		}
+		//registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte()));
+		registro.setPricFamiliaDescuento1(12);
+		registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
+		registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
+		registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
+		registro.setPricReferencia(getView().txtReferencia.getText());
+
+		return registro;
+	}
+
+	public void setRegistro(Object registro) {
 		getModel().setArticuloCargado(null);
 		getModel().setRegistro(registro);
-		if (registro != null) {
-			if (registro.getPricArticulo() > 0) {
-				cargoArticulo(String.valueOf(registro.getPricArticulo()));
-			}
+
+		if (getModel().getArticuloID() > 0) {
+			cargoArticulo(String.valueOf(getModel().getArticuloID()));
 		}
 	}
 
@@ -79,33 +96,45 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 		// getView().cbMoneda
 
 		if (getModel().isEdicion()) {
-			getView().lblArticuloID.setText(String.valueOf(getModel().getRegistro().getPricArticulo()));
 
-			if (getModel().getRegistro().getPricDescuento1() != null) {
-				getView().txtDesc1.setImporte(getModel().getRegistro().getPricDescuento1().doubleValue());
-			}
-			if (getModel().getRegistro().getPricDescuento2() != null) {
-				getView().txtDesc2.setImporte(getModel().getRegistro().getPricDescuento2().doubleValue());
-			}
-			// getView().cbMoneda
+			if (getModel().getRegistro() != null) {
 
-			if (getModel().getRegistro().getPricPrecio() != null) {
-				getView().txtPrecio.setImporte(getModel().getRegistro().getPricPrecio().doubleValue());
-			}
-			if (getModel().getRegistro().getPricFechaDesde() != null) {
-				getView().dateFechaDesde.setDate(getModel().getRegistro().getPricFechaDesde());
-			}
+				getView().lblArticuloID.setText(String.valueOf(getModel().getRegistro().getPricArticulo()));
 
-			if (getModel().getRegistro().getPricFechaHasta() != null) {
-				getView().dateFechaHasta.setDate(getModel().getRegistro().getPricFechaHasta());
-			}
+				if (getModel().getRegistro().getPricDescuento1() != null) {
+					getView().txtDesc1.setImporte(getModel().getRegistro().getPricDescuento1().doubleValue());
+				}
+				if (getModel().getRegistro().getPricDescuento2() != null) {
+					getView().txtDesc2.setImporte(getModel().getRegistro().getPricDescuento2().doubleValue());
+				}
+				// getView().cbMoneda
 
-			if (getModel().getRegistro().getPricReferencia() != null) {
-				getView().txtReferencia.setText(getModel().getRegistro().getPricReferencia());
+				if (getModel().getRegistro().getPricPrecio() != null) {
+					getView().txtPrecio.setImporte(getModel().getRegistro().getPricPrecio().doubleValue());
+				}
+				if (getModel().getRegistro().getPricFechaDesde() != null) {
+					getView().dateFechaDesde.setDate(getModel().getRegistro().getPricFechaDesde());
+				}
+
+				if (getModel().getRegistro().getPricFechaHasta() != null) {
+					getView().dateFechaHasta.setDate(getModel().getRegistro().getPricFechaHasta());
+				}
+
+				if (getModel().getRegistro().getPricReferencia() != null) {
+					getView().txtReferencia.setText(getModel().getRegistro().getPricReferencia());
+				}
+			} else {
+				// la otra calse
 			}
 		}
 
 		RefrescarDatosArticulo();
+
+		if (getModel().isEdicion()) {
+			getView().txtDesc1.requestFocus();
+		} else {
+			getView().txtArticuloID.requestFocus();
+		}
 	}
 
 	@Override
@@ -136,6 +165,10 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 
 	private Boolean validar() {
 		// Primero valido que los campos esten bien cargados
+		if (!getModel().isEdicion() && getView().lblNombre.getText().contains("S/D")) {
+			popUpError.showError(getView().txtArticuloID, "Falta cargar un producto valido", getView());
+			return false;
+		}
 
 		if ((getView().txtDesc1.isEmpty()) && (getView().txtPrecio.isEmpty())) {
 			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio", getView());

@@ -29,8 +29,11 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	public static final int COL_ID_FAMILIA = 0;
 	public static final int COL_NOMBRE_FAMILIA = 1;
+	private static final int COL_REGISTRO_FAMILIA = 6;
+	
 
 	public static final int COL_ID_ESPECIFICO = 0;
 	public static final int COL_NOMBRE_ESPECIFICO = 1;
@@ -44,6 +47,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public static final int COL_HASTA_ESPECIFICO = 9;
 	public static final int COL_REFERENCIA_ESPECIFICO = 10;
 	public static final int COL_REGISTRO_ESPECIFICO = 11;
+	
 
 	public WebFormattedTextField txtNroCliente;
 	public RPTable tableDescEspecifico;
@@ -165,6 +169,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);
 		btnAgregar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_btnModificar_1 = new GridBagConstraints();
+		gbc_btnModificar_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnModificar_1.anchor = GridBagConstraints.NORTH;
 		gbc_btnModificar_1.insets = new Insets(0, 0, 5, 0);
 		gbc_btnModificar_1.gridx = 0;
@@ -175,6 +180,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		btnModificar.setMnemonic(KeyEvent.VK_MINUS);
 		btnModificar.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_btnModificar_2 = new GridBagConstraints();
+		gbc_btnModificar_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnModificar_2.insets = new Insets(0, 0, 5, 0);
 		gbc_btnModificar_2.gridx = 0;
 		gbc_btnModificar_2.gridy = 1;
@@ -184,6 +190,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		btnEliminar.setMnemonic(KeyEvent.VK_MINUS);
 		btnEliminar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_buttonRP_1 = new GridBagConstraints();
+		gbc_buttonRP_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_buttonRP_1.insets = new Insets(0, 0, 5, 0);
 		gbc_buttonRP_1.anchor = GridBagConstraints.NORTH;
 		gbc_buttonRP_1.gridx = 0;
@@ -203,13 +210,16 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 
 		tableDescFamilia = new RPTable();
-		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta" };
+		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta" , ""};
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();
 		tableDescFamilia.setModel(new DefaultTableModel(dataDesFamilia, headerDescFamilia));		
 		tableDescFamilia.setRowHeight(30);
 		tableDescFamilia.setEditable(false);
+		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMaxWidth(0);
+		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMinWidth(0);
+		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setPreferredWidth(0);
 
 		WebScrollPane spDescLista = new WebScrollPane(tableDescFamilia);
 

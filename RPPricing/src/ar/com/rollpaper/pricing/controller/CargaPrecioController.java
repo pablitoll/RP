@@ -10,11 +10,13 @@ import javax.swing.table.DefaultTableModel;
 import com.alee.laf.optionpane.WebOptionPane;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialModel;
@@ -30,8 +32,6 @@ import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class CargaPrecioController extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
-
-	private CcobClie clienteCargado;
 
 	private CargaItemEspecialModel itemEspecialModel = new CargaItemEspecialModel();
 	private CargaItemEspecialView itemEspecialView = new CargaItemEspecialView();
@@ -63,16 +63,16 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		}
 
 		if (cliente != null) {
-			if ((clienteCargado == null) || (clienteCargado.getClieCliente() != cliente.getClieCliente())) {
-				if ((clienteCargado == null) || (WebOptionPane.showConfirmDialog(getView(), "Esta cargando otro Cliente, ¿Cancelamos la carga del actual?", "Cambio de Cliente",
-						WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0)) {
+			if ((getModel().getClienteCargado() == null) || (getModel().getClienteCargado().getClieCliente() != cliente.getClieCliente())) {
+				if ((getModel().getClienteCargado() == null) || (WebOptionPane.showConfirmDialog(getView(), "Esta cargando otro Cliente, ¿Cancelamos la carga del actual?",
+						"Cambio de Cliente", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0)) {
 					getView().lblNombreCliente.setText(cliente.getClieNombre());
 					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-					clienteCargado = cliente;
+					getModel().setClienteCargado(cliente);
 					cargarLista(cliente);
 					setModoPantalla();
 				} else {
-					getView().txtNroCliente.setText(String.valueOf(clienteCargado.getClieCliente()));
+					getView().txtNroCliente.setText(String.valueOf(getModel().getClienteCargado().getClieCliente()));
 				}
 			}
 
@@ -112,6 +112,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().tableDescEspecifico.setEnabled(tieneCli);
 		getView().tableDescFamilia.setEnabled(tieneCli);
 		getView().btnAgregar.setEnabled(tieneCli);
+		getView().btnModificar.setEnabled(tieneCli);
 		getView().btnEliminar.setEnabled(tieneCli);
 
 		getView().btnBorrar.setVisible(tieneCli);
@@ -133,14 +134,14 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().lblNombreLegal.setText("S/D");
 		getView().lblNombreCliente.setText("S/D");
 
-		clienteCargado = null;
+		getModel().setClienteCargado(null);
 		getView().txtNroCliente.clear();
 		getView().txtNroLista.clear();
 		getView().lblError.setText("");
 
-		getView().tableDescEspecifico.removeAll();
-
 		// falta borrar lista
+		getView().tableDescEspecifico.clear();
+		getView().tableDescFamilia.clear();
 
 		setModoPantalla();
 	}
@@ -195,7 +196,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 			String resutlado = "";
 			try {
-				itemEspecial.setRegistro(getModel().getRegistroPedidoEspecialEmpty());
+				itemEspecial.setRegistro(getModel().getRegistroEmpty(getClassRegistro()));
 				resutlado = itemEspecial.iniciar();
 
 				if (!resutlado.equals("")) {
@@ -206,7 +207,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 					getTableActivo().setSelectedRow(getTableActivo().getRowCount() - 1);
 
-					// grabar
+					HibernateGeneric.persist(registro);
 				}
 
 			} catch (Exception e) {
@@ -216,24 +217,25 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.MODIFICAR.toString())) {
 			String resutlado = "";
-			try {
-				int row = getTableActivo().getSelectedRow();
-				itemEspecial.setRegistro(getModel().getRegistroPedidoEspecial(getTableActivo(), row));
-				resutlado = itemEspecial.iniciar();
+			if ((getTableActivo().getRowCount() > 0) && (getTableActivo().getSelectedRow() >= 0)) {
+				try {
+					int row = getTableActivo().getSelectedRow();
+					itemEspecial.setRegistro(getModel().getRegistroPedidoEspecial(getTableActivo(), row));
+					resutlado = itemEspecial.iniciar();
 
-				if (!resutlado.equals("")) {
+					if (!resutlado.equals("")) {
 
-					PreciosEspeciales registro = itemEspecial.getRegistro();
+						PreciosEspeciales registro = itemEspecial.getRegistro();
 
-					modificarRegistroATabla(getTableActivo(), registro, row);
+						modificarRegistroATabla(getTableActivo(), registro, row);
 
-					// getModel().grabar(getView().tableDescEspecifico);
+						HibernateGeneric.persist(registro);
+					}
+
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al actualizar registro");
 				}
-
-			} catch (Exception e) {
-				ManejoDeError.showError(e, "Error al actualizar registro");
 			}
-
 		}
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.ELIMINAR.toString())) {
@@ -242,7 +244,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				dm.removeRow(getTableActivo().getSelectedRow());
 			}
 		}
-
 	}
 
 	private void modificarRegistroATabla(RPTable tableActivo, PreciosEspeciales registro, int row) {
@@ -269,6 +270,14 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
 				registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "", registro.getPricReferencia(), registro });
 
+	}
+
+	private Class<?> getClassRegistro() {
+		if (getView().tabPanel.getSelectedIndex() == 0) {
+			return DescuentoXFamilias.class;
+		} else {
+			return PreciosEspeciales.class;
+		}
 	}
 
 	private RPTable getTableActivo() {
