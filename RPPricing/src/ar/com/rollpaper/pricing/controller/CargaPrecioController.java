@@ -3,48 +3,41 @@ package ar.com.rollpaper.pricing.controller;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+
 import com.alee.laf.optionpane.WebOptionPane;
-import com.alee.laf.table.WebTable;
+
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
-import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
-import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
-import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.common.Common;
+import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
-public class CargaPrecioController
-		extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
+public class CargaPrecioController extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
 
 	private CcobClie clienteCargado;
 
 	private CargaItemEspecialModel itemEspecialModel = new CargaItemEspecialModel();
 	private CargaItemEspecialView itemEspecialView = new CargaItemEspecialView();
-	private CargaItemEspecial itemEspecial = new CargaItemEspecial(PantPrincipalController.getPantallaPrincipal(),
-			itemEspecialView, itemEspecialModel, null);
+	private CargaItemEspecial itemEspecial = new CargaItemEspecial(PantPrincipalController.getPantallaPrincipal(), itemEspecialView, itemEspecialModel, null);
 
-	public CargaPrecioController(PantPrincipalController pantPrincipal, CargaPrecioView view, CargaPrecioModel model)
-			throws Exception {
+	public CargaPrecioController(PantPrincipalController pantPrincipal, CargaPrecioView view, CargaPrecioModel model) throws Exception {
 		super(pantPrincipal, view, model, null);
 
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
@@ -56,13 +49,6 @@ public class CargaPrecioController
 				}
 			}
 		});
-
-
-	
-	}
-
-	protected void actualizarDescripcionFamilia(int lastRow) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -78,8 +64,7 @@ public class CargaPrecioController
 
 		if (cliente != null) {
 			if ((clienteCargado == null) || (clienteCargado.getClieCliente() != cliente.getClieCliente())) {
-				if ((clienteCargado == null) || (WebOptionPane.showConfirmDialog(getView(),
-						"Esta cargando otro Cliente, ¿Cancelamos la carga del actual?", "Cambio de Cliente",
+				if ((clienteCargado == null) || (WebOptionPane.showConfirmDialog(getView(), "Esta cargando otro Cliente, ¿Cancelamos la carga del actual?", "Cambio de Cliente",
 						WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0)) {
 					getView().lblNombreCliente.setText(cliente.getClieNombre());
 					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
@@ -130,7 +115,6 @@ public class CargaPrecioController
 		getView().btnEliminar.setEnabled(tieneCli);
 
 		getView().btnBorrar.setVisible(tieneCli);
-		getView().btnGrabar.setVisible(tieneCli);
 		getView().btnCancelar.setVisible(tieneCli);
 		getView().setCerrarVisible(!tieneCli);
 
@@ -197,8 +181,8 @@ public class CargaPrecioController
 	public void ejecutarAccion(String accion) {
 
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "¿Cancelamos la carga Actual?", "Cancelacion de Carga",
-					WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0) {
+			if (WebOptionPane.showConfirmDialog(getView(), "¿Cancelamos la carga Actual?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
+					WebOptionPane.QUESTION_MESSAGE) == 0) {
 				try {
 					resetearPantalla();
 				} catch (Exception e) {
@@ -218,18 +202,36 @@ public class CargaPrecioController
 
 					PreciosEspeciales registro = itemEspecial.getRegistro();
 
-					DefaultTableModel model = getModelActivo();
-
-					model.addRow(new Object[] { registro.getPricArticulo(), itemEspecial.getNombreItem(), itemEspecial.getDescripcionItem(), itemEspecial.getUnidadItem(),
-							registro.getPricDescuento1(), registro.getPricDescuento2(), registro.getPricMoneda(),
-							registro.getPricPrecio(), registro.getPricFechaDesde(), registro.getPricFechaHasta(),
-							registro.getPricReferencia() });
+					agregarRegistroATabla(getTableActivo(), registro, itemEspecial.getNombreItem(), itemEspecial.getDescripcionItem(), itemEspecial.getUnidadItem());
 
 					getTableActivo().setSelectedRow(getTableActivo().getRowCount() - 1);
+
+					// grabar
 				}
 
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al obtener registro");
+			}
+		}
+
+		if (accion.equals(ConstantesRP.PantCarPrecio.MODIFICAR.toString())) {
+			String resutlado = "";
+			try {
+				int row = getTableActivo().getSelectedRow();
+				itemEspecial.setRegistro(getModel().getRegistroPedidoEspecial(getTableActivo(), row));
+				resutlado = itemEspecial.iniciar();
+
+				if (!resutlado.equals("")) {
+
+					PreciosEspeciales registro = itemEspecial.getRegistro();
+
+					modificarRegistroATabla(getTableActivo(), registro, row);
+
+					// getModel().grabar(getView().tableDescEspecifico);
+				}
+
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al actualizar registro");
 			}
 
 		}
@@ -241,77 +243,35 @@ public class CargaPrecioController
 			}
 		}
 
-		if (accion.equals(ConstantesRP.PantCarPrecio.GRABAR.toString())) {
-			if (validarTablaEspecifico()) {
-				try {
-					getModel().grabar(getView().tableDescEspecifico);
-					resetearPantalla();
-				} catch (Exception e) {
-					ManejoDeError.showError(e, "Error al Guardar Precios");
-				}
-			}
-		}
+	}
+
+	private void modificarRegistroATabla(RPTable tableActivo, PreciosEspeciales registro, int row) {
+
+		tableActivo.setValueAt(registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "", row,
+				CargaPrecioView.COL_1DESC_ESPECIFICO);
+		tableActivo.setValueAt(registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "", row,
+				CargaPrecioView.COL_2DESC_ESPECIFICO);
+		tableActivo.setValueAt(registro.getPricMoneda(), row, CargaPrecioView.COL_MONEDA_ESPECIFICO);
+		tableActivo.setValueAt(registro.getPricPrecio() != null ? Common.double2String(registro.getPricPrecio().doubleValue()) : "", row, CargaPrecioView.COL_PRECIO_ESPECIFICO);
+		tableActivo.setValueAt(registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "", row, CargaPrecioView.COL_DESDE_ESPECIFICO);
+		tableActivo.setValueAt(registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "", row, CargaPrecioView.COL_HASTA_ESPECIFICO);
+		tableActivo.setValueAt(registro.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_ESPECIFICO);
+		tableActivo.setValueAt(registro, row, CargaPrecioView.COL_REGISTRO_ESPECIFICO);
 
 	}
 
-	private boolean validarTablaEspecifico() {
-		// Primero valido que los campos esten bien cargados
-		for (int i = 0; i < getView().tableDescEspecifico.getRowCount(); i++) {
-			Object fechaDesde = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_DESDE_ESPECIFICO);
-			Object fechaHasta = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_HASTA_ESPECIFICO);
+	private void agregarRegistroATabla(RPTable tabla, PreciosEspeciales registro, String nombreItem, String descItem, String unidadItem) {
 
-			if (fechaDesde == null) {
-				getView().lblError.setText("La fecha Desde no puede estar Vacia");
-				getView().tableDescEspecifico.setSelectedRow(i);
-				return false;
-			}
+		tabla.addRow(new Object[] { registro.getPricArticulo(), nombreItem, descItem, unidadItem,
+				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "",
+				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "", registro.getPricMoneda(),
+				registro.getPricPrecio() != null ? Common.double2String(registro.getPricPrecio().doubleValue()) : "",
+				registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
+				registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "", registro.getPricReferencia(), registro });
 
-			if (fechaHasta == null) {
-				getView().lblError.setText("La fecha Hasta no puede estar Vacia");
-				getView().tableDescEspecifico.setSelectedRow(i);
-				return false;
-			}
-
-			Date dFechaDesde = FechaManagerUtil.String2Date(fechaDesde.toString());
-			Date dFechaHasta = FechaManagerUtil.String2Date(fechaHasta.toString());
-
-			if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 1) {
-				getView().lblError.setText("La fecha desde debe ser menor a la hasta");
-				getView().tableDescEspecifico.setSelectedRow(i);
-				return false;
-			}
-
-			Object desc1 = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_1DESC_ESPECIFICO);
-			// Object desc2 = getView().tableDescEspecifico.getValueAt(i,
-			// CargaPrecioView.COL_2DESC_ESPECIFICO);
-
-			Object moneda = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_MONEDA_ESPECIFICO);
-			Object precio = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_PRECIO_ESPECIFICO);
-
-			if ((desc1 == null) && (precio == null)) {
-				getView().lblError.setText("Falta cargar el porcentage de descuento o el precio");
-				getView().tableDescEspecifico.setSelectedRow(i);
-				return false;
-			}
-
-			if ((desc1 != null) && (precio != null)) {
-				getView().lblError.setText("No se puede cargar un decuento y precio simultaneamente");
-				getView().tableDescEspecifico.setSelectedRow(i);
-				return false;
-			}
-
-			if ((precio != null) && (moneda == null)) {
-				getView().lblError.setText("Falta cargar la moneda");
-				getView().tableDescEspecifico.setSelectedRow(i);
-				return false;
-			}
-
-		}
-
-		return true;
 	}
 
-	private WebTable getTableActivo() {
+	private RPTable getTableActivo() {
 		if (getView().tabPanel.getSelectedIndex() == 0) {
 			return getView().tableDescFamilia;
 		} else {

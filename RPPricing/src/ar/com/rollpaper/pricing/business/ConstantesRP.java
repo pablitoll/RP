@@ -7,7 +7,7 @@ public class ConstantesRP {
 	}
 
 	public enum PantCarPrecio {
-		BORRAR, GRABAR, AGREGAR, ELIMINAR, CANCELAR
+		BORRAR, AGREGAR, ELIMINAR, CANCELAR, MODIFICAR
 	}
 
 	public enum PantCarClienteEsclabo {
@@ -16,8 +16,9 @@ public class ConstantesRP {
 
 	public enum AccionesCargaItemFamilia {
 		ACEPTAR, CANCELAR
-	};
+	}
 
+	public static String IMG_ERROR = "/resource/error.png";
 	public static String IMG_ICONO_APP = "/resource/vector.png";
 	public static String IMG_EXIT = "/resource/exit.png";
 	public static String IMG_CAL = "/resource/calculadora.png";

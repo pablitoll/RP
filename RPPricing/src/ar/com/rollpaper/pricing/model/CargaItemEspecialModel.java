@@ -23,8 +23,7 @@ public class CargaItemEspecialModel extends BaseModel {
 	}
 
 	public boolean isEdicion() {
-		// TODO Auto-generated method stub
-		return true;
+		return (registro != null) && (registro.getPricArticulo() > 0);
 	}
 
 	public void setAccion(String accion) {

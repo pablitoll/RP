@@ -1,12 +1,10 @@
 package ar.com.rollpaper.pricing.controller;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.math.BigDecimal;
-
-import org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
@@ -14,17 +12,16 @@ import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialModel;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
-import ar.com.rollpaper.pricing.view.CargaPrecioView;
+import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
 import ar.com.rp.ui.pantalla.BaseControllerDialog;
 
-public class CargaItemEspecial
-		extends BaseControllerDialog<PantPrincipalController, CargaItemEspecialView, CargaItemEspecialModel> {
+public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalController, CargaItemEspecialView, CargaItemEspecialModel> {
 
 	public PreciosEspeciales getRegistro() throws Exception {
-		// TODO ACA
 		PreciosEspeciales registro = getModel().getRegistro();
-		if (getModel().isEdicion()) {
+		if (!getModel().isEdicion()) {
 			registro.setPricArticulo(Integer.valueOf(getView().txtArticuloID.getText()));
 		} else {
 			registro.setPricArticulo(Integer.valueOf(getView().lblArticuloID.getText()));
@@ -42,11 +39,16 @@ public class CargaItemEspecial
 	}
 
 	public void setRegistro(PreciosEspeciales registro) {
+		getModel().setArticuloCargado(null);
 		getModel().setRegistro(registro);
+		if (registro != null) {
+			if (registro.getPricArticulo() > 0) {
+				cargoArticulo(String.valueOf(registro.getPricArticulo()));
+			}
+		}
 	}
 
-	public CargaItemEspecial(PantPrincipalController pantPrincipal, CargaItemEspecialView view,
-			CargaItemEspecialModel model, PermisosInterface permisos) throws Exception {
+	public CargaItemEspecial(PantPrincipalController pantPrincipal, CargaItemEspecialView view, CargaItemEspecialModel model, PermisosInterface permisos) throws Exception {
 		super(pantPrincipal, view, model, permisos);
 		view.txtArticuloID.addFocusListener(new FocusListener() {
 
@@ -63,9 +65,46 @@ public class CargaItemEspecial
 
 	@Override
 	protected void cargaPantalla() throws Exception {
-		getView().lblArticuloID.setVisible(!getModel().isEdicion());
-		getView().txtArticuloID.setVisible(getModel().isEdicion());
-		
+		getView().lblArticuloID.setVisible(getModel().isEdicion());
+		getView().txtArticuloID.setVisible(!getModel().isEdicion());
+
+		getView().lblArticuloID.setText("");
+		getView().txtArticuloID.setText("");
+		getView().txtDesc1.limpiar();
+		getView().txtDesc2.limpiar();
+		getView().txtPrecio.limpiar();
+		getView().txtReferencia.setText("");
+		getView().dateFechaDesde.clear();
+		getView().dateFechaHasta.clear();
+		// getView().cbMoneda
+
+		if (getModel().isEdicion()) {
+			getView().lblArticuloID.setText(String.valueOf(getModel().getRegistro().getPricArticulo()));
+
+			if (getModel().getRegistro().getPricDescuento1() != null) {
+				getView().txtDesc1.setImporte(getModel().getRegistro().getPricDescuento1().doubleValue());
+			}
+			if (getModel().getRegistro().getPricDescuento2() != null) {
+				getView().txtDesc2.setImporte(getModel().getRegistro().getPricDescuento2().doubleValue());
+			}
+			// getView().cbMoneda
+
+			if (getModel().getRegistro().getPricPrecio() != null) {
+				getView().txtPrecio.setImporte(getModel().getRegistro().getPricPrecio().doubleValue());
+			}
+			if (getModel().getRegistro().getPricFechaDesde() != null) {
+				getView().dateFechaDesde.setDate(getModel().getRegistro().getPricFechaDesde());
+			}
+
+			if (getModel().getRegistro().getPricFechaHasta() != null) {
+				getView().dateFechaHasta.setDate(getModel().getRegistro().getPricFechaHasta());
+			}
+
+			if (getModel().getRegistro().getPricReferencia() != null) {
+				getView().txtReferencia.setText(getModel().getRegistro().getPricReferencia());
+			}
+		}
+
 		RefrescarDatosArticulo();
 	}
 
@@ -88,9 +127,50 @@ public class CargaItemEspecial
 
 		if (accion.equals(ConstantesRP.AccionesCargaItemFamilia.ACEPTAR.toString())) {
 			getModel().setAccion("ACEPTO");
-			cerrarVentana();
+			if (validar()) {
+				cerrarVentana();
+			}
 		}
 
+	}
+
+	private Boolean validar() {
+		// Primero valido que los campos esten bien cargados
+
+		if ((getView().txtDesc1.isEmpty()) && (getView().txtPrecio.isEmpty())) {
+			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio", getView());
+			return false;
+		}
+
+		if ((!getView().txtDesc1.isEmpty()) && (!getView().txtPrecio.isEmpty())) {
+			popUpError.showError(getView().txtDesc1, "No se puede cargar un decuento y precio simultaneamente", getView());
+			return false;
+		}
+
+		if ((!getView().txtPrecio.isEmpty()) && (getView().cbMoneda.getSelectedItem() != null)) {
+			popUpError.showError(getView().cbMoneda, "Falta cargar la moneda", getView());
+			return false;
+		}
+
+		if (getView().dateFechaDesde.getDate() == null) {
+			popUpError.showError(getView().dateFechaDesde, "La fecha Desde no puede estar Vacia", getView());
+			return false;
+		}
+
+		if (getView().dateFechaHasta.getDate() == null) {
+			popUpError.showError(getView().dateFechaHasta, "La fecha Hasta no puede estar Vacia", getView());
+			return false;
+		}
+
+		Date dFechaDesde = getView().dateFechaDesde.getDate();
+		Date dFechaHasta = getView().dateFechaHasta.getDate();
+
+		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 1) {
+			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta", getView());
+			return false;
+		}
+
+		return true;
 	}
 
 	public String getNombreItem() {
