@@ -80,7 +80,7 @@ public class CargaItemEspecial
 	}
 
 	@Override
-	public void ejecuarAccion(String accion) {
+	public void ejecutarAccion(String accion) {
 		if (accion.equals(ConstantesRP.AccionesCargaItemFamilia.CANCELAR.toString())) {
 			getModel().setAccion("");
 			cerrarVentana();

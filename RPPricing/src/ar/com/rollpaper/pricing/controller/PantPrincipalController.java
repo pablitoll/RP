@@ -47,7 +47,7 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 
 
 	@Override
-	public void ejecuarAccion(String accion) {
+	public void ejecutarAccion(String accion) {
 
 		if (accion.equals(ConstantesRP.Acciones.CALCULADORA.toString())) {
 			if (calculadora == null) {
@@ -170,5 +170,6 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		getView().revalidate();
 		getView().repaint();
 	}
+
 
 }

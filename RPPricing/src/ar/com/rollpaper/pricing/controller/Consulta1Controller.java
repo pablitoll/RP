@@ -23,7 +23,7 @@ public class Consulta1Controller extends BaseControllerMVC<PantPrincipalControll
 	}
 
 	@Override
-	public void ejecuarAccion(String accion) {
+	public void ejecutarAccion(String accion) {
 		// TODO Auto-generated method stub
 		//llllll
 		int a;

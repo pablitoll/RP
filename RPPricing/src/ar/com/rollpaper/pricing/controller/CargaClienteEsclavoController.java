@@ -234,7 +234,7 @@ public class CargaClienteEsclavoController
 	}
 
 	@Override
-	public void ejecuarAccion(String accion) {
+	public void ejecutarAccion(String accion) {
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString())) {
 			if (WebOptionPane.showConfirmDialog(getView(), "¿Cancelamos la carga Actual?", "Cancelacion de Carga",
 					WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0) {
