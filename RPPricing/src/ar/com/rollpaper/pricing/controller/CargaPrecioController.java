@@ -273,8 +273,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		} else {
 			DescuentoXFamilias registroFamilia = (DescuentoXFamilias) registro;
 
-//			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "", row,
-//					CargaPrecioView.COL_1DESC_ESPECIFICO);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento1() != null ? Common.double2String(registroFamilia.getPricFamiliaDescuento1().doubleValue()) : "", row,
+					CargaPrecioView.COL_1DESC_ESPECIFICO);
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento2()!= null ? Common.double2String(registroFamilia.getPricFamiliaDescuento2().doubleValue()) : "", row,
 					CargaPrecioView.COL_2DESC_FAMILIA);
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaDesde()) : "", row,

@@ -48,8 +48,6 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			} else {
 				registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().lblArticuloID.getText()));
 			}
-			// registro.setPricFamiliaDescuento1(new
-			// BigDecimal(getView().txtDesc1.getImporte()));
 			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte()));
 			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
 			registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
@@ -139,10 +137,9 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			} else {
 				getView().lblArticuloID.setText(String.valueOf(getModel().getRegistroFamilia().getPricFamiliaId()));
 
-				// TODO cambiar de int a double
-				// if (getModel().getRegistroFamilia().getPricFamiliaDescuento1() != null) {
-				// getView().txtDesc1.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento1());
-				// }
+				if (getModel().getRegistroFamilia().getPricFamiliaDescuento1() != null) {
+					getView().txtDesc1.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue());
+				}
 
 				if (getModel().getRegistroFamilia().getPricFamiliaDescuento2() != null) {
 					getView().txtDesc2.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue());
@@ -159,7 +156,6 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 				if (getModel().getRegistroFamilia().getPricReferencia() != null) {
 					getView().txtReferencia.setText(getModel().getRegistroFamilia().getPricReferencia());
 				}
-
 			}
 		}
 
