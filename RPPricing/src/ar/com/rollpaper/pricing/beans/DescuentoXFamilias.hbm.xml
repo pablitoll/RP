@@ -12,7 +12,7 @@
         <property generated="never" lazy="false" name="pricFamiliaListaPrecvta" optimistic-lock="true" type="int" unique="false">
             <column name="PRIC_FAMILIA_LISTA_PRECVTA" not-null="true"/>
         </property>
-        <property generated="never" lazy="false" name="pricFamiliaDescuento1" optimistic-lock="true" type="int" unique="false">
+        <property generated="never" lazy="false" name="pricFamiliaDescuento1" optimistic-lock="true" type="big_decimal" unique="false">
             <column name="PRIC_FAMILIA_DESCUENTO_1" not-null="true"/>
         </property>
         <property generated="never" lazy="false" name="pricFamiliaDescuento2" optimistic-lock="true" type="big_decimal" unique="false">

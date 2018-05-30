@@ -50,7 +50,7 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			}
 			// registro.setPricFamiliaDescuento1(new
 			// BigDecimal(getView().txtDesc1.getImporte()));
-			registro.setPricFamiliaDescuento1(12);
+			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte()));
 			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
 			registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
 			registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
