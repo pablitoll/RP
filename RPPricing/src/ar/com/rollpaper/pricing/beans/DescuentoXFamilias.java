@@ -16,7 +16,7 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	private int pricFamiliaId;
 	private int pricFamiliaCliente;
 	private int pricFamiliaListaPrecvta;
-	private int pricFamiliaDescuento1;
+	private BigDecimal pricFamiliaDescuento1;
 	private BigDecimal pricFamiliaDescuento2;
 	private Date pricFamiliaFechaDesde;
 	private Date pricFamiliaFechaHasta;
@@ -26,7 +26,7 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	}
 
 	public DescuentoXFamilias(int pricFamiliaId, int pricFamiliaCliente, int pricFamiliaListaPrecvta,
-			int pricFamiliaDescuento1, BigDecimal pricFamiliaDescuento2, Date pricFamiliaFechaDesde,
+			BigDecimal pricFamiliaDescuento1, BigDecimal pricFamiliaDescuento2, Date pricFamiliaFechaDesde,
 			Date pricFamiliaFechaHasta) {
 		this.pricFamiliaId = pricFamiliaId;
 		this.pricFamiliaCliente = pricFamiliaCliente;
@@ -38,7 +38,7 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	}
 
 	public DescuentoXFamilias(int pricFamiliaId, int pricFamiliaCliente, int pricFamiliaListaPrecvta,
-			int pricFamiliaDescuento1, BigDecimal pricFamiliaDescuento2, Date pricFamiliaFechaDesde,
+			BigDecimal pricFamiliaDescuento1, BigDecimal pricFamiliaDescuento2, Date pricFamiliaFechaDesde,
 			Date pricFamiliaFechaHasta, String pricReferencia) {
 		this.pricFamiliaId = pricFamiliaId;
 		this.pricFamiliaCliente = pricFamiliaCliente;
@@ -74,11 +74,11 @@ public class DescuentoXFamilias implements java.io.Serializable {
 		this.pricFamiliaListaPrecvta = pricFamiliaListaPrecvta;
 	}
 
-	public int getPricFamiliaDescuento1() {
+	public BigDecimal getPricFamiliaDescuento1() {
 		return this.pricFamiliaDescuento1;
 	}
 
-	public void setPricFamiliaDescuento1(int pricFamiliaDescuento1) {
+	public void setPricFamiliaDescuento1(BigDecimal pricFamiliaDescuento1) {
 		this.pricFamiliaDescuento1 = pricFamiliaDescuento1;
 	}
 

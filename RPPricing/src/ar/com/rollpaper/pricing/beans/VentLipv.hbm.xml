@@ -44,12 +44,6 @@
         </property>
         <property generated="never" lazy="false" name="lipvEsListaAcopio" optimistic-lock="true" type="short" unique="false">
             <column name="LIPV_ES_LISTA_ACOPIO" not-null="true"/>
-        </property>
-        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="ventArpvs" optimistic-lock="true" sort="unsorted" table="VENT_ARPV">
-            <key on-delete="noaction">
-                <column name="ARPV_LISTA_PRECVTA" not-null="true"/>
-            </key>
-            <one-to-many class="ar.com.rollpaper.pricing.beans.VentArpv" embed-xml="true" not-found="exception"/>
-        </set>
+        </property>      
     </class>
 </hibernate-mapping>
