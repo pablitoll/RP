@@ -31,8 +31,13 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	private static final long serialVersionUID = 1L;
 
 	public static final int COL_ID_FAMILIA = 0;
-	public static final int COL_NOMBRE_FAMILIA = 1;
-	private static final int COL_REGISTRO_FAMILIA = 6;
+	public static final int COL_NOMBRE_FAMILIA = 1;	
+	public static final int COL_1DESC_FAMILIA = 2;
+	public static final int COL_2DESC_FAMILIA = 3;
+	public static final int COL_DESDE_FAMIIA = 4;
+	public static final int COL_HASTA_FAMILIA = 5;
+	public static final int COL_REFERENCIA_FAMILIA = 6;
+	public static final int COL_REGISTRO_FAMILIA = 7;
 	
 
 	public static final int COL_ID_ESPECIFICO = 0;
@@ -48,6 +53,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public static final int COL_REFERENCIA_ESPECIFICO = 10;
 	public static final int COL_REGISTRO_ESPECIFICO = 11;
 	
+
 
 	public WebFormattedTextField txtNroCliente;
 	public RPTable tableDescEspecifico;
@@ -210,7 +216,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 
 		tableDescFamilia = new RPTable();
-		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta" , ""};
+		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta" , "Referencia", ""};
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();

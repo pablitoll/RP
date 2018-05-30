@@ -5,6 +5,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.optionpane.WebOptionPane;
@@ -201,13 +202,14 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 				if (!resutlado.equals("")) {
 
-					PreciosEspeciales registro = itemEspecial.getRegistro();
+					Object registro = itemEspecial.getRegistro();
 
 					agregarRegistroATabla(getTableActivo(), registro, itemEspecial.getNombreItem(), itemEspecial.getDescripcionItem(), itemEspecial.getUnidadItem());
 
 					getTableActivo().setSelectedRow(getTableActivo().getRowCount() - 1);
 
 					HibernateGeneric.persist(registro);
+
 				}
 
 			} catch (Exception e) {
@@ -225,7 +227,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 					if (!resutlado.equals("")) {
 
-						PreciosEspeciales registro = itemEspecial.getRegistro();
+						Object registro = itemEspecial.getRegistro();
 
 						modificarRegistroATabla(getTableActivo(), registro, row);
 
@@ -240,35 +242,67 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.ELIMINAR.toString())) {
 			if (getTableActivo().getSelectedRow() >= 0) {
-				DefaultTableModel dm = getModelActivo();
-				dm.removeRow(getTableActivo().getSelectedRow());
+				if (WebOptionPane.showConfirmDialog(getView(), "¿Borramos el registro?", "Eliminacion de registro", JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
+
+					DefaultTableModel dm = getModelActivo();
+					dm.removeRow(getTableActivo().getSelectedRow());
+				}
 			}
 		}
 	}
 
-	private void modificarRegistroATabla(RPTable tableActivo, PreciosEspeciales registro, int row) {
+	private void modificarRegistroATabla(RPTable tableActivo, Object registro, int row) {
 
-		tableActivo.setValueAt(registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "", row,
-				CargaPrecioView.COL_1DESC_ESPECIFICO);
-		tableActivo.setValueAt(registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "", row,
-				CargaPrecioView.COL_2DESC_ESPECIFICO);
-		tableActivo.setValueAt(registro.getPricMoneda(), row, CargaPrecioView.COL_MONEDA_ESPECIFICO);
-		tableActivo.setValueAt(registro.getPricPrecio() != null ? Common.double2String(registro.getPricPrecio().doubleValue()) : "", row, CargaPrecioView.COL_PRECIO_ESPECIFICO);
-		tableActivo.setValueAt(registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "", row, CargaPrecioView.COL_DESDE_ESPECIFICO);
-		tableActivo.setValueAt(registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "", row, CargaPrecioView.COL_HASTA_ESPECIFICO);
-		tableActivo.setValueAt(registro.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_ESPECIFICO);
-		tableActivo.setValueAt(registro, row, CargaPrecioView.COL_REGISTRO_ESPECIFICO);
+		if (registro instanceof PreciosEspeciales) {
+			PreciosEspeciales registroPedido = (PreciosEspeciales) registro;
+
+			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "", row,
+					CargaPrecioView.COL_1DESC_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "", row,
+					CargaPrecioView.COL_2DESC_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricMoneda(), row, CargaPrecioView.COL_MONEDA_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricPrecio() != null ? Common.double2String(registroPedido.getPricPrecio().doubleValue()) : "", row,
+					CargaPrecioView.COL_PRECIO_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaDesde()) : "", row,
+					CargaPrecioView.COL_DESDE_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaHasta()) : "", row,
+					CargaPrecioView.COL_HASTA_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido, row, CargaPrecioView.COL_REGISTRO_ESPECIFICO);
+		} else {
+			DescuentoXFamilias registroFamilia = (DescuentoXFamilias) registro;
+
+//			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "", row,
+//					CargaPrecioView.COL_1DESC_ESPECIFICO);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento2()!= null ? Common.double2String(registroFamilia.getPricFamiliaDescuento2().doubleValue()) : "", row,
+					CargaPrecioView.COL_2DESC_FAMILIA);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaDesde()) : "", row,
+					CargaPrecioView.COL_DESDE_FAMIIA);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaHasta() != null ? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaHasta()) : "", row,
+					CargaPrecioView.COL_HASTA_FAMILIA);
+			tableActivo.setValueAt(registroFamilia.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_FAMILIA);
+			tableActivo.setValueAt(registroFamilia, row, CargaPrecioView.COL_REGISTRO_FAMILIA);
+
+		}
 
 	}
 
-	private void agregarRegistroATabla(RPTable tabla, PreciosEspeciales registro, String nombreItem, String descItem, String unidadItem) {
+	private void agregarRegistroATabla(RPTable tabla, Object registro, String nombreItem, String descItem, String unidadItem) {
 
-		tabla.addRow(new Object[] { registro.getPricArticulo(), nombreItem, descItem, unidadItem,
-				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "",
-				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "", registro.getPricMoneda(),
-				registro.getPricPrecio() != null ? Common.double2String(registro.getPricPrecio().doubleValue()) : "",
-				registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
-				registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "", registro.getPricReferencia(), registro });
+		if (registro instanceof PreciosEspeciales) {
+
+			PreciosEspeciales registroPedido = (PreciosEspeciales) registro;
+			tabla.addRow(new Object[] { registroPedido.getPricArticulo(), nombreItem, descItem, unidadItem,
+					registroPedido.getPricDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "",
+					registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "", registroPedido.getPricMoneda(),
+					registroPedido.getPricPrecio() != null ? Common.double2String(registroPedido.getPricPrecio().doubleValue()) : "",
+					registroPedido.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaDesde()) : "",
+					registroPedido.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaHasta()) : "", registroPedido.getPricReferencia(),
+					registroPedido });
+		} else {
+			// TODO FALTA
+		}
 
 	}
 

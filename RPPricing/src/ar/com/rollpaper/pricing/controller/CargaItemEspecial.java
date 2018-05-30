@@ -9,8 +9,10 @@ import java.util.concurrent.TimeUnit;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
+import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
+import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialModel;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rp.rpcutils.FechaManagerUtil;
@@ -20,49 +22,56 @@ import ar.com.rp.ui.pantalla.BaseControllerDialog;
 
 public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalController, CargaItemEspecialView, CargaItemEspecialModel> {
 
-	public PreciosEspeciales getRegistro() throws Exception {
-		PreciosEspeciales registro = getModel().getRegistro();
-		if (!getModel().isEdicion()) {
-			registro.setPricArticulo(Integer.valueOf(getView().txtArticuloID.getText()));
+	public Object getRegistro() throws Exception {
+		if (getModel().getRegistro() != null) {
+
+			PreciosEspeciales registro = getModel().getRegistro();
+			if (!getModel().isEdicion()) {
+				registro.setPricArticulo(Integer.valueOf(getView().txtArticuloID.getText()));
+			} else {
+				registro.setPricArticulo(Integer.valueOf(getView().lblArticuloID.getText()));
+			}
+			registro.setPricDescuento1(new BigDecimal(getView().txtDesc1.getImporte()));
+			registro.setPricDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
+			registro.setPricFechaDesde(getView().dateFechaDesde.getDate());
+			registro.setPricFechaHasta(getView().dateFechaHasta.getDate());
+			registro.setPricListaPrecvta(1);
+			registro.setPricMoneda("P");// getView().cbMoneda.getSelectedItem().toString());
+			registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte()));
+			registro.setPricReferencia(getView().txtReferencia.getText());
+
+			return registro;
 		} else {
-			registro.setPricArticulo(Integer.valueOf(getView().lblArticuloID.getText()));
+			DescuentoXFamilias registro = getModel().getRegistroFamilia();
+			if (!getModel().isEdicion()) {
+				registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().txtArticuloID.getText()));
+			} else {
+				registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().lblArticuloID.getText()));
+			}
+			// registro.setPricFamiliaDescuento1(new
+			// BigDecimal(getView().txtDesc1.getImporte()));
+			registro.setPricFamiliaDescuento1(12);
+			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
+			registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
+			registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
+			registro.setPricReferencia(getView().txtReferencia.getText());
+
+			return registro;
 		}
-		registro.setPricDescuento1(new BigDecimal(getView().txtDesc1.getImporte()));
-		registro.setPricDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
-		registro.setPricFechaDesde(getView().dateFechaDesde.getDate());
-		registro.setPricFechaHasta(getView().dateFechaHasta.getDate());
-		registro.setPricListaPrecvta(1);
-		registro.setPricMoneda("P");// getView().cbMoneda.getSelectedItem().toString());
-		registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte()));
-		registro.setPricReferencia(getView().txtReferencia.getText());
-
-		return registro;
-	}
-
-	public DescuentoXFamilias getRegistroFamilia() throws Exception {
-		DescuentoXFamilias registro = getModel().getRegistroFamilia();
-		if (!getModel().isEdicion()) {
-			registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().txtArticuloID.getText()));
-		} else {
-			registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().lblArticuloID.getText()));
-		}
-		//registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte()));
-		registro.setPricFamiliaDescuento1(12);
-		registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
-		registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
-		registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
-		registro.setPricReferencia(getView().txtReferencia.getText());
-
-		return registro;
 	}
 
 	public void setRegistro(Object registro) {
 		getModel().setArticuloCargado(null);
+		getModel().setFamiliaCargado(null);
 		getModel().setRegistro(registro);
 
 		if (getModel().getArticuloID() > 0) {
 			cargoArticulo(String.valueOf(getModel().getArticuloID()));
 		}
+		if (getModel().getFamiliaID() > 0) {
+			cargoFamilia(String.valueOf(getModel().getFamiliaID()));
+		}
+
 	}
 
 	public CargaItemEspecial(PantPrincipalController pantPrincipal, CargaItemEspecialView view, CargaItemEspecialModel model, PermisosInterface permisos) throws Exception {
@@ -71,7 +80,11 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				cargoArticulo(view.txtArticuloID.getText());
+				if (getModel().getRegistro() != null) {
+					cargoArticulo(view.txtArticuloID.getText());
+				} else {
+					cargoFamilia(view.txtArticuloID.getText());
+				}
 			}
 
 			@Override
@@ -124,7 +137,29 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 					getView().txtReferencia.setText(getModel().getRegistro().getPricReferencia());
 				}
 			} else {
-				// la otra calse
+				getView().lblArticuloID.setText(String.valueOf(getModel().getRegistroFamilia().getPricFamiliaId()));
+
+				// TODO cambiar de int a double
+				// if (getModel().getRegistroFamilia().getPricFamiliaDescuento1() != null) {
+				// getView().txtDesc1.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento1());
+				// }
+
+				if (getModel().getRegistroFamilia().getPricFamiliaDescuento2() != null) {
+					getView().txtDesc2.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue());
+				}
+
+				if (getModel().getRegistroFamilia().getPricFamiliaFechaDesde() != null) {
+					getView().dateFechaDesde.setDate(getModel().getRegistroFamilia().getPricFamiliaFechaDesde());
+				}
+
+				if (getModel().getRegistroFamilia().getPricFamiliaFechaHasta() != null) {
+					getView().dateFechaHasta.setDate(getModel().getRegistroFamilia().getPricFamiliaFechaHasta());
+				}
+
+				if (getModel().getRegistroFamilia().getPricReferencia() != null) {
+					getView().txtReferencia.setText(getModel().getRegistroFamilia().getPricReferencia());
+				}
+
 			}
 		}
 
@@ -134,6 +169,24 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			getView().txtDesc1.requestFocus();
 		} else {
 			getView().txtArticuloID.requestFocus();
+		}
+
+		if (getModel().getRegistro() != null) {
+			getView().txtPrecio.setVisible(true);
+			getView().cbMoneda.setVisible(true);
+			getView().lblDescripcion.setVisible(true);
+			getView().lblLabelDescipcion.setVisible(true);
+			getView().lblLabelPrecio.setVisible(true);
+			getView().lblLabelMoneda.setVisible(true);
+			getView().lblLabelArticulo.setText("Articulo ID:");
+		} else {
+			getView().txtPrecio.setVisible(false);
+			getView().cbMoneda.setVisible(false);
+			getView().lblDescripcion.setVisible(false);
+			getView().lblLabelDescipcion.setVisible(false);
+			getView().lblLabelPrecio.setVisible(false);
+			getView().lblLabelMoneda.setVisible(false);
+			getView().lblLabelArticulo.setText("Familia ID:");
 		}
 	}
 
@@ -216,6 +269,17 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 
 		if (articulo != null) {
 			getModel().setArticuloCargado(articulo);
+		}
+
+		RefrescarDatosArticulo();
+	}
+
+	protected void cargoFamilia(String id) {
+		int idInt = Integer.valueOf(id);
+		VentLipv familiaCargado = VentLipvDAO.findById(idInt);
+
+		if (familiaCargado != null) {
+			getModel().setFamiliaCargado(familiaCargado);
 		}
 
 		RefrescarDatosArticulo();

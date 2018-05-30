@@ -3,6 +3,7 @@ package ar.com.rollpaper.pricing.model;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
+import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rp.ui.pantalla.BaseModel;
 
 public class CargaItemEspecialModel extends BaseModel {
@@ -10,6 +11,11 @@ public class CargaItemEspecialModel extends BaseModel {
 	private Object registro;
 	private String accion = "";
 	private StocArts articuloCargado = null;
+	private VentLipv familiaCargado = null;
+
+	public void setFamiliaCargado(VentLipv familiaCargado) {
+		this.familiaCargado = familiaCargado;
+	}
 
 	public String getAccion() {
 		return accion;
@@ -26,7 +32,6 @@ public class CargaItemEspecialModel extends BaseModel {
 	public DescuentoXFamilias getRegistroFamilia() {
 		if (registro instanceof DescuentoXFamilias) {
 			return (DescuentoXFamilias) registro;
-
 		}
 		return null;
 	}
@@ -35,19 +40,27 @@ public class CargaItemEspecialModel extends BaseModel {
 		this.registro = registro;
 	}
 
+	public int getFamiliaID() {
+		if (registro != null) {
+			if (registro instanceof DescuentoXFamilias) {
+				return ((DescuentoXFamilias) registro).getPricFamiliaId();
+			}
+		}
+		return -1;
+
+	}
+
 	public int getArticuloID() {
 		if (registro != null) {
 			if (registro instanceof PreciosEspeciales) {
 				return ((PreciosEspeciales) registro).getPricArticulo();
-			} else {
-				return ((DescuentoXFamilias) registro).getPricFamiliaCliente();
 			}
 		}
 		return -1;
 	}
 
 	public boolean isEdicion() {
-		return (registro != null) && (getArticuloID() > 0);
+		return (registro != null) && ((getArticuloID() > 0) || (getFamiliaID() > 0));
 	}
 
 	public void setAccion(String accion) {
@@ -57,17 +70,18 @@ public class CargaItemEspecialModel extends BaseModel {
 	public String getNombreItem() {
 		if (articuloCargado != null) {
 			return articuloCargado.getArtsNombre();
-		} else {
-			return "S/D";
 		}
+		if (familiaCargado != null) {
+			return familiaCargado.getLipvNombre();
+		}
+		return "S/D";
 	}
 
 	public String getDescripcionItem() {
 		if (articuloCargado != null) {
 			return articuloCargado.getArtsDescripcion();
-		} else {
-			return "S/D";
 		}
+		return "S/D";
 	}
 
 	public String getUnidadItem() {
