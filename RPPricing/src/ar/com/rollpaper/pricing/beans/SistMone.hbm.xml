@@ -26,24 +26,6 @@
         </property>
         <property generated="never" lazy="false" name="moneCantDecimRedImpuestos" optimistic-lock="true" type="short" unique="false">
             <column name="MONE_CANT_DECIM_RED_IMPUESTOS" not-null="true"/>
-        </property>
-        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="ventArpvsForArpvMoneda" optimistic-lock="true" sort="unsorted" table="VENT_ARPV">
-            <key on-delete="noaction">
-                <column length="3" name="ARPV_MONEDA" not-null="true"/>
-            </key>
-            <one-to-many class="ar.com.rollpaper.pricing.beans.VentArpv" embed-xml="true" not-found="exception"/>
-        </set>
-        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="ventLipvs" optimistic-lock="true" sort="unsorted" table="VENT_LIPV">
-            <key on-delete="noaction">
-                <column length="3" name="LIPV_MONEDA" not-null="true"/>
-            </key>
-            <one-to-many class="ar.com.rollpaper.pricing.beans.VentLipv" embed-xml="true" not-found="exception"/>
-        </set>
-        <set embed-xml="true" fetch="select" inverse="true" lazy="true" mutable="true" name="ventArpvsForArpvMonedaAnt" optimistic-lock="true" sort="unsorted" table="VENT_ARPV">
-            <key on-delete="noaction">
-                <column length="3" name="ARPV_MONEDA_ANT"/>
-            </key>
-            <one-to-many class="ar.com.rollpaper.pricing.beans.VentArpv" embed-xml="true" not-found="exception"/>
-        </set>
+        </property>     
     </class>
 </hibernate-mapping>

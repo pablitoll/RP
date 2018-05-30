@@ -13,9 +13,9 @@ import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
- * Home object for domain model class PricDescuentoXFamilias.
+ * Home object for domain model class DescuentoXFamilias.
  * 
- * @see ar.com.rollpaper.pricing.beans.DescuentoXFamilias.PricDescuentoXFamilias
+ * @see ar.com.rollpaper.pricing.beans.DescuentoXFamilias.DescuentoXFamilias
  * @author Hibernate Tools
  */
 public class DescuentoXFamiliasDAO {
@@ -23,7 +23,7 @@ public class DescuentoXFamiliasDAO {
 	private static final Log log = LogFactory.getLog(DescuentoXFamiliasDAO.class);
 
 	public void persist(DescuentoXFamilias transientInstance) {
-		log.debug("persisting PricDescuentoXFamilias instance");
+		log.debug("persisting DescuentoXFamilias instance");
 		try {
 			Session session = HibernateUtil.getSession();
 			session.persist(transientInstance);
@@ -47,7 +47,7 @@ public class DescuentoXFamiliasDAO {
 	}
 
 	public void attachClean(DescuentoXFamilias instance) {
-		log.debug("attaching clean PricDescuentoXFamilias instance");
+		log.debug("attaching clean DescuentoXFamilias instance");
 		try {
 			Session session = HibernateUtil.getSession();
 			session.lock(instance, LockMode.NONE);
@@ -102,10 +102,10 @@ public class DescuentoXFamiliasDAO {
 	}
 
 	public List findByExample(DescuentoXFamilias instance) {
-		log.debug("finding PricDescuentoXFamilias instance by example");
+		log.debug("finding DescuentoXFamilias instance by example");
 		try {
 			Session session = HibernateUtil.getSession();
-			List results = session.getSession().createCriteria("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias")
+			List results = session.getSession().createCriteria("ar.com.rollpaper.pricing.beans.DescuentoXFamilias")
 					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
