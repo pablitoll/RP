@@ -19,6 +19,10 @@ import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
+import javax.swing.border.EmptyBorder;
+import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
@@ -50,9 +54,15 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
 	public CargaClienteEsclavoView() throws Exception {
 		super();
+		btnCerrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnCerrar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/cross.png")));
 		setTitle("Carga de Cliente/Esclavo");
 
 		JPanel pnlSuperior = new JPanel();
+		pnlSuperior.setBorder(new EmptyBorder(10, 10, 10, 10));
 		getContentPane().add(pnlSuperior, BorderLayout.NORTH);
 		GridBagLayout gbl_pnlSuperior = new GridBagLayout();
 		gbl_pnlSuperior.columnWidths = new int[] { 76, 100, 100, 46, 150, 0, 0 };
@@ -162,15 +172,18 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		String[][] data = { {} };
 
 		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/cross.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);
 
 		btnGrabar = new JButtonRP("Grabar");
+		btnGrabar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/extended/ninepatch/icons/save.png")));
 		btnGrabar.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnGrabar);
 
 		btnImprimir = new JButtonRP("Imprimir");
+		btnImprimir.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/extended/language/icons/text.png")));
 		btnImprimir.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnImprimir);
 
@@ -218,6 +231,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		panel.setLayout(gbl_panel);
 
 		btnAgregar = new JButtonRP("Agregar");
+		btnAgregar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/plus.png")));
 		btnAgregar.setFont(Common.getStandarFont());
 		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);
 		GridBagConstraints gbc_btnAgregar = new GridBagConstraints();
@@ -228,6 +242,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		panel.add(btnAgregar, gbc_btnAgregar);
 
 		btnEliminar = new JButtonRP("Eliminar");
+		btnEliminar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/minus.png")));
 		btnEliminar.setFont(Common.getStandarFont());
 		btnEliminar.setMnemonic(KeyEvent.VK_MINUS);
 		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
