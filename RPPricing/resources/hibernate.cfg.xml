@@ -11,17 +11,16 @@
 		<property name="hibernate.connection.password">udc77</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.SQLServer2012Dialect</property>
 		<property name="hibernate.show_sql">true</property>
-		<mapping
-			resource="ar/com/rollpaper/pricing/beans/CcobClie.hbm.xml" />
-		<mapping
-			resource="ar/com/rollpaper/pricing/beans/StocArts.hbm.xml" />
-		<mapping
-			resource="ar/com/rollpaper/pricing/beans/StocCa01.hbm.xml" />
-		<mapping
-			resource="ar/com/rollpaper/pricing/beans/VentArpc.hbm.xml" />
-		<mapping
-			resource="ar/com/rollpaper/pricing/beans/VentCliv.hbm.xml" />
-			<mapping
-			resource="ar/com/rollpaper/pricing/beans/PreciosEspeciales.hbm.xml" />
+		<mapping  resource="ar/com/rollpaper/pricing/beans/CcobClie.hbm.xml" />
+		<mapping  resource="ar/com/rollpaper/pricing/beans/StocArts.hbm.xml" />
+		<mapping  resource="ar/com/rollpaper/pricing/beans/StocCa01.hbm.xml" />
+		<mapping  resource="ar/com/rollpaper/pricing/beans/VentArpc.hbm.xml" />
+		<mapping  resource="ar/com/rollpaper/pricing/beans/VentCliv.hbm.xml" />
+		<mapping  resource="ar/com/rollpaper/pricing/beans/PreciosEspeciales.hbm.xml" />
+		<mapping  resource="ar/com/rollpaper/pricing/beans/DescuentoXFamilias.hbm.xml" />		
+		<mapping  resource="ar/com/rollpaper/pricing/beans/MaestroEsclavo.hbm.xml" />		
+		<mapping  resource="ar/com/rollpaper/pricing/beans/SistMone.hbm.xml" />		
+		<mapping  resource="ar/com/rollpaper/pricing/beans/VentCliv.hbm.xml" />
+		<mapping  resource="ar/com/rollpaper/pricing/beans/VentLipv.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

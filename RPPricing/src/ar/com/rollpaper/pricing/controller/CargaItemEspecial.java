@@ -48,6 +48,7 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			} else {
 				registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().lblArticuloID.getText()));
 			}
+
 			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte()));
 			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
 			registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
