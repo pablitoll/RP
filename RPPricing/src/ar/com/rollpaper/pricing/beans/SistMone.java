@@ -28,6 +28,20 @@ public class SistMone implements java.io.Serializable {
 	public SistMone() {
 	}
 
+	@Override
+	public String toString() {
+		return getMoneNombre();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if((o ==  null) || !(o instanceof SistMone)) {
+			return false;
+		}
+		
+		return ((SistMone)o).getMoneMoneda().equalsIgnoreCase(getMoneMoneda());
+	}
+
 	public SistMone(String moneMoneda, String moneNombre, String moneSimbolo, boolean moneLocal, boolean moneConversion,
 			boolean moneUtilizable, short moneCantDecimRedImpuestos) {
 		this.moneMoneda = moneMoneda;

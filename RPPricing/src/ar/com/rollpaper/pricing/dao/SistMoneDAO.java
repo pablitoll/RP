@@ -12,9 +12,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.SistMone;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class SistMone.
+ * 
  * @see ar.com.rollpaper.pricing.beans.SistMone
  * @author Hibernate Tools
  */
@@ -89,11 +91,10 @@ public class SistMoneDAO {
 		}
 	}
 
-	public SistMone findById(java.lang.String id) {
+	public static SistMone findById(String id) {
 		log.debug("getting SistMone instance with id: " + id);
 		try {
-			SistMone instance = (SistMone) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.SistMone", id);
+			SistMone instance = (SistMone) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.SistMone", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -106,12 +107,10 @@ public class SistMoneDAO {
 		}
 	}
 
-	public List findByExample(SistMone instance) {
+	public List<SistMone> findByExample(SistMone instance) {
 		log.debug("finding SistMone instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.SistMone").add(Example.create(instance))
-					.list();
+			List<SistMone> results = sessionFactory.getCurrentSession().createCriteria("ar.com.rollpaper.pricing.beans.SistMone").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -119,4 +118,17 @@ public class SistMoneDAO {
 			throw re;
 		}
 	}
+
+	public static List<SistMone> getList() {
+		log.debug("finding SistMone instance by example");
+		try {
+			List<SistMone> results = HibernateUtil.getSession().createCriteria("ar.com.rollpaper.pricing.beans.SistMone").list();
+			log.debug("find by example successful, result size: " + results.size());
+			return results;
+		} catch (RuntimeException re) {
+			log.error("find by example failed", re);
+			throw re;
+		}
+	}
+
 }

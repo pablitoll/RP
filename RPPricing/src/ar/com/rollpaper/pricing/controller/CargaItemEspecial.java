@@ -8,14 +8,17 @@ import java.util.concurrent.TimeUnit;
 
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
+import ar.com.rollpaper.pricing.beans.SistMone;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialModel;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.componentes.ItemComboBox;
 import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
 import ar.com.rp.ui.pantalla.BaseControllerDialog;
@@ -36,7 +39,7 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			registro.setPricFechaDesde(getView().dateFechaDesde.getDate());
 			registro.setPricFechaHasta(getView().dateFechaHasta.getDate());
 			registro.setPricListaPrecvta(1);
-			registro.setPricMoneda("P");// getView().cbMoneda.getSelectedItem().toString());
+			registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
 			registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte()));
 			registro.setPricReferencia(getView().txtReferencia.getText());
 
@@ -90,6 +93,12 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			public void focusGained(FocusEvent e) {
 			}
 		});
+
+		for (SistMone reg : SistMoneDAO.getList()) {
+			getView().cbMoneda.addItem(reg);
+		}
+
+		getView().cbMoneda.addItem(new ItemComboBox(-1, "Sin Seleccionar"));
 	}
 
 	@Override
@@ -105,7 +114,7 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 		getView().txtReferencia.setText("");
 		getView().dateFechaDesde.clear();
 		getView().dateFechaHasta.clear();
-		// getView().cbMoneda
+		getView().cbMoneda.setSelectedIndex(-1);
 
 		if (getModel().isEdicion()) {
 
@@ -113,16 +122,19 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 
 				getView().lblArticuloID.setText(String.valueOf(getModel().getRegistro().getPricArticulo()));
 
-				if (getModel().getRegistro().getPricDescuento1() != null) {
+				if ((getModel().getRegistro().getPricDescuento1() != null) && (getModel().getRegistro().getPricDescuento1().doubleValue() > 0.0)) {
 					getView().txtDesc1.setImporte(getModel().getRegistro().getPricDescuento1().doubleValue());
 				}
-				if (getModel().getRegistro().getPricDescuento2() != null) {
+				if ((getModel().getRegistro().getPricDescuento2() != null) && (getModel().getRegistro().getPricDescuento2().doubleValue() > 0.0)) {
 					getView().txtDesc2.setImporte(getModel().getRegistro().getPricDescuento2().doubleValue());
 				}
-				// getView().cbMoneda
 
-				if (getModel().getRegistro().getPricPrecio() != null) {
-					getView().txtPrecio.setImporte(getModel().getRegistro().getPricPrecio().doubleValue());
+				if (getModel().getRegistro().getPricMoneda() != null) {
+					getView().cbMoneda.setSelectedItem(SistMoneDAO.findById(getModel().getRegistro().getPricMoneda()));
+
+					if (getModel().getRegistro().getPricPrecio() != null) {
+						getView().txtPrecio.setImporte(getModel().getRegistro().getPricPrecio().doubleValue());
+					}
 				}
 				if (getModel().getRegistro().getPricFechaDesde() != null) {
 					getView().dateFechaDesde.setDate(getModel().getRegistro().getPricFechaDesde());
@@ -138,11 +150,11 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			} else {
 				getView().lblArticuloID.setText(String.valueOf(getModel().getRegistroFamilia().getPricFamiliaId()));
 
-				if (getModel().getRegistroFamilia().getPricFamiliaDescuento1() != null) {
+				if ((getModel().getRegistroFamilia().getPricFamiliaDescuento1() != null) && (getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue() > 0.0)) {
 					getView().txtDesc1.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue());
 				}
 
-				if (getModel().getRegistroFamilia().getPricFamiliaDescuento2() != null) {
+				if ((getModel().getRegistroFamilia().getPricFamiliaDescuento2() != null) && (getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue() > 0.0)) {
 					getView().txtDesc2.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue());
 				}
 
@@ -230,7 +242,7 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			return false;
 		}
 
-		if ((!getView().txtPrecio.isEmpty()) && (getView().cbMoneda.getSelectedItem() != null)) {
+		if (getView().txtPrecio.isVisible() && (!getView().txtPrecio.isEmpty()) && (getView().cbMoneda.getSelectedIndex() == -1)) {
 			popUpError.showError(getView().cbMoneda, "Falta cargar la moneda", getView());
 			return false;
 		}

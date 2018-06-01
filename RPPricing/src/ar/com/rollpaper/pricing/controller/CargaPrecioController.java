@@ -18,6 +18,7 @@ import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
+import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialModel;
@@ -257,11 +258,13 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		if (registro instanceof PreciosEspeciales) {
 			PreciosEspeciales registroPedido = (PreciosEspeciales) registro;
 
+			String descMoneda = SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre();
+			
 			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "", row,
 					CargaPrecioView.COL_1DESC_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "", row,
 					CargaPrecioView.COL_2DESC_ESPECIFICO);
-			tableActivo.setValueAt(registroPedido.getPricMoneda(), row, CargaPrecioView.COL_MONEDA_ESPECIFICO);
+			tableActivo.setValueAt(descMoneda, row, CargaPrecioView.COL_MONEDA_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricPrecio() != null ? Common.double2String(registroPedido.getPricPrecio().doubleValue()) : "", row,
 					CargaPrecioView.COL_PRECIO_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaDesde()) : "", row,
@@ -275,7 +278,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento1() != null ? Common.double2String(registroFamilia.getPricFamiliaDescuento1().doubleValue()) : "", row,
 					CargaPrecioView.COL_1DESC_ESPECIFICO);
-			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento2()!= null ? Common.double2String(registroFamilia.getPricFamiliaDescuento2().doubleValue()) : "", row,
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento2() != null ? Common.double2String(registroFamilia.getPricFamiliaDescuento2().doubleValue()) : "", row,
 					CargaPrecioView.COL_2DESC_FAMILIA);
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaDesde()) : "", row,
 					CargaPrecioView.COL_DESDE_FAMIIA);
@@ -295,13 +298,20 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			PreciosEspeciales registroPedido = (PreciosEspeciales) registro;
 			tabla.addRow(new Object[] { registroPedido.getPricArticulo(), nombreItem, descItem, unidadItem,
 					registroPedido.getPricDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "",
-					registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "", registroPedido.getPricMoneda(),
+					registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "",
+					SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre(),
 					registroPedido.getPricPrecio() != null ? Common.double2String(registroPedido.getPricPrecio().doubleValue()) : "",
 					registroPedido.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaDesde()) : "",
 					registroPedido.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaHasta()) : "", registroPedido.getPricReferencia(),
 					registroPedido });
 		} else {
-			// TODO FALTA
+			DescuentoXFamilias registroDescFamilia = (DescuentoXFamilias) registro;
+			tabla.addRow(new Object[] { registroDescFamilia.getPricFamiliaId(), nombreItem,
+					registroDescFamilia.getPricFamiliaDescuento1() != null ? Common.double2String(registroDescFamilia.getPricFamiliaDescuento1().doubleValue()) : "",
+					registroDescFamilia.getPricFamiliaDescuento2() != null ? Common.double2String(registroDescFamilia.getPricFamiliaDescuento2().doubleValue()) : "",
+					registroDescFamilia.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registroDescFamilia.getPricFamiliaFechaDesde()) : "",
+					registroDescFamilia.getPricFamiliaFechaHasta() != null ? FechaManagerUtil.Date2String(registroDescFamilia.getPricFamiliaFechaHasta()) : "",
+					registroDescFamilia.getPricReferencia(), registroDescFamilia });
 		}
 
 	}
