@@ -46,7 +46,8 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			registro.setPricFechaDesde(getView().dateFechaDesde.getDate());
 			registro.setPricFechaHasta(getView().dateFechaHasta.getDate());
 			registro.setPricListaPrecvta(1);
-			registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
+//			registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
+			registro.setPricMoneda("PS");
 			registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte()));
 			registro.setPricReferencia(getView().txtReferencia.getText());
 
@@ -63,7 +64,8 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
 			registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
 			registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
-			registro.setPricReferencia(getView().txtReferencia.getText());
+			//registro.setPricReferencia(getView().txtReferencia.getText()+".");
+			registro.setPricReferencia("99+++");
 
 			return registro;
 		}

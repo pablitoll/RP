@@ -14,6 +14,7 @@ import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 
@@ -86,7 +87,7 @@ public class HibernateTest {
 				new BigDecimal(2.0),new BigDecimal(3.0),
 				"DOL", new BigDecimal(4.0), new Date(2018 ,05,18), new Date(2099,12,31));
 		
-		PreciosEspecialesDAO.persist(pe);
+		HibernateGeneric.persist(pe);
 		//session.flush();
 		//session.save(pe);
 		session.getTransaction().commit();
