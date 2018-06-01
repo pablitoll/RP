@@ -17,6 +17,7 @@ import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
@@ -100,7 +101,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 					throw new Exception("No existe la lista " + listas.get(0).getClivListaPrecvta());
 				}
 			}
+		}
 
+		for (DescuentoXFamilias desc : DescuentoXFamiliasDAO.getListaDescuentoByID(cliente.getClieCliente())) {
+			agregarRegistroATabla(getView().tableDescFamilia, desc, "", "", "");
 		}
 
 		setModoPantalla();
@@ -259,7 +263,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			PreciosEspeciales registroPedido = (PreciosEspeciales) registro;
 
 			String descMoneda = SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre();
-			
+
 			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "", row,
 					CargaPrecioView.COL_1DESC_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "", row,

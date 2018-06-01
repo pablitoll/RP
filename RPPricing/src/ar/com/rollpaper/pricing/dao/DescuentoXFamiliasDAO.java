@@ -3,6 +3,10 @@ package ar.com.rollpaper.pricing.dao;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
@@ -10,6 +14,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
+import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
@@ -87,8 +92,7 @@ public class DescuentoXFamiliasDAO {
 		log.debug("getting PricDescuentoXFamilias instance with id: " + id);
 		try {
 			Session session = HibernateUtil.getSession();
-			DescuentoXFamilias instance = (DescuentoXFamilias) session
-					.get("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias", id);
+			DescuentoXFamilias instance = (DescuentoXFamilias) session.get("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -105,13 +109,26 @@ public class DescuentoXFamiliasDAO {
 		log.debug("finding DescuentoXFamilias instance by example");
 		try {
 			Session session = HibernateUtil.getSession();
-			List results = session.getSession().createCriteria("ar.com.rollpaper.pricing.beans.DescuentoXFamilias")
-					.add(Example.create(instance)).list();
+			List results = session.getSession().createCriteria("ar.com.rollpaper.pricing.beans.DescuentoXFamilias").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			throw re;
 		}
+	}
+
+	public static List<DescuentoXFamilias> getListaDescuentoByID(Integer pricFamiliaCliente) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder().createQuery(DescuentoXFamilias.class);
+		Root<DescuentoXFamilias> i = criteriaQuery.from(DescuentoXFamilias.class);
+		criteriaQuery.where(cb.equal(i.get("pricFamiliaCliente"), pricFamiliaCliente));
+
+		List<DescuentoXFamilias> clientes = session.createQuery(criteriaQuery).getResultList();
+
+		return clientes;
+
 	}
 }
