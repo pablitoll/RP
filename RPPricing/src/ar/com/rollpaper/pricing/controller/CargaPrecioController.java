@@ -19,6 +19,7 @@ import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
+import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
@@ -105,6 +106,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		for (DescuentoXFamilias desc : DescuentoXFamiliasDAO.getListaDescuentoByID(cliente.getClieCliente())) {
 			agregarRegistroATabla(getView().tableDescFamilia, desc, "", "", "");
+		}
+
+		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(cliente.getClieCliente())) {
+			agregarRegistroATabla(getView().tableDescEspecifico, desc, "", "", "");
 		}
 
 		setModoPantalla();
@@ -300,10 +305,11 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		if (registro instanceof PreciosEspeciales) {
 
 			PreciosEspeciales registroPedido = (PreciosEspeciales) registro;
+
 			tabla.addRow(new Object[] { registroPedido.getPricArticulo(), nombreItem, descItem, unidadItem,
 					registroPedido.getPricDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "",
 					registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "",
-					SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre(),
+					registroPedido.getPricMoneda() != null ? SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre() : "",
 					registroPedido.getPricPrecio() != null ? Common.double2String(registroPedido.getPricPrecio().doubleValue()) : "",
 					registroPedido.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaDesde()) : "",
 					registroPedido.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaHasta()) : "", registroPedido.getPricReferencia(),

@@ -5,6 +5,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -41,15 +42,16 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			} else {
 				registro.setPricArticulo(Integer.valueOf(getView().lblArticuloID.getText()));
 			}
-			registro.setPricDescuento1(new BigDecimal(getView().txtDesc1.getImporte()));
-			registro.setPricDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
+			registro.setPricDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
+			registro.setPricDescuento2(new BigDecimal(getView().txtDesc2.getImporte(), MathContext.DECIMAL64));
 			registro.setPricFechaDesde(getView().dateFechaDesde.getDate());
 			registro.setPricFechaHasta(getView().dateFechaHasta.getDate());
 			registro.setPricListaPrecvta(1);
-//			registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
-			registro.setPricMoneda("PS");
-			registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte()));
-			registro.setPricReferencia(getView().txtReferencia.getText());
+			if (getView().cbMoneda.getSelectedIndex() > 0) {
+				registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
+				registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte(), MathContext.DECIMAL64));
+			}
+			registro.setPricReferencia("." + getView().txtReferencia.getText());
 
 			return registro;
 		} else {
@@ -60,12 +62,11 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 				registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().lblArticuloID.getText()));
 			}
 
-			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte()));
-			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte()));
+			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
+			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte(), MathContext.DECIMAL64));
 			registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
 			registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
-			//registro.setPricReferencia(getView().txtReferencia.getText()+".");
-			registro.setPricReferencia("99+++");
+			registro.setPricReferencia("." + getView().txtReferencia.getText());
 
 			return registro;
 		}

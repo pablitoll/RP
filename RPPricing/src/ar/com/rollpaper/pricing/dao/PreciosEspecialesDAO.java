@@ -3,12 +3,17 @@ package ar.com.rollpaper.pricing.dao;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.criterion.Example;
 
+import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
@@ -22,10 +27,10 @@ public class PreciosEspecialesDAO {
 
 	private static final Log log = LogFactory.getLog(PreciosEspecialesDAO.class);
 
-	public static void persist(Object transientInstance ) {
+	public static void persist(Object transientInstance) {
 		log.debug("persisting PricPreciosEspeciales instance");
-	    Session session = HibernateUtil.getSession();
-	    session.beginTransaction();
+		Session session = HibernateUtil.getSession();
+		session.beginTransaction();
 		try {
 			session.persist(transientInstance);
 			session.flush();
@@ -33,8 +38,9 @@ public class PreciosEspecialesDAO {
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
 			throw re;
+		} finally {
+			session.getTransaction().commit();
 		}
-	    finally {session.getTransaction().commit();}
 	}
 
 	public static void attachDirty(PreciosEspeciales instance) {
@@ -90,8 +96,7 @@ public class PreciosEspecialesDAO {
 		log.debug("getting PricPreciosEspeciales instance with id: " + id);
 		Session session = HibernateUtil.getSession();
 		try {
-			PreciosEspeciales instance = (PreciosEspeciales) session
-					.get("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales", id);
+			PreciosEspeciales instance = (PreciosEspeciales) session.get("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -108,8 +113,7 @@ public class PreciosEspecialesDAO {
 		log.debug("finding PricPreciosEspeciales instance by example");
 		Session session = HibernateUtil.getSession();
 		try {
-			List results = session.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales")
-					.add(Example.create(instance)).list();
+			List results = session.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
@@ -117,4 +121,19 @@ public class PreciosEspecialesDAO {
 			throw re;
 		}
 	}
+
+	public static List<PreciosEspeciales> getListaPrecioEspeciaByID(Integer pricCliente) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder().createQuery(PreciosEspeciales.class);
+		Root<PreciosEspeciales> i = criteriaQuery.from(PreciosEspeciales.class);
+		criteriaQuery.where(cb.equal(i.get("pricCliente"), pricCliente));
+
+		List<PreciosEspeciales> clientes = session.createQuery(criteriaQuery).getResultList();
+
+		return clientes;
+
+	}
+
 }
