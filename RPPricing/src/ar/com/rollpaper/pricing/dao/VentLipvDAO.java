@@ -3,11 +3,17 @@ package ar.com.rollpaper.pricing.dao;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.criterion.Example;
 
+import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
@@ -81,8 +87,7 @@ public class VentLipvDAO {
 
 		log.debug("getting VentLipv instance with id: " + id);
 		try {
-			VentLipv instance = (VentLipv) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.VentLipv",
-					id);
+			VentLipv instance = (VentLipv) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.VentLipv", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -98,13 +103,26 @@ public class VentLipvDAO {
 	public List findByExample(VentLipv instance) {
 		log.debug("finding VentLipv instance by example");
 		try {
-			List results = HibernateUtil.getSession().createCriteria("ar.com.rollpaper.pricing.beans.VentLipv")
-					.add(Example.create(instance)).list();
+			List results = HibernateUtil.getSession().createCriteria("ar.com.rollpaper.pricing.beans.VentLipv").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			throw re;
 		}
+	}
+
+	public static List<VentLipv> getListaFamilia(String nombre) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<VentLipv> criteriaQuery = session.getCriteriaBuilder().createQuery(VentLipv.class);
+		Root<VentLipv> i = criteriaQuery.from(VentLipv.class);
+		criteriaQuery.where(cb.like(i.get("lipvNombre"), "%" + nombre + "%"));
+
+		List<VentLipv> clientes = session.createQuery(criteriaQuery).getResultList();
+
+		return clientes;
+
 	}
 }

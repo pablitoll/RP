@@ -12,38 +12,37 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
-import com.alee.laf.table.WebTable;
 
-import ar.com.rollpaper.pricing.beans.CcobClie;
-import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.beans.StocArts;
+import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.DialogBase;
 
-public class BuscarClienteDialog extends DialogBase {
+public class BuscarArticuloDialog extends DialogBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private RPTable tableCliente;
-	private JTextField txtDescCliente;
+	private RPTable tableArticulo;
+	private JTextField txtDescArticulo;
 	private JButtonRP btnSeleccionar;
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
-	private Integer nroCliente = null;
+	private Integer nroArticulo = null;
 
-	public Integer getNroCliente() {
-		return nroCliente;
+	public Integer getNroArticulo() {
+		return nroArticulo;
 	}
 
-	public BuscarClienteDialog(BasePantallaPrincipal<?, ?> pantPrincipal) {
+	public BuscarArticuloDialog(BasePantallaPrincipal<?, ?> pantPrincipal) {
 		super(pantPrincipal);
 		setBounds(100, 100, 600, 600);
 		setModal(true);
-		nroCliente = null;
+		nroArticulo = null;
 		JPanel panel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
@@ -52,7 +51,7 @@ public class BuscarClienteDialog extends DialogBase {
 		btnSeleccionar = new JButtonRP("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nroCliente = (Integer) tableCliente.getModel().getValueAt(tableCliente.getSelectedRow(), 0);
+				nroArticulo = (Integer) tableArticulo.getModel().getValueAt(tableArticulo.getSelectedRow(), 0);
 				cerrar();
 			}
 		});
@@ -71,14 +70,14 @@ public class BuscarClienteDialog extends DialogBase {
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.NORTH);
 
-		JLabel lblNombreDelCliente = new JLabel("Nombre del Cliente:");
-		lblNombreDelCliente.setFont(Common.getStandarFont());
-		panel_1.add(lblNombreDelCliente);
+		JLabel lblNombreDelArticulo = new JLabel("Nombre del Articulo:");
+		lblNombreDelArticulo.setFont(Common.getStandarFont());
+		panel_1.add(lblNombreDelArticulo);
 
-		txtDescCliente = new JTextField();
-		txtDescCliente.setFont(Common.getStandarFont());
-		panel_1.add(txtDescCliente);
-		txtDescCliente.setColumns(25);
+		txtDescArticulo = new JTextField();
+		txtDescArticulo.setFont(Common.getStandarFont());
+		panel_1.add(txtDescArticulo);
+		txtDescArticulo.setColumns(25);
 
 		btnBuscar = new JButtonRP("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
@@ -89,33 +88,33 @@ public class BuscarClienteDialog extends DialogBase {
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
 
-		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal" };
+		String[] header = { "Nro Articulo", "Nombre", "Descripcion" };
 		String[][] data = {};
-		tableCliente = new RPTable();
-		tableCliente.setModel(new DefaultTableModel(data, header));
-		tableCliente.setEditable(false);
-		WebScrollPane scrollPane = new WebScrollPane(tableCliente);
+		tableArticulo = new RPTable();
+		tableArticulo.setModel(new DefaultTableModel(data, header));
+		tableArticulo.setEditable(false);
+		WebScrollPane scrollPane = new WebScrollPane(tableArticulo);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		cambioCliente();
+		cambioArticulo();
 	}
 
-	private void cambioCliente() {
-		btnSeleccionar.setEnabled(tableCliente.getRowCount() > 0);
+	private void cambioArticulo() {
+		btnSeleccionar.setEnabled(tableArticulo.getRowCount() > 0);
 	}
 
 	protected void buscar() {
-		tableCliente.clear();
+		tableArticulo.clear();
 
-		for (CcobClie clie : CcobClieDAO.getListaCliente(txtDescCliente.getText())) {
-			tableCliente.addRow(new Object[] { clie.getClieCliente(), clie.getClieNombre(), clie.getClieNombreLegal() });
+		for (StocArts art : StocArtsDAO.getListaArticulos(txtDescArticulo.getText())) {
+			tableArticulo.addRow(new Object[] { art.getArtsArticulo(), art.getArtsNombre(), art.getArtsDescripcion() });
 		}
 
-		if (tableCliente.getRowCount() > 0) {
-			tableCliente.setSelectedRow(0);
-			tableCliente.requestFocus();
+		if (tableArticulo.getRowCount() > 0) {
+			tableArticulo.setSelectedRow(0);
+			tableArticulo.requestFocus();
 		}
 
-		cambioCliente();
+		cambioArticulo();
 	}
 
 	@Override
@@ -127,11 +126,11 @@ public class BuscarClienteDialog extends DialogBase {
 		boolean retorno = super.presionoTecla(ke);
 		if (!retorno) {
 			if (ke.getKeyCode() == KeyEvent.VK_ENTER) {
-				if (txtDescCliente.hasFocus()) {
+				if (txtDescArticulo.hasFocus()) {
 					retorno = true;
 					btnBuscar.doClick();
 				}
-				if (tableCliente.hasFocus()) {
+				if (tableArticulo.hasFocus()) {
 					retorno = true;
 					btnSeleccionar.doClick();
 				}

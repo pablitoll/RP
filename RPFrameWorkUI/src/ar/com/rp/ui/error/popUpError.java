@@ -2,7 +2,6 @@ package ar.com.rp.ui.error;
 
 import java.awt.Component;
 import java.awt.Dialog;
-import java.awt.Frame;
 
 import com.alee.extended.layout.VerticalFlowLayout;
 import com.alee.extended.window.WebPopOver;
@@ -22,7 +21,7 @@ public class popUpError {
 		WebLabel msg = new WebLabel(mensaje);// , Common.loadIcon(ConstantesRP.IMG_ERROR));
 		msg.setFont(Common.getStandarFont());
 		pop.add(msg);
-		component.requestFocus();
+		//component.requestFocus();
 		pop.show(component);
 	}
 }

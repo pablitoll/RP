@@ -4,10 +4,14 @@ package ar.com.rollpaper.pricing.dao;
 import java.util.List;
 
 import javax.naming.InitialContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
@@ -105,6 +109,20 @@ public class StocArtsDAO {
 			log.error("get failed", re);
 			throw re;
 		}
+	}
+	
+	public static List<StocArts> getListaArticulos(String nombre) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<StocArts> criteriaQuery = session.getCriteriaBuilder().createQuery(StocArts.class);
+		Root<StocArts> i = criteriaQuery.from(StocArts.class);
+		criteriaQuery.where(cb.like(i.get("artsNombre"), "%" + nombre + "%"));
+
+		List<StocArts> clientes = session.createQuery(criteriaQuery).getResultList();
+
+		return clientes;
+
 	}
 
 	public List findByExample(StocArts instance) {

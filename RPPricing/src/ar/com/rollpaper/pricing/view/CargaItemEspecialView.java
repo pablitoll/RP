@@ -115,6 +115,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		panel_1.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		lblNombre = new WebTextArea("lbln");
+		lblNombre.setFocusable(false);
 		lblNombre.setBorder(UIManager.getBorder("TextField.border"));
 		lblNombre.setEditable(false);
 		lblNombre.setFont(Common.getStandarFont());
@@ -135,6 +136,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		panel_1.add(lblLabelDescipcion, gbc_lblNewLabel_2);
 
 		lblDescripcion = new WebTextArea("lblde");
+		lblDescripcion.setFocusable(false);
 		lblDescripcion.setWrapStyleWord(true);
 		lblDescripcion.setBorder(UIManager.getBorder("TextField.border"));
 		lblDescripcion.setEditable(false);

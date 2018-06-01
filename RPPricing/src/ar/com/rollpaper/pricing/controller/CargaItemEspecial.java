@@ -2,6 +2,7 @@ package ar.com.rollpaper.pricing.controller;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -16,6 +17,9 @@ import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialModel;
+import ar.com.rollpaper.pricing.ui.BuscarArticuloDialog;
+import ar.com.rollpaper.pricing.ui.BuscarFamiliaDialog;
+import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.componentes.ItemComboBox;
@@ -94,11 +98,11 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			}
 		});
 
+		getView().cbMoneda.addItem(new ItemComboBox(-1, "Sin Seleccionar"));
+
 		for (SistMone reg : SistMoneDAO.getList()) {
 			getView().cbMoneda.addItem(reg);
 		}
-
-		getView().cbMoneda.addItem(new ItemComboBox(-1, "Sin Seleccionar"));
 	}
 
 	@Override
@@ -305,5 +309,57 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 
 	public String getUnidadItem() {
 		return getModel().getUnidadItem();
+	}
+
+	@Override
+	public boolean presionoTecla(KeyEvent ke) {
+		boolean retorno = super.presionoTecla(ke);
+		if (!retorno) {
+
+			if ((ke.getKeyCode() == KeyEvent.VK_F3) && getView().txtArticuloID.hasFocus()) {
+				retorno = true;
+				try {
+					if (getModel().getRegistro() != null) { //es articulo
+						String id = buscarArticulo();
+						if (!id.equals("")) {
+							cargoArticulo(id);
+						}
+					} else { // es familia
+						String id = buscarFamilia();
+						if (!id.equals("")) {
+							cargoFamilia(id);
+						}
+					}
+						
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al cargar la busqueda de Articulo / Familia");
+				}
+			}
+		}
+		return retorno;
+	}
+
+	private String buscarFamilia() throws Exception {
+		String retorno = "";
+		BuscarFamiliaDialog buscarFamiliaDialog = new BuscarFamiliaDialog(getPantallaPrincipal());
+		buscarFamiliaDialog.iniciar();
+		if (buscarFamiliaDialog.getNroFamilia() != null) {
+			retorno = String.valueOf(buscarFamiliaDialog.getNroFamilia());
+			getView().txtArticuloID.setText(retorno);
+		}
+
+		return retorno;
+	}
+
+	private String buscarArticulo() throws Exception {
+		String retorno = "";
+		BuscarArticuloDialog buscarClienteDialog = new BuscarArticuloDialog(getPantallaPrincipal());
+		buscarClienteDialog.iniciar();
+		if (buscarClienteDialog.getNroArticulo() != null) {
+			retorno = String.valueOf(buscarClienteDialog.getNroArticulo());
+			getView().txtArticuloID.setText(retorno);
+		}
+
+		return retorno;
 	}
 }
