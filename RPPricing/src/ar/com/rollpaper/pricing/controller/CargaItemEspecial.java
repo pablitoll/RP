@@ -1,5 +1,6 @@
 package ar.com.rollpaper.pricing.controller;
 
+import java.awt.KeyboardFocusManager;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -21,7 +22,9 @@ import ar.com.rollpaper.pricing.ui.BuscarArticuloDialog;
 import ar.com.rollpaper.pricing.ui.BuscarFamiliaDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
+import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.ItemComboBox;
 import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
@@ -232,32 +235,32 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 	private Boolean validar() {
 		// Primero valido que los campos esten bien cargados
 		if (!getModel().isEdicion() && getView().lblNombre.getText().contains("S/D")) {
-			popUpError.showError(getView().txtArticuloID, "Falta cargar un producto valido", getView());
+			popUpError.showError(getView().txtArticuloID, "Falta cargar un producto valido");
 			return false;
 		}
 
 		if ((getView().txtDesc1.isEmpty()) && (getView().txtPrecio.isEmpty())) {
-			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio", getView());
+			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio");
 			return false;
 		}
 
 		if ((!getView().txtDesc1.isEmpty()) && (!getView().txtPrecio.isEmpty())) {
-			popUpError.showError(getView().txtDesc1, "No se puede cargar un decuento y precio simultaneamente", getView());
+			popUpError.showError(getView().txtDesc1, "No se puede cargar un decuento y precio simultaneamente");
 			return false;
 		}
 
 		if (getView().txtPrecio.isVisible() && (!getView().txtPrecio.isEmpty()) && (getView().cbMoneda.getSelectedIndex() == -1)) {
-			popUpError.showError(getView().cbMoneda, "Falta cargar la moneda", getView());
+			popUpError.showError(getView().cbMoneda, "Falta cargar la moneda");
 			return false;
 		}
 
 		if (getView().dateFechaDesde.getDate() == null) {
-			popUpError.showError(getView().dateFechaDesde, "La fecha Desde no puede estar Vacia", getView());
+			popUpError.showError(getView().dateFechaDesde, "La fecha Desde no puede estar Vacia");
 			return false;
 		}
 
 		if (getView().dateFechaHasta.getDate() == null) {
-			popUpError.showError(getView().dateFechaHasta, "La fecha Hasta no puede estar Vacia", getView());
+			popUpError.showError(getView().dateFechaHasta, "La fecha Hasta no puede estar Vacia");
 			return false;
 		}
 
@@ -265,7 +268,7 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 		Date dFechaHasta = getView().dateFechaHasta.getDate();
 
 		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 1) {
-			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta", getView());
+			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta");
 			return false;
 		}
 
@@ -277,22 +280,25 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 	}
 
 	protected void cargoArticulo(String id) {
-		int idInt = Integer.valueOf(id);
-		StocArts articulo = StocArtsDAO.findById(idInt);
+		if (!id.equals("") && CommonUtils.isNumeric(id)) {
+			int idInt = Integer.valueOf(id);
+			StocArts articulo = StocArtsDAO.findById(idInt);
 
-		if (articulo != null) {
-			getModel().setArticuloCargado(articulo);
+			if (articulo != null) {
+				getModel().setArticuloCargado(articulo);
+			}
 		}
-
 		RefrescarDatosArticulo();
 	}
 
 	protected void cargoFamilia(String id) {
-		int idInt = Integer.valueOf(id);
-		VentLipv familiaCargado = VentLipvDAO.findById(idInt);
+		if (!id.equals("") && CommonUtils.isNumeric(id)) {
+			int idInt = Integer.valueOf(id);
+			VentLipv familiaCargado = VentLipvDAO.findById(idInt);
 
-		if (familiaCargado != null) {
-			getModel().setFamiliaCargado(familiaCargado);
+			if (familiaCargado != null) {
+				getModel().setFamiliaCargado(familiaCargado);
+			}
 		}
 
 		RefrescarDatosArticulo();
@@ -319,18 +325,20 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			if ((ke.getKeyCode() == KeyEvent.VK_F3) && getView().txtArticuloID.hasFocus()) {
 				retorno = true;
 				try {
-					if (getModel().getRegistro() != null) { //es articulo
+					if (getModel().getRegistro() != null) { // es articulo
 						String id = buscarArticulo();
 						if (!id.equals("")) {
-							cargoArticulo(id);
+							getView().txtArticuloID.setText(id);
+							getView().txtDesc1.requestFocus();
 						}
 					} else { // es familia
 						String id = buscarFamilia();
 						if (!id.equals("")) {
-							cargoFamilia(id);
+							getView().txtArticuloID.setText(id);
+							getView().txtDesc1.requestFocus();
 						}
 					}
-						
+
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cargar la busqueda de Articulo / Familia");
 				}
