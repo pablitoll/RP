@@ -26,7 +26,9 @@ public class MaestroEsclavoDAO {
 	public static void persist(MaestroEsclavo transientInstance) {
 		log.debug("persisting PricMaestroEsclavo instance");
 		try {
-			HibernateUtil.getSession().persist(transientInstance);
+		
+			//HibernateUtil.persist(transientInstance);
+			
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);

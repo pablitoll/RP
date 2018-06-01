@@ -231,6 +231,10 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		panel.setLayout(gbl_panel);
 
 		btnAgregar = new JButtonRP("Agregar");
+		btnAgregar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnAgregar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/plus.png")));
 		btnAgregar.setFont(Common.getStandarFont());
 		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);

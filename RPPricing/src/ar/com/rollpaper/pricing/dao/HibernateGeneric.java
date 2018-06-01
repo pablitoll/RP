@@ -14,7 +14,6 @@ public class HibernateGeneric {
 		Session session = HibernateUtil.getSession();
 		session.beginTransaction();
 		try {
-
 			session.persist(transientInstance);
 			session.flush();
 			log.debug("persist successful");

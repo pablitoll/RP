@@ -17,7 +17,7 @@ import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
-import ar.com.rollpaper.pricing.dao.MaestroEsclavoDAO;
+import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
@@ -260,12 +260,12 @@ public class CargaClienteEsclavoController
 			for (int i = 0; i < getView().tableEsclavo.getRowCount(); i++) {
 				Integer id = (Integer) getView().tableEsclavo.getValueAt(i, CargaClienteEsclavoView.COL_ID);
 
-				MaestroEsclavo maestroEsclavo = new MaestroEsclavo(1,
+				MaestroEsclavo maestroEsclavo = new MaestroEsclavo(
 						Integer.valueOf(getView().txtNroCliente.getText()), 1, id);
 
 				// TODO FALLA ACA
 				try {
-					MaestroEsclavoDAO.persist(maestroEsclavo);
+					HibernateGeneric.persist(maestroEsclavo);
 
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al gravar");

@@ -4,7 +4,7 @@
     <class catalog="RPAPER" dynamic-insert="false" dynamic-update="false" mutable="true" name="ar.com.rollpaper.pricing.beans.MaestroEsclavo" optimistic-lock="version" polymorphism="implicit" schema="dbo" select-before-update="false" table="PRIC_MAESTRO_ESCLAVO">
         <id name="pricMaestroEsclavoId" type="int">
             <column name="PRIC_MAESTRO_ESCLAVO_ID"/>
-            <generator class="assigned"/>
+            <generator class="identity"/>
         </id>
         <property generated="never" lazy="false" name="pricMaestroCliente" optimistic-lock="true" type="int" unique="false">
             <column name="PRIC_MAESTRO_CLIENTE" not-null="true"/>
