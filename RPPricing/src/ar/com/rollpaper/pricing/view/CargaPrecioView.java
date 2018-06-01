@@ -59,7 +59,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public RPTable tableDescEspecifico;
 	public RPTable tableDescFamilia;
 	public WebFormattedTextField txtNroLista;
-	public JButtonRP btnBorrar;
 	public JLabel lblNombreLista;
 	public JLabel lblNombreLegal;
 	public JLabel lblNombreCliente;
@@ -256,15 +255,10 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);
 
-		btnBorrar = new JButtonRP("Borrar");
-		btnBorrar.setFont(Common.getStandarFont());
-		pnlInferiorBotones.add(btnBorrar);
-
 	}
 
 	@Override
 	public void asignarBotonesPantExtendida() {
-		asignarBotonAccion(btnBorrar, ConstantesRP.PantCarPrecio.BORRAR.toString());
 		asignarBotonAccion(btnAgregar, ConstantesRP.PantCarPrecio.AGREGAR.toString());
 		asignarBotonAccion(btnEliminar, ConstantesRP.PantCarPrecio.ELIMINAR.toString());
 		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarPrecio.CANCELAR.toString());

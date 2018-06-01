@@ -60,6 +60,7 @@ public class BuscarArticuloDialog extends DialogBase {
 
 		btnCancelar = new JButtonRP("Cancelar");
 		btnCancelar.setFont(Common.getStandarFont());
+		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				cerrar();

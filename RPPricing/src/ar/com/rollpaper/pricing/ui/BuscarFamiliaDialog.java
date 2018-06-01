@@ -13,10 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
 
-import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentLipv;
-import ar.com.rollpaper.pricing.dao.SistMoneDAO;
-import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
@@ -63,6 +60,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 
 		btnCancelar = new JButtonRP("Cancelar");
 		btnCancelar.setFont(Common.getStandarFont());
+		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				cerrar();

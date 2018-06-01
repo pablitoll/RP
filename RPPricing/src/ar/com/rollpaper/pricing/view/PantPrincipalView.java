@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
-import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -112,8 +111,6 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		agregarBotonStd2Barra(btnClienteEsclavo, Main.class.getResource(ConstantesRP.IMG_CAL));
 		btnClienteEsclavo.setMnemonicControl(true);
 		btnClienteEsclavo.setMnemonic(KeyEvent.VK_C);
-
-		toolBarBotones.add(Box.createVerticalGlue()); // De aca en adelante los mando para abajo
 
 		agregarBotonStd2Barra(btnCalculadora, Main.class.getResource(ConstantesRP.IMG_CAL));
 		btnCalculadora.setMnemonicControl(true);

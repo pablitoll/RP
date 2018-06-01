@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.net.ServerSocket;
 
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import com.alee.laf.WebLookAndFeel;
 

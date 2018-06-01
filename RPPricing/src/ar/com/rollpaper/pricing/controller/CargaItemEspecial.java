@@ -1,6 +1,5 @@
 package ar.com.rollpaper.pricing.controller;
 
-import java.awt.KeyboardFocusManager;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -25,7 +24,6 @@ import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
-import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.ItemComboBox;
 import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
@@ -42,15 +40,30 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 			} else {
 				registro.setPricArticulo(Integer.valueOf(getView().lblArticuloID.getText()));
 			}
-			registro.setPricDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
-			registro.setPricDescuento2(new BigDecimal(getView().txtDesc2.getImporte(), MathContext.DECIMAL64));
+			if (getView().txtDesc1.getImporte() > 0.0) {
+				registro.setPricDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
+			} else {
+				registro.setPricDescuento1(null);
+			}
+
+			if (getView().txtDesc2.getImporte() > 0.0) {
+				registro.setPricDescuento2(new BigDecimal(getView().txtDesc2.getImporte(), MathContext.DECIMAL64));
+			} else {
+				registro.setPricDescuento2(null);
+			}
+
 			registro.setPricFechaDesde(getView().dateFechaDesde.getDate());
 			registro.setPricFechaHasta(getView().dateFechaHasta.getDate());
+
 			registro.setPricListaPrecvta(1);
 			if (getView().cbMoneda.getSelectedIndex() > 0) {
 				registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
 				registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte(), MathContext.DECIMAL64));
+			} else {
+				registro.setPricMoneda(null);
+				registro.setPricPrecio(null);
 			}
+
 			registro.setPricReferencia("." + getView().txtReferencia.getText());
 
 			return registro;
@@ -62,8 +75,16 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 				registro.setPricFamiliaListaPrecvta(Integer.valueOf(getView().lblArticuloID.getText()));
 			}
 
-			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
-			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte(), MathContext.DECIMAL64));
+			if (getView().txtDesc1.getImporte() > 0.0) {
+				registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
+			} else {
+				registro.setPricFamiliaDescuento1(null);
+			}
+			if (getView().txtDesc2.getImporte() > 0.0) {
+				registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte(), MathContext.DECIMAL64));
+			} else {
+				registro.setPricFamiliaDescuento2(null);
+			}
 			registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
 			registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
 			registro.setPricReferencia("." + getView().txtReferencia.getText());
@@ -124,7 +145,7 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 		getView().txtReferencia.setText("");
 		getView().dateFechaDesde.clear();
 		getView().dateFechaHasta.clear();
-		getView().cbMoneda.setSelectedIndex(-1);
+		getView().cbMoneda.setSelectedIndex(0);
 
 		if (getModel().isEdicion()) {
 

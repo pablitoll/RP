@@ -13,36 +13,36 @@ import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
 
-import ar.com.rollpaper.pricing.beans.CcobClie;
-import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.DialogBase;
 
-public class BuscarClienteDialog extends DialogBase {
+public class BuscarListaDialog extends DialogBase {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private RPTable tableCliente;
+	private RPTable tableLista;
 	private JTextField txtDescCliente;
 	private JButtonRP btnSeleccionar;
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
-	private Integer nroCliente = null;
+	private Integer nroLista = null;
 
-	public Integer getNroCliente() {
-		return nroCliente;
+	public Integer getNroLista() {
+		return nroLista;
 	}
 
-	public BuscarClienteDialog(BasePantallaPrincipal<?, ?> pantPrincipal) {
+	public BuscarListaDialog(BasePantallaPrincipal<?, ?> pantPrincipal) {
 		super(pantPrincipal);
 		setBounds(100, 100, 600, 600);
 		setModal(true);
-		nroCliente = null;
+		nroLista = null;
 		JPanel panel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
@@ -51,7 +51,7 @@ public class BuscarClienteDialog extends DialogBase {
 		btnSeleccionar = new JButtonRP("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nroCliente = (Integer) tableCliente.getModel().getValueAt(tableCliente.getSelectedRow(), 0);
+				nroLista = (Integer) tableLista.getModel().getValueAt(tableLista.getSelectedRow(), 0);
 				cerrar();
 			}
 		});
@@ -71,7 +71,7 @@ public class BuscarClienteDialog extends DialogBase {
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.NORTH);
 
-		JLabel lblNombreDelCliente = new JLabel("Nombre del Cliente:");
+		JLabel lblNombreDelCliente = new JLabel("Nombre de la Lista:");
 		lblNombreDelCliente.setFont(Common.getStandarFont());
 		panel_1.add(lblNombreDelCliente);
 
@@ -89,30 +89,30 @@ public class BuscarClienteDialog extends DialogBase {
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
 
-		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal" };
+		String[] header = { "Nro de Lista", "Nombre", "Moneda" }; 
 		String[][] data = {};
-		tableCliente = new RPTable();
-		tableCliente.setModel(new DefaultTableModel(data, header));
-		tableCliente.setEditable(false);
-		WebScrollPane scrollPane = new WebScrollPane(tableCliente);
+		tableLista = new RPTable();
+		tableLista.setModel(new DefaultTableModel(data, header));
+		tableLista.setEditable(false);
+		WebScrollPane scrollPane = new WebScrollPane(tableLista);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioCliente();
 	}
 
 	private void cambioCliente() {
-		btnSeleccionar.setEnabled(tableCliente.getRowCount() > 0);
+		btnSeleccionar.setEnabled(tableLista.getRowCount() > 0);
 	}
 
 	protected void buscar() {
-		tableCliente.clear();
+		tableLista.clear();
 
-		for (CcobClie clie : CcobClieDAO.getListaCliente(txtDescCliente.getText())) {
-			tableCliente.addRow(new Object[] { clie.getClieCliente(), clie.getClieNombre(), clie.getClieNombreLegal() });
+		for (VentLipv lista : VentLipvDAO.getListaFamilia(txtDescCliente.getText())) {
+			tableLista.addRow(new Object[] { lista.getLipvListaPrecvta(), lista.getLipvNombre(), lista.getSistMone().getMoneNombre()});
 		}
 
-		if (tableCliente.getRowCount() > 0) {
-			tableCliente.setSelectedRow(0);
-			tableCliente.requestFocus();
+		if (tableLista.getRowCount() > 0) {
+			tableLista.setSelectedRow(0);
+			tableLista.requestFocus();
 		}
 
 		cambioCliente();
@@ -131,7 +131,7 @@ public class BuscarClienteDialog extends DialogBase {
 					retorno = true;
 					btnBuscar.doClick();
 				}
-				if (tableCliente.hasFocus()) {
+				if (tableLista.hasFocus()) {
 					retorno = true;
 					btnSeleccionar.doClick();
 				}

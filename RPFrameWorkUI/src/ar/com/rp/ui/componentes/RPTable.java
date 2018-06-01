@@ -6,7 +6,10 @@ import java.awt.FontMetrics;
 import java.util.Vector;
 
 import javax.swing.JLabel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -16,10 +19,10 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 
 import ar.com.rp.ui.common.Common;
-
 
 public class RPTable extends WebTable {
 
@@ -44,7 +47,6 @@ public class RPTable extends WebTable {
 
 		return c;
 	}
-	
 
 	public void addRow(Object[] row) {
 		DefaultTableModel tableModel = (DefaultTableModel) getModel();
@@ -106,28 +108,56 @@ public class RPTable extends WebTable {
 
 	private void autoSize() {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		int anchoScroll = -1;
+
+		JViewport parent = (JViewport) getParent();
+
+		if ((parent.getParent() instanceof JScrollBar) || (parent.getParent() instanceof WebScrollPane)) {
+			JScrollPane enclosing = (JScrollPane) parent.getParent();
+			anchoScroll = enclosing.getWidth();
+		}
 
 		JTableHeader tableHeader = getTableHeader();
 		FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
+		int anchoTotalColumnas = 0;
 
 		for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
 
 			TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
 
 			int widthHeader = headerFontMetrics.stringWidth(getColumnName(nroColumn)) + getIntercellSpacing().width + 20; // tama�o del header
-			//int widthCol = tableColumn.getWidth();
+			// int widthCol = tableColumn.getWidth();
 
 			TableCellRenderer cellRenderer = getCellRenderer(getRowCount() - 1, nroColumn);
 			Component c = prepareRenderer(cellRenderer, getRowCount() - 1, nroColumn);
 			int widthRender = c.getPreferredSize().width + getIntercellSpacing().width;
 
 			int preferredWidth = Math.max(widthHeader, widthRender);
-			//preferredWidth = Math.max(preferredWidth, widthRender);
+			// preferredWidth = Math.max(preferredWidth, widthRender);
 
 			tableColumn.setPreferredWidth(preferredWidth);
 			tableColumn.setWidth(preferredWidth);
+
+			anchoTotalColumnas += preferredWidth;
 		}
 
+		//TODO VER PORQUE NO ANDA
+		if (anchoScroll > -1) { // Si tengo un scroll me aseguro que el resize sea del mismo ancho que el sb
+			if (anchoScroll > anchoTotalColumnas) { // si me quede corto distribullo la diferencia entre todas las columnas
+				int dif = anchoScroll - anchoTotalColumnas;
+				int difToAdd = dif / getColumnCount();
+				for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
+
+					TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
+
+					tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + difToAdd);
+					tableColumn.setWidth(tableColumn.getWidth() + difToAdd);
+					
+					tableColumn.setWidth(600);
+
+				}
+			}
+		}
 	}
 
 	public RPTable() {

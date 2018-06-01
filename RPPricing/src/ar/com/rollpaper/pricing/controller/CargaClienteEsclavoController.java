@@ -27,13 +27,11 @@ import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
-public class CargaClienteEsclavoController
-		extends BaseControllerMVC<PantPrincipalController, CargaClienteEsclavoView, CargaClienteEsclavoModel> {
+public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincipalController, CargaClienteEsclavoView, CargaClienteEsclavoModel> {
 
 	private CcobClie clienteCargado;
 
-	public CargaClienteEsclavoController(PantPrincipalController pantPrincipal, CargaClienteEsclavoView view,
-			CargaClienteEsclavoModel model) throws Exception {
+	public CargaClienteEsclavoController(PantPrincipalController pantPrincipal, CargaClienteEsclavoView view, CargaClienteEsclavoModel model) throws Exception {
 		super(pantPrincipal, view, model, null);
 
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
@@ -50,8 +48,7 @@ public class CargaClienteEsclavoController
 
 			@Override
 			public void tableChanged(TableModelEvent e) {
-				if ((e != null) && ((e.getType() == TableModelEvent.INSERT) || ((e.getType() == TableModelEvent.UPDATE)
-						&& e.getColumn() == CargaClienteEsclavoView.COL_ID))) {
+				if ((e != null) && ((e.getType() == TableModelEvent.INSERT) || ((e.getType() == TableModelEvent.UPDATE) && e.getColumn() == CargaClienteEsclavoView.COL_ID))) {
 					try {
 						actualizarDescripcion(e.getLastRow());
 					} catch (Exception e1) {
@@ -76,8 +73,7 @@ public class CargaClienteEsclavoController
 
 		if (cliente != null) {
 			if ((clienteCargado == null) || (clienteCargado.getClieCliente() != cliente.getClieCliente())) {
-				if ((clienteCargado == null) || (WebOptionPane.showConfirmDialog(getView(),
-						"Esta cargando otro Cliente, ¿Cancelamos la carga del actual?", "Cambio de Cliente",
+				if ((clienteCargado == null) || (WebOptionPane.showConfirmDialog(getView(), "Esta cargando otro Cliente, ¿Cancelamos la carga del actual?", "Cambio de Cliente",
 						WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0)) {
 					getView().lblNombreCliente.setText(cliente.getClieNombre());
 					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
@@ -181,8 +177,7 @@ public class CargaClienteEsclavoController
 			if ((ke.getKeyCode() == KeyEvent.VK_F3) && getView().tableEsclavo.hasFocus()) {
 				retorno = true;
 				try {
-					getView().tableEsclavo.setValueAt(buscarCliente(), getView().tableEsclavo.getSelectedRow(),
-							getView().tableEsclavo.getSelectedColumn());
+					getView().tableEsclavo.setValueAt(buscarCliente(), getView().tableEsclavo.getSelectedRow(), getView().tableEsclavo.getSelectedColumn());
 
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
@@ -233,8 +228,8 @@ public class CargaClienteEsclavoController
 	@Override
 	public void ejecutarAccion(String accion) {
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "¿Cancelamos la carga Actual?", "Cancelacion de Carga",
-					WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0) {
+			if (WebOptionPane.showConfirmDialog(getView(), "¿Cancelamos la carga Actual?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
+					WebOptionPane.QUESTION_MESSAGE) == 0) {
 				try {
 					resetearPantalla();
 				} catch (Exception e) {
@@ -253,6 +248,7 @@ public class CargaClienteEsclavoController
 			if (getView().tableEsclavo.getSelectedRow() >= 0) {
 				DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
 				dm.removeRow(getView().tableEsclavo.getSelectedRow());
+				//TODO FALTA EL DELETE EN TABLA
 			}
 		}
 
@@ -260,10 +256,8 @@ public class CargaClienteEsclavoController
 			for (int i = 0; i < getView().tableEsclavo.getRowCount(); i++) {
 				Integer id = (Integer) getView().tableEsclavo.getValueAt(i, CargaClienteEsclavoView.COL_ID);
 
-				MaestroEsclavo maestroEsclavo = new MaestroEsclavo(
-						Integer.valueOf(getView().txtNroCliente.getText()), 1, id);
+				MaestroEsclavo maestroEsclavo = new MaestroEsclavo(Integer.valueOf(getView().txtNroCliente.getText()), 1, id);
 
-				// TODO FALLA ACA
 				try {
 					HibernateGeneric.persist(maestroEsclavo);
 

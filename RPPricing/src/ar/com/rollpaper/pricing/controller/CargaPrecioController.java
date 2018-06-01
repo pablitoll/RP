@@ -3,7 +3,10 @@ package ar.com.rollpaper.pricing.controller;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -13,19 +16,23 @@ import com.alee.laf.optionpane.WebOptionPane;
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
+import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.business.ColumnaOrdenar;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
+import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
+import ar.com.rollpaper.pricing.ui.BuscarListaDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
@@ -47,38 +54,56 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent evento) {
 				try {
-					perdioFocoCliente();
+
+					if (!getView().txtNroCliente.getText().equals("")) {
+						String id = getView().txtNroCliente.getText();
+						if (CommonUtils.isNumeric(id)) {
+							perdioFocoCliente(Integer.valueOf(id));
+						}
+					}
+
 				} catch (Exception e1) {
 					ManejoDeError.showError(e1, "Error al buscar cliente");
 				}
 			}
 		});
 
-	}
-
-	protected void perdioFocoCliente() throws Exception {
-		CcobClie cliente = null;
-
-		if (!getView().txtNroCliente.getText().equals("")) {
-			String id = getView().txtNroCliente.getText();
-			if (CommonUtils.isNumeric(id)) {
-				cliente = CcobClieDAO.findById(Integer.valueOf(id));
-			}
-		}
-
-		if (cliente != null) {
-			if ((getModel().getClienteCargado() == null) || (getModel().getClienteCargado().getClieCliente() != cliente.getClieCliente())) {
-				if ((getModel().getClienteCargado() == null) || (WebOptionPane.showConfirmDialog(getView(), "Esta cargando otro Cliente, ¿Cancelamos la carga del actual?",
-						"Cambio de Cliente", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0)) {
-					getView().lblNombreCliente.setText(cliente.getClieNombre());
-					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-					getModel().setClienteCargado(cliente);
-					cargarLista(cliente);
-					setModoPantalla();
-				} else {
-					getView().txtNroCliente.setText(String.valueOf(getModel().getClienteCargado().getClieCliente()));
+		view.txtNroLista.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent evento) {
+				try {
+					if (!getView().txtNroLista.getText().equals("")) {
+						String id = getView().txtNroLista.getText();
+						if (CommonUtils.isNumeric(id)) {
+							perdioFocoNroLista(Integer.valueOf(id));
+						}
+					}
+				} catch (Exception e1) {
+					ManejoDeError.showError(e1, "Error al buscar Lista");
 				}
 			}
+		});
+
+	}
+
+	protected void perdioFocoNroLista(Integer id) {
+		// TODO falta validacion si la lista no la original del cliente
+		VentLipv lista = VentLipvDAO.findById(Integer.valueOf(id));
+		if (lista != null) {
+			getView().lblNombreLista.setText(lista.getLipvNombre());
+		}
+
+	}
+
+	protected void perdioFocoCliente(int id) throws Exception {
+		CcobClie cliente = CcobClieDAO.findById(Integer.valueOf(id));
+
+		if (cliente != null) {
+
+			getView().lblNombreCliente.setText(cliente.getClieNombre());
+			getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+			getModel().setClienteCargado(cliente);
+			cargarLista(cliente);
+			setModoPantalla();
 
 		} else {
 			resetearPantalla();
@@ -104,21 +129,32 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			}
 		}
 
-		for (DescuentoXFamilias desc : DescuentoXFamiliasDAO.getListaDescuentoByID(cliente.getClieCliente())) {
-			agregarRegistroATabla(getView().tableDescFamilia, desc, "", "", "");
+		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(cliente.getClieCliente())) {
+			VentLipv familiaClass = VentLipvDAO.findById(familia.getPricFamiliaId());
+			agregarRegistroATabla(getView().tableDescFamilia, familia, familiaClass.getLipvNombre(), familiaClass.getSistMone().getMoneNombre(), "");
 		}
 
 		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(cliente.getClieCliente())) {
-			agregarRegistroATabla(getView().tableDescEspecifico, desc, "", "", "");
-		}
+			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
+			agregarRegistroATabla(getView().tableDescEspecifico, desc, arti.getArtsNombre(), arti.getArtsDescripcion(), arti.getArtsUnimedStock());
+		}	
 
+		getView().tableDescEspecifico.setAutoCreateColumnsFromModel(false);
+		DefaultTableModel modeltable = (DefaultTableModel) getView().tableDescEspecifico.getModel();
+		Vector data = modeltable.getDataVector();
+		Collections.sort(data, new ColumnaOrdenar(1));
+		
+		// TODO VER ESTO
+		((DefaultTableModel) getTableActivo().getModel()).fireTableStructureChanged();
+
+		
 		setModoPantalla();
 	}
 
 	private void setModoPantalla() {
 		Boolean tieneCli = !getView().lblNombreCliente.getText().equals("S/D");
-		Boolean tieneLista = !getView().lblNombreLista.getText().equals("S/D");
 
+		getView().txtNroCliente.setEnabled(!tieneCli);
 		getView().txtNroLista.setEnabled(tieneCli);
 		getView().tableDescEspecifico.setEnabled(tieneCli);
 		getView().tableDescFamilia.setEnabled(tieneCli);
@@ -126,12 +162,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().btnModificar.setEnabled(tieneCli);
 		getView().btnEliminar.setEnabled(tieneCli);
 
-		getView().btnBorrar.setVisible(tieneCli);
 		getView().btnCancelar.setVisible(tieneCli);
 		getView().setCerrarVisible(!tieneCli);
-
-		// getView().txtNroLista.setEnabled(!sinDatos);
-
 	}
 
 	@Override
@@ -150,8 +182,17 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().txtNroLista.clear();
 		getView().lblError.setText("");
 
-		// falta borrar lista
 		getView().tableDescEspecifico.clear();
+
+		//Le seteo el order
+		
+//		getView().tableDescEspecifico.setAutoCreateColumnsFromModel(false);
+//		DefaultTableModel modeltable = (DefaultTableModel) getView().tableDescEspecifico.getModel();
+//		Vector data = modeltable.getDataVector();
+//		Collections.sort(data, new ColumnaOrdenar(1));
+//		
+		
+		
 		getView().tableDescFamilia.clear();
 
 		setModoPantalla();
@@ -163,7 +204,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		if (!retorno) {
 			if ((ke.getKeyCode() == KeyEvent.VK_ENTER) && getView().txtNroCliente.hasFocus()) {
 				try {
-					perdioFocoCliente();
+					buscarCliente();
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
 				}
@@ -177,8 +218,27 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 					ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
 				}
 			}
+
+			if ((ke.getKeyCode() == KeyEvent.VK_F3) && getView().txtNroLista.hasFocus()) {
+				retorno = true;
+				try {
+					buscarNroLista();
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
+				}
+			}
+
 		}
 		return retorno;
+	}
+
+	private void buscarNroLista() throws Exception {
+		BuscarListaDialog buscarListaDialog = new BuscarListaDialog(getPantallaPrincipal());
+		buscarListaDialog.iniciar();
+		if (buscarListaDialog.getNroLista() != null) {
+			getView().txtNroLista.setValue(buscarListaDialog.getNroLista());
+			perdioFocoNroLista(buscarListaDialog.getNroLista());
+		}
 	}
 
 	private void buscarCliente() throws Exception {
@@ -186,6 +246,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		buscarClienteDialog.iniciar();
 		if (buscarClienteDialog.getNroCliente() != null) {
 			getView().txtNroCliente.setValue(buscarClienteDialog.getNroCliente());
+			perdioFocoCliente(buscarClienteDialog.getNroCliente());
 		}
 	}
 
@@ -218,10 +279,11 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 					getTableActivo().setSelectedRow(getTableActivo().getRowCount() - 1);
 
+					// TODO VER ESTO
+					((DefaultTableModel) getTableActivo().getModel()).fireTableStructureChanged();
+
 					HibernateGeneric.persist(registro);
-
 				}
-
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al obtener registro");
 			}
@@ -240,6 +302,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 						Object registro = itemEspecial.getRegistro();
 
 						modificarRegistroATabla(getTableActivo(), registro, row);
+						// TODO VER ESTO
+						((DefaultTableModel) getTableActivo().getModel()).fireTableStructureChanged();
 
 						HibernateGeneric.persist(registro);
 					}
@@ -257,6 +321,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 					DefaultTableModel dm = getModelActivo();
 					dm.removeRow(getTableActivo().getSelectedRow());
+					// TODO FALA EL DELETE EN LA TABLA
 				}
 			}
 		}
@@ -267,7 +332,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		if (registro instanceof PreciosEspeciales) {
 			PreciosEspeciales registroPedido = (PreciosEspeciales) registro;
 
-			String descMoneda = SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre();
+			String descMoneda = "";
+			if (registroPedido.getPricMoneda() != null) {
+				descMoneda = SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre();
+			}
 
 			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "", row,
 					CargaPrecioView.COL_1DESC_ESPECIFICO);
@@ -323,7 +391,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 					registroDescFamilia.getPricFamiliaFechaHasta() != null ? FechaManagerUtil.Date2String(registroDescFamilia.getPricFamiliaFechaHasta()) : "",
 					registroDescFamilia.getPricReferencia(), registroDescFamilia });
 		}
-
 	}
 
 	private Class<?> getClassRegistro() {
