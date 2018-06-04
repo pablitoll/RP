@@ -3,13 +3,14 @@ package ar.com.rollpaper.pricing.controller;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-
 import javax.swing.JOptionPane;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.alee.laf.optionpane.WebOptionPane;
 
@@ -20,7 +21,6 @@ import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
-import ar.com.rollpaper.pricing.business.ColumnaOrdenar;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
@@ -47,6 +47,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	private CargaItemEspecialModel itemEspecialModel = new CargaItemEspecialModel();
 	private CargaItemEspecialView itemEspecialView = new CargaItemEspecialView();
 	private CargaItemEspecial itemEspecial = new CargaItemEspecial(PantPrincipalController.getPantallaPrincipal(), itemEspecialView, itemEspecialModel, null);
+	private TableRowSorter<TableModel> sorterTablaDesEspecifico;
+	private TableRowSorter<TableModel> sorterTablaDesFamilia;
 
 	public CargaPrecioController(PantPrincipalController pantPrincipal, CargaPrecioView view, CargaPrecioModel model) throws Exception {
 		super(pantPrincipal, view, model, null);
@@ -82,7 +84,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				}
 			}
 		});
-
 	}
 
 	protected void perdioFocoNroLista(Integer id) {
@@ -133,21 +134,14 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			VentLipv familiaClass = VentLipvDAO.findById(familia.getPricFamiliaId());
 			agregarRegistroATabla(getView().tableDescFamilia, familia, familiaClass.getLipvNombre(), familiaClass.getSistMone().getMoneNombre(), "");
 		}
+		sorterTablaDesEspecifico.sort();
 
 		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(cliente.getClieCliente())) {
 			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
 			agregarRegistroATabla(getView().tableDescEspecifico, desc, arti.getArtsNombre(), arti.getArtsDescripcion(), arti.getArtsUnimedStock());
 		}	
 
-		getView().tableDescEspecifico.setAutoCreateColumnsFromModel(false);
-		DefaultTableModel modeltable = (DefaultTableModel) getView().tableDescEspecifico.getModel();
-		Vector data = modeltable.getDataVector();
-		Collections.sort(data, new ColumnaOrdenar(1));
-		
-		// TODO VER ESTO
-		((DefaultTableModel) getTableActivo().getModel()).fireTableStructureChanged();
 
-		
 		setModoPantalla();
 	}
 
@@ -185,16 +179,27 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().tableDescEspecifico.clear();
 
 		//Le seteo el order
-		
-//		getView().tableDescEspecifico.setAutoCreateColumnsFromModel(false);
-//		DefaultTableModel modeltable = (DefaultTableModel) getView().tableDescEspecifico.getModel();
-//		Vector data = modeltable.getDataVector();
-//		Collections.sort(data, new ColumnaOrdenar(1));
-//		
-		
+		sorterTablaDesEspecifico = new TableRowSorter<TableModel>(getView().tableDescEspecifico.getModel());		
+		getView().tableDescEspecifico.setRowSorter(sorterTablaDesEspecifico);
+		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
+		 
+		sortKeys.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_ESPECIFICO, SortOrder.ASCENDING));
+		sortKeys.add(new RowSorter.SortKey(CargaPrecioView.COL_DESDE_ESPECIFICO, SortOrder.ASCENDING));
+		 
+		sorterTablaDesEspecifico.setSortKeys(sortKeys);
 		
 		getView().tableDescFamilia.clear();
+		//Le seteo el order		
+		sorterTablaDesFamilia = new TableRowSorter<TableModel>(getView().tableDescFamilia.getModel());		
+		getView().tableDescFamilia.setRowSorter(sorterTablaDesFamilia);
+		ArrayList<RowSorter.SortKey> sortKeysFamilia = new ArrayList<RowSorter.SortKey>();
+		 
+		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_FAMILIA, SortOrder.ASCENDING));
+		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_DESDE_FAMIIA, SortOrder.ASCENDING));
+		 
+		sorterTablaDesFamilia.setSortKeys(sortKeysFamilia);
 
+		
 		setModoPantalla();
 	}
 
@@ -279,8 +284,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 					getTableActivo().setSelectedRow(getTableActivo().getRowCount() - 1);
 
-					// TODO VER ESTO
-					((DefaultTableModel) getTableActivo().getModel()).fireTableStructureChanged();
+					SortTabla(getTableActivo());
 
 					HibernateGeneric.persist(registro);
 				}
@@ -302,8 +306,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 						Object registro = itemEspecial.getRegistro();
 
 						modificarRegistroATabla(getTableActivo(), registro, row);
-						// TODO VER ESTO
-						((DefaultTableModel) getTableActivo().getModel()).fireTableStructureChanged();
+
+						SortTabla(getTableActivo());
 
 						HibernateGeneric.persist(registro);
 					}
@@ -325,6 +329,15 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				}
 			}
 		}
+	}
+
+	private void SortTabla(RPTable tableActivo) {
+		if(tableActivo == getView().tableDescEspecifico) {
+			sorterTablaDesEspecifico.sort();
+		} else {
+			sorterTablaDesFamilia.sort();
+		}
+		
 	}
 
 	private void modificarRegistroATabla(RPTable tableActivo, Object registro, int row) {

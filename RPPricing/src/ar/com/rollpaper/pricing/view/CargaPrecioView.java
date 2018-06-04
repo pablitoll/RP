@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
+import java.sql.Date;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,29 +32,26 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	private static final long serialVersionUID = 1L;
 
 	public static final int COL_ID_FAMILIA = 0;
-	public static final int COL_NOMBRE_FAMILIA = 1;	
+	public static final int COL_NOMBRE_FAMILIA = 1;
 	public static final int COL_1DESC_FAMILIA = 2;
 	public static final int COL_2DESC_FAMILIA = 3;
 	public static final int COL_DESDE_FAMIIA = 4;
 	public static final int COL_HASTA_FAMILIA = 5;
 	public static final int COL_REFERENCIA_FAMILIA = 6;
 	public static final int COL_REGISTRO_FAMILIA = 7;
-	
 
 	public static final int COL_ID_ESPECIFICO = 0;
 	public static final int COL_NOMBRE_ESPECIFICO = 1;
 	public static final int COL_DESC_ESPECIFICO = 2;
 	public static final int COL_UNIDAD_ESPECIFICO = 3;
 	public static final int COL_1DESC_ESPECIFICO = 4;
-	public static final int COL_2DESC_ESPECIFICO = 5;	
+	public static final int COL_2DESC_ESPECIFICO = 5;
 	public static final int COL_MONEDA_ESPECIFICO = 6;
-	public static final int COL_PRECIO_ESPECIFICO = 7;	
+	public static final int COL_PRECIO_ESPECIFICO = 7;
 	public static final int COL_DESDE_ESPECIFICO = 8;
 	public static final int COL_HASTA_ESPECIFICO = 9;
 	public static final int COL_REFERENCIA_ESPECIFICO = 10;
 	public static final int COL_REGISTRO_ESPECIFICO = 11;
-	
-
 
 	public WebFormattedTextField txtNroCliente;
 	public RPTable tableDescEspecifico;
@@ -215,11 +213,11 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 
 		tableDescFamilia = new RPTable();
-		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta" , "Referencia", ""};
+		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta", "Referencia", "" };
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();
-		tableDescFamilia.setModel(new DefaultTableModel(dataDesFamilia, headerDescFamilia));		
+		tableDescFamilia.setModel(new DefaultTableModel(dataDesFamilia, headerDescFamilia));
 		tableDescFamilia.setRowHeight(30);
 		tableDescFamilia.setEditable(false);
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMaxWidth(0);
@@ -230,11 +228,27 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
 
-		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2",
-				"Moneda", "Precio", "Desde", "Hasta", "Referencia" , ""};
+		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "Referencia", "" };
 		String[][] dataDesEspecifico = { {} };
 
-		tableDescEspecifico = new RPTable();
+		tableDescEspecifico = new RPTable(); 
+//		{
+//
+//			/**
+//			 * 
+//			 */
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public Class getColumnClass(int column) {
+//				if(column == COL_DESDE_ESPECIFICO) {
+//					return Date.class;
+//				} else {
+//					return super.getColumnClass(column);
+//				}
+//			}
+//
+//		};
 		tableDescEspecifico.setModel(new DefaultTableModel(dataDesEspecifico, headerDescEspecifico));
 		tableDescEspecifico.setRowHeight(30);
 		tableDescEspecifico.setEditable(false);
