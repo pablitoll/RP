@@ -4,7 +4,11 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
@@ -139,8 +143,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(cliente.getClieCliente())) {
 			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
 			agregarRegistroATabla(getView().tableDescEspecifico, desc, arti.getArtsNombre(), arti.getArtsDescripcion(), arti.getArtsUnimedStock());
-		}	
-
+		}
 
 		setModoPantalla();
 	}
@@ -178,28 +181,37 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		getView().tableDescEspecifico.clear();
 
-		//Le seteo el order
-		sorterTablaDesEspecifico = new TableRowSorter<TableModel>(getView().tableDescEspecifico.getModel());		
+		// Le seteo el order
+		sorterTablaDesEspecifico = new TableRowSorter<TableModel>(getView().tableDescEspecifico.getModel());
 		getView().tableDescEspecifico.setRowSorter(sorterTablaDesEspecifico);
 		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
-		 
+
 		sortKeys.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_ESPECIFICO, SortOrder.ASCENDING));
 		sortKeys.add(new RowSorter.SortKey(CargaPrecioView.COL_DESDE_ESPECIFICO, SortOrder.ASCENDING));
-		 
+
+		sorterTablaDesEspecifico.setComparator(CargaPrecioView.COL_DESDE_ESPECIFICO, new Comparator<String>() {
+			@Override
+			public int compare(String s1, String s2) {
+				Date date1 = FechaManagerUtil.String2Date(s1);
+				Date date2 = FechaManagerUtil.String2Date(s2);
+
+				return (int) FechaManagerUtil.getDateDiff(date2, date1, TimeUnit.SECONDS);
+			}
+		});
+
 		sorterTablaDesEspecifico.setSortKeys(sortKeys);
-		
+
 		getView().tableDescFamilia.clear();
-		//Le seteo el order		
-		sorterTablaDesFamilia = new TableRowSorter<TableModel>(getView().tableDescFamilia.getModel());		
+		// Le seteo el order
+		sorterTablaDesFamilia = new TableRowSorter<TableModel>(getView().tableDescFamilia.getModel());
 		getView().tableDescFamilia.setRowSorter(sorterTablaDesFamilia);
 		ArrayList<RowSorter.SortKey> sortKeysFamilia = new ArrayList<RowSorter.SortKey>();
-		 
+
 		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_FAMILIA, SortOrder.ASCENDING));
 		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_DESDE_FAMIIA, SortOrder.ASCENDING));
-		 
+
 		sorterTablaDesFamilia.setSortKeys(sortKeysFamilia);
 
-		
 		setModoPantalla();
 	}
 
@@ -332,12 +344,12 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	private void SortTabla(RPTable tableActivo) {
-		if(tableActivo == getView().tableDescEspecifico) {
+		if (tableActivo == getView().tableDescEspecifico) {
 			sorterTablaDesEspecifico.sort();
 		} else {
 			sorterTablaDesFamilia.sort();
 		}
-		
+
 	}
 
 	private void modificarRegistroATabla(RPTable tableActivo, Object registro, int row) {
