@@ -292,11 +292,11 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 					Object registro = itemEspecial.getRegistro();
 
-					agregarRegistroATabla(getTableActivo(), registro, itemEspecial.getNombreItem(), itemEspecial.getDescripcionItem(), itemEspecial.getUnidadItem());
-
-					getTableActivo().setSelectedRow(getTableActivo().getRowCount() - 1);
+					agregarRegistroATabla(getTableActivo(), registro, itemEspecial.getNombreItem(), itemEspecial.getDescripcionItem(), itemEspecial.getUnidadItem());					
 
 					SortTabla(getTableActivo());
+					
+					buscarRegisro(getTableActivo(), registro, itemEspecial.getNombreItem());
 
 					HibernateGeneric.persist(registro);
 				}
@@ -321,6 +321,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 						SortTabla(getTableActivo());
 
+						buscarRegisro(getTableActivo(), registro, itemEspecial.getNombreItem());
+						
 						HibernateGeneric.persist(registro);
 					}
 
@@ -341,6 +343,30 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				}
 			}
 		}
+	}
+
+	private void buscarRegisro(RPTable tableActivo, Object registro, String nombre) {
+		int col_nombre = CargaPrecioView.COL_NOMBRE_ESPECIFICO;
+		int col_desde = CargaPrecioView.COL_DESDE_ESPECIFICO;
+		Date desde;
+		
+		if (tableActivo == getView().tableDescEspecifico) {
+			desde = ((PreciosEspeciales) registro).getPricFechaDesde();
+		} else {
+			col_nombre = CargaPrecioView.COL_NOMBRE_FAMILIA;
+			col_desde = CargaPrecioView.COL_DESDE_FAMIIA;
+			desde = ((DescuentoXFamilias) registro).getPricFamiliaFechaDesde();
+		}
+		
+		String strDesde = FechaManagerUtil.Date2String(desde);
+		
+		for(int i = 0; i < tableActivo.getRowCount(); i++) {
+			if((tableActivo.getValueAt(i, col_nombre).equals(nombre)) && tableActivo.getValueAt(i, col_desde).equals(strDesde)){
+				tableActivo.setSelectedRow(i);	
+				i = tableActivo.getRowCount() + 2;
+			}
+		}
+		
 	}
 
 	private void SortTabla(RPTable tableActivo) {
