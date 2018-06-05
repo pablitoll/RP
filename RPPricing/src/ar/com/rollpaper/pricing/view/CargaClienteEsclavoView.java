@@ -23,6 +23,7 @@ import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
+import java.awt.Font;
 
 public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
@@ -32,7 +33,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	private static final long serialVersionUID = 1L;
 	public static final int COL_DESC = 1;
 	public static final int COL_DESC_LEGAL = 2;
-	public static final int COL_ID = 0;
+	public static final int COL_ID_CLIENTE_ESCLAVO = 0;
 
 	public WebFormattedTextField txtNroCliente;
 	public WebTable tableEsclavo;
@@ -58,14 +59,14 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnCerrar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/cross.png")));
+		btnCerrar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		setTitle("Carga de Cliente/Esclavo");
 
 		JPanel pnlSuperior = new JPanel();
 		pnlSuperior.setBorder(new EmptyBorder(10, 10, 10, 10));
 		getContentPane().add(pnlSuperior, BorderLayout.NORTH);
 		GridBagLayout gbl_pnlSuperior = new GridBagLayout();
-		gbl_pnlSuperior.columnWidths = new int[] { 76, 100, 100, 46, 150, 0, 0 };
+		gbl_pnlSuperior.columnWidths = new int[] { 76, 100, 100, 111, 150, 0, 0 };
 		gbl_pnlSuperior.rowHeights = new int[] { 0, 0, 0 };
 		gbl_pnlSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		gbl_pnlSuperior.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
@@ -106,9 +107,9 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		pnlSuperior.add(lblNewLabel, gbc_lblNewLabel);
 
 		lblNombreCliente = new JLabel("New label");
-		lblNombreCliente.setFont(Common.getStandarFont());
+		lblNombreCliente.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNombreCliente = new GridBagConstraints();
-		gbc_lblNombreCliente.anchor = GridBagConstraints.WEST;
+		gbc_lblNombreCliente.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNombreCliente.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNombreCliente.gridx = 3;
 		gbc_lblNombreCliente.gridy = 0;
@@ -124,10 +125,10 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		pnlSuperior.add(lblNewLabel_3, gbc_lblNewLabel_3);
 
 		lblNombreLegal = new JLabel("New label");
-		lblNombreLegal.setFont(Common.getStandarFont());
+		lblNombreLegal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNombreLegal = new GridBagConstraints();
+		gbc_lblNombreLegal.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNombreLegal.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNombreLegal.anchor = GridBagConstraints.WEST;
 		gbc_lblNombreLegal.gridx = 5;
 		gbc_lblNombreLegal.gridy = 0;
 		pnlSuperior.add(lblNombreLegal, gbc_lblNombreLegal);
@@ -142,9 +143,9 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		pnlSuperior.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		lblNroLista = new JLabel("New label");
-		lblNroLista.setFont(Common.getStandarFont());
+		lblNroLista.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNroListaShow = new GridBagConstraints();
-		gbc_lblNroListaShow.anchor = GridBagConstraints.EAST;
+		gbc_lblNroListaShow.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNroListaShow.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNroListaShow.gridx = 1;
 		gbc_lblNroListaShow.gridy = 1;
@@ -160,9 +161,9 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		pnlSuperior.add(lblNewLabel_2, gbc_lblNewLabel_2);
 
 		lblNombreLista = new JLabel("New label");
-		lblNombreLista.setFont(Common.getStandarFont());
+		lblNombreLista.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNombreLista = new GridBagConstraints();
-		gbc_lblNombreLista.anchor = GridBagConstraints.WEST;
+		gbc_lblNombreLista.fill = GridBagConstraints.BOTH;
 		gbc_lblNombreLista.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNombreLista.gridx = 3;
 		gbc_lblNombreLista.gridy = 1;
@@ -172,7 +173,11 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		String[][] data = { {} };
 
 		btnCancelar = new JButtonRP("Cancelar");
-		btnCancelar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/cross.png")));
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnCancelar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);
@@ -203,12 +208,12 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
 			@Override
 			public boolean isCellEditable(int row, int col) {
-				return col == COL_ID;
+				return col == COL_ID_CLIENTE_ESCLAVO;
 			}
 
 			@Override
 			public Class<?> getColumnClass(int c) {
-				if(c == COL_ID) {
+				if(c == COL_ID_CLIENTE_ESCLAVO) {
 					return Integer.class;
 				} else {
 					return String.class;
