@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.sql.Date;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -23,6 +24,9 @@ import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.border.EmptyBorder;
 
 public class CargaPrecioView extends BaseViewMVCExtendida {
 
@@ -57,9 +61,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public RPTable tableDescEspecifico;
 	public RPTable tableDescFamilia;
 	public WebFormattedTextField txtNroLista;
-	public JLabel lblNombreLista;
-	public JLabel lblNombreLegal;
-	public JLabel lblNombreCliente;
 	private JPanel pnlBotonesTabla;
 	public JButtonRP btnAgregar;
 	public JButtonRP btnEliminar;
@@ -69,17 +70,25 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	private JPanel panelCentral;
 	public WebLabel lblError;
 	public JButtonRP btnModificar;
+	public JLabel lblNombreCliente;
+	public JLabel lblNombreLista;
+	public JLabel lblNombreLegal;
+	private JLabel lblNombre_1;
+	private JLabel lbl_1;
+	private JLabel lblNombreLegal_1;
 
 	public CargaPrecioView() throws Exception {
 		super();
+		btnCerrar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		setTitle("Carga de Precio de Cliente");
 
 		JPanel panelSuperior = new JPanel();
+		panelSuperior.setBorder(new EmptyBorder(5, 5, 5, 0));
 		getContentPane().add(panelSuperior, BorderLayout.NORTH);
 		GridBagLayout gbl_panelSuperior = new GridBagLayout();
-		gbl_panelSuperior.columnWidths = new int[] { 76, 100, 50, 46, 46, 0, 0 };
+		gbl_panelSuperior.columnWidths = new int[] { 76, 100, 50, 46, 46, 50, 0, 0, 0 };
 		gbl_panelSuperior.rowHeights = new int[] { 0, 0, 0 };
-		gbl_panelSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panelSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_panelSuperior.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
 		panelSuperior.setLayout(gbl_panelSuperior);
 
@@ -107,22 +116,39 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_txtNroCliente.gridy = 0;
 		panelSuperior.add(txtNroCliente, gbc_txtNroCliente);
 		txtNroCliente.setColumns(10);
-
-		lblNombreCliente = new JLabel("New label");
-		lblNombreCliente.setFont(Common.getStandarFont());
+		
+		lblNombre_1 = new JLabel("Nombre:");
+		lblNombre_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		GridBagConstraints gbc_lblNombre_1 = new GridBagConstraints();
+		gbc_lblNombre_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombre_1.gridx = 3;
+		gbc_lblNombre_1.gridy = 0;
+		panelSuperior.add(lblNombre_1, gbc_lblNombre_1);
+		
+		lblNombreCliente = new JLabel("xxxxxxxxxxxxxxxxxxxx");
+		lblNombreCliente.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNombreCliente = new GridBagConstraints();
 		gbc_lblNombreCliente.anchor = GridBagConstraints.WEST;
 		gbc_lblNombreCliente.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNombreCliente.gridx = 3;
+		gbc_lblNombreCliente.gridx = 4;
 		gbc_lblNombreCliente.gridy = 0;
 		panelSuperior.add(lblNombreCliente, gbc_lblNombreCliente);
-
+		
+		lblNombreLegal_1 = new JLabel("Nombre Legal:");
+		lblNombreLegal_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		GridBagConstraints gbc_lblNombreLegal_1 = new GridBagConstraints();
+		gbc_lblNombreLegal_1.anchor = GridBagConstraints.EAST;
+		gbc_lblNombreLegal_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombreLegal_1.gridx = 5;
+		gbc_lblNombreLegal_1.gridy = 0;
+		panelSuperior.add(lblNombreLegal_1, gbc_lblNombreLegal_1);
+		
 		lblNombreLegal = new JLabel("New label");
-		lblNombreLegal.setFont(Common.getStandarFont());
+		lblNombreLegal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNombreLegal = new GridBagConstraints();
-		gbc_lblNombreLegal.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNombreLegal.anchor = GridBagConstraints.WEST;
-		gbc_lblNombreLegal.gridx = 5;
+		gbc_lblNombreLegal.fill = GridBagConstraints.HORIZONTAL;
+		gbc_lblNombreLegal.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombreLegal.gridx = 6;
 		gbc_lblNombreLegal.gridy = 0;
 		panelSuperior.add(lblNombreLegal, gbc_lblNombreLegal);
 
@@ -150,12 +176,21 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_txtNroLista.gridy = 1;
 		panelSuperior.add(txtNroLista, gbc_txtNroLista);
 		txtNroLista.setColumns(10);
-
+		
+		lbl_1 = new JLabel("Nombre Lista ");
+		lbl_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		GridBagConstraints gbc_lbl_1 = new GridBagConstraints();
+		gbc_lbl_1.insets = new Insets(0, 0, 0, 5);
+		gbc_lbl_1.gridx = 3;
+		gbc_lbl_1.gridy = 1;
+		panelSuperior.add(lbl_1, gbc_lbl_1);
+		
 		lblNombreLista = new JLabel("New label");
-		lblNombreLista.setFont(Common.getStandarFont());
+		lblNombreLista.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNombreLista = new GridBagConstraints();
+		gbc_lblNombreLista.anchor = GridBagConstraints.WEST;
 		gbc_lblNombreLista.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNombreLista.gridx = 3;
+		gbc_lblNombreLista.gridx = 4;
 		gbc_lblNombreLista.gridy = 1;
 		panelSuperior.add(lblNombreLista, gbc_lblNombreLista);
 
@@ -169,17 +204,19 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		pnlBotonesTabla.setLayout(gbl_pnlBotonesTabla);
 
 		btnAgregar = new JButtonRP("Agregar");
+		btnAgregar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/plus.png")));
+		
 		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);
 		btnAgregar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_btnModificar_1 = new GridBagConstraints();
 		gbc_btnModificar_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnModificar_1.anchor = GridBagConstraints.NORTH;
 		gbc_btnModificar_1.insets = new Insets(0, 0, 5, 0);
 		gbc_btnModificar_1.gridx = 0;
 		gbc_btnModificar_1.gridy = 0;
 		pnlBotonesTabla.add(btnAgregar, gbc_btnModificar_1);
 
 		btnModificar = new JButtonRP("Modificar");
+		btnModificar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/resource/edit-icon.png")));
 		btnModificar.setMnemonic(KeyEvent.VK_MINUS);
 		btnModificar.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_btnModificar_2 = new GridBagConstraints();
@@ -190,12 +227,13 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		pnlBotonesTabla.add(btnModificar, gbc_btnModificar_2);
 
 		btnEliminar = new JButtonRP("Eliminar");
+		btnEliminar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/minus.png")));
+		
 		btnEliminar.setMnemonic(KeyEvent.VK_MINUS);
 		btnEliminar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_buttonRP_1 = new GridBagConstraints();
 		gbc_buttonRP_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_buttonRP_1.insets = new Insets(0, 0, 5, 0);
-		gbc_buttonRP_1.anchor = GridBagConstraints.NORTH;
 		gbc_buttonRP_1.gridx = 0;
 		gbc_buttonRP_1.gridy = 2;
 		pnlBotonesTabla.add(btnEliminar, gbc_buttonRP_1);
@@ -265,6 +303,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panelCentral.add(lblError, BorderLayout.NORTH);
 
 		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);

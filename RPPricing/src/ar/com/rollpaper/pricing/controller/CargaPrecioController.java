@@ -135,7 +135,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		}
 
 		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(cliente.getClieCliente())) {
-			VentLipv familiaClass = VentLipvDAO.findById(familia.getPricFamiliaId());
+			VentLipv familiaClass = VentLipvDAO.findById(familia.getPricFamiliaListaPrecvta());
 			agregarRegistroATabla(getView().tableDescFamilia, familia, familiaClass.getLipvNombre(), familiaClass.getSistMone().getMoneNombre(), "");
 		}
 		sorterTablaDesEspecifico.sort();
