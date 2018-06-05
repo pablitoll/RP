@@ -43,15 +43,15 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private final JMenuItem mntmConsulta1 = new JMenuItem("Consulta XX");
 
-	private final JMenuItem mntmCargaPrecioCliente = new JMenuItem("Carga de Precio de Cliente");
+	private final JMenuItem mntmCargaPrecioCliente = new JMenuItem("Gestion de Precios");
 
 	private final JMenuItem mnuVersion = new JMenuItem("Version");
 
-	private final JMenuItem mntmCargaClienteEsclavo = new JMenuItem("Carga Cliente/Esclavo");
+	private final JMenuItem mntmCargaClienteEsclavo = new JMenuItem("Gestion de Cliente/Esclavo");
 
-	private JButtonBarraBotonesRP btnCargaPrecio = new JButtonBarraBotonesRP("Carga de Precio");
+	private JButtonBarraBotonesRP btnCargaPrecio = new JButtonBarraBotonesRP("Gestion de Precios");
 
-	private JButtonBarraBotonesRP btnClienteEsclavo = new JButtonBarraBotonesRP("Carga de Cliente/Esclavo");
+	private JButtonBarraBotonesRP btnClienteEsclavo = new JButtonBarraBotonesRP("Gestion de Cliente/Esclavo");
 
 	public PantPrincipalView() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException {
@@ -104,11 +104,11 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mntmSalir.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_EXIT)));
 		mnSalir.add(mntmSalir);
 
-		agregarBotonStd2Barra(btnCargaPrecio, Main.class.getResource(ConstantesRP.IMG_CAL));
+		agregarBotonStd2Barra(btnCargaPrecio, Main.class.getResource(ConstantesRP.IMG_PRICE_CONFIG));
 		btnCargaPrecio.setMnemonicControl(true);
 		btnCargaPrecio.setMnemonic(KeyEvent.VK_P);
 
-		agregarBotonStd2Barra(btnClienteEsclavo, Main.class.getResource(ConstantesRP.IMG_CAL));
+		agregarBotonStd2Barra(btnClienteEsclavo, Main.class.getResource(ConstantesRP.IMG_MASTER_SLAVE));
 		btnClienteEsclavo.setMnemonicControl(true);
 		btnClienteEsclavo.setMnemonic(KeyEvent.VK_C);
 

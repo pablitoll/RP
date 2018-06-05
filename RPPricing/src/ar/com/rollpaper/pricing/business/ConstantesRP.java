@@ -21,6 +21,7 @@ public class ConstantesRP {
 	public static String IMG_ERROR = "/resource/error.png";
 	public static String IMG_ICONO_APP = "/resource/vector.png";
 	public static String IMG_EXIT = "/resource/exit.png";
-	public static String IMG_CAL = "/resource/calculadora.png";
-
+	public static String IMG_CAL = "/resource/Calculator.png";
+	public static String IMG_MASTER_SLAVE = "/resource/masterSlave.png";
+	public static String IMG_PRICE_CONFIG = "/resource/priceConfig.png";
 }

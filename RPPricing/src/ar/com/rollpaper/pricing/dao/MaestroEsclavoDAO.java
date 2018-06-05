@@ -3,17 +3,26 @@ package ar.com.rollpaper.pricing.dao;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.criterion.Example;
 
+import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
+import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class PricMaestroEsclavo.
+ * 
  * @see ar.com.rollpaper.pricing.beans.MaestroEsclavo.PricMaestroEsclavo
  * @author Hibernate Tools
  */
@@ -21,14 +30,12 @@ public class MaestroEsclavoDAO {
 
 	private static final Log log = LogFactory.getLog(MaestroEsclavoDAO.class);
 
-
-
 	public static void persist(MaestroEsclavo transientInstance) {
 		log.debug("persisting PricMaestroEsclavo instance");
 		try {
-		
-			//HibernateUtil.persist(transientInstance);
-			
+
+			// HibernateUtil.persist(transientInstance);
+
 			log.debug("persist successful");
 		} catch (RuntimeException re) {
 			log.error("persist failed", re);
@@ -39,7 +46,7 @@ public class MaestroEsclavoDAO {
 	public void attachDirty(MaestroEsclavo instance) {
 		log.debug("attaching dirty PricMaestroEsclavo instance");
 		try {
-			Session session = HibernateUtil.getSession();			
+			Session session = HibernateUtil.getSession();
 			session.saveOrUpdate(instance);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
@@ -51,7 +58,7 @@ public class MaestroEsclavoDAO {
 	public void attachClean(MaestroEsclavo instance) {
 		log.debug("attaching clean PricMaestroEsclavo instance");
 		try {
-			Session session = HibernateUtil.getSession();	
+			Session session = HibernateUtil.getSession();
 			session.lock(instance, LockMode.NONE);
 			log.debug("attach successful");
 		} catch (RuntimeException re) {
@@ -63,7 +70,7 @@ public class MaestroEsclavoDAO {
 	public void delete(MaestroEsclavo persistentInstance) {
 		log.debug("deleting PricMaestroEsclavo instance");
 		try {
-			Session session = HibernateUtil.getSession();	
+			Session session = HibernateUtil.getSession();
 			session.delete(persistentInstance);
 			log.debug("delete successful");
 		} catch (RuntimeException re) {
@@ -75,7 +82,7 @@ public class MaestroEsclavoDAO {
 	public MaestroEsclavo merge(MaestroEsclavo detachedInstance) {
 		log.debug("merging PricMaestroEsclavo instance");
 		try {
-			Session session = HibernateUtil.getSession();	
+			Session session = HibernateUtil.getSession();
 			MaestroEsclavo result = (MaestroEsclavo) session.merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -85,11 +92,11 @@ public class MaestroEsclavoDAO {
 		}
 	}
 
-	public MaestroEsclavo findById(int id) {
+	public static MaestroEsclavo findById(int id) {
 		log.debug("getting PricMaestroEsclavo instance with id: " + id);
 		try {
 			Session session = HibernateUtil.getSession();
-			MaestroEsclavo instance = (MaestroEsclavo)session.get("ar.com.rollpaper.pricing.beans.PricMaestroEsclavo", id);
+			MaestroEsclavo instance = (MaestroEsclavo) session.get("ar.com.rollpaper.pricing.beans.MaestroEsclavo", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -114,5 +121,35 @@ public class MaestroEsclavoDAO {
 			log.error("find by example failed", re);
 			throw re;
 		}
+	}
+
+	public static List<MaestroEsclavo> getListaEsclavosByCliente(CcobClie cliente) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<MaestroEsclavo> criteriaQuery = session.getCriteriaBuilder().createQuery(MaestroEsclavo.class);
+		Root<MaestroEsclavo> i = criteriaQuery.from(MaestroEsclavo.class);
+		criteriaQuery.where(cb.equal(i.get("pricMaestroCliente"), cliente.getClieCliente()));
+
+		List<MaestroEsclavo> esclavos = session.createQuery(criteriaQuery).getResultList();
+
+		return esclavos;
+
+	}
+
+	public static MaestroEsclavo findByClienteIdEsclavoID(int clienteID, int esclavoID) {
+
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+		Metamodel m = session.getEntityManagerFactory().getMetamodel();
+		EntityType<MaestroEsclavo> Mae_ = m.entity(MaestroEsclavo.class);
+
+		CriteriaQuery<MaestroEsclavo> criteriaQuery = session.getCriteriaBuilder().createQuery(MaestroEsclavo.class);
+		Root<MaestroEsclavo> i = criteriaQuery.from(MaestroEsclavo.class);
+		criteriaQuery.where(cb.equal(i.get("pricMaestroCliente"), clienteID));
+		cb.and(cb.equal(i.get("pricEsclavoCliente"), esclavoID));
+		List<MaestroEsclavo> esclavos = session.createQuery(criteriaQuery).getResultList();
+
+		return esclavos.get(0);
 	}
 }
