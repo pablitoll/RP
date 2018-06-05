@@ -40,7 +40,7 @@ public class RPTable extends WebTable {
 				if (row % 2 > 0) {
 					c.setBackground(Color.WHITE);
 				} else {
-					c.setBackground(new Color(228, 228, 228));
+					c.setBackground(new Color(230, 230, 230));
 				}
 			}
 		}
@@ -108,54 +108,42 @@ public class RPTable extends WebTable {
 
 	private void autoSize() {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		int anchoScroll = -1;
 
-		JViewport parent = (JViewport) getParent();
-
-		if ((parent.getParent() instanceof JScrollBar) || (parent.getParent() instanceof WebScrollPane)) {
-			JScrollPane enclosing = (JScrollPane) parent.getParent();
-			anchoScroll = enclosing.getWidth();
-		}
+		JViewport parent = (JViewport)getParent();
+		JScrollPane enclosing = (JScrollPane)parent.getParent();
 
 		JTableHeader tableHeader = getTableHeader();
 		FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
-		int anchoTotalColumnas = 0;
+		int anchoTotal = 0;
 
 		for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
 
 			TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
 
 			int widthHeader = headerFontMetrics.stringWidth(getColumnName(nroColumn)) + getIntercellSpacing().width + 20; // tama�o del header
-			// int widthCol = tableColumn.getWidth();
+			int widthCol = tableColumn.getWidth();
+			if (getRowCount() == 1) { // Si es el primer registro ignoro la columna porque puede ser que la tenga que achicar
+				widthCol = 0;
+			}
 
 			TableCellRenderer cellRenderer = getCellRenderer(getRowCount() - 1, nroColumn);
 			Component c = prepareRenderer(cellRenderer, getRowCount() - 1, nroColumn);
 			int widthRender = c.getPreferredSize().width + getIntercellSpacing().width;
 
 			int preferredWidth = Math.max(widthHeader, widthRender);
-			// preferredWidth = Math.max(preferredWidth, widthRender);
+			preferredWidth = Math.max(preferredWidth, widthCol);
 
 			tableColumn.setPreferredWidth(preferredWidth);
 			tableColumn.setWidth(preferredWidth);
-
-			anchoTotalColumnas += preferredWidth;
+			anchoTotal += preferredWidth;
 		}
 
-		//TODO VER PORQUE NO ANDA
-		if (anchoScroll > -1) { // Si tengo un scroll me aseguro que el resize sea del mismo ancho que el sb
-			if (anchoScroll > anchoTotalColumnas) { // si me quede corto distribullo la diferencia entre todas las columnas
-				int dif = anchoScroll - anchoTotalColumnas;
-				int difToAdd = dif / getColumnCount();
-				for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
-
-					TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
-
-					tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + difToAdd);
-					tableColumn.setWidth(tableColumn.getWidth() + difToAdd);
-					
-					tableColumn.setWidth(600);
-
-				}
+		if(anchoTotal < enclosing.getWidth()) {
+			int dif = (enclosing.getWidth() - anchoTotal - getColumnCount()) / getColumnCount();
+			for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
+				TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
+				tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + dif);
+				tableColumn.setWidth(tableColumn.getWidth() + dif);
 			}
 		}
 	}
