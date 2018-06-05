@@ -179,7 +179,7 @@ public class CargaItemEspecial extends BaseControllerDialog<PantPrincipalControl
 					getView().txtReferencia.setText(getModel().getRegistro().getPricReferencia());
 				}
 			} else {
-				getView().lblArticuloID.setText(String.valueOf(getModel().getRegistroFamilia().getPricFamiliaId()));
+				getView().lblArticuloID.setText(String.valueOf(getModel().getRegistroFamilia().getPricFamiliaListaPrecvta()));
 
 				if ((getModel().getRegistroFamilia().getPricFamiliaDescuento1() != null) && (getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue() > 0.0)) {
 					getView().txtDesc1.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue());

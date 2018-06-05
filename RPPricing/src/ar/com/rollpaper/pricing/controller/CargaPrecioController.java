@@ -221,7 +221,11 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		if (!retorno) {
 			if ((ke.getKeyCode() == KeyEvent.VK_ENTER) && getView().txtNroCliente.hasFocus()) {
 				try {
-					buscarCliente();
+					String id = getView().txtNroCliente.getText();
+					if (!id.equals("") && CommonUtils.isNumeric(id)) {
+						perdioFocoCliente(Integer.valueOf(id));
+					}
+
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
 				}
@@ -244,7 +248,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 					ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
 				}
 			}
-
 		}
 		return retorno;
 	}
@@ -292,10 +295,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 					Object registro = itemEspecial.getRegistro();
 
-					agregarRegistroATabla(getTableActivo(), registro, itemEspecial.getNombreItem(), itemEspecial.getDescripcionItem(), itemEspecial.getUnidadItem());					
+					agregarRegistroATabla(getTableActivo(), registro, itemEspecial.getNombreItem(), itemEspecial.getDescripcionItem(), itemEspecial.getUnidadItem());
 
 					SortTabla(getTableActivo());
-					
+
 					buscarRegisro(getTableActivo(), registro, itemEspecial.getNombreItem());
 
 					HibernateGeneric.persist(registro);
@@ -310,7 +313,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			if ((getTableActivo().getRowCount() > 0) && (getTableActivo().getSelectedRow() >= 0)) {
 				try {
 					int row = getTableActivo().getSelectedRow();
-					itemEspecial.setRegistro(getModel().getRegistroPedidoEspecial(getTableActivo(), row));
+					itemEspecial.setRegistro(getModel().getRegistro(getTableActivo(), row, getColRegitro()));
 					resutlado = itemEspecial.iniciar();
 
 					if (!resutlado.equals("")) {
@@ -322,7 +325,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 						SortTabla(getTableActivo());
 
 						buscarRegisro(getTableActivo(), registro, itemEspecial.getNombreItem());
-						
+
 						HibernateGeneric.persist(registro);
 					}
 
@@ -337,11 +340,23 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				if (WebOptionPane.showConfirmDialog(getView(), "¿Borramos el registro?", "Eliminacion de registro", JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 
+					int row = getTableActivo().getSelectedRow();					
+					Object regis = getModel().getRegistro(getTableActivo(), row, getColRegitro());
+					HibernateGeneric.remove(regis);
+					
 					DefaultTableModel dm = getModelActivo();
 					dm.removeRow(getTableActivo().getSelectedRow());
-					// TODO FALA EL DELETE EN LA TABLA
+
 				}
 			}
+		}
+	}
+
+	private int getColRegitro() {
+		if (getTableActivo() == getView().tableDescEspecifico) {
+			return CargaPrecioView.COL_REGISTRO_ESPECIFICO;
+		} else {
+			return CargaPrecioView.COL_REGISTRO_FAMILIA;
 		}
 	}
 
@@ -349,7 +364,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		int col_nombre = CargaPrecioView.COL_NOMBRE_ESPECIFICO;
 		int col_desde = CargaPrecioView.COL_DESDE_ESPECIFICO;
 		Date desde;
-		
+
 		if (tableActivo == getView().tableDescEspecifico) {
 			desde = ((PreciosEspeciales) registro).getPricFechaDesde();
 		} else {
@@ -357,16 +372,16 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			col_desde = CargaPrecioView.COL_DESDE_FAMIIA;
 			desde = ((DescuentoXFamilias) registro).getPricFamiliaFechaDesde();
 		}
-		
+
 		String strDesde = FechaManagerUtil.Date2String(desde);
-		
-		for(int i = 0; i < tableActivo.getRowCount(); i++) {
-			if((tableActivo.getValueAt(i, col_nombre).equals(nombre)) && tableActivo.getValueAt(i, col_desde).equals(strDesde)){
-				tableActivo.setSelectedRow(i);	
+
+		for (int i = 0; i < tableActivo.getRowCount(); i++) {
+			if ((tableActivo.getValueAt(i, col_nombre).equals(nombre)) && tableActivo.getValueAt(i, col_desde).equals(strDesde)) {
+				tableActivo.setSelectedRow(i);
 				i = tableActivo.getRowCount() + 2;
 			}
 		}
-		
+
 	}
 
 	private void SortTabla(RPTable tableActivo) {
@@ -435,7 +450,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 					registroPedido });
 		} else {
 			DescuentoXFamilias registroDescFamilia = (DescuentoXFamilias) registro;
-			tabla.addRow(new Object[] { registroDescFamilia.getPricFamiliaId(), nombreItem,
+			tabla.addRow(new Object[] { registroDescFamilia.getPricFamiliaListaPrecvta(), nombreItem,
 					registroDescFamilia.getPricFamiliaDescuento1() != null ? Common.double2String(registroDescFamilia.getPricFamiliaDescuento1().doubleValue()) : "",
 					registroDescFamilia.getPricFamiliaDescuento2() != null ? Common.double2String(registroDescFamilia.getPricFamiliaDescuento2().doubleValue()) : "",
 					registroDescFamilia.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registroDescFamilia.getPricFamiliaFechaDesde()) : "",

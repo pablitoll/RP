@@ -6,7 +6,6 @@ import java.awt.FontMetrics;
 import java.util.Vector;
 
 import javax.swing.JLabel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
@@ -19,7 +18,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 
 import ar.com.rp.ui.common.Common;

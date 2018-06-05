@@ -87,7 +87,7 @@ public class DescuentoXFamiliasDAO {
 		}
 	}
 
-	public DescuentoXFamilias findById(int id) {
+	public static DescuentoXFamilias findById(int id) {
 		log.debug("getting PricDescuentoXFamilias instance with id: " + id);
 		try {
 			Session session = HibernateUtil.getSession();

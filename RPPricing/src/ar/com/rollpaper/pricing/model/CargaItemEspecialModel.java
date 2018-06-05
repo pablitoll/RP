@@ -43,7 +43,7 @@ public class CargaItemEspecialModel extends BaseModel {
 	public int getFamiliaID() {
 		if (registro != null) {
 			if (registro instanceof DescuentoXFamilias) {
-				return ((DescuentoXFamilias) registro).getPricFamiliaId();
+				return ((DescuentoXFamilias) registro).getPricFamiliaListaPrecvta();
 			}
 		}
 		return -1;
