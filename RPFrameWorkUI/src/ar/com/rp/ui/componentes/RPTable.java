@@ -107,12 +107,13 @@ public class RPTable extends WebTable {
 	private void autoSize() {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-		JViewport parent = (JViewport)getParent();
-		JScrollPane enclosing = (JScrollPane)parent.getParent();
+		JViewport parent = (JViewport) getParent();
+		JScrollPane enclosing = (JScrollPane) parent.getParent();
 
 		JTableHeader tableHeader = getTableHeader();
 		FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
 		int anchoTotal = 0;
+		int cantCol = 0;
 
 		for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
 
@@ -120,7 +121,8 @@ public class RPTable extends WebTable {
 
 			int widthHeader = headerFontMetrics.stringWidth(getColumnName(nroColumn)) + getIntercellSpacing().width + 20; // tama�o del header
 			int widthCol = tableColumn.getWidth();
-			if (getRowCount() == 1) { // Si es el primer registro ignoro la columna porque puede ser que la tenga que achicar
+			if (getRowCount() == 1) { // Si es el primer registro ignoro la columna porque puede ser que la tenga que
+										// achicar
 				widthCol = 0;
 			}
 
@@ -134,14 +136,17 @@ public class RPTable extends WebTable {
 			tableColumn.setPreferredWidth(preferredWidth);
 			tableColumn.setWidth(preferredWidth);
 			anchoTotal += preferredWidth;
+			cantCol++;
 		}
 
-		if(anchoTotal < enclosing.getWidth()) {
-			int dif = (enclosing.getWidth() - anchoTotal - getColumnCount()) / getColumnCount();
+		if (anchoTotal < enclosing.getWidth()) {
+			int dif = (enclosing.getWidth() - anchoTotal) / cantCol;
 			for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
 				TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
-				tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + dif);
-				tableColumn.setWidth(tableColumn.getWidth() + dif);
+				if (tableColumn.getMaxWidth() > 0) {
+					tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + dif);
+					tableColumn.setWidth(tableColumn.getWidth() + dif);
+				}
 			}
 		}
 	}
