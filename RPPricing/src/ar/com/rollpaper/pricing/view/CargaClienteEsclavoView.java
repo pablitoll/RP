@@ -173,10 +173,6 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		String[][] data = { {} };
 
 		btnCancelar = new JButtonRP("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		btnCancelar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
