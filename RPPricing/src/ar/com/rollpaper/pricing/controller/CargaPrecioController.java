@@ -120,7 +120,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			setModoPantalla();
 
 		} else {
-			resetearPantalla();
+			resetearDatosDePantalla();
 		}
 	}
 
@@ -181,12 +181,16 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 	@Override
 	protected void resetearPantalla() throws Exception {
+		getView().txtNroCliente.clear();
+		resetearDatosDePantalla();
+	}
+
+	protected void resetearDatosDePantalla() throws Exception {
 		getView().lblNombreLista.setText("S/D");
 		getView().lblNombreLegal.setText("S/D");
 		getView().lblNombreCliente.setText("S/D");
 
 		getModel().setClienteCargado(null);
-		getView().txtNroCliente.clear();
 		getView().txtNroLista.clear();
 		getView().lblError.setText("");
 
@@ -306,7 +310,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 						DescuentoXFamilias registro = itemEspecialFamilia.getRegistro();
 
-						agregarRegistroATablaFamilia(getView().tableDescFamilia, registro, itemEspecialArticulo.getArticuloIDMostrar());
+						agregarRegistroATablaFamilia(getView().tableDescFamilia, registro, itemEspecialFamilia.getNombreItem());
 
 						sorterTablaDesFamilia.sort();
 
@@ -459,7 +463,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			DescuentoXFamilias registroFamilia = (DescuentoXFamilias) registro;
 
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento1() != null ? Common.double2String(registroFamilia.getPricFamiliaDescuento1().doubleValue()) : "", row,
-					CargaPrecioView.COL_1DESC_ESPECIFICO);
+					CargaPrecioView.COL_1DESC_FAMILIA);
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento2() != null ? Common.double2String(registroFamilia.getPricFamiliaDescuento2().doubleValue()) : "", row,
 					CargaPrecioView.COL_2DESC_FAMILIA);
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaDesde()) : "", row,

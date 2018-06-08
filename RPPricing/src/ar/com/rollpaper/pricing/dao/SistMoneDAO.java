@@ -120,22 +120,10 @@ public class SistMoneDAO {
 	// }
 
 	public static List<SistMone> getList() {
-		Session session = HibernateUtil.getSession();
-		CriteriaQuery<SistMone> criteriaQuery = session.getCriteriaBuilder().createQuery(SistMone.class);
-		List<SistMone> listaLP = session.createQuery(criteriaQuery).getResultList();
+		CriteriaQuery<SistMone> criteria = HibernateUtil.getSession().getCriteriaBuilder().createQuery(SistMone.class);
+		criteria.select(criteria.from(SistMone.class));
+		List<SistMone> listaLP = HibernateUtil.getSession().createQuery(criteria).getResultList();
 		return listaLP;
-
-		// log.debug("finding SistMone instance by example");
-		// try {
-		// List<SistMone> results =
-		// HibernateUtil.getSession().getCriteriaBuilder().createQuery(SistMone.class).getr
-		// getResultList();
-		// log.debug("find by example successful, result size: " + results.size());
-		// return results;
-		// } catch (RuntimeException re) {
-		// log.error("find by example failed", re);
-		// throw re;
-		// }
 	}
 
 }

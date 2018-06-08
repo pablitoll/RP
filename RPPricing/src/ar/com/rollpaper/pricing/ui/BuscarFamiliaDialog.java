@@ -20,6 +20,8 @@ import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.DialogBase;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BuscarFamiliaDialog extends DialogBase {
 
@@ -32,10 +34,10 @@ public class BuscarFamiliaDialog extends DialogBase {
 	private JButtonRP btnSeleccionar;
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
-	private Integer nroFamilia = null;
+	private String nroFamilia = null;
 	private JButtonRP btnTodos;
 
-	public Integer getNroFamilia() {
+	public String getNroFamilia() {
 		return nroFamilia;
 	}
 
@@ -52,7 +54,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		btnSeleccionar = new JButtonRP("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nroFamilia = (Integer) tableFamilia.getModel().getValueAt(tableFamilia.getSelectedRow(), 0);
+				nroFamilia = (String) tableFamilia.getModel().getValueAt(tableFamilia.getSelectedRow(), 0);
 				cerrar();
 			}
 		});
@@ -69,6 +71,11 @@ public class BuscarFamiliaDialog extends DialogBase {
 		});
 		
 		btnTodos = new JButtonRP("Visualizar Todos");
+		btnTodos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				buscar("");
+			}
+		});
 		btnTodos.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnTodos.setFont(Common.getStandarFont());
 		panel.add(btnTodos);
@@ -89,7 +96,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		btnBuscar = new JButtonRP("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				buscar();
+				buscar(txtDescFamilia.getText());
 			}
 		});
 		btnBuscar.setFont(Common.getStandarFont());
@@ -98,21 +105,29 @@ public class BuscarFamiliaDialog extends DialogBase {
 		String[] header = { "Nro Familia", "Nombre" };
 		String[][] data = {};
 		tableFamilia = new RPTable();
+		tableFamilia.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+		        if (mouseEvent.getClickCount() == 2 && tableFamilia.getSelectedRow() != -1) {
+		            btnSeleccionar.doClick(); 
+		        }
+		    }
+		});
 		tableFamilia.setModel(new DefaultTableModel(data, header));
 		tableFamilia.setEditable(false);
 		WebScrollPane scrollPane = new WebScrollPane(tableFamilia);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioArticulo();
 	}
-
+	
 	private void cambioArticulo() {
 		btnSeleccionar.setEnabled(tableFamilia.getRowCount() > 0);
 	}
 
-	protected void buscar() {
+	protected void buscar(String nombre) {
 		tableFamilia.clear();
 
-		for (StocCa01 art : StocCa01DAO.getListaFamiliaByDesc_ID(txtDescFamilia.getText())) {
+		for (StocCa01 art : StocCa01DAO.getListaFamiliaByDesc_ID(nombre)) {
 			tableFamilia.addRow(new Object[] { art.getCa01Clasif1(), art.getCa01Nombre() });
 		}
 

@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
 import ar.com.rollpaper.pricing.ui.BuscarFamiliaDialog;
@@ -50,7 +51,9 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		getModel().setFamiliaCargado(null);
 		getModel().setRegistro(registro);
 
-		cargoFamilia(String.valueOf(getModel().getFamiliaID()));
+		if ((registro.getPricFamiliaListaPrecvta() != null) && !registro.getPricFamiliaListaPrecvta().equals("")) {
+			getModel().setFamiliaCargado(StocCa01DAO.findById(registro.getPricFamiliaListaPrecvta()));
+		}
 	}
 
 	public CargaItemEspecialFamilia(PantPrincipalController pantPrincipal, CargaItemEspecialView view, CargaItemEspecialFamiliaModel model, PermisosInterface permisos)
@@ -68,7 +71,17 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				cargoFamilia(view.txtArticuloID.getText());
+
+				String id = view.txtArticuloID.getText();
+
+				if (!id.equals("")) {
+					StocCa01 familiaCargado = StocCa01DAO.findById(id);
+
+					if (familiaCargado != null) {
+						getModel().setFamiliaCargado(familiaCargado);
+					}
+				}
+				RefrescarDatosFamilia();
 			}
 
 			@Override
@@ -118,7 +131,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 			}
 		}
 
-		RefrescarDatosArticulo();
+		RefrescarDatosFamilia();
 
 		if (getModel().isEdicion()) {
 			getView().txtDesc1.requestFocus();
@@ -190,19 +203,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		return getModel().getNombreItem();
 	}
 
-	protected void cargoFamilia(String id) {
-		if (!id.equals("")) {
-			StocCa01 familiaCargado = StocCa01DAO.findById(id);
-
-			if (familiaCargado != null) {
-				getModel().setFamiliaCargado(familiaCargado);
-			}
-		}
-
-		RefrescarDatosArticulo();
-	}
-
-	private void RefrescarDatosArticulo() {
+	private void RefrescarDatosFamilia() {
 		getView().lblNombre.setText(getModel().getNombreItem());
 	}
 
@@ -229,7 +230,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		}
 
 		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F3) && getView().dateFechaHasta.hasFocus()) {
-			getView().dateFechaDesde.setText("01/01/2100");
+			getView().dateFechaHasta.setText("01/01/2100");
 		}
 
 		return retorno;

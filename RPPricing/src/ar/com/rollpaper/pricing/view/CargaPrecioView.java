@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.scroll.WebScrollPane;
@@ -177,7 +178,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		txtNroLista.setColumns(10);
 
 		lbl_1 = new JLabel("Nombre Lista ");
-		lbl_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lbl_1.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lbl_1 = new GridBagConstraints();
 		gbc_lbl_1.insets = new Insets(0, 0, 0, 5);
 		gbc_lbl_1.gridx = 3;
@@ -249,7 +250,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panelCentral.add(tabPanel);
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 
-		tableDescFamilia = new RPTable();
 		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta", "Comision", "Referencia", "" };
 		String[][] dataDesFamilia = { {} };
 
@@ -262,6 +262,12 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setPreferredWidth(0);
 		// tableDescFamilia.getColumnModel().removeColumn(tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA));
 
+		tableDescFamilia.getColumnModel().getColumn(COL_1DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_2DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_COMSISION_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_DESDE_FAMIIA).setCellRenderer(tableDescFamilia.getCenterRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
+
 		WebScrollPane spDescLista = new WebScrollPane(tableDescFamilia);
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
@@ -270,7 +276,20 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 				"" };
 		String[][] dataDesEspecifico = { {} };
 
-		tableDescEspecifico = new RPTable();
+		tableDescEspecifico = new RPTable() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void autoSize() {
+				super.autoSize();
+				TableColumn tableColumn = getColumnModel().getColumn(COL_DESC_ESPECIFICO);
+				tableColumn.setPreferredWidth(100); // Fijo para que entre los otros campos
+				tableColumn.setWidth(100);
+			}
+		};
 		tableDescEspecifico.setModel(new DefaultTableModel(dataDesEspecifico, headerDescEspecifico));
 		tableDescEspecifico.setRowHeight(30);
 		tableDescEspecifico.setEditable(false);
@@ -279,6 +298,14 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMinWidth(0);
 		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setPreferredWidth(0);
 		// tableDescEspecifico.getColumnModel().removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
+
+		tableDescEspecifico.getColumnModel().getColumn(COL_1DESC_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_2DESC_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_PRECIO_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_COMISION_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_DESDE_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_HASTA_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
 
 		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
 		tabPanel.addTab("Descuentos y Precios Especificos", spDescEspecifico);

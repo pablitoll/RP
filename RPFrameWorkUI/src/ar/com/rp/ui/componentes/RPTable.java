@@ -18,6 +18,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
+import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.table.WebTable;
 
 import ar.com.rp.ui.common.Common;
@@ -105,11 +106,12 @@ public class RPTable extends WebTable {
 		return preferredWidth;
 	}
 
-	private void autoSize() {
+	protected void autoSize() {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 		JViewport parent = (JViewport) getParent();
 		JScrollPane enclosing = (JScrollPane) parent.getParent();
+		enclosing.getParent().getWidth();
 
 		JTableHeader tableHeader = getTableHeader();
 		FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
@@ -120,28 +122,30 @@ public class RPTable extends WebTable {
 
 			TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
 
-			int widthHeader = headerFontMetrics.stringWidth(getColumnName(nroColumn)) + getIntercellSpacing().width + 20; // tama�o del header
-			int widthCol = tableColumn.getWidth();
-			if (getRowCount() == 1) { // Si es el primer registro ignoro la columna porque puede ser que la tenga que
-										// achicar
-				widthCol = 0;
+			if (tableColumn.getMaxWidth() > 0) {
+				int widthHeader = headerFontMetrics.stringWidth(getColumnName(nroColumn)) + getIntercellSpacing().width + 20; // tama�o del header
+				int widthCol = tableColumn.getWidth();
+				if (getRowCount() == 1) { // Si es el primer registro ignoro la columna porque puede ser que la tenga que
+											// achicar
+					widthCol = 0;
+				}
+
+				TableCellRenderer cellRenderer = getCellRenderer(getRowCount() - 1, nroColumn);
+				Component c = prepareRenderer(cellRenderer, getRowCount() - 1, nroColumn);
+				int widthRender = c.getPreferredSize().width + getIntercellSpacing().width;
+
+				int preferredWidth = Math.max(widthHeader, widthRender);
+				preferredWidth = Math.max(preferredWidth, widthCol);
+
+				tableColumn.setPreferredWidth(preferredWidth);
+				tableColumn.setWidth(preferredWidth);
+				anchoTotal += preferredWidth;
+				cantCol++;
 			}
-
-			TableCellRenderer cellRenderer = getCellRenderer(getRowCount() - 1, nroColumn);
-			Component c = prepareRenderer(cellRenderer, getRowCount() - 1, nroColumn);
-			int widthRender = c.getPreferredSize().width + getIntercellSpacing().width;
-
-			int preferredWidth = Math.max(widthHeader, widthRender);
-			preferredWidth = Math.max(preferredWidth, widthCol);
-
-			tableColumn.setPreferredWidth(preferredWidth);
-			tableColumn.setWidth(preferredWidth);
-			anchoTotal += preferredWidth;
-			cantCol++;
 		}
 
 		if (anchoTotal < enclosing.getWidth()) {
-			int dif = (enclosing.getWidth() - anchoTotal) / cantCol;
+			int dif = (enclosing.getWidth() - anchoTotal) / cantCol; 
 			for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
 				TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
 				if (tableColumn.getMaxWidth() > 0) {
