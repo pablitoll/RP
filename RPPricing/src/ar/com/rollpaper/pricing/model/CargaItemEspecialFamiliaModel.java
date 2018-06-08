@@ -2,7 +2,6 @@ package ar.com.rollpaper.pricing.model;
 
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.StocCa01;
-import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rp.ui.pantalla.BaseModel;
 
 public class CargaItemEspecialFamiliaModel extends BaseModel {

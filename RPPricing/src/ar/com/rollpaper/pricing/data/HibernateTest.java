@@ -17,7 +17,6 @@ import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 
-
 public class HibernateTest {
 
 	public static void main(String[] args) {
@@ -76,17 +75,17 @@ public class HibernateTest {
 		
 
 		VentClivDAO listaPrecio = new VentClivDAO();		
-		VentCliv x = listaPrecio.findById(28);
+//		VentCliv x = listaPrecio.findById(28);
 		
 		VentClivDAO listaPrecio1 = new VentClivDAO();		
 		List<VentCliv> x1 = listaPrecio1.getListaPreciosByCliente(CcobClieDAO.findById(28));
 		
 		
-		PreciosEspeciales pe = new PreciosEspeciales( 28 , 100, 10, 
+		PreciosEspeciales pe = new PreciosEspeciales( 28 , 100, 10, 10,
 				new BigDecimal(2.0),new BigDecimal(3.0),
-				"DOL", new BigDecimal(4.0), new Date(2018 ,05,18), new Date(2099,12,31));
+				"DOL", new BigDecimal(4.0), new Date(2018 ,05,18), new Date(2099,12,31), new BigDecimal(3.0), "");
 		
-		HibernateGeneric.persist(pe);
+			HibernateGeneric.persist(pe);
 		//session.flush();
 		//session.save(pe);
 		session.getTransaction().commit();

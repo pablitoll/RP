@@ -9,9 +9,7 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.LockMode;
 import org.hibernate.Session;
-import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
@@ -25,62 +23,62 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
 public class VentLipvDAO {
 
 	private static final Log log = LogFactory.getLog(SistMoneDAO.class);
-
-	public void persist(VentLipv transientInstance) {
-		log.debug("persisting VentLipv instance");
-		try {
-			HibernateUtil.getSession().persist(transientInstance);
-			log.debug("persist successful");
-		} catch (RuntimeException re) {
-			log.error("persist failed", re);
-			throw re;
-		}
-	}
-
-	public void attachDirty(VentLipv instance) {
-		log.debug("attaching dirty VentLipv instance");
-		try {
-			HibernateUtil.getSession().saveOrUpdate(instance);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
-			throw re;
-		}
-	}
-
-	public void attachClean(VentLipv instance) {
-		log.debug("attaching clean VentLipv instance");
-		try {
-			HibernateUtil.getSession().lock(instance, LockMode.NONE);
-			log.debug("attach successful");
-		} catch (RuntimeException re) {
-			log.error("attach failed", re);
-			throw re;
-		}
-	}
-
-	public void delete(VentLipv persistentInstance) {
-		log.debug("deleting VentLipv instance");
-		try {
-			HibernateUtil.getSession().delete(persistentInstance);
-			log.debug("delete successful");
-		} catch (RuntimeException re) {
-			log.error("delete failed", re);
-			throw re;
-		}
-	}
-
-	public VentLipv merge(VentLipv detachedInstance) {
-		log.debug("merging VentLipv instance");
-		try {
-			VentLipv result = (VentLipv) HibernateUtil.getSession().merge(detachedInstance);
-			log.debug("merge successful");
-			return result;
-		} catch (RuntimeException re) {
-			log.error("merge failed", re);
-			throw re;
-		}
-	}
+//
+//	public void persist(VentLipv transientInstance) {
+//		log.debug("persisting VentLipv instance");
+//		try {
+//			HibernateUtil.getSession().persist(transientInstance);
+//			log.debug("persist successful");
+//		} catch (RuntimeException re) {
+//			log.error("persist failed", re);
+//			throw re;
+//		}
+//	}
+//
+//	public void attachDirty(VentLipv instance) {
+//		log.debug("attaching dirty VentLipv instance");
+//		try {
+//			HibernateUtil.getSession().saveOrUpdate(instance);
+//			log.debug("attach successful");
+//		} catch (RuntimeException re) {
+//			log.error("attach failed", re);
+//			throw re;
+//		}
+//	}
+//
+//	public void attachClean(VentLipv instance) {
+//		log.debug("attaching clean VentLipv instance");
+//		try {
+//			HibernateUtil.getSession().lock(instance, LockMode.NONE);
+//			log.debug("attach successful");
+//		} catch (RuntimeException re) {
+//			log.error("attach failed", re);
+//			throw re;
+//		}
+//	}
+//
+//	public void delete(VentLipv persistentInstance) {
+//		log.debug("deleting VentLipv instance");
+//		try {
+//			HibernateUtil.getSession().delete(persistentInstance);
+//			log.debug("delete successful");
+//		} catch (RuntimeException re) {
+//			log.error("delete failed", re);
+//			throw re;
+//		}
+//	}
+//
+//	public VentLipv merge(VentLipv detachedInstance) {
+//		log.debug("merging VentLipv instance");
+//		try {
+//			VentLipv result = (VentLipv) HibernateUtil.getSession().merge(detachedInstance);
+//			log.debug("merge successful");
+//			return result;
+//		} catch (RuntimeException re) {
+//			log.error("merge failed", re);
+//			throw re;
+//		}
+//	}
 
 	public static VentLipv findById(int id) {
 
@@ -98,18 +96,18 @@ public class VentLipvDAO {
 			throw re;
 		}
 	}
-
-	public List findByExample(VentLipv instance) {
-		log.debug("finding VentLipv instance by example");
-		try {
-			List results = HibernateUtil.getSession().createCriteria("ar.com.rollpaper.pricing.beans.VentLipv").add(Example.create(instance)).list();
-			log.debug("find by example successful, result size: " + results.size());
-			return results;
-		} catch (RuntimeException re) {
-			log.error("find by example failed", re);
-			throw re;
-		}
-	}
+//
+//	public List findByExample(VentLipv instance) {
+//		log.debug("finding VentLipv instance by example");
+//		try {
+//			List results = HibernateUtil.getSession().createCriteria("ar.com.rollpaper.pricing.beans.VentLipv").add(Example.create(instance)).list();
+//			log.debug("find by example successful, result size: " + results.size());
+//			return results;
+//		} catch (RuntimeException re) {
+//			log.error("find by example failed", re);
+//			throw re;
+//		}
+//	}
 
 	public static List<VentLipv> getListaFamilia(String nombre) {
 		Session session = HibernateUtil.getSession();
@@ -118,7 +116,6 @@ public class VentLipvDAO {
 		CriteriaQuery<VentLipv> criteriaQuery = session.getCriteriaBuilder().createQuery(VentLipv.class);
 		Root<VentLipv> i = criteriaQuery.from(VentLipv.class);
 		criteriaQuery.where(cb.like(i.get("lipvNombre"), "%" + nombre + "%"));
-
 		List<VentLipv> clientes = session.createQuery(criteriaQuery).getResultList();
 
 		return clientes;

@@ -9,7 +9,7 @@
         <property generated="never" lazy="false" name="pricFamiliaCliente" optimistic-lock="true" type="int" unique="false">
             <column name="PRIC_FAMILIA_CLIENTE" not-null="true"/>
         </property>
-        <property generated="never" lazy="false" name="pricFamiliaListaPrecvta" optimistic-lock="true" type="int" unique="false">
+        <property generated="never" lazy="false" name="pricFamiliaListaPrecvta" optimistic-lock="true" type="string" unique="false">
             <column name="PRIC_FAMILIA_LISTA_PRECVTA" not-null="true"/>
         </property>
         <property generated="never" lazy="false" name="pricFamiliaDescuento1" optimistic-lock="true" type="big_decimal" unique="false">
@@ -24,6 +24,9 @@
         <property generated="never" lazy="false" name="pricFamiliaFechaHasta" optimistic-lock="true" type="timestamp" unique="false">
             <column length="23" name="PRIC_FAMILIA_FECHA_HASTA" not-null="true"/>
         </property>
+                <property generated="never" lazy="false" name="pricFamiliaComision" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="PRIC_FAMILIA_COMISION" not-null="true"/>
+        </property>        
         <property generated="never" lazy="false" name="pricReferencia" optimistic-lock="true" type="string" unique="false">
             <column length="100" name="PRIC_REFERENCIA"/>
         </property>

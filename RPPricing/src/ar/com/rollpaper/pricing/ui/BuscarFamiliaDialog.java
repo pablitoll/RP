@@ -13,8 +13,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
 
-import ar.com.rollpaper.pricing.beans.VentLipv;
-import ar.com.rollpaper.pricing.dao.VentLipvDAO;
+import ar.com.rollpaper.pricing.beans.StocCa01;
+import ar.com.rollpaper.pricing.dao.StocCa01DAO;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -33,6 +33,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
 	private Integer nroFamilia = null;
+	private JButtonRP btnTodos;
 
 	public Integer getNroFamilia() {
 		return nroFamilia;
@@ -66,6 +67,11 @@ public class BuscarFamiliaDialog extends DialogBase {
 				cerrar();
 			}
 		});
+		
+		btnTodos = new JButtonRP("Visualizar Todos");
+		btnTodos.setMnemonic(KeyEvent.VK_ESCAPE);
+		btnTodos.setFont(Common.getStandarFont());
+		panel.add(btnTodos);
 		panel.add(btnCancelar);
 
 		JPanel panel_1 = new JPanel();
@@ -89,7 +95,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
 
-		String[] header = { "Nro Familia", "Nombre", "Moneda" };
+		String[] header = { "Nro Familia", "Nombre" };
 		String[][] data = {};
 		tableFamilia = new RPTable();
 		tableFamilia.setModel(new DefaultTableModel(data, header));
@@ -106,8 +112,8 @@ public class BuscarFamiliaDialog extends DialogBase {
 	protected void buscar() {
 		tableFamilia.clear();
 
-		for (VentLipv art : VentLipvDAO.getListaFamilia(txtDescFamilia.getText())) {
-			tableFamilia.addRow(new Object[] { art.getLipvListaPrecvta(), art.getLipvNombre(), art.getSistMone().getMoneNombre()});
+		for (StocCa01 art : StocCa01DAO.getListaFamiliaByDesc_ID(txtDescFamilia.getText())) {
+			tableFamilia.addRow(new Object[] { art.getCa01Clasif1(), art.getCa01Nombre() });
 		}
 
 		if (tableFamilia.getRowCount() > 0) {

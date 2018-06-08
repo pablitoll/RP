@@ -38,8 +38,9 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public static final int COL_2DESC_FAMILIA = 3;
 	public static final int COL_DESDE_FAMIIA = 4;
 	public static final int COL_HASTA_FAMILIA = 5;
-	public static final int COL_REFERENCIA_FAMILIA = 6;
-	public static final int COL_REGISTRO_FAMILIA = 7;
+	public static final int COL_COMSISION_FAMILIA = 6;
+	public static final int COL_REFERENCIA_FAMILIA = 7;
+	public static final int COL_REGISTRO_FAMILIA = 8;
 
 	public static final int COL_ID_ESPECIFICO = 0;
 	public static final int COL_NOMBRE_ESPECIFICO = 1;
@@ -51,8 +52,9 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public static final int COL_PRECIO_ESPECIFICO = 7;
 	public static final int COL_DESDE_ESPECIFICO = 8;
 	public static final int COL_HASTA_ESPECIFICO = 9;
-	public static final int COL_REFERENCIA_ESPECIFICO = 10;
-	public static final int COL_REGISTRO_ESPECIFICO = 11;
+	public static final int COL_COMISION_ESPECIFICO = 10;
+	public static final int COL_REFERENCIA_ESPECIFICO = 11;
+	public static final int COL_REGISTRO_ESPECIFICO = 12;
 
 	public WebFormattedTextField txtNroCliente;
 	public RPTable tableDescEspecifico;
@@ -248,7 +250,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 
 		tableDescFamilia = new RPTable();
-		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta", "Referencia", "" };
+		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta", "Comision", "Referencia", "" };
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();
@@ -258,13 +260,14 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMaxWidth(0);
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMinWidth(0);
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setPreferredWidth(0);
-		tableDescFamilia.getColumnModel().removeColumn(tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA));
+		// tableDescFamilia.getColumnModel().removeColumn(tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA));
 
 		WebScrollPane spDescLista = new WebScrollPane(tableDescFamilia);
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
 
-		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "Referencia", "" };
+		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "Comision", "Referencia",
+				"" };
 		String[][] dataDesEspecifico = { {} };
 
 		tableDescEspecifico = new RPTable();
@@ -275,7 +278,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMaxWidth(0);
 		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMinWidth(0);
 		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setPreferredWidth(0);
-		tableDescEspecifico.getColumnModel().removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
+		// tableDescEspecifico.getColumnModel().removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
 
 		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
 		tabPanel.addTab("Descuentos y Precios Especificos", spDescEspecifico);
@@ -284,7 +287,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		lblError.setFont(Common.getStandarFontBold());
 		panelCentral.add(lblError, BorderLayout.NORTH);
 
-		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar = new JButtonRP("Terminar Carga");
 		btnCancelar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);

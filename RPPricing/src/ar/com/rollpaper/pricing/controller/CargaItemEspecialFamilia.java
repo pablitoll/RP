@@ -10,15 +10,12 @@ import java.util.concurrent.TimeUnit;
 
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.StocCa01;
-import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
-import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
 import ar.com.rollpaper.pricing.ui.BuscarFamiliaDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
-import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
@@ -43,6 +40,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		}
 		registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
 		registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
+		registro.setPricFamiliaComision(new BigDecimal(getView().txtComision.getImporte(), MathContext.DECIMAL64));
 		registro.setPricReferencia("." + getView().txtReferencia.getText());
 
 		return registro;
@@ -91,6 +89,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		getView().txtReferencia.setText("");
 		getView().dateFechaDesde.clear();
 		getView().dateFechaHasta.clear();
+		getView().txtComision.limpiar();
 
 		if (getModel().isEdicion()) {
 
@@ -111,6 +110,8 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 			if (getModel().getRegistroFamilia().getPricFamiliaFechaHasta() != null) {
 				getView().dateFechaHasta.setDate(getModel().getRegistroFamilia().getPricFamiliaFechaHasta());
 			}
+
+			getView().txtComision.setImporte(getModel().getRegistroFamilia().getPricFamiliaComision().doubleValue());
 
 			if (getModel().getRegistroFamilia().getPricReferencia() != null) {
 				getView().txtReferencia.setText(getModel().getRegistroFamilia().getPricReferencia());

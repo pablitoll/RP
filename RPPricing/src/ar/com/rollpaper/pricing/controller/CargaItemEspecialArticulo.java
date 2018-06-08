@@ -55,6 +55,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			registro.setPricMoneda(null);
 			registro.setPricPrecio(null);
 		}
+		registro.setPricComision(new BigDecimal(getView().txtComision.getImporte(), MathContext.DECIMAL64));
 
 		registro.setPricReferencia("." + getView().txtReferencia.getText());
 
@@ -71,6 +72,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public CargaItemEspecialArticulo(PantPrincipalController pantPrincipal, CargaItemEspecialView view, CargaItemEspecialArticuloModel model, PermisosInterface permisos)
 			throws Exception {
 		super(pantPrincipal, view, model, permisos);
@@ -108,6 +110,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		getView().txtReferencia.setText("");
 		getView().dateFechaDesde.clear();
 		getView().dateFechaHasta.clear();
+		getView().txtComision.limpiar();
 		getView().cbMoneda.setSelectedIndex(0);
 
 		if (getModel().isEdicion()) {
@@ -135,6 +138,8 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			if (getModel().getRegistro().getPricFechaHasta() != null) {
 				getView().dateFechaHasta.setDate(getModel().getRegistro().getPricFechaHasta());
 			}
+
+			getView().txtComision.setImporte(getModel().getRegistro().getPricComision().doubleValue());
 
 			if (getModel().getRegistro().getPricReferencia() != null) {
 				getView().txtReferencia.setText(getModel().getRegistro().getPricReferencia());

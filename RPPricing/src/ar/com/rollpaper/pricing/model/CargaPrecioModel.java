@@ -20,7 +20,7 @@ public class CargaPrecioModel extends BaseModel {
 	}
 
 	public Object getRegistro(WebTable tablaPedidoEspecial, int row, int col) {
-		return tablaPedidoEspecial.getModel().getValueAt(row, col);
+		return tablaPedidoEspecial.getValueAt(row, col);
 	}
 
 	public PreciosEspeciales getRegistroArticuloEmpty() {
