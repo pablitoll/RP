@@ -20,6 +20,7 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class StocArts.
+ * 
  * @see ar.com.rollpaper.pricing.beans.StocArts
  * @author Hibernate Tools
  */
@@ -97,8 +98,7 @@ public class StocArtsDAO {
 	public static StocArts findById(int id) {
 		log.debug("getting StocArts instance with id: " + id);
 		try {
-			StocArts instance = (StocArts) HibernateUtil.getSession()
-					.get("ar.com.rollpaper.pricing.beans.StocArts", id);
+			StocArts instance = (StocArts) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.StocArts", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -110,14 +110,14 @@ public class StocArtsDAO {
 			throw re;
 		}
 	}
-	
+
 	public static List<StocArts> getListaArticulos(String nombre) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 
 		CriteriaQuery<StocArts> criteriaQuery = session.getCriteriaBuilder().createQuery(StocArts.class);
 		Root<StocArts> i = criteriaQuery.from(StocArts.class);
-		criteriaQuery.where(cb.like(i.get("artsNombre"), "%" + nombre + "%"));
+		criteriaQuery.where(cb.or(cb.like(i.get("artsNombre"), "%" + nombre + "%"), cb.like(i.get("artsArticuloEmp"), "%" + nombre + "%")));
 
 		List<StocArts> clientes = session.createQuery(criteriaQuery).getResultList();
 
@@ -128,14 +128,24 @@ public class StocArtsDAO {
 	public List findByExample(StocArts instance) {
 		log.debug("finding StocArts instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.StocArts").add(Example.create(instance))
-					.list();
+			List results = sessionFactory.getCurrentSession().createCriteria("ar.com.rollpaper.pricing.beans.StocArts").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
 			log.error("find by example failed", re);
 			throw re;
 		}
+	}
+
+	public static StocArts getArticulo(String idEmp) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<StocArts> criteriaQuery = session.getCriteriaBuilder().createQuery(StocArts.class);
+		Root<StocArts> i = criteriaQuery.from(StocArts.class);
+		criteriaQuery.where(cb.equal(i.get("artsArticuloEmp"), idEmp));
+
+		return session.createQuery(criteriaQuery).getSingleResult();
+
 	}
 }

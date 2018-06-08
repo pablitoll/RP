@@ -6,14 +6,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
-import java.sql.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.scroll.WebScrollPane;
@@ -25,9 +24,6 @@ import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.border.EmptyBorder;
 
 public class CargaPrecioView extends BaseViewMVCExtendida {
 

@@ -19,22 +19,20 @@ public class CargaPrecioModel extends BaseModel {
 		this.clienteCargado = clienteCargado;
 	}
 
-
 	public Object getRegistro(WebTable tablaPedidoEspecial, int row, int col) {
-		return tablaPedidoEspecial.getValueAt(row, col);
+		return tablaPedidoEspecial.getModel().getValueAt(row, col);
 	}
 
-	public Object getRegistroEmpty(Class<?> classRegistro) {
-		if (classRegistro == PreciosEspeciales.class) {
-			PreciosEspeciales preciosEspeciales = new PreciosEspeciales();
-			preciosEspeciales.setPricCliente(clienteCargado.getClieCliente());
-			return preciosEspeciales;
+	public PreciosEspeciales getRegistroArticuloEmpty() {
+		PreciosEspeciales preciosEspeciales = new PreciosEspeciales();
+		preciosEspeciales.setPricCliente(clienteCargado.getClieCliente());
+		return preciosEspeciales;
+	}
 
-		} else {
-			DescuentoXFamilias descuentoXFamilias = new DescuentoXFamilias();
-			descuentoXFamilias.setPricFamiliaCliente(clienteCargado.getClieCliente());
-			return descuentoXFamilias;
+	public DescuentoXFamilias getRegistroFamilaiEmpty() {
+		DescuentoXFamilias descuentoXFamilias = new DescuentoXFamilias();
+		descuentoXFamilias.setPricFamiliaCliente(clienteCargado.getClieCliente());
+		return descuentoXFamilias;
 
-		}
 	}
 }

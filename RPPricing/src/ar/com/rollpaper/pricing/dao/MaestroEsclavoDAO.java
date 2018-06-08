@@ -17,7 +17,6 @@ import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
-import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**

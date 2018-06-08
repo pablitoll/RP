@@ -1,0 +1,249 @@
+package ar.com.rollpaper.pricing.controller;
+
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
+import ar.com.rollpaper.pricing.beans.StocCa01;
+import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.dao.StocCa01DAO;
+import ar.com.rollpaper.pricing.dao.VentLipvDAO;
+import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
+import ar.com.rollpaper.pricing.ui.BuscarFamiliaDialog;
+import ar.com.rollpaper.pricing.ui.ManejoDeError;
+import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
+import ar.com.rp.rpcutils.CommonUtils;
+import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.error.popUpError;
+import ar.com.rp.ui.interfaces.PermisosInterface;
+import ar.com.rp.ui.pantalla.BaseControllerDialog;
+
+public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipalController, CargaItemEspecialView, CargaItemEspecialFamiliaModel> {
+
+	public DescuentoXFamilias getRegistro() throws Exception {
+
+		DescuentoXFamilias registro = getModel().getRegistroFamilia();
+		registro.setPricFamiliaListaPrecvta(getModel().getFamiliaID());
+
+		if (getView().txtDesc1.getImporte() > 0.0) {
+			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
+		} else {
+			registro.setPricFamiliaDescuento1(null);
+		}
+		if (getView().txtDesc2.getImporte() > 0.0) {
+			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte(), MathContext.DECIMAL64));
+		} else {
+			registro.setPricFamiliaDescuento2(null);
+		}
+		registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
+		registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
+		registro.setPricReferencia("." + getView().txtReferencia.getText());
+
+		return registro;
+	}
+
+	public void setRegistro(DescuentoXFamilias registro) {
+		getModel().setFamiliaCargado(null);
+		getModel().setRegistro(registro);
+
+		cargoFamilia(String.valueOf(getModel().getFamiliaID()));
+	}
+
+	public CargaItemEspecialFamilia(PantPrincipalController pantPrincipal, CargaItemEspecialView view, CargaItemEspecialFamiliaModel model, PermisosInterface permisos)
+			throws Exception {
+		super(pantPrincipal, view, model, permisos);
+		view.lblLabelArticulo.setText("Familia ID:");
+		view.txtPrecio.setVisible(false);
+		view.cbMoneda.setVisible(false);
+		view.lblDescripcion.setVisible(false);
+		view.lblLabelDescipcion.setVisible(false);
+		view.lblLabelPrecio.setVisible(false);
+		view.lblLabelMoneda.setVisible(false);
+
+		view.txtArticuloID.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				cargoFamilia(view.txtArticuloID.getText());
+			}
+
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+		});
+	}
+
+	@Override
+	protected void cargaPantalla() throws Exception {
+		getView().lblArticuloID.setVisible(getModel().isEdicion());
+		getView().txtArticuloID.setVisible(!getModel().isEdicion());
+
+		getView().lblArticuloID.setText("");
+		getView().txtArticuloID.setText("");
+		getView().txtDesc1.limpiar();
+		getView().txtDesc2.limpiar();
+		getView().txtReferencia.setText("");
+		getView().dateFechaDesde.clear();
+		getView().dateFechaHasta.clear();
+
+		if (getModel().isEdicion()) {
+
+			getView().lblArticuloID.setText(String.valueOf(getModel().getRegistroFamilia().getPricFamiliaListaPrecvta()));
+
+			if ((getModel().getRegistroFamilia().getPricFamiliaDescuento1() != null) && (getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue() > 0.0)) {
+				getView().txtDesc1.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue());
+			}
+
+			if ((getModel().getRegistroFamilia().getPricFamiliaDescuento2() != null) && (getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue() > 0.0)) {
+				getView().txtDesc2.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue());
+			}
+
+			if (getModel().getRegistroFamilia().getPricFamiliaFechaDesde() != null) {
+				getView().dateFechaDesde.setDate(getModel().getRegistroFamilia().getPricFamiliaFechaDesde());
+			}
+
+			if (getModel().getRegistroFamilia().getPricFamiliaFechaHasta() != null) {
+				getView().dateFechaHasta.setDate(getModel().getRegistroFamilia().getPricFamiliaFechaHasta());
+			}
+
+			if (getModel().getRegistroFamilia().getPricReferencia() != null) {
+				getView().txtReferencia.setText(getModel().getRegistroFamilia().getPricReferencia());
+			}
+		}
+
+		RefrescarDatosArticulo();
+
+		if (getModel().isEdicion()) {
+			getView().txtDesc1.requestFocus();
+		} else {
+			getView().txtArticuloID.requestFocus();
+		}
+	}
+
+	@Override
+	protected String getResultado() throws Exception {
+		return getModel().getAccion();
+	}
+
+	@Override
+	protected String getNombrePantalla() {
+		return "Carga de Registro de Familia";
+	}
+
+	@Override
+	public void ejecutarAccion(String accion) {
+		if (accion.equals(ConstantesRP.AccionesCargaItemFamilia.CANCELAR.toString())) {
+			getModel().setAccion("");
+			cerrarVentana();
+		}
+
+		if (accion.equals(ConstantesRP.AccionesCargaItemFamilia.ACEPTAR.toString())) {
+			getModel().setAccion("ACEPTO");
+			if (validar()) {
+				cerrarVentana();
+			}
+		}
+
+	}
+
+	private Boolean validar() {
+		// Primero valido que los campos esten bien cargados
+		if (!getModel().isEdicion() && getView().lblNombre.getText().contains("S/D")) {
+			popUpError.showError(getView().txtArticuloID, "Falta cargar un producto valido");
+			return false;
+		}
+
+		if ((getView().txtDesc1.isEmpty()) && (getView().txtPrecio.isEmpty())) {
+			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio");
+			return false;
+		}
+
+		if (getView().dateFechaDesde.getDate() == null) {
+			popUpError.showError(getView().dateFechaDesde, "La fecha Desde no puede estar Vacia");
+			return false;
+		}
+
+		if (getView().dateFechaHasta.getDate() == null) {
+			popUpError.showError(getView().dateFechaHasta, "La fecha Hasta no puede estar Vacia");
+			return false;
+		}
+
+		Date dFechaDesde = getView().dateFechaDesde.getDate();
+		Date dFechaHasta = getView().dateFechaHasta.getDate();
+
+		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 1) {
+			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta");
+			return false;
+		}
+
+		return true;
+	}
+
+	public String getNombreItem() {
+		return getModel().getNombreItem();
+	}
+
+	protected void cargoFamilia(String id) {
+		if (!id.equals("")) {
+			StocCa01 familiaCargado = StocCa01DAO.findById(id);
+
+			if (familiaCargado != null) {
+				getModel().setFamiliaCargado(familiaCargado);
+			}
+		}
+
+		RefrescarDatosArticulo();
+	}
+
+	private void RefrescarDatosArticulo() {
+		getView().lblNombre.setText(getModel().getNombreItem());
+	}
+
+	@Override
+	public boolean presionoTecla(KeyEvent ke) {
+		boolean retorno = super.presionoTecla(ke);
+
+		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F2) && getView().txtArticuloID.hasFocus()) {
+			retorno = true;
+			try {
+				String id = buscarFamilia();
+				if (!id.equals("")) {
+					getView().txtArticuloID.setText(id);
+					getView().txtDesc1.requestFocus();
+				}
+
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al cargar la busqueda de Articulo / Familia");
+			}
+		}
+
+		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F3) && getView().dateFechaDesde.hasFocus()) {
+			getView().dateFechaDesde.setText(FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), FechaManagerUtil.FORMATO_FECHA));
+		}
+
+		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F3) && getView().dateFechaHasta.hasFocus()) {
+			getView().dateFechaDesde.setText("01/01/2100");
+		}
+
+		return retorno;
+	}
+
+	private String buscarFamilia() throws Exception {
+		String retorno = "";
+		BuscarFamiliaDialog buscarFamiliaDialog = new BuscarFamiliaDialog(getPantallaPrincipal());
+		buscarFamiliaDialog.iniciar();
+		if (buscarFamiliaDialog.getNroFamilia() != null) {
+			retorno = String.valueOf(buscarFamiliaDialog.getNroFamilia());
+			getView().txtArticuloID.setText(retorno);
+		}
+
+		return retorno;
+	}
+
+}

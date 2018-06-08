@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,6 +19,7 @@ import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.text.WebTextArea;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPImporte;
@@ -234,6 +236,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 
 		dateFechaDesde = new WebDateField();
 		dateFechaDesde.setFont(Common.getStandarFont());
+		dateFechaDesde.setDateFormat(new SimpleDateFormat(FechaManagerUtil.FORMATO_FECHA));
 		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
 		gbc_lblNewLabel_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 0);
@@ -252,6 +255,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 
 		dateFechaHasta = new WebDateField();
 		dateFechaHasta.setFont(Common.getStandarFont());
+		dateFechaHasta.setDateFormat(new SimpleDateFormat(FechaManagerUtil.FORMATO_FECHA));
 		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
 		gbc_lblNewLabel_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 0);

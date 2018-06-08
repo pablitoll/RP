@@ -27,20 +27,21 @@ public class BuscarArticuloDialog extends DialogBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final int COL_ID_INTERNO = 3;
 	private RPTable tableArticulo;
 	private JTextField txtDescArticulo;
 	private JButtonRP btnSeleccionar;
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
-	private Integer nroArticulo = null;
+	private StocArts nroArticulo = null;
 
-	public Integer getNroArticulo() {
+	public StocArts getNroArticulo() {
 		return nroArticulo;
 	}
 
 	public BuscarArticuloDialog(BasePantallaPrincipal<?, ?> pantPrincipal) {
 		super(pantPrincipal);
-		setBounds(100, 100, 600, 600);
+		setBounds(100, 100, 900, 600);
 		setModal(true);
 		nroArticulo = null;
 		JPanel panel = new JPanel();
@@ -51,7 +52,7 @@ public class BuscarArticuloDialog extends DialogBase {
 		btnSeleccionar = new JButtonRP("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nroArticulo = (Integer) tableArticulo.getModel().getValueAt(tableArticulo.getSelectedRow(), 0);
+				nroArticulo = StocArtsDAO.findById((int) tableArticulo.getModel().getValueAt(tableArticulo.getSelectedRow(), COL_ID_INTERNO));
 				cerrar();
 			}
 		});
@@ -69,9 +70,11 @@ public class BuscarArticuloDialog extends DialogBase {
 		panel.add(btnCancelar);
 
 		JPanel panel_1 = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panel_1.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.LEFT);
 		getContentPane().add(panel_1, BorderLayout.NORTH);
 
-		JLabel lblNombreDelArticulo = new JLabel("Nombre del Articulo:");
+		JLabel lblNombreDelArticulo = new JLabel("Nombre del Articulo / ID:");
 		lblNombreDelArticulo.setFont(Common.getStandarFont());
 		panel_1.add(lblNombreDelArticulo);
 
@@ -89,11 +92,12 @@ public class BuscarArticuloDialog extends DialogBase {
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
 
-		String[] header = { "Nro Articulo", "Nombre", "Descripcion" };
+		String[] header = { "ID Articulo", "Nombre", "Descripcion", "ID" };
 		String[][] data = {};
 		tableArticulo = new RPTable();
 		tableArticulo.setModel(new DefaultTableModel(data, header));
 		tableArticulo.setEditable(false);
+		tableArticulo.getColumnModel().removeColumn(tableArticulo.getColumnModel().getColumn(COL_ID_INTERNO));
 		WebScrollPane scrollPane = new WebScrollPane(tableArticulo);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioArticulo();
@@ -107,7 +111,7 @@ public class BuscarArticuloDialog extends DialogBase {
 		tableArticulo.clear();
 
 		for (StocArts art : StocArtsDAO.getListaArticulos(txtDescArticulo.getText())) {
-			tableArticulo.addRow(new Object[] { art.getArtsArticulo(), art.getArtsNombre(), art.getArtsDescripcion() });
+			tableArticulo.addRow(new Object[] { art.getArtsArticuloEmp(), art.getArtsNombre(), art.getArtsDescripcion(), art.getArtsArticulo() });
 		}
 
 		if (tableArticulo.getRowCount() > 0) {

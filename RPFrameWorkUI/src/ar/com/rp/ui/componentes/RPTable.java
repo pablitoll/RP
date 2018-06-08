@@ -55,6 +55,7 @@ public class RPTable extends WebTable {
 	public void clear() {
 		DefaultTableModel tableModel = (DefaultTableModel) getModel();
 		tableModel.getDataVector().removeAllElements();
+		repaint();
 	}
 
 	public void autoSizeAllColumn() {

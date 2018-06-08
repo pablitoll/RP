@@ -12,9 +12,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.StocCa01;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class StocCa01.
+ * 
  * @see ar.com.rollpaper.pricing.beans.StocCa01
  * @author Hibernate Tools
  */
@@ -89,11 +91,10 @@ public class StocCa01DAO {
 		}
 	}
 
-	public StocCa01 findById(java.lang.String id) {
+	public static StocCa01 findById(String id) {
 		log.debug("getting StocCa01 instance with id: " + id);
 		try {
-			StocCa01 instance = (StocCa01) sessionFactory.getCurrentSession()
-					.get("ar.com.rollpaper.pricing.beans.StocCa01", id);
+			StocCa01 instance = (StocCa01) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.StocCa01", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -109,9 +110,7 @@ public class StocCa01DAO {
 	public List findByExample(StocCa01 instance) {
 		log.debug("finding StocCa01 instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.StocCa01").add(Example.create(instance))
-					.list();
+			List results = sessionFactory.getCurrentSession().createCriteria("ar.com.rollpaper.pricing.beans.StocCa01").add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
