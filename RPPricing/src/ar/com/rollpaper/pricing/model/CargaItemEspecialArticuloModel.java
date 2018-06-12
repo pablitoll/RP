@@ -1,5 +1,7 @@
 package ar.com.rollpaper.pricing.model;
 
+import javax.swing.table.DefaultTableModel;
+
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rp.ui.pantalla.BaseModel;
@@ -9,6 +11,16 @@ public class CargaItemEspecialArticuloModel extends BaseModel {
 	private PreciosEspeciales registro;
 	private String accion = "";
 	private StocArts articuloCargado = null;
+	private DefaultTableModel tableModel;
+
+	
+	public void setTableModel(DefaultTableModel tableModel) {
+		this.tableModel = tableModel;
+	}
+
+	public DefaultTableModel getTableModel() {
+		return tableModel;
+	}
 
 	public String getAccion() {
 		return accion;

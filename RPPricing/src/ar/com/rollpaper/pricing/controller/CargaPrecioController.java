@@ -73,6 +73,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 					if (!getView().txtNroCliente.getText().equals("")) {
 						String id = getView().txtNroCliente.getText();
+
 						if (CommonUtils.isNumeric(id)) {
 							perdioFocoCliente(Integer.valueOf(id));
 						}
@@ -98,6 +99,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				}
 			}
 		});
+
 	}
 
 	protected void perdioFocoNroLista(Integer id) {
@@ -106,18 +108,19 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		if (lista != null) {
 			getView().lblNombreLista.setText(lista.getLipvNombre());
 		}
-
 	}
 
 	protected void perdioFocoCliente(int id) throws Exception {
 		CcobClie cliente = CcobClieDAO.findById(Integer.valueOf(id));
 
 		if (cliente != null) {
-			getView().lblNombreCliente.setText(cliente.getClieNombre());
-			getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-			getModel().setClienteCargado(cliente);
-			cargarLista(cliente);
-			setModoPantalla();
+			if ((getModel().getClienteCargado() == null) || (cliente.getClieCliente() != getModel().getClienteCargado().getClieCliente())) {
+				getView().lblNombreCliente.setText(cliente.getClieNombre());
+				getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+				getModel().setClienteCargado(cliente);
+				cargarLista(cliente);
+				setModoPantalla();
+			}
 
 		} else {
 			resetearDatosDePantalla();
@@ -236,6 +239,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_ENTER) && getView().txtNroCliente.hasFocus()) {
 			try {
+				retorno = true;
 				String id = getView().txtNroCliente.getText();
 				if (!id.equals("") && CommonUtils.isNumeric(id)) {
 					perdioFocoCliente(Integer.valueOf(id));
@@ -304,30 +308,35 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			try {
 				if (isPanelActivoFamilia()) {
 					itemEspecialFamilia.setRegistro(getModel().getRegistroFamilaiEmpty());
+					itemEspecialFamiliaModel.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
 					resutlado = itemEspecialFamilia.iniciar();
 
 					if (!resutlado.equals("")) {
 
 						DescuentoXFamilias registro = itemEspecialFamilia.getRegistro();
 
+						HibernateGeneric.persist(registro);
+						
 						agregarRegistroATablaFamilia(getView().tableDescFamilia, registro, itemEspecialFamilia.getNombreItem());
 
 						sorterTablaDesFamilia.sort();
 
 						buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA, itemEspecialFamilia.getNombreItem(), CargaPrecioView.COL_DESDE_FAMIIA,
 								registro.getPricFamiliaFechaDesde());
-
-						HibernateGeneric.persist(registro);
+						
 					}
 
 				} else {
+					itemEspecialArticuloModel.setTableModel((DefaultTableModel) getView().tableDescEspecifico.getModel());
 					itemEspecialArticulo.setRegistro(getModel().getRegistroArticuloEmpty());
 					resutlado = itemEspecialArticulo.iniciar();
 
 					if (!resutlado.equals("")) {
 
 						PreciosEspeciales registro = itemEspecialArticulo.getRegistro();
-
+						
+						HibernateGeneric.persist(registro);
+						
 						agregarRegistroATablaArticulo(getView().tableDescEspecifico, registro, itemEspecialArticulo.getArticuloIDMostrar(), itemEspecialArticulo.getNombreItem(),
 								itemEspecialArticulo.getDescripcionItem(), itemEspecialArticulo.getUnidadItem());
 
@@ -335,8 +344,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 						buscarRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO, itemEspecialArticulo.getNombreItem(),
 								CargaPrecioView.COL_DESDE_ESPECIFICO, registro.getPricFechaDesde());
-
-						HibernateGeneric.persist(registro);
+						
 					}
 				}
 			} catch (Exception e) {
@@ -349,44 +357,48 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			try {
 				if (isPanelActivoFamilia()) {
 					if ((getView().tableDescFamilia.getRowCount() > 0) && (getView().tableDescFamilia.getSelectedRow() >= 0)) {
-						int row = getView().tableDescFamilia.getSelectedRow();
+						int row = getView().tableDescFamilia.getSelectedRow();						
 						itemEspecialFamilia.setRegistro((DescuentoXFamilias) getModel().getRegistro(getView().tableDescFamilia, row, CargaPrecioView.COL_REGISTRO_FAMILIA));
+						itemEspecialFamiliaModel.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
 						resutlado = itemEspecialFamilia.iniciar();
 
 						if (!resutlado.equals("")) {
 
 							DescuentoXFamilias registro = itemEspecialFamilia.getRegistro();
 
+							HibernateGeneric.persist(registro);
+							
 							modificarRegistroATabla(getView().tableDescFamilia, registro, row);
 
 							sorterTablaDesFamilia.sort();
 
 							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA, itemEspecialFamilia.getNombreItem(), CargaPrecioView.COL_DESDE_FAMIIA,
 									registro.getPricFamiliaFechaDesde());
-
-							HibernateGeneric.persist(registro);
+							
 						}
 					}
 
 				} else {
 					if ((getView().tableDescEspecifico.getRowCount() > 0) && (getView().tableDescEspecifico.getSelectedRow() >= 0)) {
-
+						
 						int row = getView().tableDescEspecifico.getSelectedRow();
 						itemEspecialArticulo.setRegistro((PreciosEspeciales) getModel().getRegistro(getView().tableDescEspecifico, row, CargaPrecioView.COL_REGISTRO_ESPECIFICO));
+						itemEspecialArticuloModel.setTableModel((DefaultTableModel) getView().tableDescEspecifico.getModel());
+						
 						resutlado = itemEspecialArticulo.iniciar();
 
 						if (!resutlado.equals("")) {
 
 							PreciosEspeciales registro = itemEspecialArticulo.getRegistro();
 
+							HibernateGeneric.persist(registro);
+							
 							modificarRegistroATabla(getView().tableDescEspecifico, registro, row);
 
 							sorterTablaDesEspecifico.sort();
 
 							buscarRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO, itemEspecialArticulo.getNombreItem(),
-									CargaPrecioView.COL_DESDE_ESPECIFICO, registro.getPricFechaDesde());
-
-							HibernateGeneric.persist(registro);
+									CargaPrecioView.COL_DESDE_ESPECIFICO, registro.getPricFechaDesde());							
 						}
 
 					}

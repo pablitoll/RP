@@ -76,7 +76,6 @@ public class BuscarFamiliaDialog extends DialogBase {
 				buscar("");
 			}
 		});
-		btnTodos.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnTodos.setFont(Common.getStandarFont());
 		panel.add(btnTodos);
 		panel.add(btnCancelar);

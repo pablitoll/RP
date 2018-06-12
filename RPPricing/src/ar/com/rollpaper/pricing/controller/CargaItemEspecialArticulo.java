@@ -18,6 +18,7 @@ import ar.com.rollpaper.pricing.model.CargaItemEspecialArticuloModel;
 import ar.com.rollpaper.pricing.ui.BuscarArticuloDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
+import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.componentes.ItemComboBox;
 import ar.com.rp.ui.error.popUpError;
@@ -57,7 +58,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		}
 		registro.setPricComision(new BigDecimal(getView().txtComision.getImporte(), MathContext.DECIMAL64));
 
-		registro.setPricReferencia("." + getView().txtReferencia.getText());
+		registro.setPricReferencia(getView().txtReferencia.getText());
 
 		return registro;
 
@@ -148,18 +149,18 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		RefrescarDatosArticulo();
 
-		if (getModel().isEdicion()) {
-			getView().txtDesc1.requestFocus();
-		} else {
-			getView().txtArticuloID.requestFocus();
-		}
-
 		getView().txtPrecio.setVisible(true);
 		getView().cbMoneda.setVisible(true);
 		getView().lblDescripcion.setVisible(true);
 		getView().lblLabelDescipcion.setVisible(true);
 		getView().lblLabelPrecio.setVisible(true);
 		getView().lblLabelMoneda.setVisible(true);
+
+		if (getModel().isEdicion()) {
+			getView().txtDesc1.requestFocus();
+		} else {
+			getView().txtArticuloID.requestFocus();
+		}
 
 	}
 
@@ -206,8 +207,13 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			return false;
 		}
 
-		if (getView().txtPrecio.isVisible() && (!getView().txtPrecio.isEmpty()) && (getView().cbMoneda.getSelectedIndex() == -1)) {
+		if (!getView().txtPrecio.isEmpty() && (getView().cbMoneda.getSelectedIndex() == 0)) {
 			popUpError.showError(getView().cbMoneda, "Falta cargar la moneda");
+			return false;
+		}
+
+		if (getView().txtPrecio.isEmpty() && (getView().cbMoneda.getSelectedIndex() != 0)) {
+			popUpError.showError(getView().cbMoneda, "Falta cargar el precio para la moneda selecionada");
 			return false;
 		}
 
@@ -224,9 +230,34 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		Date dFechaDesde = getView().dateFechaDesde.getDate();
 		Date dFechaHasta = getView().dateFechaHasta.getDate();
 
-		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 1) {
+		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 0) {
 			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta");
 			return false;
+		}
+
+		// Valido si el rango de fecha ya esta cargado
+		for (int i = 0; i < getModel().getTableModel().getRowCount(); i++) {
+			PreciosEspeciales registroTabla = (PreciosEspeciales) getModel().getTableModel().getValueAt(i, CargaPrecioView.COL_REGISTRO_ESPECIFICO);
+
+			if (getModel().getArticuloID() == registroTabla.getPricArticulo()) {
+
+				if (registroTabla.getPricPreciosEspecialesId() != getModel().getRegistro().getPricPreciosEspecialesId()) {
+					if ((FechaManagerUtil.getDateDiff(registroTabla.getPricFechaDesde(), getView().dateFechaDesde.getDate(), TimeUnit.DAYS) <= 0)
+							&& (FechaManagerUtil.getDateDiff(registroTabla.getPricFechaDesde(), getView().dateFechaHasta.getDate(), TimeUnit.DAYS) >= 0)) {
+						popUpError.showError(getView().dateFechaDesde,
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(registroTabla.getPricFechaDesde()));
+						return false;
+					}
+
+					if ((FechaManagerUtil.getDateDiff( getView().dateFechaDesde.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) >= 0)
+							&& (FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) <= 0)) {
+						popUpError.showError(getView().dateFechaDesde,
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaDesde.getDate()));
+						return false;
+					}
+
+				}
+			}
 		}
 
 		return true;
@@ -242,7 +273,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		return articulo;
 	}
-	
+
 	private StocArts buscarArticulo() throws Exception {
 		BuscarArticuloDialog buscarClienteDialog = new BuscarArticuloDialog(getPantallaPrincipal());
 		buscarClienteDialog.iniciar();
@@ -273,7 +304,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 				RefrescarDatosArticulo();
 				getView().txtArticuloID.setText(getModel().getArticuloIDEmp());
-				
+
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al cargar la busqueda de Articulo / Familia");
 			}

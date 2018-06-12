@@ -11,12 +11,12 @@ import java.util.concurrent.TimeUnit;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
-import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
 import ar.com.rollpaper.pricing.ui.BuscarFamiliaDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
+import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
@@ -42,7 +42,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
 		registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
 		registro.setPricFamiliaComision(new BigDecimal(getView().txtComision.getImporte(), MathContext.DECIMAL64));
-		registro.setPricReferencia("." + getView().txtReferencia.getText());
+		registro.setPricReferencia(getView().txtReferencia.getText());
 
 		return registro;
 	}
@@ -191,9 +191,34 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		Date dFechaDesde = getView().dateFechaDesde.getDate();
 		Date dFechaHasta = getView().dateFechaHasta.getDate();
 
-		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 1) {
+		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 0) {
 			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta");
 			return false;
+		}
+
+		// Valido si el rango de fecha ya esta cargado
+		for (int i = 0; i < getModel().getTableModel().getRowCount(); i++) {
+			DescuentoXFamilias registroTabla = (DescuentoXFamilias) getModel().getTableModel().getValueAt(i, CargaPrecioView.COL_REGISTRO_FAMILIA);
+
+			if (getModel().getFamiliaID().equals(registroTabla.getPricFamiliaListaPrecvta())) {
+
+				if (registroTabla.getPricFamiliaId() != getModel().getRegistroFamilia().getPricFamiliaId()) {
+					if ((FechaManagerUtil.getDateDiff(registroTabla.getPricFamiliaFechaDesde(), getView().dateFechaDesde.getDate(), TimeUnit.DAYS) <= 0)
+							&& (FechaManagerUtil.getDateDiff(registroTabla.getPricFamiliaFechaDesde(), getView().dateFechaHasta.getDate(), TimeUnit.DAYS) >= 0)) {
+						popUpError.showError(getView().dateFechaDesde,
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(registroTabla.getPricFamiliaFechaDesde()));
+						return false;
+					}
+
+					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFamiliaFechaHasta(), TimeUnit.DAYS) >= 0)
+							&& (FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFamiliaFechaHasta(), TimeUnit.DAYS) <= 0)) {
+						popUpError.showError(getView().dateFechaDesde,
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaDesde.getDate()));
+						return false;
+					}
+
+				}
+			}
 		}
 
 		return true;
