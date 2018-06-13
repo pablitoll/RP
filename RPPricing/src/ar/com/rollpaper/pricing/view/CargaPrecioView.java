@@ -37,7 +37,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public static final int COL_NOMBRE_FAMILIA = 1;
 	public static final int COL_1DESC_FAMILIA = 2;
 	public static final int COL_2DESC_FAMILIA = 3;
-	public static final int COL_DESDE_FAMIIA = 4;
+	public static final int COL_DESDE_FAMILIA = 4;
 	public static final int COL_HASTA_FAMILIA = 5;
 	public static final int COL_COMSISION_FAMILIA = 6;
 	public static final int COL_REFERENCIA_FAMILIA = 7;
@@ -265,7 +265,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescFamilia.getColumnModel().getColumn(COL_1DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
 		tableDescFamilia.getColumnModel().getColumn(COL_2DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
 		tableDescFamilia.getColumnModel().getColumn(COL_COMSISION_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
-		tableDescFamilia.getColumnModel().getColumn(COL_DESDE_FAMIIA).setCellRenderer(tableDescFamilia.getCenterRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_DESDE_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
 		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
 
 		WebScrollPane spDescLista = new WebScrollPane(tableDescFamilia);

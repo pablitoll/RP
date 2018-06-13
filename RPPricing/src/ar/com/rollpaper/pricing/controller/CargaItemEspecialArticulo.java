@@ -230,7 +230,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		Date dFechaDesde = getView().dateFechaDesde.getDate();
 		Date dFechaHasta = getView().dateFechaHasta.getDate();
 
-		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) < 0) {
+		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) >= 0) {
 			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta");
 			return false;
 		}
@@ -242,17 +242,27 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			if (getModel().getArticuloID() == registroTabla.getPricArticulo()) {
 
 				if (registroTabla.getPricPreciosEspecialesId() != getModel().getRegistro().getPricPreciosEspecialesId()) {
-					if ((FechaManagerUtil.getDateDiff(registroTabla.getPricFechaDesde(), getView().dateFechaDesde.getDate(), TimeUnit.DAYS) <= 0)
-							&& (FechaManagerUtil.getDateDiff(registroTabla.getPricFechaDesde(), getView().dateFechaHasta.getDate(), TimeUnit.DAYS) >= 0)) {
-						popUpError.showError(getView().dateFechaDesde,
-								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(registroTabla.getPricFechaDesde()));
-						return false;
-					}
-
-					if ((FechaManagerUtil.getDateDiff( getView().dateFechaDesde.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) >= 0)
+					//Si el desde que cargo esta entre las dos fecha del registro
+					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaDesde(), TimeUnit.DAYS) >= 0)
 							&& (FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) <= 0)) {
 						popUpError.showError(getView().dateFechaDesde,
 								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaDesde.getDate()));
+						return false;
+					}
+
+					//Si el hasta que cargo esta entre las dos fecha del registro
+					if ((FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFechaDesde(), TimeUnit.DAYS) >= 0)
+							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) <= 0)) {
+						popUpError.showError(getView().dateFechaDesde,
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaHasta.getDate()));
+						return false;
+					}
+					
+					//Si el desde que cargo esta antes que el desde del registro y el hasta que cargo es mayor que el del registro
+					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaDesde(), TimeUnit.DAYS) <= 0)
+							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) >= 0)) {
+						popUpError.showError(getView().dateFechaDesde,
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el rango " + FechaManagerUtil.Date2String(registroTabla.getPricFechaDesde()) + " - " + FechaManagerUtil.Date2String(registroTabla.getPricFechaHasta()));
 						return false;
 					}
 

@@ -1,7 +1,5 @@
 package ar.com.rollpaper.pricing.model;
 
-import com.alee.laf.table.WebTable;
-
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
@@ -17,10 +15,6 @@ public class CargaPrecioModel extends BaseModel {
 
 	public void setClienteCargado(CcobClie clienteCargado) {
 		this.clienteCargado = clienteCargado;
-	}
-
-	public Object getRegistro(WebTable tablaPedidoEspecial, int row, int col) {
-		return tablaPedidoEspecial.getValueAt(row, col);
 	}
 
 	public PreciosEspeciales getRegistroArticuloEmpty() {
