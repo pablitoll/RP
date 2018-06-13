@@ -20,6 +20,7 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
  * Home object for domain model class StocArts.
+ * 
  * @see ar.com.rollpaper.pricing.beans.StocArts
  * @author Hibernate Tools
  */
@@ -97,12 +98,16 @@ public class StocArtsDAO {
 	public static StocArts findById(int id) {
 		log.debug("getting StocArts instance with id: " + id);
 		try {
-			StocArts instance = (StocArts) HibernateUtil.getSession()
-					.get("ar.com.rollpaper.pricing.beans.StocArts", id);
+			StocArts instance = (StocArts) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.StocArts",
+					id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
+			}
+			// solo puedo ver articulos que esten a la venta
+			if (!instance.isArtsSeVende()) {
+				instance = null;
 			}
 			return instance;
 		} catch (RuntimeException re) {
@@ -110,27 +115,35 @@ public class StocArtsDAO {
 			throw re;
 		}
 	}
-	
+
 	public static List<StocArts> getListaArticulos(String nombre) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 
 		CriteriaQuery<StocArts> criteriaQuery = session.getCriteriaBuilder().createQuery(StocArts.class);
 		Root<StocArts> i = criteriaQuery.from(StocArts.class);
-		criteriaQuery.where(cb.like(i.get("artsNombre"), "%" + nombre + "%"));
+		criteriaQuery.where(cb.like(i.get("artsNombre"), "%" + nombre + "%"),cb.and(cb.equal(i.get("artsSeVende"), 1)));
+		
+		//TODO ver porque no anda el criteria este!
+	//	criteriaQuery.where(cb.and(cb.equal(i.get("artsSeVende"), 1)));
+		
+		
+	//	criteriaQuery.select(i).where(cb.and(cb.equal(i.get("default_house"),  true), cb.equal(i.get(House.getUser), user))));
+		
+		
+		List<StocArts> listaArticulos = session.createQuery(criteriaQuery).getResultList();
 
-		List<StocArts> clientes = session.createQuery(criteriaQuery).getResultList();
-
-		return clientes;
+		
+		
+		return listaArticulos;
 
 	}
 
 	public List findByExample(StocArts instance) {
 		log.debug("finding StocArts instance by example");
 		try {
-			List results = sessionFactory.getCurrentSession()
-					.createCriteria("ar.com.rollpaper.pricing.beans.StocArts").add(Example.create(instance))
-					.list();
+			List results = sessionFactory.getCurrentSession().createCriteria("ar.com.rollpaper.pricing.beans.StocArts")
+					.add(Example.create(instance)).list();
 			log.debug("find by example successful, result size: " + results.size());
 			return results;
 		} catch (RuntimeException re) {
