@@ -1,6 +1,7 @@
 package ar.com.rollpaper.pricing.view;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -23,7 +24,6 @@ import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
-import java.awt.Font;
 
 public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 

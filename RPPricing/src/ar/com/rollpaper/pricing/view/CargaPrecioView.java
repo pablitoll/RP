@@ -6,13 +6,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
-import java.sql.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.scroll.WebScrollPane;
@@ -24,9 +25,6 @@ import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.border.EmptyBorder;
 
 public class CargaPrecioView extends BaseViewMVCExtendida {
 
@@ -39,10 +37,11 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public static final int COL_NOMBRE_FAMILIA = 1;
 	public static final int COL_1DESC_FAMILIA = 2;
 	public static final int COL_2DESC_FAMILIA = 3;
-	public static final int COL_DESDE_FAMIIA = 4;
+	public static final int COL_DESDE_FAMILIA = 4;
 	public static final int COL_HASTA_FAMILIA = 5;
-	public static final int COL_REFERENCIA_FAMILIA = 6;
-	public static final int COL_REGISTRO_FAMILIA = 7;
+	public static final int COL_COMSISION_FAMILIA = 6;
+	public static final int COL_REFERENCIA_FAMILIA = 7;
+	public static final int COL_REGISTRO_FAMILIA = 8;
 
 	public static final int COL_ID_ESPECIFICO = 0;
 	public static final int COL_NOMBRE_ESPECIFICO = 1;
@@ -54,8 +53,9 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public static final int COL_PRECIO_ESPECIFICO = 7;
 	public static final int COL_DESDE_ESPECIFICO = 8;
 	public static final int COL_HASTA_ESPECIFICO = 9;
-	public static final int COL_REFERENCIA_ESPECIFICO = 10;
-	public static final int COL_REGISTRO_ESPECIFICO = 11;
+	public static final int COL_COMISION_ESPECIFICO = 10;
+	public static final int COL_REFERENCIA_ESPECIFICO = 11;
+	public static final int COL_REGISTRO_ESPECIFICO = 12;
 
 	public WebFormattedTextField txtNroCliente;
 	public RPTable tableDescEspecifico;
@@ -116,7 +116,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_txtNroCliente.gridy = 0;
 		panelSuperior.add(txtNroCliente, gbc_txtNroCliente);
 		txtNroCliente.setColumns(10);
-		
+
 		lblNombre_1 = new JLabel("Nombre:");
 		lblNombre_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_lblNombre_1 = new GridBagConstraints();
@@ -124,7 +124,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNombre_1.gridx = 3;
 		gbc_lblNombre_1.gridy = 0;
 		panelSuperior.add(lblNombre_1, gbc_lblNombre_1);
-		
+
 		lblNombreCliente = new JLabel("xxxxxxxxxxxxxxxxxxxx");
 		lblNombreCliente.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNombreCliente = new GridBagConstraints();
@@ -133,7 +133,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNombreCliente.gridx = 4;
 		gbc_lblNombreCliente.gridy = 0;
 		panelSuperior.add(lblNombreCliente, gbc_lblNombreCliente);
-		
+
 		lblNombreLegal_1 = new JLabel("Nombre Legal:");
 		lblNombreLegal_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		GridBagConstraints gbc_lblNombreLegal_1 = new GridBagConstraints();
@@ -142,7 +142,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNombreLegal_1.gridx = 5;
 		gbc_lblNombreLegal_1.gridy = 0;
 		panelSuperior.add(lblNombreLegal_1, gbc_lblNombreLegal_1);
-		
+
 		lblNombreLegal = new JLabel("New label");
 		lblNombreLegal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNombreLegal = new GridBagConstraints();
@@ -176,15 +176,15 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_txtNroLista.gridy = 1;
 		panelSuperior.add(txtNroLista, gbc_txtNroLista);
 		txtNroLista.setColumns(10);
-		
+
 		lbl_1 = new JLabel("Nombre Lista ");
-		lbl_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lbl_1.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lbl_1 = new GridBagConstraints();
 		gbc_lbl_1.insets = new Insets(0, 0, 0, 5);
 		gbc_lbl_1.gridx = 3;
 		gbc_lbl_1.gridy = 1;
 		panelSuperior.add(lbl_1, gbc_lbl_1);
-		
+
 		lblNombreLista = new JLabel("New label");
 		lblNombreLista.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
 		GridBagConstraints gbc_lblNombreLista = new GridBagConstraints();
@@ -205,7 +205,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 		btnAgregar = new JButtonRP("Agregar");
 		btnAgregar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/plus.png")));
-		
+
 		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);
 		btnAgregar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_btnModificar_1 = new GridBagConstraints();
@@ -228,7 +228,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 		btnEliminar = new JButtonRP("Eliminar");
 		btnEliminar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/minus.png")));
-		
+
 		btnEliminar.setMnemonic(KeyEvent.VK_MINUS);
 		btnEliminar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_buttonRP_1 = new GridBagConstraints();
@@ -250,8 +250,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panelCentral.add(tabPanel);
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 
-		tableDescFamilia = new RPTable();
-		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta", "Referencia", "" };
+		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta", "Comision", "Referencia", "" };
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();
@@ -261,32 +260,36 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMaxWidth(0);
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMinWidth(0);
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setPreferredWidth(0);
+		// tableDescFamilia.getColumnModel().removeColumn(tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA));
+
+		tableDescFamilia.getColumnModel().getColumn(COL_1DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_2DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_COMSISION_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_DESDE_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
 
 		WebScrollPane spDescLista = new WebScrollPane(tableDescFamilia);
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
 
-		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "Referencia", "" };
+		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "Comision", "Referencia",
+				"" };
 		String[][] dataDesEspecifico = { {} };
 
-		tableDescEspecifico = new RPTable(); 
-//		{
-//
-//			/**
-//			 * 
-//			 */
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public Class getColumnClass(int column) {
-//				if(column == COL_DESDE_ESPECIFICO) {
-//					return Date.class;
-//				} else {
-//					return super.getColumnClass(column);
-//				}
-//			}
-//
-//		};
+		tableDescEspecifico = new RPTable() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void autoSize() {
+				super.autoSize();
+				TableColumn tableColumn = getColumnModel().getColumn(COL_DESC_ESPECIFICO);
+				tableColumn.setPreferredWidth(100); // Fijo para que entre los otros campos
+				tableColumn.setWidth(100);
+			}
+		};
 		tableDescEspecifico.setModel(new DefaultTableModel(dataDesEspecifico, headerDescEspecifico));
 		tableDescEspecifico.setRowHeight(30);
 		tableDescEspecifico.setEditable(false);
@@ -294,6 +297,15 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMaxWidth(0);
 		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMinWidth(0);
 		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setPreferredWidth(0);
+		// tableDescEspecifico.getColumnModel().removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
+
+		tableDescEspecifico.getColumnModel().getColumn(COL_1DESC_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_2DESC_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_PRECIO_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_COMISION_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_DESDE_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_HASTA_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
 
 		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
 		tabPanel.addTab("Descuentos y Precios Especificos", spDescEspecifico);
@@ -302,7 +314,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		lblError.setFont(Common.getStandarFontBold());
 		panelCentral.add(lblError, BorderLayout.NORTH);
 
-		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar = new JButtonRP("Terminar Carga");
 		btnCancelar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);

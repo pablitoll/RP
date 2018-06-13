@@ -206,8 +206,14 @@ public class FechaManagerUtil {
 		return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
 
+//	@Deprecated
+//	public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+//	    long diffInMillies = date2.getTime() - date1.getTime();
+//	    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+//	}
+
 	public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-	    long diffInMillies = date2.getTime() - date1.getTime();
+	    long diffInMillies = date1.getTime() - date2.getTime();
 	    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
 	}
 

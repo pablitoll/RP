@@ -15,19 +15,20 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	private static final long serialVersionUID = 2261744219677416566L;
 	private int pricFamiliaId;
 	private int pricFamiliaCliente;
-	private int pricFamiliaListaPrecvta;
+	private String pricFamiliaListaPrecvta;
 	private BigDecimal pricFamiliaDescuento1;
 	private BigDecimal pricFamiliaDescuento2;
 	private Date pricFamiliaFechaDesde;
 	private Date pricFamiliaFechaHasta;
+	private BigDecimal pricFamiliaComision;
 	private String pricReferencia;
 
 	public DescuentoXFamilias() {
 	}
 
-	public DescuentoXFamilias(int pricFamiliaId, int pricFamiliaCliente, int pricFamiliaListaPrecvta,
-			BigDecimal pricFamiliaDescuento1, BigDecimal pricFamiliaDescuento2, Date pricFamiliaFechaDesde,
-			Date pricFamiliaFechaHasta) {
+	public DescuentoXFamilias(int pricFamiliaId, int pricFamiliaCliente, String pricFamiliaListaPrecvta, BigDecimal pricFamiliaDescuento1, BigDecimal pricFamiliaDescuento2,
+			Date pricFamiliaFechaDesde, Date pricFamiliaFechaHasta, BigDecimal pricFamiliaComision, String pricReferencia) {
+		super();
 		this.pricFamiliaId = pricFamiliaId;
 		this.pricFamiliaCliente = pricFamiliaCliente;
 		this.pricFamiliaListaPrecvta = pricFamiliaListaPrecvta;
@@ -35,23 +36,12 @@ public class DescuentoXFamilias implements java.io.Serializable {
 		this.pricFamiliaDescuento2 = pricFamiliaDescuento2;
 		this.pricFamiliaFechaDesde = pricFamiliaFechaDesde;
 		this.pricFamiliaFechaHasta = pricFamiliaFechaHasta;
-	}
-
-	public DescuentoXFamilias(int pricFamiliaId, int pricFamiliaCliente, int pricFamiliaListaPrecvta,
-			BigDecimal pricFamiliaDescuento1, BigDecimal pricFamiliaDescuento2, Date pricFamiliaFechaDesde,
-			Date pricFamiliaFechaHasta, String pricReferencia) {
-		this.pricFamiliaId = pricFamiliaId;
-		this.pricFamiliaCliente = pricFamiliaCliente;
-		this.pricFamiliaListaPrecvta = pricFamiliaListaPrecvta;
-		this.pricFamiliaDescuento1 = pricFamiliaDescuento1;
-		this.pricFamiliaDescuento2 = pricFamiliaDescuento2;
-		this.pricFamiliaFechaDesde = pricFamiliaFechaDesde;
-		this.pricFamiliaFechaHasta = pricFamiliaFechaHasta;
+		this.pricFamiliaComision = pricFamiliaComision;
 		this.pricReferencia = pricReferencia;
 	}
 
 	public int getPricFamiliaId() {
-		return this.pricFamiliaId;
+		return pricFamiliaId;
 	}
 
 	public void setPricFamiliaId(int pricFamiliaId) {
@@ -59,23 +49,23 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	}
 
 	public int getPricFamiliaCliente() {
-		return this.pricFamiliaCliente;
+		return pricFamiliaCliente;
 	}
 
 	public void setPricFamiliaCliente(int pricFamiliaCliente) {
 		this.pricFamiliaCliente = pricFamiliaCliente;
 	}
 
-	public int getPricFamiliaListaPrecvta() {
-		return this.pricFamiliaListaPrecvta;
+	public String getPricFamiliaListaPrecvta() {
+		return pricFamiliaListaPrecvta;
 	}
 
-	public void setPricFamiliaListaPrecvta(int pricFamiliaListaPrecvta) {
+	public void setPricFamiliaListaPrecvta(String pricFamiliaListaPrecvta) {
 		this.pricFamiliaListaPrecvta = pricFamiliaListaPrecvta;
 	}
 
 	public BigDecimal getPricFamiliaDescuento1() {
-		return this.pricFamiliaDescuento1;
+		return pricFamiliaDescuento1;
 	}
 
 	public void setPricFamiliaDescuento1(BigDecimal pricFamiliaDescuento1) {
@@ -83,7 +73,7 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	}
 
 	public BigDecimal getPricFamiliaDescuento2() {
-		return this.pricFamiliaDescuento2;
+		return pricFamiliaDescuento2;
 	}
 
 	public void setPricFamiliaDescuento2(BigDecimal pricFamiliaDescuento2) {
@@ -91,7 +81,7 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	}
 
 	public Date getPricFamiliaFechaDesde() {
-		return this.pricFamiliaFechaDesde;
+		return pricFamiliaFechaDesde;
 	}
 
 	public void setPricFamiliaFechaDesde(Date pricFamiliaFechaDesde) {
@@ -99,19 +89,26 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	}
 
 	public Date getPricFamiliaFechaHasta() {
-		return this.pricFamiliaFechaHasta;
+		return pricFamiliaFechaHasta;
 	}
 
 	public void setPricFamiliaFechaHasta(Date pricFamiliaFechaHasta) {
 		this.pricFamiliaFechaHasta = pricFamiliaFechaHasta;
 	}
 
+	public BigDecimal getPricFamiliaComision() {
+		return pricFamiliaComision;
+	}
+
+	public void setPricFamiliaComision(BigDecimal pricFamiliaComision) {
+		this.pricFamiliaComision = pricFamiliaComision;
+	}
+
 	public String getPricReferencia() {
-		return this.pricReferencia;
+		return pricReferencia;
 	}
 
 	public void setPricReferencia(String pricReferencia) {
 		this.pricReferencia = pricReferencia;
 	}
-
 }

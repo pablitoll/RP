@@ -3,41 +3,59 @@
                                    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 22/05/2018 19:11:07 by Hibernate Tools 5.3.0.Beta2 -->
 <hibernate-mapping>
- <class catalog="RPAPER"
-  name="ar.com.rollpaper.pricing.beans.PreciosEspeciales" schema="dbo" table="PRIC_PRECIOS_ESPECIALES">
-  <id name="pricPreciosEspecialesId" type="int">
-   <column name="PRIC_PRECIOS_ESPECIALES_ID"/>
-    <generator class="identity"/>
-  </id>
-  <property generated="never" lazy="false" name="pricCliente" type="int">
-   <column name="PRIC_CLIENTE" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false" name="pricListaPrecvta" type="int">
-   <column name="PRIC_LISTA_PRECVTA" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false" name="pricArticulo" type="int">
-   <column name="PRIC_ARTICULO" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false" name="pricDescuento1" type="big_decimal">
-   <column name="PRIC_DESCUENTO_1" not-null="false" precision="14"/>
-  </property>
-  <property generated="never" lazy="false" name="pricDescuento2" type="big_decimal">
-   <column name="PRIC_DESCUENTO_2" not-null="false" precision="14"/>
-  </property>
-  <property generated="never" lazy="false" name="pricMoneda" type="string">
-   <column length="3" name="PRIC_MONEDA" not-null="false"/>
-  </property>
-  <property generated="never" lazy="false" name="pricPrecio" type="big_decimal">
-   <column name="PRIC_PRECIO" not-null="false" precision="14"/>
-  </property>
-  <property generated="never" lazy="false" name="pricFechaDesde" type="timestamp">
-   <column length="23" name="PRIC_FECHA_DESDE" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false" name="pricFechaHasta" type="timestamp">
-   <column length="23" name="PRIC_FECHA_HASTA" not-null="true"/>
-  </property>
-  <property generated="never" lazy="false" name="pricReferencia" type="string">
-   <column length="100" name="PRIC_REFERENCIA"/>
-  </property>
- </class>
+	<class catalog="RPAPER"
+		name="ar.com.rollpaper.pricing.beans.PreciosEspeciales" schema="dbo"
+		table="PRIC_PRECIOS_ESPECIALES">
+		<id name="pricPreciosEspecialesId" type="int">
+			<column name="PRIC_PRECIOS_ESPECIALES_ID" />
+			<generator class="identity" />
+		</id>
+		<property generated="never" lazy="false" name="pricCliente"
+			type="int">
+			<column name="PRIC_CLIENTE" not-null="true" />
+		</property>
+		<property generated="never" lazy="false"
+			name="pricListaPrecvta" type="int">
+			<column name="PRIC_LISTA_PRECVTA" not-null="true" />
+		</property>
+		<property generated="never" lazy="false" name="pricArticulo"
+			type="int">
+			<column name="PRIC_ARTICULO" not-null="true" />
+		</property>
+		<property generated="never" lazy="false"
+			name="pricDescuento1" type="big_decimal">
+			<column name="PRIC_DESCUENTO_1" not-null="false"
+				precision="14" />
+		</property>
+		<property generated="never" lazy="false"
+			name="pricDescuento2" type="big_decimal">
+			<column name="PRIC_DESCUENTO_2" not-null="false"
+				precision="14" />
+		</property>
+		<property generated="never" lazy="false" name="pricMoneda"
+			type="string">
+			<column length="3" name="PRIC_MONEDA" not-null="false" />
+		</property>
+		<property generated="never" lazy="false" name="pricPrecio"
+			type="big_decimal">
+			<column name="PRIC_PRECIO" not-null="false" precision="14" />
+		</property>
+		<property generated="never" lazy="false"
+			name="pricFechaDesde" type="timestamp">
+			<column length="23" name="PRIC_FECHA_DESDE" not-null="true" />
+		</property>
+		<property generated="never" lazy="false"
+			name="pricFechaHasta" type="timestamp">
+			<column length="23" name="PRIC_FECHA_HASTA" not-null="true" />
+		</property>
+		<property generated="never" lazy="false" name="pricComision"
+	type="big_decimal">
+			<column name="PRIC_COMISION" not-null="false" precision="14" />
+		</property>
+		<property generated="never" lazy="false"
+			name="pricReferencia" type="string">
+			<column length="100" name="PRIC_REFERENCIA" />
+		</property>
+	</class>
 </hibernate-mapping>
+

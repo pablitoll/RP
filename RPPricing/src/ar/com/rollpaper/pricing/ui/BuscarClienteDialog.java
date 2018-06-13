@@ -20,6 +20,8 @@ import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.DialogBase;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BuscarClienteDialog extends DialogBase {
 
@@ -92,6 +94,14 @@ public class BuscarClienteDialog extends DialogBase {
 		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal" };
 		String[][] data = {};
 		tableCliente = new RPTable();
+		tableCliente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				if (mouseEvent.getClickCount() == 2 && tableCliente.getSelectedRow() != -1) {
+					btnSeleccionar.doClick();
+				}
+			}
+		});
 		tableCliente.setModel(new DefaultTableModel(data, header));
 		tableCliente.setEditable(false);
 		WebScrollPane scrollPane = new WebScrollPane(tableCliente);
