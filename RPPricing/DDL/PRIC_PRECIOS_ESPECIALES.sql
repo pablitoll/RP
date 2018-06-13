@@ -16,13 +16,13 @@ CREATE TABLE [dbo].[PRIC_PRECIOS_ESPECIALES](
 	[PRIC_CLIENTE] [int] NOT NULL,
 	[PRIC_LISTA_PRECVTA] [int] NOT NULL,
 	[PRIC_ARTICULO] [int] NOT NULL,
-	[PRIC_DESCUENTO_1] [decimal](14, 2) ,
-	[PRIC_DESCUENTO_2] [decimal](14, 2) ,
+	[PRIC_DESCUENTO_1] [decimal](14, 4) ,
+	[PRIC_DESCUENTO_2] [decimal](14, 4) ,
 	[PRIC_MONEDA] [varchar](3) ,
-	[PRIC_PRECIO] [decimal](14, 2) ,
+	[PRIC_PRECIO] [decimal](14, 4) ,
 	[PRIC_FECHA_DESDE] [datetime] NOT NULL,
 	[PRIC_FECHA_HASTA] [datetime] NOT NULL,
-	[PRIC_COMISION] [decimal](14, 2) NOT NULL,
+	[PRIC_COMISION] [decimal](14, 4) NOT NULL,
 	[PRIC_REFERENCIA] [varchar](100) NULL,
  CONSTRAINT [PRIC_PK1] PRIMARY KEY CLUSTERED 
 (
