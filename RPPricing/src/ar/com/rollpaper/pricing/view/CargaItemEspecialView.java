@@ -163,6 +163,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 
 		txtDesc1 = new RPImporte();
 		txtDesc1.setFont(Common.getStandarFont());
+		txtDesc1.setCantDecimales(4);
 		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
 		gbc_textField_3.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
@@ -182,6 +183,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 
 		txtDesc2 = new RPImporte();
 		txtDesc2.setFont(Common.getStandarFont());
+		txtDesc2.setCantDecimales(4);
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
 		gbc_textField_4.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
@@ -219,6 +221,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 
 		txtPrecio = new RPImporte();
 		txtPrecio.setFont(Common.getStandarFont());
+		txtPrecio.setCantDecimales(4);
 		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
 		gbc_textField_6.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
@@ -277,6 +280,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		txtComision = new RPImporte();
 		txtComision.setFont(Common.getStandarFont());
 		txtComision.setColumns(10);
+		txtComision.setCantDecimales(4);
 		GridBagConstraints gbc_txtComision = new GridBagConstraints();
 		gbc_txtComision.insets = new Insets(0, 0, 5, 0);
 		gbc_txtComision.fill = GridBagConstraints.HORIZONTAL;

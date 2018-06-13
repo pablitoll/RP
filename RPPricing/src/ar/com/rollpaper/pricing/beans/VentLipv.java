@@ -28,7 +28,7 @@ public class VentLipv implements java.io.Serializable {
 	private short lipvCalculoConMargen;
 	private short lipvEsListaRef;
 	private short lipvEsListaAcopio;
-	private Set ventArpvs = new HashSet(0);
+	private Set<?> ventArpvs = new HashSet<Object>(0);
 
 	public VentLipv() {
 	}
@@ -56,7 +56,7 @@ public class VentLipv implements java.io.Serializable {
 	public VentLipv(int lipvListaPrecvta, SistMone sistMone, String lipvNombre, boolean lipvModifMoneda,
 			boolean lipvConImpuestos, Date lipvFechaVigDes, Date lipvFechaVigHas, boolean lipvUtilizable,
 			boolean lipvModPrecioNp, boolean lipvEsOferta, boolean lipvHabPromVol, short lipvCalculoConMargen,
-			short lipvEsListaRef, short lipvEsListaAcopio, Set ventArpvs) {
+			short lipvEsListaRef, short lipvEsListaAcopio, Set<?> ventArpvs) {
 		this.lipvListaPrecvta = lipvListaPrecvta;
 		this.sistMone = sistMone;
 		this.lipvNombre = lipvNombre;
@@ -186,11 +186,11 @@ public class VentLipv implements java.io.Serializable {
 		this.lipvEsListaAcopio = lipvEsListaAcopio;
 	}
 
-	public Set getVentArpvs() {
+	public Set<?> getVentArpvs() {
 		return this.ventArpvs;
 	}
 
-	public void setVentArpvs(Set ventArpvs) {
+	public void setVentArpvs(Set<?> ventArpvs) {
 		this.ventArpvs = ventArpvs;
 	}
 
