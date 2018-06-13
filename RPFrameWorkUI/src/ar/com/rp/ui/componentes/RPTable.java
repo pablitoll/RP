@@ -87,11 +87,14 @@ public class RPTable extends WebTable {
 		}
 
 		if (anchoTotal < enclosing.getWidth()) {
-			int dif = (enclosing.getWidth() - anchoTotal - getColumnCount()) / getColumnCount();
+			int cantCol = getColumnCount() - colToIgnorar.length;
+			int dif = (enclosing.getWidth() - anchoTotal - cantCol) / cantCol;
 			for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
-				TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
-				tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + dif);
-				tableColumn.setWidth(tableColumn.getWidth() + dif);
+				if (!isColToIgnorar(nroColumn)) {
+					TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
+					tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + dif);
+					tableColumn.setWidth(tableColumn.getWidth() + dif);
+				}
 			}
 		}
 	}
