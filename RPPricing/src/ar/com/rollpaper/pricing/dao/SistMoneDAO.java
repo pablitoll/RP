@@ -7,7 +7,6 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.SistMone;
 import ar.com.rollpaper.pricing.data.HibernateUtil;

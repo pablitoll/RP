@@ -11,7 +11,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
-import org.hibernate.criterion.Example;
 
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
@@ -108,18 +107,18 @@ public class PreciosEspecialesDAO {
 		}
 	}
 
-	public static List findByExample(PreciosEspeciales instance) {
-		log.debug("finding PricPreciosEspeciales instance by example");
-		Session session = HibernateUtil.getSession();
-		try {
-			List results = session.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales").add(Example.create(instance)).list();
-			log.debug("find by example successful, result size: " + results.size());
-			return results;
-		} catch (RuntimeException re) {
-			log.error("find by example failed", re);
-			throw re;
-		}
-	}
+//	public static List findByExample(PreciosEspeciales instance) {
+//		log.debug("finding PricPreciosEspeciales instance by example");
+//		Session session = HibernateUtil.getSession();
+//		try {
+//			List results = session.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales").add(Example.create(instance)).list();
+//			log.debug("find by example successful, result size: " + results.size());
+//			return results;
+//		} catch (RuntimeException re) {
+//			log.error("find by example failed", re);
+//			throw re;
+//		}
+//	}
 
 	public static List<PreciosEspeciales> getListaPrecioEspeciaByID(Integer pricCliente) {
 		Session session = HibernateUtil.getSession();

@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.scroll.WebScrollPane;
@@ -254,6 +253,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();
+		tableDescFamilia.setColToIgnorar(new Integer[] {COL_REGISTRO_FAMILIA});
 		tableDescFamilia.setModel(new DefaultTableModel(dataDesFamilia, headerDescFamilia));
 		tableDescFamilia.setRowHeight(30);
 		tableDescFamilia.setEditable(false);
@@ -276,20 +276,10 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 				"" };
 		String[][] dataDesEspecifico = { {} };
 
-		tableDescEspecifico = new RPTable() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void autoSize() {
-				super.autoSize();
-				TableColumn tableColumn = getColumnModel().getColumn(COL_DESC_ESPECIFICO);
-				tableColumn.setPreferredWidth(100); // Fijo para que entre los otros campos
-				tableColumn.setWidth(100);
-			}
-		};
+		tableDescEspecifico = new RPTable();
+		tableDescEspecifico.setColToIgnorar(new Integer[] {COL_DESC_ESPECIFICO, COL_REGISTRO_ESPECIFICO});
+				
+				
 		tableDescEspecifico.setModel(new DefaultTableModel(dataDesEspecifico, headerDescEspecifico));
 		tableDescEspecifico.setRowHeight(30);
 		tableDescEspecifico.setEditable(false);

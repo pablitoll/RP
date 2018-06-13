@@ -21,6 +21,7 @@ import com.alee.laf.optionpane.WebOptionPane;
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
+import ar.com.rollpaper.pricing.beans.SistUnim;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.beans.VentCliv;
@@ -31,6 +32,7 @@ import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
+import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
@@ -154,8 +156,9 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(cliente.getClieCliente())) {
 			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
+			SistUnim unidad = SistUnimDAO.findById(arti.getArtsUnimedStock());
 			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(), arti.getArtsNombre(), arti.getArtsDescripcion(),
-					arti.getArtsUnimedStock());
+					unidad.getUnimNombre());
 		}
 		sorterTablaDesEspecifico.sort();
 
@@ -337,8 +340,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 						HibernateGeneric.persist(registro);
 
+						SistUnim unidad = SistUnimDAO.findById(itemEspecialArticulo.getUnidadItem());
+						
 						agregarRegistroATablaArticulo(getView().tableDescEspecifico, registro, itemEspecialArticulo.getArticuloIDMostrar(), itemEspecialArticulo.getNombreItem(),
-								itemEspecialArticulo.getDescripcionItem(), itemEspecialArticulo.getUnidadItem());
+								itemEspecialArticulo.getDescripcionItem(), unidad.getUnimNombre());
 
 						sorterTablaDesEspecifico.sort();
 

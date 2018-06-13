@@ -230,7 +230,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		Date dFechaDesde = getView().dateFechaDesde.getDate();
 		Date dFechaHasta = getView().dateFechaHasta.getDate();
 
-		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) >= 0) {
+		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) > 0) {
 			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta");
 			return false;
 		}

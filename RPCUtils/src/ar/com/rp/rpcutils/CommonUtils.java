@@ -242,7 +242,14 @@ public class CommonUtils {
 	}
 
 	public static String double2String(Double valor, String separadorMiles, String separadorDecimal) {
-		String retorno = String.format("%.2f", valor);
+		String string = Double.toString(valor);
+		String[] b = string.split( "\\.");
+		int cantDecimales = 2;
+		if(b.length > 1) {
+			cantDecimales = b[1].length();
+		}
+		
+		String retorno = String.format("%." + cantDecimales + "f", valor);
 		retorno = retorno.replace(separadorMiles, separadorDecimal); // El String.format("%f", valor) solo agrega el
 																		// separador decimal, me aseguro que
 																		// sea el que usa el sismeta

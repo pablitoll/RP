@@ -7,8 +7,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
@@ -23,7 +21,7 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
  */
 public class VentClivDAO {
 
-	private static final Log log = LogFactory.getLog(VentClivDAO.class);
+//	private static final Log log = LogFactory.getLog(VentClivDAO.class);
 
 //	public void persist(VentCliv transientInstance) {
 //		log.debug("persisting VentCliv instance");

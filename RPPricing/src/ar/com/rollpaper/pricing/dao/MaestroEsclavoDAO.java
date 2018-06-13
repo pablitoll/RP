@@ -6,8 +6,6 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -138,8 +136,6 @@ public class MaestroEsclavoDAO {
 
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
-		Metamodel m = session.getEntityManagerFactory().getMetamodel();
-		EntityType<MaestroEsclavo> Mae_ = m.entity(MaestroEsclavo.class);
 
 		CriteriaQuery<MaestroEsclavo> criteriaQuery = session.getCriteriaBuilder().createQuery(MaestroEsclavo.class);
 		Root<MaestroEsclavo> i = criteriaQuery.from(MaestroEsclavo.class);
