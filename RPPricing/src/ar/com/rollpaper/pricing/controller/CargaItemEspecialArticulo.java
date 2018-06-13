@@ -47,8 +47,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		registro.setPricFechaDesde(getView().dateFechaDesde.getDate());
 		registro.setPricFechaHasta(getView().dateFechaHasta.getDate());
-
-		registro.setPricListaPrecvta(1);
+		
 		if (getView().cbMoneda.getSelectedIndex() > 0) {
 			registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
 			registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte(), MathContext.DECIMAL64));

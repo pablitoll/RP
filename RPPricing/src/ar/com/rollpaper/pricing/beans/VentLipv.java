@@ -30,6 +30,11 @@ public class VentLipv implements java.io.Serializable {
 	private short lipvEsListaAcopio;
 	private Set<?> ventArpvs = new HashSet<Object>(0);
 
+	@Override
+	public String toString() { //Para el combo
+		return "(" + lipvListaPrecvta + ") "  + lipvNombre;
+	}
+
 	public VentLipv() {
 	}
 

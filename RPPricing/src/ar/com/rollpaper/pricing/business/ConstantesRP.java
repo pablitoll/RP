@@ -7,7 +7,7 @@ public class ConstantesRP {
 	}
 
 	public enum PantCarPrecio {
-		AGREGAR, ELIMINAR, CANCELAR, MODIFICAR
+		AGREGAR, ELIMINAR, CANCELAR, MODIFICAR, AGREGAR_LISTA
 	}
 
 	public enum PantCarClienteEsclabo {

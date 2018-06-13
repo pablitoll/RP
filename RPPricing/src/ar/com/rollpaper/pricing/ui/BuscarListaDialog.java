@@ -27,14 +27,15 @@ public class BuscarListaDialog extends DialogBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final Integer COL_REGISTRO = 3;
 	private RPTable tableLista;
 	private JTextField txtDescCliente;
 	private JButtonRP btnSeleccionar;
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
-	private Integer nroLista = null;
+	private VentLipv nroLista = null;
 
-	public Integer getNroLista() {
+	public VentLipv getNroLista() {
 		return nroLista;
 	}
 
@@ -51,7 +52,7 @@ public class BuscarListaDialog extends DialogBase {
 		btnSeleccionar = new JButtonRP("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nroLista = (Integer) tableLista.getModel().getValueAt(tableLista.getSelectedRow(), 0);
+				nroLista = (VentLipv) tableLista.getModel().getValueAt(tableLista.getSelectedRow(), COL_REGISTRO);
 				cerrar();
 			}
 		});
@@ -89,11 +90,16 @@ public class BuscarListaDialog extends DialogBase {
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
 
-		String[] header = { "Nro de Lista", "Nombre", "Moneda" }; 
+		String[] header = { "Nro de Lista", "Nombre", "Moneda","" }; 
 		String[][] data = {};
 		tableLista = new RPTable();
 		tableLista.setModel(new DefaultTableModel(data, header));
 		tableLista.setEditable(false);
+		tableLista.setColToIgnorar(new Integer[] {COL_REGISTRO});
+		tableLista.getColumnModel().getColumn(COL_REGISTRO).setMaxWidth(0);
+		tableLista.getColumnModel().getColumn(COL_REGISTRO).setMinWidth(0);
+		tableLista.getColumnModel().getColumn(COL_REGISTRO).setPreferredWidth(0);
+		
 		WebScrollPane scrollPane = new WebScrollPane(tableLista);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioCliente();
@@ -107,7 +113,7 @@ public class BuscarListaDialog extends DialogBase {
 		tableLista.clear();
 
 		for (VentLipv lista : VentLipvDAO.getListaFamilia(txtDescCliente.getText())) {
-			tableLista.addRow(new Object[] { lista.getLipvListaPrecvta(), lista.getLipvNombre(), lista.getSistMone().getMoneNombre()});
+			tableLista.addRow(new Object[] { lista.getLipvListaPrecvta(), lista.getLipvNombre(), lista.getSistMone().getMoneNombre(), lista});
 		}
 
 		if (tableLista.getRowCount() > 0) {

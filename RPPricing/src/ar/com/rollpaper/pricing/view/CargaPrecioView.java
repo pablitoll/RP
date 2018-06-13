@@ -1,7 +1,6 @@
 package ar.com.rollpaper.pricing.view;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -14,6 +13,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.tabbedpane.WebTabbedPane;
@@ -59,7 +59,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public WebFormattedTextField txtNroCliente;
 	public RPTable tableDescEspecifico;
 	public RPTable tableDescFamilia;
-	public WebFormattedTextField txtNroLista;
+	public WebComboBox txtNroLista;
 	private JPanel pnlBotonesTabla;
 	public JButtonRP btnAgregar;
 	public JButtonRP btnEliminar;
@@ -75,6 +75,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	private JLabel lblNombre_1;
 	private JLabel lbl_1;
 	private JLabel lblNombreLegal_1;
+	public JButtonRP btnAgregarLista;
 
 	public CargaPrecioView() throws Exception {
 		super();
@@ -117,7 +118,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		txtNroCliente.setColumns(10);
 
 		lblNombre_1 = new JLabel("Nombre:");
-		lblNombre_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNombre_1.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNombre_1 = new GridBagConstraints();
 		gbc_lblNombre_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNombre_1.gridx = 3;
@@ -125,7 +126,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panelSuperior.add(lblNombre_1, gbc_lblNombre_1);
 
 		lblNombreCliente = new JLabel("xxxxxxxxxxxxxxxxxxxx");
-		lblNombreCliente.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblNombreCliente.setFont(Common.getStandarFontBold());
 		GridBagConstraints gbc_lblNombreCliente = new GridBagConstraints();
 		gbc_lblNombreCliente.anchor = GridBagConstraints.WEST;
 		gbc_lblNombreCliente.insets = new Insets(0, 0, 5, 5);
@@ -134,7 +135,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panelSuperior.add(lblNombreCliente, gbc_lblNombreCliente);
 
 		lblNombreLegal_1 = new JLabel("Nombre Legal:");
-		lblNombreLegal_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNombreLegal_1.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNombreLegal_1 = new GridBagConstraints();
 		gbc_lblNombreLegal_1.anchor = GridBagConstraints.EAST;
 		gbc_lblNombreLegal_1.insets = new Insets(0, 0, 5, 5);
@@ -143,7 +144,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panelSuperior.add(lblNombreLegal_1, gbc_lblNombreLegal_1);
 
 		lblNombreLegal = new JLabel("New label");
-		lblNombreLegal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblNombreLegal.setFont(Common.getStandarFontBold());
 		GridBagConstraints gbc_lblNombreLegal = new GridBagConstraints();
 		gbc_lblNombreLegal.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNombreLegal.insets = new Insets(0, 0, 5, 5);
@@ -160,13 +161,8 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel_1.gridy = 1;
 		panelSuperior.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
-		txtNroLista = new WebFormattedTextField();
+		txtNroLista = new WebComboBox();
 		txtNroLista.setFont(Common.getStandarFont());
-		txtNroLista.setInputPrompt("Ingrese nro. Lista");
-		txtNroLista.setInputPromptFont(Common.getStandarFontItalic());
-		txtNroLista.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtNroLista.setColumns(10);
-		txtNroLista.clear();
 
 		GridBagConstraints gbc_txtNroLista = new GridBagConstraints();
 		gbc_txtNroLista.insets = new Insets(0, 0, 0, 5);
@@ -174,7 +170,14 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_txtNroLista.gridx = 1;
 		gbc_txtNroLista.gridy = 1;
 		panelSuperior.add(txtNroLista, gbc_txtNroLista);
-		txtNroLista.setColumns(10);
+		
+		btnAgregarLista = new JButtonRP("Agregar Lista");
+		btnAgregarLista.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
+		gbc_btnNewButton.gridx = 2;
+		gbc_btnNewButton.gridy = 1;
+		panelSuperior.add(btnAgregarLista, gbc_btnNewButton);
 
 		lbl_1 = new JLabel("Nombre Lista ");
 		lbl_1.setFont(Common.getStandarFont());
@@ -185,7 +188,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panelSuperior.add(lbl_1, gbc_lbl_1);
 
 		lblNombreLista = new JLabel("New label");
-		lblNombreLista.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblNombreLista.setFont(Common.getStandarFontBold());
 		GridBagConstraints gbc_lblNombreLista = new GridBagConstraints();
 		gbc_lblNombreLista.anchor = GridBagConstraints.WEST;
 		gbc_lblNombreLista.insets = new Insets(0, 0, 0, 5);
@@ -217,7 +220,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		btnModificar = new JButtonRP("Modificar");
 		btnModificar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/resource/edit-icon.png")));
 		btnModificar.setMnemonic(KeyEvent.VK_MINUS);
-		btnModificar.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		btnModificar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_btnModificar_2 = new GridBagConstraints();
 		gbc_btnModificar_2.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnModificar_2.insets = new Insets(0, 0, 5, 0);
@@ -318,6 +321,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnEliminar, ConstantesRP.PantCarPrecio.ELIMINAR.toString());
 		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarPrecio.CANCELAR.toString());
 		asignarBotonAccion(btnModificar, ConstantesRP.PantCarPrecio.MODIFICAR.toString());
+		asignarBotonAccion(btnAgregarLista, ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString());
 	}
 
 	public void setCerrarVisible(Boolean visible) {

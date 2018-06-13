@@ -2,11 +2,12 @@ package ar.com.rollpaper.pricing.controller;
 
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
@@ -49,6 +50,7 @@ import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.RPTable;
+import ar.com.rp.ui.error.ErrorManager;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class CargaPrecioController extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
@@ -70,6 +72,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		super(pantPrincipal, view, model, null);
 
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
+						
 			public void focusLost(FocusEvent evento) {
 				try {
 
@@ -87,28 +90,29 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			}
 		});
 
-		view.txtNroLista.addFocusListener(new FocusAdapter() {
-			public void focusLost(FocusEvent evento) {
-				try {
-					if (!getView().txtNroLista.getText().equals("")) {
-						String id = getView().txtNroLista.getText();
-						if (CommonUtils.isNumeric(id)) {
-							perdioFocoNroLista(Integer.valueOf(id));
-						}
-					}
-				} catch (Exception e1) {
-					ManejoDeError.showError(e1, "Error al buscar Lista");
-				}
-			}
-		});
-
+		view.txtNroLista.addItemListener(new ItemListener(){
+	        public void itemStateChanged(ItemEvent e){
+	        	perdioFocoNroLista();
+	        }
+	    });
+		
+//		view.txtNroLista.addFocusListener(new FocusAdapter() {
+//			public void focusLost(FocusEvent evento) {
+//				try {
+//					perdioFocoNroLista();
+//				} catch (Exception e1) {
+//					ManejoDeError.showError(e1, "Error al buscar Lista");
+//				}
+//			}
+//		});
 	}
 
-	protected void perdioFocoNroLista(Integer id) {
-		// TODO falta validacion si la lista no la original del cliente
-		VentLipv lista = VentLipvDAO.findById(Integer.valueOf(id));
-		if (lista != null) {
-			getView().lblNombreLista.setText(lista.getLipvNombre());
+	protected void perdioFocoNroLista() {
+		if (getView().txtNroLista.getSelectedIndex() > -1) {
+			VentLipv lista = (VentLipv) getView().txtNroLista.getSelectedItem();
+			if (lista != null) {
+				getView().lblNombreLista.setText(lista.getLipvNombre());
+			}
 		}
 	}
 
@@ -130,22 +134,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	private void cargarLista(CcobClie cliente) throws Exception {
-		List<VentCliv> listas = VentClivDAO.getListaPreciosByCliente(cliente);
-		if (listas.size() > 1) {
-			throw new Exception("El Cliente tiene mas de una lista asociada");
-		}
-
-		if (listas.size() == 1) {
-			if (listas.get(0).getClivListaPrecvta() != null) {
-				getView().txtNroLista.setText(String.valueOf(listas.get(0).getClivListaPrecvta()));
-
-				VentLipv lista = VentLipvDAO.findById(listas.get(0).getClivListaPrecvta());
-				if (lista != null) {
-					getView().lblNombreLista.setText(lista.getLipvNombre());
-				} else {
-					throw new Exception("No existe la lista " + listas.get(0).getClivListaPrecvta());
-				}
-			}
+		getView().txtNroLista.removeAllItems();
+		for (VentCliv listaClienteLista : VentClivDAO.getListaPreciosByCliente(cliente)) {
+			VentLipv lista = VentLipvDAO.findById(listaClienteLista.getClivListaPrecvta());
+			getView().txtNroLista.addItem(lista);
 		}
 
 		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(cliente.getClieCliente())) {
@@ -157,8 +149,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(cliente.getClieCliente())) {
 			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
 			SistUnim unidad = SistUnimDAO.findById(arti.getArtsUnimedStock());
-			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(), arti.getArtsNombre(), arti.getArtsDescripcion(),
-					unidad.getUnimNombre());
+			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(), arti.getArtsNombre(), arti.getArtsDescripcion(), unidad.getUnimNombre());
 		}
 		sorterTablaDesEspecifico.sort();
 
@@ -197,7 +188,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().lblNombreCliente.setText("S/D");
 
 		getModel().setClienteCargado(null);
-		getView().txtNroLista.clear();
+		getView().txtNroLista.removeAllItems();
 		getView().lblError.setText("");
 
 		getView().tableDescEspecifico.clear();
@@ -277,8 +268,9 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		BuscarListaDialog buscarListaDialog = new BuscarListaDialog(getPantallaPrincipal());
 		buscarListaDialog.iniciar();
 		if (buscarListaDialog.getNroLista() != null) {
-			getView().txtNroLista.setValue(buscarListaDialog.getNroLista());
-			perdioFocoNroLista(buscarListaDialog.getNroLista());
+			VentLipv lista = buscarListaDialog.getNroLista();
+			getView().txtNroLista.addItem(lista);
+			perdioFocoNroLista();
 		}
 	}
 
@@ -341,7 +333,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 						HibernateGeneric.persist(registro);
 
 						SistUnim unidad = SistUnimDAO.findById(itemEspecialArticulo.getUnidadItem());
-						
+
 						agregarRegistroATablaArticulo(getView().tableDescEspecifico, registro, itemEspecialArticulo.getArticuloIDMostrar(), itemEspecialArticulo.getNombreItem(),
 								itemEspecialArticulo.getDescripcionItem(), unidad.getUnimNombre());
 
@@ -436,7 +428,14 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 					dm.removeRow(tabla.getSelectedRow());
 				}
 			}
-
+		}
+		
+		if (accion.equals(ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString())) {
+			try {
+				buscarNroLista();
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al agregar lista");
+			}
 		}
 	}
 
