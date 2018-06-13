@@ -21,9 +21,9 @@ public class SistMone implements java.io.Serializable {
 	private String moneTipoMonAfip;
 	private boolean moneUtilizable;
 	private short moneCantDecimRedImpuestos;
-	private Set ventArpvsForArpvMoneda = new HashSet(0);
-	private Set ventLipvs = new HashSet(0);
-	private Set ventArpvsForArpvMonedaAnt = new HashSet(0);
+	private Set<?> ventArpvsForArpvMoneda = new HashSet<Object>(0);
+	private Set<?> ventLipvs = new HashSet<Object>(0);
+	private Set<?> ventArpvsForArpvMonedaAnt = new HashSet<Object>(0);
 
 	public SistMone() {
 	}
@@ -54,8 +54,8 @@ public class SistMone implements java.io.Serializable {
 	}
 
 	public SistMone(String moneMoneda, String moneNombre, String moneSimbolo, boolean moneLocal, boolean moneConversion,
-			String moneTipoMonAfip, boolean moneUtilizable, short moneCantDecimRedImpuestos, Set ventArpvsForArpvMoneda,
-			Set ventLipvs, Set ventArpvsForArpvMonedaAnt) {
+			String moneTipoMonAfip, boolean moneUtilizable, short moneCantDecimRedImpuestos, Set<?> ventArpvsForArpvMoneda,
+			Set<?> ventLipvs, Set<?> ventArpvsForArpvMonedaAnt) {
 		this.moneMoneda = moneMoneda;
 		this.moneNombre = moneNombre;
 		this.moneSimbolo = moneSimbolo;
@@ -133,27 +133,27 @@ public class SistMone implements java.io.Serializable {
 		this.moneCantDecimRedImpuestos = moneCantDecimRedImpuestos;
 	}
 
-	public Set getVentArpvsForArpvMoneda() {
+	public Set<?> getVentArpvsForArpvMoneda() {
 		return this.ventArpvsForArpvMoneda;
 	}
 
-	public void setVentArpvsForArpvMoneda(Set ventArpvsForArpvMoneda) {
+	public void setVentArpvsForArpvMoneda(Set<?> ventArpvsForArpvMoneda) {
 		this.ventArpvsForArpvMoneda = ventArpvsForArpvMoneda;
 	}
 
-	public Set getVentLipvs() {
+	public Set<?> getVentLipvs() {
 		return this.ventLipvs;
 	}
 
-	public void setVentLipvs(Set ventLipvs) {
+	public void setVentLipvs(Set<?> ventLipvs) {
 		this.ventLipvs = ventLipvs;
 	}
 
-	public Set getVentArpvsForArpvMonedaAnt() {
+	public Set<?> getVentArpvsForArpvMonedaAnt() {
 		return this.ventArpvsForArpvMonedaAnt;
 	}
 
-	public void setVentArpvsForArpvMonedaAnt(Set ventArpvsForArpvMonedaAnt) {
+	public void setVentArpvsForArpvMonedaAnt(Set<?> ventArpvsForArpvMonedaAnt) {
 		this.ventArpvsForArpvMonedaAnt = ventArpvsForArpvMonedaAnt;
 	}
 
