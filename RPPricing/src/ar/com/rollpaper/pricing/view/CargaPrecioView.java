@@ -20,10 +20,13 @@ import com.alee.laf.tabbedpane.WebTabbedPane;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
+import java.awt.Font;
+import java.awt.FlowLayout;
 
 public class CargaPrecioView extends BaseViewMVCExtendida {
 
@@ -59,7 +62,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public WebFormattedTextField txtNroCliente;
 	public RPTable tableDescEspecifico;
 	public RPTable tableDescFamilia;
-	public WebComboBox txtNroLista;
+	public WebComboBox cbNroLista;
 	private JPanel pnlBotonesTabla;
 	public JButtonRP btnAgregar;
 	public JButtonRP btnEliminar;
@@ -76,6 +79,8 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	private JLabel lbl_1;
 	private JLabel lblNombreLegal_1;
 	public JButtonRP btnAgregarLista;
+	public JButtonRP btnEliminarLista;
+	private JPanel pnlBotonLista;
 
 	public CargaPrecioView() throws Exception {
 		super();
@@ -89,7 +94,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbl_panelSuperior.columnWidths = new int[] { 76, 100, 50, 46, 46, 50, 0, 0, 0 };
 		gbl_panelSuperior.rowHeights = new int[] { 0, 0, 0 };
 		gbl_panelSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_panelSuperior.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		gbl_panelSuperior.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		panelSuperior.setLayout(gbl_panelSuperior);
 
 		JLabel lblcliente = new JLabel("Nro. de Cliente:");
@@ -116,7 +121,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_txtNroCliente.gridy = 0;
 		panelSuperior.add(txtNroCliente, gbc_txtNroCliente);
 		txtNroCliente.setColumns(10);
-
+		
 		lblNombre_1 = new JLabel("Nombre:");
 		lblNombre_1.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNombre_1 = new GridBagConstraints();
@@ -161,23 +166,38 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel_1.gridy = 1;
 		panelSuperior.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
-		txtNroLista = new WebComboBox();
-		txtNroLista.setFont(Common.getStandarFont());
+		cbNroLista = new WebComboBox();
+		cbNroLista.setFont(Common.getStandarFont());
 
 		GridBagConstraints gbc_txtNroLista = new GridBagConstraints();
 		gbc_txtNroLista.insets = new Insets(0, 0, 0, 5);
 		gbc_txtNroLista.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtNroLista.gridx = 1;
 		gbc_txtNroLista.gridy = 1;
-		panelSuperior.add(txtNroLista, gbc_txtNroLista);
+		panelSuperior.add(cbNroLista, gbc_txtNroLista);
 		
-		btnAgregarLista = new JButtonRP("Agregar Lista");
+		
+		btnAgregarLista = new JButtonRP("");
+		btnAgregarLista.setToolTipText("Agregar Lista");
 		btnAgregarLista.setFont(Common.getStandarFont());
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
-		gbc_btnNewButton.gridx = 2;
-		gbc_btnNewButton.gridy = 1;
-		panelSuperior.add(btnAgregarLista, gbc_btnNewButton);
+		btnAgregarLista.setIcon(CommonUtils.loadIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/plus.png"), 15, 15));
+
+		btnEliminarLista = new JButtonRP("");
+		btnEliminarLista.setToolTipText("Eliminar Lista");
+		btnEliminarLista.setFont(Common.getStandarFont());
+		btnEliminarLista.setIcon(CommonUtils.loadIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/minus.png"), 15, 15));
+		
+		pnlBotonLista = new JPanel();
+		FlowLayout fl_pnlBotonLista = new FlowLayout(FlowLayout.CENTER, 5, 5);
+		pnlBotonLista.setLayout(fl_pnlBotonLista);
+		pnlBotonLista.add(btnAgregarLista);
+		pnlBotonLista.add(btnEliminarLista);
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 0, 5);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 2;
+		gbc_panel.gridy = 1;
+		panelSuperior.add(pnlBotonLista, gbc_panel);
 
 		lbl_1 = new JLabel("Nombre Lista ");
 		lbl_1.setFont(Common.getStandarFont());
@@ -206,7 +226,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		pnlBotonesTabla.setLayout(gbl_pnlBotonesTabla);
 
 		btnAgregar = new JButtonRP("Agregar");
-		btnAgregar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/plus.png")));
+		btnAgregar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/plus.png")));
 
 		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);
 		btnAgregar.setFont(Common.getStandarFont());
@@ -218,7 +238,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		pnlBotonesTabla.add(btnAgregar, gbc_btnModificar_1);
 
 		btnModificar = new JButtonRP("Modificar");
-		btnModificar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/resource/edit-icon.png")));
+		btnModificar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/resource/edit-icon.png")));
 		btnModificar.setMnemonic(KeyEvent.VK_MINUS);
 		btnModificar.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_btnModificar_2 = new GridBagConstraints();
@@ -229,7 +249,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		pnlBotonesTabla.add(btnModificar, gbc_btnModificar_2);
 
 		btnEliminar = new JButtonRP("Eliminar");
-		btnEliminar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/minus.png")));
+		btnEliminar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/minus.png")));
 
 		btnEliminar.setMnemonic(KeyEvent.VK_MINUS);
 		btnEliminar.setFont(Common.getStandarFont());
@@ -256,7 +276,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();
-		tableDescFamilia.setColToIgnorar(new Integer[] {COL_REGISTRO_FAMILIA});
+		tableDescFamilia.setColToIgnorar(new Integer[] { COL_REGISTRO_FAMILIA });
 		tableDescFamilia.setModel(new DefaultTableModel(dataDesFamilia, headerDescFamilia));
 		tableDescFamilia.setRowHeight(30);
 		tableDescFamilia.setEditable(false);
@@ -269,7 +289,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescFamilia.getColumnModel().getColumn(COL_2DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
 		tableDescFamilia.getColumnModel().getColumn(COL_COMSISION_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
 		tableDescFamilia.getColumnModel().getColumn(COL_DESDE_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
-		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
 
 		WebScrollPane spDescLista = new WebScrollPane(tableDescFamilia);
 
@@ -280,9 +300,8 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		String[][] dataDesEspecifico = { {} };
 
 		tableDescEspecifico = new RPTable();
-		tableDescEspecifico.setColToIgnorar(new Integer[] {COL_DESC_ESPECIFICO, COL_REGISTRO_ESPECIFICO});
-				
-				
+		tableDescEspecifico.setColToIgnorar(new Integer[] { COL_DESC_ESPECIFICO, COL_REGISTRO_ESPECIFICO });
+
 		tableDescEspecifico.setModel(new DefaultTableModel(dataDesEspecifico, headerDescEspecifico));
 		tableDescEspecifico.setRowHeight(30);
 		tableDescEspecifico.setEditable(false);
@@ -322,6 +341,8 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarPrecio.CANCELAR.toString());
 		asignarBotonAccion(btnModificar, ConstantesRP.PantCarPrecio.MODIFICAR.toString());
 		asignarBotonAccion(btnAgregarLista, ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString());
+		asignarBotonAccion(btnEliminarLista, ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString());
+
 	}
 
 	public void setCerrarVisible(Boolean visible) {

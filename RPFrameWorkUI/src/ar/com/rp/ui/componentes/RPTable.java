@@ -87,7 +87,7 @@ public class RPTable extends WebTable {
 		}
 
 		if (anchoTotal < enclosing.getWidth()) {
-			int cantCol = getColumnCount() - colToIgnorar.length;
+			int cantCol = getColumnCount() - (colToIgnorar != null ? colToIgnorar.length : 0);
 			int dif = (enclosing.getWidth() - anchoTotal - cantCol) / cantCol;
 			for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
 				if (!isColToIgnorar(nroColumn)) {

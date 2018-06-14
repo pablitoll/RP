@@ -50,7 +50,6 @@ import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.RPTable;
-import ar.com.rp.ui.error.ErrorManager;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class CargaPrecioController extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
@@ -72,7 +71,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		super(pantPrincipal, view, model, null);
 
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
-						
+
 			public void focusLost(FocusEvent evento) {
 				try {
 
@@ -90,30 +89,43 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			}
 		});
 
-		view.txtNroLista.addItemListener(new ItemListener(){
-	        public void itemStateChanged(ItemEvent e){
-	        	perdioFocoNroLista();
-	        }
-	    });
-		
-//		view.txtNroLista.addFocusListener(new FocusAdapter() {
-//			public void focusLost(FocusEvent evento) {
-//				try {
-//					perdioFocoNroLista();
-//				} catch (Exception e1) {
-//					ManejoDeError.showError(e1, "Error al buscar Lista");
-//				}
-//			}
-//		});
+		view.cbNroLista.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				perdioFocoNroLista();
+			}
+		});
 	}
 
 	protected void perdioFocoNroLista() {
-		if (getView().txtNroLista.getSelectedIndex() > -1) {
-			VentLipv lista = (VentLipv) getView().txtNroLista.getSelectedItem();
+		if (getView().cbNroLista.getSelectedIndex() > -1) {
+			VentLipv lista = (VentLipv) getView().cbNroLista.getSelectedItem();
 			if (lista != null) {
 				getView().lblNombreLista.setText(lista.getLipvNombre());
+				getModel().setListaCargada(lista);
+				cargarProductos();
 			}
 		}
+	}
+
+	private void cargarProductos() {
+		resetearTablaFamilia();
+		resetearTablaEspecifico();
+		
+//TODO IMPLEMENTAR LA BUSQUEDA LISTA		
+		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(getModel().getClienteCargado().getClieCliente(), getModel().getListaCargada().getLipvListaPrecvta())) {
+			StocCa01 familiaClass = StocCa01DAO.findById(familia.getPricFamiliaListaPrecvta());
+			agregarRegistroATablaFamilia(getView().tableDescFamilia, familia, familiaClass.getCa01Nombre());
+		}
+		sorterTablaDesFamilia.sort();
+
+		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(getModel().getClienteCargado().getClieCliente(), getModel().getListaCargada().getLipvListaPrecvta())) {
+			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
+			SistUnim unidad = SistUnimDAO.findById(arti.getArtsUnimedStock());
+			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(), arti.getArtsNombre(), arti.getArtsDescripcion(), unidad.getUnimNombre());
+		}
+		sorterTablaDesEspecifico.sort();
+
+		setModoPantalla();
 	}
 
 	protected void perdioFocoCliente(int id) throws Exception {
@@ -134,24 +146,13 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	private void cargarLista(CcobClie cliente) throws Exception {
-		getView().txtNroLista.removeAllItems();
+		getView().cbNroLista.removeAllItems();
 		for (VentCliv listaClienteLista : VentClivDAO.getListaPreciosByCliente(cliente)) {
 			VentLipv lista = VentLipvDAO.findById(listaClienteLista.getClivListaPrecvta());
-			getView().txtNroLista.addItem(lista);
+			lista.setIsListaPrincipal(true);
+			getView().cbNroLista.addItem(lista);
 		}
-
-		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(cliente.getClieCliente())) {
-			StocCa01 familiaClass = StocCa01DAO.findById(familia.getPricFamiliaListaPrecvta());
-			agregarRegistroATablaFamilia(getView().tableDescFamilia, familia, familiaClass.getCa01Nombre());
-		}
-		sorterTablaDesFamilia.sort();
-
-		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(cliente.getClieCliente())) {
-			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
-			SistUnim unidad = SistUnimDAO.findById(arti.getArtsUnimedStock());
-			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(), arti.getArtsNombre(), arti.getArtsDescripcion(), unidad.getUnimNombre());
-		}
-		sorterTablaDesEspecifico.sort();
+		//perdioFocoNroLista();
 
 		setModoPantalla();
 	}
@@ -160,12 +161,14 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		Boolean tieneCli = !getView().lblNombreCliente.getText().equals("S/D");
 
 		getView().txtNroCliente.setEnabled(!tieneCli);
-		getView().txtNroLista.setEnabled(tieneCli);
+		getView().cbNroLista.setEnabled(tieneCli);
 		getView().tableDescEspecifico.setEnabled(tieneCli);
 		getView().tableDescFamilia.setEnabled(tieneCli);
 		getView().btnAgregar.setEnabled(tieneCli);
 		getView().btnModificar.setEnabled(tieneCli);
 		getView().btnEliminar.setEnabled(tieneCli);
+		getView().btnEliminarLista.setEnabled(tieneCli);
+		getView().btnAgregarLista.setEnabled(tieneCli);
 
 		getView().btnCancelar.setVisible(tieneCli);
 		getView().setCerrarVisible(!tieneCli);
@@ -188,12 +191,33 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().lblNombreCliente.setText("S/D");
 
 		getModel().setClienteCargado(null);
-		getView().txtNroLista.removeAllItems();
+		getView().cbNroLista.removeAllItems();
 		getView().lblError.setText("");
 
-		getView().tableDescEspecifico.clear();
+		resetearTablaEspecifico();
+		resetearTablaFamilia();
+		
+		setModoPantalla();
+	}
 
+	private void resetearTablaFamilia() {
+		getView().tableDescFamilia.clear();
 		// Le seteo el order
+		sorterTablaDesFamilia = new TableRowSorter<TableModel>(getView().tableDescFamilia.getModel());
+		getView().tableDescFamilia.setRowSorter(sorterTablaDesFamilia);
+		ArrayList<RowSorter.SortKey> sortKeysFamilia = new ArrayList<RowSorter.SortKey>();
+
+		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_FAMILIA, SortOrder.ASCENDING));
+		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_DESDE_FAMILIA, SortOrder.ASCENDING));
+
+		sorterTablaDesFamilia.setSortKeys(sortKeysFamilia);
+		
+	}
+
+	private void resetearTablaEspecifico() {
+		getView().tableDescEspecifico.clear();
+		
+		// Le seteo el order		
 		sorterTablaDesEspecifico = new TableRowSorter<TableModel>(getView().tableDescEspecifico.getModel());
 		getView().tableDescEspecifico.setRowSorter(sorterTablaDesEspecifico);
 		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
@@ -211,20 +235,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			}
 		});
 
-		sorterTablaDesEspecifico.setSortKeys(sortKeys);
-
-		getView().tableDescFamilia.clear();
-		// Le seteo el order
-		sorterTablaDesFamilia = new TableRowSorter<TableModel>(getView().tableDescFamilia.getModel());
-		getView().tableDescFamilia.setRowSorter(sorterTablaDesFamilia);
-		ArrayList<RowSorter.SortKey> sortKeysFamilia = new ArrayList<RowSorter.SortKey>();
-
-		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_FAMILIA, SortOrder.ASCENDING));
-		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_DESDE_FAMILIA, SortOrder.ASCENDING));
-
-		sorterTablaDesFamilia.setSortKeys(sortKeysFamilia);
-
-		setModoPantalla();
+		sorterTablaDesEspecifico.setSortKeys(sortKeys);		
 	}
 
 	@Override
@@ -253,7 +264,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			}
 		}
 
-		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F2) && getView().txtNroLista.hasFocus()) {
+		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F2) && getView().cbNroLista.hasFocus()) {
 			retorno = true;
 			try {
 				buscarNroLista();
@@ -269,8 +280,9 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		buscarListaDialog.iniciar();
 		if (buscarListaDialog.getNroLista() != null) {
 			VentLipv lista = buscarListaDialog.getNroLista();
-			getView().txtNroLista.addItem(lista);
-			perdioFocoNroLista();
+			getView().cbNroLista.addItem(lista);
+			getView().cbNroLista.setSelectedIndex(getView().cbNroLista.getItemCount() - 1);
+			//perdioFocoNroLista();
 		}
 	}
 
@@ -423,13 +435,12 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 					int row = tabla.getSelectedRow();
 					Object regis = tabla.getValueAt(row, col_registro);
 					HibernateGeneric.remove(regis);
-
 					DefaultTableModel dm = (DefaultTableModel) tabla.getModel();
 					dm.removeRow(tabla.getSelectedRow());
 				}
 			}
 		}
-		
+
 		if (accion.equals(ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString())) {
 			try {
 				buscarNroLista();

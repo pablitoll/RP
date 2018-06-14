@@ -1,3 +1,5 @@
+//TODO falta agregar el campo id familia
+
 package ar.com.rollpaper.pricing.beans;
 // Generated 24/05/2018 09:03:27 by Hibernate Tools 5.3.0.Beta2
 

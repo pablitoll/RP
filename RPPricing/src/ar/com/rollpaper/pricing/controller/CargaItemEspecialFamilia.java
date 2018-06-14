@@ -27,6 +27,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 	public DescuentoXFamilias getRegistro() throws Exception {
 
 		DescuentoXFamilias registro = getModel().getRegistroFamilia();
+		
 		registro.setPricFamiliaListaPrecvta(getModel().getFamiliaID());
 
 		if (getView().txtDesc1.getImporte() > 0.0) {

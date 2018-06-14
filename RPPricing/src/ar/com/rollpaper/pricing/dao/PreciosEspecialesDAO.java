@@ -94,7 +94,8 @@ public class PreciosEspecialesDAO {
 		log.debug("getting PricPreciosEspeciales instance with id: " + id);
 		Session session = HibernateUtil.getSession();
 		try {
-			PreciosEspeciales instance = (PreciosEspeciales) session.get("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales", id);
+			//PreciosEspeciales instance = (PreciosEspeciales) session.get("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales", id);
+			PreciosEspeciales instance = (PreciosEspeciales) session.get(PreciosEspeciales.class, id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -107,27 +108,28 @@ public class PreciosEspecialesDAO {
 		}
 	}
 
-//	public static List findByExample(PreciosEspeciales instance) {
-//		log.debug("finding PricPreciosEspeciales instance by example");
-//		Session session = HibernateUtil.getSession();
-//		try {
-//			List results = session.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales").add(Example.create(instance)).list();
-//			log.debug("find by example successful, result size: " + results.size());
-//			return results;
-//		} catch (RuntimeException re) {
-//			log.error("find by example failed", re);
-//			throw re;
-//		}
-//	}
+	// public static List findByExample(PreciosEspeciales instance) {
+	// log.debug("finding PricPreciosEspeciales instance by example");
+	// Session session = HibernateUtil.getSession();
+	// try {
+	// List results =
+	// session.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales").add(Example.create(instance)).list();
+	// log.debug("find by example successful, result size: " + results.size());
+	// return results;
+	// } catch (RuntimeException re) {
+	// log.error("find by example failed", re);
+	// throw re;
+	// }
+	// }
 
-	public static List<PreciosEspeciales> getListaPrecioEspeciaByID(Integer pricCliente) {
+	public static List<PreciosEspeciales> getListaPrecioEspeciaByID(Integer pricCliente, Integer nroLista) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 
 		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder().createQuery(PreciosEspeciales.class);
 		Root<PreciosEspeciales> i = criteriaQuery.from(PreciosEspeciales.class);
-		criteriaQuery.where(cb.equal(i.get("pricCliente"), pricCliente));
-
+		criteriaQuery.where(cb.equal(i.get("pricCliente"), pricCliente), cb.equal(i.get("pricListaPrecvta"), nroLista));
+		
 		List<PreciosEspeciales> clientes = session.createQuery(criteriaQuery).getResultList();
 
 		return clientes;

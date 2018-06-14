@@ -115,7 +115,7 @@ public class DescuentoXFamiliasDAO {
 //		}
 //	}
 
-	public static List<DescuentoXFamilias> getListaDescuentoByID(Integer pricFamiliaCliente) {
+	public static List<DescuentoXFamilias> getListaDescuentoByID(Integer pricFamiliaCliente, Integer nroLista) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 

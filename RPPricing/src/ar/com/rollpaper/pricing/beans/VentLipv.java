@@ -29,19 +29,20 @@ public class VentLipv implements java.io.Serializable {
 	private short lipvEsListaRef;
 	private short lipvEsListaAcopio;
 	private Set<?> ventArpvs = new HashSet<Object>(0);
+	private boolean isListaPrincipal;
 
 	@Override
-	public String toString() { //Para el combo
-		return "(" + lipvListaPrecvta + ") "  + lipvNombre;
+	public String toString() { // Para el combo
+		String listaPrincipal = isListaPrincipal ? " - PRINCIPAL" : "";
+		return "(" + lipvListaPrecvta + ") " + lipvNombre + listaPrincipal;
 	}
 
 	public VentLipv() {
 	}
 
-	public VentLipv(int lipvListaPrecvta, SistMone sistMone, String lipvNombre, boolean lipvModifMoneda,
-			boolean lipvConImpuestos, Date lipvFechaVigDes, Date lipvFechaVigHas, boolean lipvUtilizable,
-			boolean lipvModPrecioNp, boolean lipvEsOferta, boolean lipvHabPromVol, short lipvCalculoConMargen,
-			short lipvEsListaRef, short lipvEsListaAcopio) {
+	public VentLipv(int lipvListaPrecvta, SistMone sistMone, String lipvNombre, boolean lipvModifMoneda, boolean lipvConImpuestos, Date lipvFechaVigDes, Date lipvFechaVigHas,
+			boolean lipvUtilizable, boolean lipvModPrecioNp, boolean lipvEsOferta, boolean lipvHabPromVol, short lipvCalculoConMargen, short lipvEsListaRef,
+			short lipvEsListaAcopio) {
 		this.lipvListaPrecvta = lipvListaPrecvta;
 		this.sistMone = sistMone;
 		this.lipvNombre = lipvNombre;
@@ -58,10 +59,9 @@ public class VentLipv implements java.io.Serializable {
 		this.lipvEsListaAcopio = lipvEsListaAcopio;
 	}
 
-	public VentLipv(int lipvListaPrecvta, SistMone sistMone, String lipvNombre, boolean lipvModifMoneda,
-			boolean lipvConImpuestos, Date lipvFechaVigDes, Date lipvFechaVigHas, boolean lipvUtilizable,
-			boolean lipvModPrecioNp, boolean lipvEsOferta, boolean lipvHabPromVol, short lipvCalculoConMargen,
-			short lipvEsListaRef, short lipvEsListaAcopio, Set<?> ventArpvs) {
+	public VentLipv(int lipvListaPrecvta, SistMone sistMone, String lipvNombre, boolean lipvModifMoneda, boolean lipvConImpuestos, Date lipvFechaVigDes, Date lipvFechaVigHas,
+			boolean lipvUtilizable, boolean lipvModPrecioNp, boolean lipvEsOferta, boolean lipvHabPromVol, short lipvCalculoConMargen, short lipvEsListaRef,
+			short lipvEsListaAcopio, Set<?> ventArpvs) {
 		this.lipvListaPrecvta = lipvListaPrecvta;
 		this.sistMone = sistMone;
 		this.lipvNombre = lipvNombre;
@@ -197,6 +197,14 @@ public class VentLipv implements java.io.Serializable {
 
 	public void setVentArpvs(Set<?> ventArpvs) {
 		this.ventArpvs = ventArpvs;
+	}
+
+	public void setIsListaPrincipal(boolean isListaPrincipal) {
+		this.isListaPrincipal = isListaPrincipal;
+	}
+
+	public boolean isListaPrincipal() {
+		return isListaPrincipal;
 	}
 
 }
