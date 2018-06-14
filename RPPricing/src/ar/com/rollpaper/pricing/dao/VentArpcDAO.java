@@ -1,6 +1,9 @@
 package ar.com.rollpaper.pricing.dao;
 // Generated 21/05/2018 20:09:26 by Hibernate Tools 5.3.0.Beta2
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Home object for domain model class VentArpc.
  * @see ar.com.rollpaper.pricing.beans.VentArpc
@@ -8,7 +11,7 @@ package ar.com.rollpaper.pricing.dao;
  */
 public class VentArpcDAO {
 
-//	private static final Log log = LogFactory.getLog(VentArpcDAO.class);
+	private static final Log log = LogFactory.getLog(VentArpcDAO.class);
 
 //	private final SessionFactory sessionFactory = getSessionFactory();
 //

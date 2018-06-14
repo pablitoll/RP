@@ -1,4 +1,4 @@
-package ar.com.rollpaper.pricing.beans;        
+package ar.com.rollpaper.pricing.beans;
 
 
 /**
@@ -12,15 +12,14 @@ public class SistUnim implements java.io.Serializable {
 	private static final long serialVersionUID = 3049401397345839420L;
 	private String unimUnimed;
 	private String unimNombre;
-	
-	public SistUnim(String unimUnimed, String unimNombre) {
-		super();
-		this.unimUnimed = unimUnimed;
-		this.unimNombre = unimNombre;
-	}
 
 	public SistUnim() {
-		super();
+	}
+
+	public SistUnim(String unimUnimed, String unimNombre, String unimSimbolo, boolean unimUtilizable,
+			boolean unimEsHora) {
+		this.unimUnimed = unimUnimed;
+		this.unimNombre = unimNombre;
 	}
 
 	public String getUnimUnimed() {
@@ -38,5 +37,4 @@ public class SistUnim implements java.io.Serializable {
 	public void setUnimNombre(String unimNombre) {
 		this.unimNombre = unimNombre;
 	}
-	
 }
