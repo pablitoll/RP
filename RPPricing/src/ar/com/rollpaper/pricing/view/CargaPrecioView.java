@@ -25,7 +25,6 @@ import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
-import java.awt.Font;
 import java.awt.FlowLayout;
 
 public class CargaPrecioView extends BaseViewMVCExtendida {

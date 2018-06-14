@@ -28,7 +28,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 		DescuentoXFamilias registro = getModel().getRegistroFamilia();
 		
-		registro.setPricFamiliaListaPrecvta(getModel().getFamiliaID());
+		registro.setPricCa01Clasif1(getModel().getFamiliaID());
 
 		if (getView().txtDesc1.getImporte() > 0.0) {
 			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
@@ -52,8 +52,8 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		getModel().setFamiliaCargado(null);
 		getModel().setRegistro(registro);
 
-		if ((registro.getPricFamiliaListaPrecvta() != null) && !registro.getPricFamiliaListaPrecvta().equals("")) {
-			getModel().setFamiliaCargado(StocCa01DAO.findById(registro.getPricFamiliaListaPrecvta()));
+		if ((registro.getPricCa01Clasif1() != null) && !registro.getPricCa01Clasif1().equals("")) {
+			getModel().setFamiliaCargado(StocCa01DAO.findById(registro.getPricCa01Clasif1()));
 		}
 	}
 
@@ -164,7 +164,6 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 				cerrarVentana();
 			}
 		}
-
 	}
 
 	private Boolean validar() {
@@ -201,7 +200,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		for (int i = 0; i < getModel().getTableModel().getRowCount(); i++) {
 			DescuentoXFamilias registroTabla = (DescuentoXFamilias) getModel().getTableModel().getValueAt(i, CargaPrecioView.COL_REGISTRO_FAMILIA);
 
-			if (getModel().getFamiliaID().equals(registroTabla.getPricFamiliaListaPrecvta())) {
+			if (getModel().getFamiliaID().equals(registroTabla.getPricCa01Clasif1())) {
 
 				if (registroTabla.getPricFamiliaId() != getModel().getRegistroFamilia().getPricFamiliaId()) {
 					//Si el desde que cargo esta entre las dos fecha del registro

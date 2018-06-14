@@ -25,7 +25,6 @@ import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.SistUnim;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.StocCa01;
-import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
@@ -36,8 +35,6 @@ import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
-import ar.com.rollpaper.pricing.dao.VentClivDAO;
-import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialArticuloModel;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
@@ -110,15 +107,15 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	private void cargarProductos() {
 		resetearTablaFamilia();
 		resetearTablaEspecifico();
-		
-//TODO IMPLEMENTAR LA BUSQUEDA LISTA		
-		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(getModel().getClienteCargado().getClieCliente(), getModel().getListaCargada().getLipvListaPrecvta())) {
-			StocCa01 familiaClass = StocCa01DAO.findById(familia.getPricFamiliaListaPrecvta());
+
+		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(getModel().getClienteCargado().getClieCliente(),
+				getModel().getListaCargada().getLipvListaPrecvta())) {
+			StocCa01 familiaClass = StocCa01DAO.findById(familia.getPricCa01Clasif1());
 			agregarRegistroATablaFamilia(getView().tableDescFamilia, familia, familiaClass.getCa01Nombre());
 		}
 		sorterTablaDesFamilia.sort();
-
-		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(getModel().getClienteCargado().getClieCliente(), getModel().getListaCargada().getLipvListaPrecvta())) {
+		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(getModel().getClienteCargado().getClieCliente(),
+				getModel().getListaCargada().getLipvListaPrecvta())) {
 			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
 			SistUnim unidad = SistUnimDAO.findById(arti.getArtsUnimedStock());
 			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(), arti.getArtsNombre(), arti.getArtsDescripcion(), unidad.getUnimNombre());
@@ -132,29 +129,25 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		CcobClie cliente = CcobClieDAO.findById(Integer.valueOf(id));
 
 		if (cliente != null) {
-			if ((getModel().getClienteCargado() == null) || (cliente.getClieCliente() != getModel().getClienteCargado().getClieCliente())) {
-				getView().lblNombreCliente.setText(cliente.getClieNombre());
-				getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-				getModel().setClienteCargado(cliente);
-				cargarLista(cliente);
-				setModoPantalla();
-			}
+			getView().lblNombreCliente.setText(cliente.getClieNombre());
+			getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+			getModel().setClienteCargado(cliente);
+			cargarLista();
+			setModoPantalla();
 
 		} else {
 			resetearDatosDePantalla();
 		}
 	}
 
-	private void cargarLista(CcobClie cliente) throws Exception {
+	private void cargarLista() throws Exception {
 		getView().cbNroLista.removeAllItems();
-		for (VentCliv listaClienteLista : VentClivDAO.getListaPreciosByCliente(cliente)) {
-			VentLipv lista = VentLipvDAO.findById(listaClienteLista.getClivListaPrecvta());
-			lista.setIsListaPrincipal(true);
+		for (VentLipv lista : getModel().getListasToShow()) {
 			getView().cbNroLista.addItem(lista);
 		}
-		//perdioFocoNroLista();
 
 		setModoPantalla();
+
 	}
 
 	private void setModoPantalla() {
@@ -167,7 +160,14 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().btnAgregar.setEnabled(tieneCli);
 		getView().btnModificar.setEnabled(tieneCli);
 		getView().btnEliminar.setEnabled(tieneCli);
-		getView().btnEliminarLista.setEnabled(tieneCli);
+
+		boolean habilitaEliminar = tieneCli;
+		if (getModel().getListaCargada() != null) {
+			if (getModel().getListaCargada().isListaPrincipal()) {
+				habilitaEliminar = false;
+			}
+		}
+		getView().btnEliminarLista.setEnabled(habilitaEliminar);
 		getView().btnAgregarLista.setEnabled(tieneCli);
 
 		getView().btnCancelar.setVisible(tieneCli);
@@ -196,7 +196,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		resetearTablaEspecifico();
 		resetearTablaFamilia();
-		
+
 		setModoPantalla();
 	}
 
@@ -211,13 +211,13 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_DESDE_FAMILIA, SortOrder.ASCENDING));
 
 		sorterTablaDesFamilia.setSortKeys(sortKeysFamilia);
-		
+
 	}
 
 	private void resetearTablaEspecifico() {
 		getView().tableDescEspecifico.clear();
-		
-		// Le seteo el order		
+
+		// Le seteo el order
 		sorterTablaDesEspecifico = new TableRowSorter<TableModel>(getView().tableDescEspecifico.getModel());
 		getView().tableDescEspecifico.setRowSorter(sorterTablaDesEspecifico);
 		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
@@ -235,7 +235,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			}
 		});
 
-		sorterTablaDesEspecifico.setSortKeys(sortKeys);		
+		sorterTablaDesEspecifico.setSortKeys(sortKeys);
 	}
 
 	@Override
@@ -282,7 +282,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			VentLipv lista = buscarListaDialog.getNroLista();
 			getView().cbNroLista.addItem(lista);
 			getView().cbNroLista.setSelectedIndex(getView().cbNroLista.getItemCount() - 1);
-			//perdioFocoNroLista();
 		}
 	}
 
@@ -448,6 +447,31 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				ManejoDeError.showError(e, "Error al agregar lista");
 			}
 		}
+
+		if (accion.equals(ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString())) {
+			if (WebOptionPane.showConfirmDialog(getView(), "¿Eliminamos la lista?", "Eliminacion de Lista", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
+
+				for (int i = 0; i < getView().tableDescFamilia.getRowCount(); i++) {
+					Object regis = getView().tableDescFamilia.getValueAt(i, CargaPrecioView.COL_REGISTRO_FAMILIA);
+					HibernateGeneric.remove(regis);
+				}
+
+				for (int i = 0; i < getView().tableDescEspecifico.getRowCount(); i++) {
+					Object regis = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_REGISTRO_ESPECIFICO);
+					HibernateGeneric.remove(regis);
+				}
+
+				try {
+					perdioFocoCliente(getModel().getClienteCargado().getClieCliente());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		}
+
 	}
 
 	private void buscarRegisro(RPTable tableActivo, int col_nombre, String nombre, int col_desde, Date fechaDesde) {
@@ -502,7 +526,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			tableActivo.setValueAt(registroFamilia.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_FAMILIA);
 			tableActivo.getModel().setValueAt(registroFamilia, row, CargaPrecioView.COL_REGISTRO_FAMILIA);
 		}
-
 	}
 
 	private void agregarRegistroATablaArticulo(RPTable tabla, PreciosEspeciales registro, String id_Articulo, String nombreItem, String descItem, String unidadItem) {
@@ -518,7 +541,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro, String nombreItem) {
-		tabla.addRow(new Object[] { registro.getPricFamiliaListaPrecvta(), nombreItem,
+		tabla.addRow(new Object[] { registro.getPricCa01Clasif1(), nombreItem,
 				registro.getPricFamiliaDescuento1() != null ? Common.double2String(registro.getPricFamiliaDescuento1().doubleValue()) : "",
 				registro.getPricFamiliaDescuento2() != null ? Common.double2String(registro.getPricFamiliaDescuento2().doubleValue()) : "",
 				registro.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFamiliaFechaDesde()) : "",

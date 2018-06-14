@@ -94,7 +94,8 @@ public class PreciosEspecialesDAO {
 		log.debug("getting PricPreciosEspeciales instance with id: " + id);
 		Session session = HibernateUtil.getSession();
 		try {
-			//PreciosEspeciales instance = (PreciosEspeciales) session.get("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales", id);
+			// PreciosEspeciales instance = (PreciosEspeciales)
+			// session.get("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales", id);
 			PreciosEspeciales instance = (PreciosEspeciales) session.get(PreciosEspeciales.class, id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
@@ -129,7 +130,21 @@ public class PreciosEspecialesDAO {
 		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder().createQuery(PreciosEspeciales.class);
 		Root<PreciosEspeciales> i = criteriaQuery.from(PreciosEspeciales.class);
 		criteriaQuery.where(cb.equal(i.get("pricCliente"), pricCliente), cb.equal(i.get("pricListaPrecvta"), nroLista));
-		
+
+		List<PreciosEspeciales> clientes = session.createQuery(criteriaQuery).getResultList();
+
+		return clientes;
+
+	}
+
+	public static List<PreciosEspeciales> getByCliente(int clieCliente) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder().createQuery(PreciosEspeciales.class);
+		Root<PreciosEspeciales> i = criteriaQuery.from(PreciosEspeciales.class);
+		criteriaQuery.where(cb.equal(i.get("pricCliente"), clieCliente));
+
 		List<PreciosEspeciales> clientes = session.createQuery(criteriaQuery).getResultList();
 
 		return clientes;

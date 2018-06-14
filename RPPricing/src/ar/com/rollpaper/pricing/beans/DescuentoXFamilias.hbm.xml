@@ -9,8 +9,11 @@
         <property generated="never" lazy="false" name="pricFamiliaCliente" optimistic-lock="true" type="int" unique="false">
             <column name="PRIC_FAMILIA_CLIENTE" not-null="true"/>
         </property>
-        <property generated="never" lazy="false" name="pricFamiliaListaPrecvta" optimistic-lock="true" type="string" unique="false">
+        <property generated="never" lazy="false" name="pricFamiliaListaPrecvta" optimistic-lock="true" type="int" unique="false">
             <column name="PRIC_FAMILIA_LISTA_PRECVTA" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="pricCa01Clasif1" optimistic-lock="true" type="string" unique="false">
+            <column name="PRIC_CA01_CLASIF_1" not-null="true"/>
         </property>
         <property generated="never" lazy="false" name="pricFamiliaDescuento1" optimistic-lock="true" type="big_decimal" unique="false">
             <column name="PRIC_FAMILIA_DESCUENTO_1" not-null="true"/>

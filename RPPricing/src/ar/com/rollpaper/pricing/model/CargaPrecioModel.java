@@ -1,9 +1,17 @@
 package ar.com.rollpaper.pricing.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
+import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
+import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
+import ar.com.rollpaper.pricing.dao.VentClivDAO;
+import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rp.ui.pantalla.BaseModel;
 
 public class CargaPrecioModel extends BaseModel {
@@ -29,6 +37,7 @@ public class CargaPrecioModel extends BaseModel {
 
 	public DescuentoXFamilias getRegistroFamilaiEmpty() {
 		DescuentoXFamilias descuentoXFamilias = new DescuentoXFamilias();
+		descuentoXFamilias.setPricFamiliaListaPrecvta(listaCargada.getLipvListaPrecvta());
 		descuentoXFamilias.setPricFamiliaCliente(clienteCargado.getClieCliente());
 		return descuentoXFamilias;
 
@@ -40,6 +49,48 @@ public class CargaPrecioModel extends BaseModel {
 
 	public void setListaCargada(VentLipv listaCargada) {
 		this.listaCargada = listaCargada;
-		
+	}
+
+	public List<VentLipv> getListasToShow() {
+		List<VentLipv> retorno = new ArrayList<VentLipv>();
+
+		// Busco la lista principal
+		for (VentCliv listaClienteLista : VentClivDAO.getListaPreciosByCliente(getClienteCargado())) {
+			VentLipv lista = VentLipvDAO.findById(listaClienteLista.getClivListaPrecvta());
+			lista.setIsListaPrincipal(true);
+			retorno.add(lista);
+		}
+
+		// Busco las lista que tenga en las otras tablas
+		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getByCliente(getClienteCargado().getClieCliente())) {
+			VentLipv lista = VentLipvDAO.findById(familia.getPricFamiliaListaPrecvta());
+			if (lista != null) {
+				if (!isInLista(retorno, lista)) {
+					retorno.add(lista);
+				}
+			}
+		}
+
+		for (PreciosEspeciales especial : PreciosEspecialesDAO.getByCliente(getClienteCargado().getClieCliente())) {
+			VentLipv lista = VentLipvDAO.findById(especial.getPricPreciosEspecialesId());
+			if (lista != null) {
+				if (!isInLista(retorno, lista)) {
+					retorno.add(lista);
+				}
+			}
+		}
+
+		// TODO falta los heredados
+
+		return retorno;
+	}
+
+	private boolean isInLista(List<VentLipv> lista, VentLipv registro) {
+		for (VentLipv aux : lista) {
+			if (aux.getLipvListaPrecvta() == registro.getLipvListaPrecvta()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -1,5 +1,3 @@
-//TODO falta agregar el campo id familia
-
 package ar.com.rollpaper.pricing.beans;
 // Generated 24/05/2018 09:03:27 by Hibernate Tools 5.3.0.Beta2
 
@@ -17,7 +15,8 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	private static final long serialVersionUID = 2261744219677416566L;
 	private int pricFamiliaId;
 	private int pricFamiliaCliente;
-	private String pricFamiliaListaPrecvta;
+	private int pricFamiliaListaPrecvta;
+	private String pricCa01Clasif1;
 	private BigDecimal pricFamiliaDescuento1;
 	private BigDecimal pricFamiliaDescuento2;
 	private Date pricFamiliaFechaDesde;
@@ -28,12 +27,13 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	public DescuentoXFamilias() {
 	}
 
-	public DescuentoXFamilias(int pricFamiliaId, int pricFamiliaCliente, String pricFamiliaListaPrecvta, BigDecimal pricFamiliaDescuento1, BigDecimal pricFamiliaDescuento2,
-			Date pricFamiliaFechaDesde, Date pricFamiliaFechaHasta, BigDecimal pricFamiliaComision, String pricReferencia) {
+	public DescuentoXFamilias(int pricFamiliaId, int pricFamiliaCliente, int pricFamiliaListaPrecvta, String pricCa01Clasif1, BigDecimal pricFamiliaDescuento1,
+			BigDecimal pricFamiliaDescuento2, Date pricFamiliaFechaDesde, Date pricFamiliaFechaHasta, BigDecimal pricFamiliaComision, String pricReferencia) {
 		super();
 		this.pricFamiliaId = pricFamiliaId;
 		this.pricFamiliaCliente = pricFamiliaCliente;
 		this.pricFamiliaListaPrecvta = pricFamiliaListaPrecvta;
+		this.pricCa01Clasif1 = pricCa01Clasif1;
 		this.pricFamiliaDescuento1 = pricFamiliaDescuento1;
 		this.pricFamiliaDescuento2 = pricFamiliaDescuento2;
 		this.pricFamiliaFechaDesde = pricFamiliaFechaDesde;
@@ -58,12 +58,20 @@ public class DescuentoXFamilias implements java.io.Serializable {
 		this.pricFamiliaCliente = pricFamiliaCliente;
 	}
 
-	public String getPricFamiliaListaPrecvta() {
+	public int getPricFamiliaListaPrecvta() {
 		return pricFamiliaListaPrecvta;
 	}
 
-	public void setPricFamiliaListaPrecvta(String pricFamiliaListaPrecvta) {
+	public void setPricFamiliaListaPrecvta(int pricFamiliaListaPrecvta) {
 		this.pricFamiliaListaPrecvta = pricFamiliaListaPrecvta;
+	}
+
+	public String getPricCa01Clasif1() {
+		return pricCa01Clasif1;
+	}
+
+	public void setPricCa01Clasif1(String pricCa01Clasif1) {
+		this.pricCa01Clasif1 = pricCa01Clasif1;
 	}
 
 	public BigDecimal getPricFamiliaDescuento1() {
@@ -113,4 +121,5 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	public void setPricReferencia(String pricReferencia) {
 		this.pricReferencia = pricReferencia;
 	}
+
 }
