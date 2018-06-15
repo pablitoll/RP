@@ -39,6 +39,10 @@ public abstract class BaseController implements ActionListener {
 	public boolean presionoTecla(KeyEvent ke) {
 		return FrameworkCommon.buscarKey(getContenedor(), ke);
 	}
+	
+	public boolean liberoTecla(KeyEvent ke) {
+		return true;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {

@@ -2,12 +2,7 @@ package ar.com.rp.ui.error;
 
 import java.awt.Component;
 
-import com.alee.extended.layout.VerticalFlowLayout;
-import com.alee.extended.window.WebPopOver;
-import com.alee.laf.label.WebLabel;
 import com.alee.laf.optionpane.WebOptionPane;
-
-import ar.com.rp.ui.common.Common;
 
 public class popUpError {
 

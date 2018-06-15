@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
@@ -98,6 +99,7 @@ public class BuscarArticuloDialog extends DialogBase {
 		tableArticulo.setModel(new DefaultTableModel(data, header));
 		tableArticulo.setEditable(false);
 		tableArticulo.getColumnModel().removeColumn(tableArticulo.getColumnModel().getColumn(COL_ID_INTERNO));
+		tableArticulo.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		WebScrollPane scrollPane = new WebScrollPane(tableArticulo);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioArticulo();

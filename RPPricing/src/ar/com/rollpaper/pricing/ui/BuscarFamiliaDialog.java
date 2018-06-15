@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
@@ -114,6 +115,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		});
 		tableFamilia.setModel(new DefaultTableModel(data, header));
 		tableFamilia.setEditable(false);
+		tableFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		WebScrollPane scrollPane = new WebScrollPane(tableFamilia);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioArticulo();

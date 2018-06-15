@@ -1,7 +1,6 @@
 package ar.com.rollpaper.pricing.view;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -12,17 +11,18 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
-import com.alee.laf.table.WebTable;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
+import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
 
 public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
@@ -34,10 +34,10 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	public static final int COL_DESC = 1;
 	public static final int COL_DESC_LEGAL = 2;
 	public static final int COL_ID_CLIENTE_ESCLAVO = 0;
+	public static final int COL_REGISTRO = 3;
 
 	public WebFormattedTextField txtNroCliente;
-	public WebTable tableEsclavo;
-	public JButtonRP btnGrabar;
+	public RPTable tableEsclavo;
 	public JLabel lblNombreLista;
 	public JLabel lblNombreLegal;
 	public JLabel lblNombreCliente;
@@ -107,7 +107,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		pnlSuperior.add(lblNewLabel, gbc_lblNewLabel);
 
 		lblNombreCliente = new JLabel("New label");
-		lblNombreCliente.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblNombreCliente.setFont(Common.getStandarFontBold());
 		GridBagConstraints gbc_lblNombreCliente = new GridBagConstraints();
 		gbc_lblNombreCliente.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNombreCliente.insets = new Insets(0, 0, 5, 5);
@@ -125,7 +125,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		pnlSuperior.add(lblNewLabel_3, gbc_lblNewLabel_3);
 
 		lblNombreLegal = new JLabel("New label");
-		lblNombreLegal.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblNombreLegal.setFont(Common.getStandarFontBold());
 		GridBagConstraints gbc_lblNombreLegal = new GridBagConstraints();
 		gbc_lblNombreLegal.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNombreLegal.insets = new Insets(0, 0, 5, 0);
@@ -143,7 +143,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		pnlSuperior.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		lblNroLista = new JLabel("New label");
-		lblNroLista.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblNroLista.setFont(Common.getStandarFontBold());
 		GridBagConstraints gbc_lblNroListaShow = new GridBagConstraints();
 		gbc_lblNroListaShow.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNroListaShow.insets = new Insets(0, 0, 0, 5);
@@ -161,7 +161,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		pnlSuperior.add(lblNewLabel_2, gbc_lblNewLabel_2);
 
 		lblNombreLista = new JLabel("New label");
-		lblNombreLista.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 15));
+		lblNombreLista.setFont(Common.getStandarFontBold());
 		GridBagConstraints gbc_lblNombreLista = new GridBagConstraints();
 		gbc_lblNombreLista.fill = GridBagConstraints.BOTH;
 		gbc_lblNombreLista.insets = new Insets(0, 0, 0, 5);
@@ -169,22 +169,17 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNombreLista.gridy = 1;
 		pnlSuperior.add(lblNombreLista, gbc_lblNombreLista);
 
-		String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia" };
+		String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "" };
 		String[][] data = { {} };
 
-		btnCancelar = new JButtonRP("Cancelar");
-		btnCancelar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar = new JButtonRP("Cancelar Carga");
+		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);
 
-		btnGrabar = new JButtonRP("Grabar");
-		btnGrabar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/extended/ninepatch/icons/save.png")));
-		btnGrabar.setFont(Common.getStandarFont());
-		pnlInferiorBotones.add(btnGrabar);
-
 		btnImprimir = new JButtonRP("Imprimir");
-		btnImprimir.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/extended/language/icons/text.png")));
+		btnImprimir.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/extended/language/icons/text.png")));
 		btnImprimir.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnImprimir);
 
@@ -195,28 +190,18 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		pnlCentral = new JPanel();
 		getContentPane().add(pnlCentral, BorderLayout.CENTER);
 
-		tableEsclavo = new WebTable();
-		tableEsclavo.setModel(new DefaultTableModel(data, header) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean isCellEditable(int row, int col) {
-				return col == COL_ID_CLIENTE_ESCLAVO;
-			}
-
-			@Override
-			public Class<?> getColumnClass(int c) {
-				if(c == COL_ID_CLIENTE_ESCLAVO) {
-					return Integer.class;
-				} else {
-					return String.class;
-				}
-			}
-		});
+		tableEsclavo = new RPTable();
+		tableEsclavo.setModel(new DefaultTableModel(data, header));
+		tableEsclavo.setEditable(false);
 		tableEsclavo.setFont(Common.getStandarFont());
+		tableEsclavo.setRowHeight(30);
+		tableEsclavo.setColToIgnorar(new Integer[] {COL_REGISTRO});
+		tableEsclavo.getColumnModel().getColumn(COL_REGISTRO).setMaxWidth(0);
+		tableEsclavo.getColumnModel().getColumn(COL_REGISTRO).setMinWidth(0);
+		tableEsclavo.getColumnModel().getColumn(COL_REGISTRO).setPreferredWidth(0);
+		tableEsclavo.getColumnModel().getColumn(COL_REGISTRO).setCellRenderer(tableEsclavo.getCenterRender());
+		tableEsclavo.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 		pnlCentral.setLayout(new BorderLayout(0, 0));
 
 		WebScrollPane spEsclavo = new WebScrollPane(tableEsclavo);
@@ -232,11 +217,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		panel.setLayout(gbl_panel);
 
 		btnAgregar = new JButtonRP("Agregar");
-		btnAgregar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnAgregar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/plus.png")));
+		btnAgregar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/plus.png")));
 		btnAgregar.setFont(Common.getStandarFont());
 		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);
 		GridBagConstraints gbc_btnAgregar = new GridBagConstraints();
@@ -247,7 +228,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		panel.add(btnAgregar, gbc_btnAgregar);
 
 		btnEliminar = new JButtonRP("Eliminar");
-		btnEliminar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/minus.png")));
+		btnEliminar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/minus.png")));
 		btnEliminar.setFont(Common.getStandarFont());
 		btnEliminar.setMnemonic(KeyEvent.VK_MINUS);
 		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();
@@ -262,7 +243,6 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnAgregar, ConstantesRP.PantCarClienteEsclabo.AGREGAR.toString());
 		asignarBotonAccion(btnEliminar, ConstantesRP.PantCarClienteEsclabo.BORRAR.toString());
 		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString());
-		asignarBotonAccion(btnGrabar, ConstantesRP.PantCarClienteEsclabo.GRABAR.toString());
 		asignarBotonAccion(btnImprimir, ConstantesRP.PantCarClienteEsclabo.IMPRIMIR.toString());
 		asignarBotonAccion(btnImprimirTodo, ConstantesRP.PantCarClienteEsclabo.IMPRIMIR_TODO.toString());
 	}

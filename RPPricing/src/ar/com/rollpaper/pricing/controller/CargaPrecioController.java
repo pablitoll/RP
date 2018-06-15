@@ -288,9 +288,12 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	private void buscarCliente() throws Exception {
 		BuscarClienteDialog buscarClienteDialog = new BuscarClienteDialog(getPantallaPrincipal());
 		buscarClienteDialog.iniciar();
-		if (buscarClienteDialog.getNroCliente() != null) {
-			getView().txtNroCliente.setValue(buscarClienteDialog.getNroCliente());
-			perdioFocoCliente(buscarClienteDialog.getNroCliente());
+		if (buscarClienteDialog.getCliente() != null) {
+			CcobClie cliente = buscarClienteDialog.getCliente();
+			if (cliente != null) {
+				getView().txtNroCliente.setValue(cliente.getClieCliente());
+				perdioFocoCliente(cliente.getClieCliente());
+			}
 		}
 	}
 

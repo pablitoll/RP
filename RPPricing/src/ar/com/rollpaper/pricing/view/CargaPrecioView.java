@@ -1,6 +1,7 @@
 package ar.com.rollpaper.pricing.view;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,6 +10,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -25,7 +27,6 @@ import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
-import java.awt.FlowLayout;
 
 public class CargaPrecioView extends BaseViewMVCExtendida {
 
@@ -282,13 +283,14 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMaxWidth(0);
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMinWidth(0);
 		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setPreferredWidth(0);
-		// tableDescFamilia.getColumnModel().removeColumn(tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA));
+		tableDescFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		tableDescFamilia.getColumnModel().getColumn(COL_1DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
 		tableDescFamilia.getColumnModel().getColumn(COL_2DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
 		tableDescFamilia.getColumnModel().getColumn(COL_COMSISION_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
 		tableDescFamilia.getColumnModel().getColumn(COL_DESDE_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
 		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
+		tableDescFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		WebScrollPane spDescLista = new WebScrollPane(tableDescFamilia);
 

@@ -31,7 +31,7 @@ public abstract class BasePantallaPrincipal<TipoVista extends BasePantallaPrinci
 	protected ControllerManager cmGestordeVentanas;
 	protected LoguerInterface loguerInterface;
 	private static Robot robot = null;
-	
+
 	public BasePantallaPrincipal(TipoVista view, TipoModelo model, PermisosInterface permisos) throws Exception {
 		super(permisos);
 		this.model = model;
@@ -48,8 +48,16 @@ public abstract class BasePantallaPrincipal<TipoVista extends BasePantallaPrinci
 			@Override
 			public boolean dispatchKeyEvent(KeyEvent e) {
 				boolean llamarAPrincipal = true;
+
+				if (e.getID() == KeyEvent.KEY_RELEASED) {
+					if ((e.getKeyCode() == KeyEvent.VK_ALT) || isMenuSelected()) {
+						liberoTecla(e); // Para acceder al menu
+					}
+				}
+
 				if (e.getID() == KeyEvent.KEY_PRESSED) {
-					// System.out.println("Got key event!" +" *** " +e.getExtendedKeyCode()+" *** "+ e.getKeyText(e.getKeyCode()));
+					// System.out.println("Got key event!" +" *** " +e.getExtendedKeyCode()+" *** "+
+					// e.getKeyText(e.getKeyCode()));
 					try {
 						if (loguerInterface != null) {
 							loguerInterface.logKeyLoger(KeyEvent.getKeyText(e.getKeyCode()));
@@ -59,43 +67,43 @@ public abstract class BasePantallaPrincipal<TipoVista extends BasePantallaPrinci
 					}
 
 					if (!e.isConsumed()) {
-						if ((e.getKeyCode() == KeyEvent.VK_ALT) || isMenuSelected()) {
-							presionoTecla(e); // Para acceder al menu
-						} else {
-							// Me fijo si la pantalla activa es un BaseControllerMVC
-							if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow() instanceof JFrame) {// Pant Principal
-								BaseControllerMVC<?, ?, ?> controller = cmGestordeVentanas.getLastCall();
-								if (controller != null) {
-									if (controller.presionoTecla(e)) {
-										e.consume();
-									}
-								}
-							} else {
-								// Me fijo si la pantalla activa es un BaseViewDialog
-								if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow() instanceof BaseViewDialog) {
-									if (((BaseViewDialog) KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow()).presionoTecla(e)) {
-										e.consume();
-									}
-									llamarAPrincipal = false;
-								} else {
-									// Me fijo si la pantalla activa es un DialogBase
-									if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow() instanceof DialogBase) {
-										if (((DialogBase) KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow()).presionoTecla(e)) {
-											e.consume();
-										}
-									} else {
-										// Por ultimo me fijo si la pantalla activa es un showmessaje
-										if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow() instanceof JDialog) {
-											llamarAPrincipal = false;
-										}
-									}
+						// if ((e.getKeyCode() == KeyEvent.VK_ALT) || isMenuSelected()) {
+						// presionoTecla(e); // Para acceder al menu
+						// } else {
+						// Me fijo si la pantalla activa es un BaseControllerMVC
+						if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow() instanceof JFrame) {// Pant Principal
+							BaseControllerMVC<?, ?, ?> controller = cmGestordeVentanas.getLastCall();
+							if (controller != null) {
+								if (controller.presionoTecla(e)) {
+									e.consume();
 								}
 							}
-
-							if (!e.isConsumed() && llamarAPrincipal) {
-								presionoTecla(e);
+						} else {
+							// Me fijo si la pantalla activa es un BaseViewDialog
+							if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow() instanceof BaseViewDialog) {
+								if (((BaseViewDialog) KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow()).presionoTecla(e)) {
+									e.consume();
+								}
+								llamarAPrincipal = false;
+							} else {
+								// Me fijo si la pantalla activa es un DialogBase
+								if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow() instanceof DialogBase) {
+									if (((DialogBase) KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow()).presionoTecla(e)) {
+										e.consume();
+									}
+								} else {
+									// Por ultimo me fijo si la pantalla activa es un showmessaje
+									if (KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow() instanceof JDialog) {
+										llamarAPrincipal = false;
+									}
+								}
 							}
 						}
+
+						if (!e.isConsumed() && llamarAPrincipal) {
+							presionoTecla(e);
+						}
+						// }
 					}
 				}
 
@@ -107,7 +115,7 @@ public abstract class BasePantallaPrincipal<TipoVista extends BasePantallaPrinci
 		requestFocusFirstComponent();
 
 	}
-	
+
 	@Override
 	protected void cerrarVentana() {
 		salir();
@@ -137,7 +145,7 @@ public abstract class BasePantallaPrincipal<TipoVista extends BasePantallaPrinci
 	}
 
 	@Override
-	public boolean presionoTecla(KeyEvent ke) {
+	public boolean liberoTecla(KeyEvent ke) {
 		boolean retorno = super.presionoTecla(ke);
 
 		if (!retorno) {
@@ -219,7 +227,7 @@ public abstract class BasePantallaPrincipal<TipoVista extends BasePantallaPrinci
 		// muestro la pantalla despues de todo
 		getView().initialize();
 	}
-	
+
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 		salir();

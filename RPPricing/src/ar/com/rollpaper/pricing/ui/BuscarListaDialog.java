@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
@@ -99,6 +100,7 @@ public class BuscarListaDialog extends DialogBase {
 		tableLista.getColumnModel().getColumn(COL_REGISTRO).setMaxWidth(0);
 		tableLista.getColumnModel().getColumn(COL_REGISTRO).setMinWidth(0);
 		tableLista.getColumnModel().getColumn(COL_REGISTRO).setPreferredWidth(0);
+		tableLista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		WebScrollPane scrollPane = new WebScrollPane(tableLista);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);

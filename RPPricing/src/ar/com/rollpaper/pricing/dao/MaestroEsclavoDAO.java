@@ -145,4 +145,19 @@ public class MaestroEsclavoDAO {
 
 		return esclavos.get(0);
 	}
+
+	public static List<MaestroEsclavo>  getListaEsclavosByEsclavo(CcobClie esclavo) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<MaestroEsclavo> criteriaQuery = session.getCriteriaBuilder().createQuery(MaestroEsclavo.class);
+		Root<MaestroEsclavo> i = criteriaQuery.from(MaestroEsclavo.class);
+		criteriaQuery.where(cb.equal(i.get("pricEsclavoCliente"), esclavo.getClieCliente()));
+
+		List<MaestroEsclavo> esclavos = session.createQuery(criteriaQuery).getResultList();
+
+		return esclavos;
+
+		
+	}
 }

@@ -11,12 +11,14 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -29,14 +31,15 @@ public class BuscarClienteDialog extends DialogBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private RPTable tableCliente;
+	protected static final int COL_REG_INTERNO = 3;
+	protected RPTable tableCliente;
 	private JTextField txtDescCliente;
 	private JButtonRP btnSeleccionar;
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
-	private Integer nroCliente = null;
+	private CcobClie nroCliente = null;
 
-	public Integer getNroCliente() {
+	public CcobClie getCliente() {
 		return nroCliente;
 	}
 
@@ -53,9 +56,12 @@ public class BuscarClienteDialog extends DialogBase {
 		btnSeleccionar = new JButtonRP("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nroCliente = (Integer) tableCliente.getModel().getValueAt(tableCliente.getSelectedRow(), 0);
-				cerrar();
+				if(puedeSeleccionar()) {
+					nroCliente = (CcobClie) tableCliente.getModel().getValueAt(tableCliente.getSelectedRow(), COL_REG_INTERNO);
+					cerrar();
+				}
 			}
+			
 		});
 		btnSeleccionar.setFont(Common.getStandarFont());
 		panel.add(btnSeleccionar);
@@ -73,7 +79,7 @@ public class BuscarClienteDialog extends DialogBase {
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, BorderLayout.NORTH);
 
-		JLabel lblNombreDelCliente = new JLabel("Nombre del Cliente:");
+		JLabel lblNombreDelCliente = new JLabel("Nombre del Cliente / Nro:");
 		lblNombreDelCliente.setFont(Common.getStandarFont());
 		panel_1.add(lblNombreDelCliente);
 
@@ -86,12 +92,17 @@ public class BuscarClienteDialog extends DialogBase {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscar();
+				if(CommonUtils.isNumeric(txtDescCliente.getText())) {
+					if(tableCliente.getRowCount() == 1) {
+						btnSeleccionar.doClick();
+					}
+				}
 			}
 		});
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
 
-		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal" };
+		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal", "" };
 		String[][] data = {};
 		tableCliente = new RPTable();
 		tableCliente.addMouseListener(new MouseAdapter() {
@@ -104,6 +115,9 @@ public class BuscarClienteDialog extends DialogBase {
 		});
 		tableCliente.setModel(new DefaultTableModel(data, header));
 		tableCliente.setEditable(false);
+		tableCliente.getColumnModel().removeColumn(tableCliente.getColumnModel().getColumn(COL_REG_INTERNO));
+		tableCliente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		WebScrollPane scrollPane = new WebScrollPane(tableCliente);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioCliente();
@@ -117,7 +131,7 @@ public class BuscarClienteDialog extends DialogBase {
 		tableCliente.clear();
 
 		for (CcobClie clie : CcobClieDAO.getListaCliente(txtDescCliente.getText())) {
-			tableCliente.addRow(new Object[] { clie.getClieCliente(), clie.getClieNombre(), clie.getClieNombreLegal() });
+			tableCliente.addRow(new Object[] { clie.getClieCliente(), clie.getClieNombre(), clie.getClieNombreLegal(), clie});
 		}
 
 		if (tableCliente.getRowCount() > 0) {
@@ -148,6 +162,10 @@ public class BuscarClienteDialog extends DialogBase {
 			}
 		}
 		return retorno;
+	}
+	
+	protected boolean puedeSeleccionar() {
+		return true; //Para el hijo
 	}
 
 }

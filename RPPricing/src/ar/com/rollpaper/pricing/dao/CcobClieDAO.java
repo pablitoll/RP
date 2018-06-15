@@ -13,6 +13,7 @@ import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
+import ar.com.rp.rpcutils.CommonUtils;
 
 /**
  * Home object for domain model class CcobClie.
@@ -23,12 +24,11 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
 public class CcobClieDAO {
 
 	private static final Log log = LogFactory.getLog(CcobClieDAO.class);
-	
+
 	public static CcobClie findById(int id) {
 		log.debug("getting CcobClie instance with id: " + id);
 		try {
-			CcobClie instance = (CcobClie) HibernateUtil.getSession()
-					.get("ar.com.rollpaper.pricing.beans.CcobClie", id);
+			CcobClie instance = (CcobClie) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.CcobClie", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -41,19 +41,23 @@ public class CcobClieDAO {
 		}
 	}
 
-	
 	public static List<CcobClie> getListaCliente(String nombre) {
+		Integer id = -1;
+		if (CommonUtils.isNumeric(nombre)) {
+			id = Integer.valueOf(nombre);
+		}
+
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 
 		CriteriaQuery<CcobClie> criteriaQuery = session.getCriteriaBuilder().createQuery(CcobClie.class);
 		Root<CcobClie> i = criteriaQuery.from(CcobClie.class);
-		criteriaQuery.where(cb.like(i.get("clieNombre"), "%" + nombre + "%"));
+		criteriaQuery.where(cb.or(cb.like(i.get("clieNombre"), "%" + nombre + "%"), cb.equal(i.get("clieCliente"), id)));
 
 		List<CcobClie> clientes = session.createQuery(criteriaQuery).getResultList();
 
 		return clientes;
 
-		}
+	}
 
 }

@@ -20,7 +20,6 @@ public class MaestroEsclavo implements java.io.Serializable {
 
 	public MaestroEsclavo( int pricMaestroCliente, int pricMEListaPrecvta,
 			int pricEsclavoCliente) {
-		//this.pricMaestroEsclavoId = pricMaestroEsclavoId;
 		this.pricMaestroCliente = pricMaestroCliente;
 		this.pricMEListaPrecvta = pricMEListaPrecvta;
 		this.pricEsclavoCliente = pricEsclavoCliente;
