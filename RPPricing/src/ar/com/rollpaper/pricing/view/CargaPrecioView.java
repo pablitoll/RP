@@ -178,17 +178,19 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		
 		
 		btnAgregarLista = new JButtonRP("");
+		btnAgregarLista.setLeftRightSpacing(0);
 		btnAgregarLista.setToolTipText("Agregar Lista");
 		btnAgregarLista.setFont(Common.getStandarFont());
 		btnAgregarLista.setIcon(CommonUtils.loadIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/plus.png"), 15, 15));
 
 		btnEliminarLista = new JButtonRP("");
+		btnEliminarLista.setLeftRightSpacing(0);
 		btnEliminarLista.setToolTipText("Eliminar Lista");
 		btnEliminarLista.setFont(Common.getStandarFont());
 		btnEliminarLista.setIcon(CommonUtils.loadIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/minus.png"), 15, 15));
 		
 		pnlBotonLista = new JPanel();
-		FlowLayout fl_pnlBotonLista = new FlowLayout(FlowLayout.CENTER, 5, 5);
+		FlowLayout fl_pnlBotonLista = new FlowLayout(FlowLayout.CENTER, 0, 0);
 		pnlBotonLista.setLayout(fl_pnlBotonLista);
 		pnlBotonLista.add(btnAgregarLista);
 		pnlBotonLista.add(btnEliminarLista);

@@ -27,7 +27,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 	public DescuentoXFamilias getRegistro() throws Exception {
 
 		DescuentoXFamilias registro = getModel().getRegistroFamilia();
-		
+
 		registro.setPricCa01Clasif1(getModel().getFamiliaID());
 
 		if (getView().txtDesc1.getImporte() > 0.0) {
@@ -170,21 +170,25 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		// Primero valido que los campos esten bien cargados
 		if (!getModel().isEdicion() && getView().lblNombre.getText().contains("S/D")) {
 			popUpError.showError(getView().txtArticuloID, "Falta cargar un producto valido");
+			getView().txtArticuloID.requestFocus();
 			return false;
 		}
 
 		if ((getView().txtDesc1.isEmpty()) && (getView().txtPrecio.isEmpty())) {
 			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio");
+			getView().txtDesc1.requestFocus();
 			return false;
 		}
 
 		if (getView().dateFechaDesde.getDate() == null) {
 			popUpError.showError(getView().dateFechaDesde, "La fecha Desde no puede estar Vacia");
+			getView().dateFechaDesde.requestFocus();
 			return false;
 		}
 
 		if (getView().dateFechaHasta.getDate() == null) {
 			popUpError.showError(getView().dateFechaHasta, "La fecha Hasta no puede estar Vacia");
+			getView().dateFechaHasta.requestFocus();
 			return false;
 		}
 
@@ -193,6 +197,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) > 0) {
 			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta");
+			getView().dateFechaDesde.requestFocus();
 			return false;
 		}
 
@@ -203,27 +208,32 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 			if (getModel().getFamiliaID().equals(registroTabla.getPricCa01Clasif1())) {
 
 				if (registroTabla.getPricFamiliaId() != getModel().getRegistroFamilia().getPricFamiliaId()) {
-					//Si el desde que cargo esta entre las dos fecha del registro
+					// Si el desde que cargo esta entre las dos fecha del registro
 					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFamiliaFechaDesde(), TimeUnit.DAYS) >= 0)
 							&& (FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFamiliaFechaHasta(), TimeUnit.DAYS) <= 0)) {
 						popUpError.showError(getView().dateFechaDesde,
 								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaDesde.getDate()));
+						getView().dateFechaDesde.requestFocus();
 						return false;
 					}
 
-					//Si el hasta que cargo esta entre las dos fecha del registro
+					// Si el hasta que cargo esta entre las dos fecha del registro
 					if ((FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFamiliaFechaDesde(), TimeUnit.DAYS) >= 0)
 							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFamiliaFechaHasta(), TimeUnit.DAYS) <= 0)) {
 						popUpError.showError(getView().dateFechaDesde,
 								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaHasta.getDate()));
+						getView().dateFechaDesde.requestFocus();
 						return false;
 					}
-					
-					//Si el desde que cargo esta antes que el desde del registro y el hasta que cargo es mayor que el del registro
+
+					// Si el desde que cargo esta antes que el desde del registro y el hasta que
+					// cargo es mayor que el del registro
 					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFamiliaFechaDesde(), TimeUnit.DAYS) <= 0)
 							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFamiliaFechaHasta(), TimeUnit.DAYS) >= 0)) {
 						popUpError.showError(getView().dateFechaDesde,
-								"Hay solapamiento de Rango de Fecha.\nYa esta carga el rango " + FechaManagerUtil.Date2String(registroTabla.getPricFamiliaFechaDesde()) + " - " + FechaManagerUtil.Date2String(registroTabla.getPricFamiliaFechaHasta()));
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el rango " + FechaManagerUtil.Date2String(registroTabla.getPricFamiliaFechaDesde()) + " - "
+										+ FechaManagerUtil.Date2String(registroTabla.getPricFamiliaFechaHasta()));
+						getView().dateFechaDesde.requestFocus();
 						return false;
 					}
 				}

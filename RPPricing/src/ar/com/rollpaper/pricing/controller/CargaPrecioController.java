@@ -48,7 +48,6 @@ import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
-
 public class CargaPrecioController extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
 
 	private CargaItemEspecialArticuloModel itemEspecialArticuloModel = new CargaItemEspecialArticuloModel();
@@ -142,7 +141,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 	private void cargarLista() throws Exception {
 		getView().cbNroLista.removeAllItems();
-		for (VentLipv lista : getModel().getListasToShow()) {
+		for (VentLipv lista : getModel().getListasToShow()) {			
 			getView().cbNroLista.addItem(lista);
 		}
 
@@ -153,20 +152,21 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	private void setModoPantalla() {
 		Boolean tieneCli = !getView().lblNombreCliente.getText().equals("S/D");
 
+		Boolean isListaHeredada = false;
+		Boolean habilitaEliminar = tieneCli;
+
+		if (getModel().getListaCargada() != null) {
+			isListaHeredada = getModel().getListaCargada().isListaHeredada();
+			habilitaEliminar = !getModel().getListaCargada().isListaPrincipal() && !isListaHeredada;
+		}
 		getView().txtNroCliente.setEnabled(!tieneCli);
 		getView().cbNroLista.setEnabled(tieneCli);
 		getView().tableDescEspecifico.setEnabled(tieneCli);
 		getView().tableDescFamilia.setEnabled(tieneCli);
-		getView().btnAgregar.setEnabled(tieneCli);
-		getView().btnModificar.setEnabled(tieneCli);
-		getView().btnEliminar.setEnabled(tieneCli);
+		getView().btnAgregar.setEnabled(tieneCli && !isListaHeredada);
+		getView().btnModificar.setEnabled(tieneCli && !isListaHeredada);
+		getView().btnEliminar.setEnabled(tieneCli && !isListaHeredada);
 
-		boolean habilitaEliminar = tieneCli;
-		if (getModel().getListaCargada() != null) {
-			if (getModel().getListaCargada().isListaPrincipal()) {
-				habilitaEliminar = false;
-			}
-		}
 		getView().btnEliminarLista.setEnabled(habilitaEliminar);
 		getView().btnAgregarLista.setEnabled(tieneCli);
 
@@ -267,7 +267,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F2) && getView().cbNroLista.hasFocus()) {
 			retorno = true;
 			try {
-				buscarNroLista();
+				agregarLista();
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
 			}
@@ -275,8 +275,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		return retorno;
 	}
 
-	private void buscarNroLista() throws Exception {
-		BuscarListaDialog buscarListaDialog = new BuscarListaDialog(getPantallaPrincipal());
+	private void agregarLista() throws Exception {
+		BuscarListaDialog buscarListaDialog = new BuscarListaDialog(getPantallaPrincipal(), getView().cbNroLista.getModel());
 		buscarListaDialog.iniciar();
 		if (buscarListaDialog.getNroLista() != null) {
 			VentLipv lista = buscarListaDialog.getNroLista();
@@ -445,7 +445,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString())) {
 			try {
-				buscarNroLista();
+				agregarLista();
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al agregar lista");
 			}

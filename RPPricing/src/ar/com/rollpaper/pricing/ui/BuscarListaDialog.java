@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -34,17 +35,19 @@ public class BuscarListaDialog extends DialogBase {
 	private JButtonRP btnSeleccionar;
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
-	private VentLipv nroLista = null;
+	private VentLipv listaSeleccionada = null;
+	private ComboBoxModel<VentLipv> cbmLista;
 
 	public VentLipv getNroLista() {
-		return nroLista;
+		return listaSeleccionada;
 	}
 
-	public BuscarListaDialog(BasePantallaPrincipal<?, ?> pantPrincipal) {
+	public BuscarListaDialog(BasePantallaPrincipal<?, ?> pantPrincipal, ComboBoxModel<VentLipv> cbmLista) {
 		super(pantPrincipal);
+		this.cbmLista = cbmLista;
 		setBounds(100, 100, 600, 600);
 		setModal(true);
-		nroLista = null;
+		listaSeleccionada = null;
 		JPanel panel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
@@ -53,8 +56,14 @@ public class BuscarListaDialog extends DialogBase {
 		btnSeleccionar = new JButtonRP("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nroLista = (VentLipv) tableLista.getModel().getValueAt(tableLista.getSelectedRow(), COL_REGISTRO);
-				cerrar();
+				if (tableLista.getSelectedRow() > -1) {
+					listaSeleccionada = (VentLipv) tableLista.getModel().getValueAt(tableLista.getSelectedRow(), COL_REGISTRO);
+					if (!isListaYaCargada(listaSeleccionada)) {						
+						cerrar();
+					} else {
+						Dialog.showMessageDialog("La lista ya esta catrgada, no se puede seleccionar");
+					}
+				}
 			}
 		});
 		btnSeleccionar.setFont(Common.getStandarFont());
@@ -91,20 +100,28 @@ public class BuscarListaDialog extends DialogBase {
 		btnBuscar.setFont(Common.getStandarFont());
 		panel_1.add(btnBuscar);
 
-		String[] header = { "Nro de Lista", "Nombre", "Moneda","" }; 
+		String[] header = { "Nro de Lista", "Nombre", "Moneda", "" };
 		String[][] data = {};
 		tableLista = new RPTable();
 		tableLista.setModel(new DefaultTableModel(data, header));
 		tableLista.setEditable(false);
-		tableLista.setColToIgnorar(new Integer[] {COL_REGISTRO});
+		tableLista.setColToIgnorar(new Integer[] { COL_REGISTRO });
 		tableLista.getColumnModel().getColumn(COL_REGISTRO).setMaxWidth(0);
 		tableLista.getColumnModel().getColumn(COL_REGISTRO).setMinWidth(0);
 		tableLista.getColumnModel().getColumn(COL_REGISTRO).setPreferredWidth(0);
 		tableLista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		WebScrollPane scrollPane = new WebScrollPane(tableLista);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioCliente();
+	}
+
+	protected boolean isListaYaCargada(VentLipv listaSeleccionada) {
+		for(int i = 0; i <cbmLista.getSize(); i++) {
+			if(cbmLista.getElementAt(i).getLipvListaPrecvta() == listaSeleccionada.getLipvListaPrecvta())
+				return true;
+		}
+		return false;
 	}
 
 	private void cambioCliente() {
@@ -115,7 +132,7 @@ public class BuscarListaDialog extends DialogBase {
 		tableLista.clear();
 
 		for (VentLipv lista : VentLipvDAO.getListaFamilia(txtDescCliente.getText())) {
-			tableLista.addRow(new Object[] { lista.getLipvListaPrecvta(), lista.getLipvNombre(), lista.getSistMone().getMoneNombre(), lista});
+			tableLista.addRow(new Object[] { lista.getLipvListaPrecvta(), lista.getLipvNombre(), lista.getSistMone().getMoneNombre(), lista });
 		}
 
 		if (tableLista.getRowCount() > 0) {

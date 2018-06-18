@@ -3,12 +3,16 @@ package ar.com.rollpaper.pricing.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.internal.SessionImpl.ManagedFlushCheckerStandardImpl;
+
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
+import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
+import ar.com.rollpaper.pricing.dao.MaestroEsclavoDAO;
 import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
@@ -81,6 +85,16 @@ public class CargaPrecioModel extends BaseModel {
 		}
 
 		// TODO falta los heredados
+		for (MaestroEsclavo maestro : MaestroEsclavoDAO.getListaEsclavosByEsclavo(getClienteCargado())) {
+			VentLipv lista = VentLipvDAO.findById(maestro.getPricMEListaPrecvta());
+			if (lista != null) {
+				if (!isInLista(retorno, lista)) {
+					lista.setIsListaHeredada(true);
+					retorno.add(lista);
+				}
+			}
+		}
+
 
 		return retorno;
 	}

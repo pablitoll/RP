@@ -47,7 +47,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		registro.setPricFechaDesde(getView().dateFechaDesde.getDate());
 		registro.setPricFechaHasta(getView().dateFechaHasta.getDate());
-		
+
 		if (getView().cbMoneda.getSelectedIndex() > 0) {
 			registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
 			registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte(), MathContext.DECIMAL64));
@@ -81,8 +81,10 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				getArticuloByEmp(view.txtArticuloID.getText());
-				RefrescarDatosArticulo();
+				if (!view.txtArticuloID.getText().equals("")) {
+					getArticuloByEmp(view.txtArticuloID.getText());
+					RefrescarDatosArticulo();
+				}
 			}
 
 			@Override
@@ -193,36 +195,43 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		// Primero valido que los campos esten bien cargados
 		if (!getModel().isEdicion() && getView().lblNombre.getText().contains("S/D")) {
 			popUpError.showError(getView().txtArticuloID, "Falta cargar un producto valido");
+			getView().txtArticuloID.requestFocus();
 			return false;
 		}
 
 		if ((getView().txtDesc1.isEmpty()) && (getView().txtPrecio.isEmpty())) {
 			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio");
+			getView().txtDesc1.requestFocus();
 			return false;
 		}
 
 		if ((!getView().txtDesc1.isEmpty()) && (!getView().txtPrecio.isEmpty())) {
 			popUpError.showError(getView().txtDesc1, "No se puede cargar un decuento y precio simultaneamente");
+			getView().txtDesc1.requestFocus();
 			return false;
 		}
 
 		if (!getView().txtPrecio.isEmpty() && (getView().cbMoneda.getSelectedIndex() == 0)) {
 			popUpError.showError(getView().cbMoneda, "Falta cargar la moneda");
+			getView().cbMoneda.requestFocus();
 			return false;
 		}
 
 		if (getView().txtPrecio.isEmpty() && (getView().cbMoneda.getSelectedIndex() != 0)) {
 			popUpError.showError(getView().cbMoneda, "Falta cargar el precio para la moneda selecionada");
+			getView().cbMoneda.requestFocus();
 			return false;
 		}
 
 		if (getView().dateFechaDesde.getDate() == null) {
 			popUpError.showError(getView().dateFechaDesde, "La fecha Desde no puede estar Vacia");
+			getView().dateFechaDesde.requestFocus();
 			return false;
 		}
 
 		if (getView().dateFechaHasta.getDate() == null) {
 			popUpError.showError(getView().dateFechaHasta, "La fecha Hasta no puede estar Vacia");
+			getView().dateFechaHasta.requestFocus();
 			return false;
 		}
 
@@ -231,6 +240,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		if (FechaManagerUtil.getDateDiff(dFechaDesde, dFechaHasta, TimeUnit.DAYS) > 0) {
 			popUpError.showError(getView().dateFechaDesde, "La fecha desde debe ser menor a la hasta");
+			getView().dateFechaDesde.requestFocus();
 			return false;
 		}
 
@@ -241,27 +251,31 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			if (getModel().getArticuloID() == registroTabla.getPricArticulo()) {
 
 				if (registroTabla.getPricPreciosEspecialesId() != getModel().getRegistro().getPricPreciosEspecialesId()) {
-					//Si el desde que cargo esta entre las dos fecha del registro
+					// Si el desde que cargo esta entre las dos fecha del registro
 					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaDesde(), TimeUnit.DAYS) >= 0)
 							&& (FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) <= 0)) {
 						popUpError.showError(getView().dateFechaDesde,
 								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaDesde.getDate()));
+						getView().dateFechaHasta.requestFocus();
 						return false;
 					}
 
-					//Si el hasta que cargo esta entre las dos fecha del registro
+					// Si el hasta que cargo esta entre las dos fecha del registro
 					if ((FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFechaDesde(), TimeUnit.DAYS) >= 0)
 							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) <= 0)) {
 						popUpError.showError(getView().dateFechaDesde,
 								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaHasta.getDate()));
+						getView().dateFechaDesde.requestFocus();
 						return false;
 					}
-					
-					//Si el desde que cargo esta antes que el desde del registro y el hasta que cargo es mayor que el del registro
+
+					// Si el desde que cargo esta antes que el desde del registro y el hasta que
+					// cargo es mayor que el del registro
 					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaDesde(), TimeUnit.DAYS) <= 0)
 							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) >= 0)) {
-						popUpError.showError(getView().dateFechaDesde,
-								"Hay solapamiento de Rango de Fecha.\nYa esta carga el rango " + FechaManagerUtil.Date2String(registroTabla.getPricFechaDesde()) + " - " + FechaManagerUtil.Date2String(registroTabla.getPricFechaHasta()));
+						popUpError.showError(getView().dateFechaDesde, "Hay solapamiento de Rango de Fecha.\nYa esta carga el rango "
+								+ FechaManagerUtil.Date2String(registroTabla.getPricFechaDesde()) + " - " + FechaManagerUtil.Date2String(registroTabla.getPricFechaHasta()));
+						getView().dateFechaDesde.requestFocus();
 						return false;
 					}
 
