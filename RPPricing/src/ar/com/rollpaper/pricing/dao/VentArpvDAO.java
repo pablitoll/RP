@@ -1,4 +1,12 @@
 package ar.com.rollpaper.pricing.dao;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import ar.com.rollpaper.pricing.beans.VentArpv;
+import ar.com.rollpaper.pricing.beans.VentArpvId;
+import ar.com.rollpaper.pricing.data.HibernateUtil;
+
 // Generated 24/05/2018 09:16:17 by Hibernate Tools 5.3.0.Beta2
 
 /**
@@ -8,7 +16,7 @@ package ar.com.rollpaper.pricing.dao;
  */
 public class VentArpvDAO {
 
-//	private static final Log log = LogFactory.getLog(VentArpvDAO.class);
+	private static final Log log = LogFactory.getLog(VentArpvDAO.class);
 
 //	private final SessionFactory sessionFactory = getSessionFactory();
 //
@@ -77,22 +85,21 @@ public class VentArpvDAO {
 //		}
 //	}
 //
-//	public VentArpv findById(ar.com.rollpaper.pricing.beans.VentArpvId id) {
-//		log.debug("getting VentArpv instance with id: " + id);
-//		try {
-//			VentArpv instance = (VentArpv) sessionFactory.getCurrentSession()
-//					.get("ar.com.rollpaper.pricing.beans.VentArpv", id);
-//			if (instance == null) {
-//				log.debug("get successful, no instance found");
-//			} else {
-//				log.debug("get successful, instance found");
-//			}
-//			return instance;
-//		} catch (RuntimeException re) {
-//			log.error("get failed", re);
-//			throw re;
-//		}
-//	}
+	public static VentArpv findById(VentArpvId id) {
+		log.debug("getting VentArpv instance with id: " + id);
+		try {
+			VentArpv instance = (VentArpv) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.VentArpv", id);
+			if (instance == null) {
+				log.debug("get successful, no instance found");
+			} else {
+				log.debug("get successful, instance found");
+			}
+			return instance;
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+	}
 //
 //	public List findByExample(VentArpv instance) {
 //		log.debug("finding VentArpv instance by example");
@@ -107,4 +114,5 @@ public class VentArpvDAO {
 //			throw re;
 //		}
 //	}
+
 }

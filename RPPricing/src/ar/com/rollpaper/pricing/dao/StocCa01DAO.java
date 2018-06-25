@@ -22,6 +22,7 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
  */
 public class StocCa01DAO {
 
+	public static StocCa01 stocCa01Todos = new StocCa01("TODOS", "Todos los articulos", true);
 	private static final Log log = LogFactory.getLog(StocCa01DAO.class);
 
 //	private final SessionFactory sessionFactory = getSessionFactory();
@@ -94,7 +95,12 @@ public class StocCa01DAO {
 	public static StocCa01 findById(String id) {
 		log.debug("getting StocCa01 instance with id: " + id);
 		try {
-			StocCa01 instance = (StocCa01) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.StocCa01", id);
+			StocCa01 instance;
+			if(id.equalsIgnoreCase(stocCa01Todos.getCa01Clasif1())) {
+				instance = stocCa01Todos;
+			} else {
+				instance = (StocCa01) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.StocCa01", id);
+			}
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -130,6 +136,10 @@ public class StocCa01DAO {
 
 		List<StocCa01> clientes = session.createQuery(criteriaQuery).getResultList();
 
+		if(stocCa01Todos.getCa01Nombre().toLowerCase().contains(nombre.toLowerCase())) {
+			clientes.add(stocCa01Todos);
+		}
+		
 		return clientes;
 
 	}

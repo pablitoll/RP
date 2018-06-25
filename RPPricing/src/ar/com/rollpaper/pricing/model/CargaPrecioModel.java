@@ -3,8 +3,6 @@ package ar.com.rollpaper.pricing.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.internal.SessionImpl.ManagedFlushCheckerStandardImpl;
-
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.MaestroEsclavo;

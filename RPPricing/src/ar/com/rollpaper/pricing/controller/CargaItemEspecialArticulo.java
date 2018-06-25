@@ -19,6 +19,7 @@ import ar.com.rollpaper.pricing.ui.BuscarArticuloDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
+import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.componentes.ItemComboBox;
 import ar.com.rp.ui.error.popUpError;
@@ -114,6 +115,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		getView().dateFechaHasta.clear();
 		getView().txtComision.limpiar();
 		getView().cbMoneda.setSelectedIndex(0);
+		getView().lblEstaEnLista.setText("");
 
 		if (getModel().isEdicion()) {
 
@@ -222,6 +224,12 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			getView().cbMoneda.requestFocus();
 			return false;
 		}
+		
+		if(!getModel().isArticuloEnLista() && !getView().txtDesc1.isEmpty()) {
+			popUpError.showError(getView().txtDesc1, "El articulo no esta en la lista, el descuento es solo por precio");
+			getView().txtDesc1.requestFocus();
+			return false;			
+		}
 
 		if (getView().dateFechaDesde.getDate() == null) {
 			popUpError.showError(getView().dateFechaDesde, "La fecha Desde no puede estar Vacia");
@@ -306,6 +314,11 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 	private void RefrescarDatosArticulo() {
 		getView().lblDescripcion.setText(getModel().getDescripcionItem());
 		getView().lblNombre.setText(getModel().getNombreItem());
+		if(getModel().isArticuloEnLista()) {
+			getView().lblEstaEnLista.setText(CommonUtils.SetHTMLColor("ESTA EN LISTA", "blue"));
+		} else {
+			getView().lblEstaEnLista.setText(CommonUtils.SetHTMLColor("NO ESTA EN LISTA", "red"));
+		}
 	}
 
 	public String getDescripcionItem() {

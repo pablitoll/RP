@@ -115,7 +115,9 @@ public class VentLipvDAO {
 
 		CriteriaQuery<VentLipv> criteriaQuery = session.getCriteriaBuilder().createQuery(VentLipv.class);
 		Root<VentLipv> i = criteriaQuery.from(VentLipv.class);
-		criteriaQuery.where(cb.like(i.get("lipvNombre"), "%" + nombre + "%"));
+		criteriaQuery.where(cb.like(i.get("lipvNombre"), "%" + nombre + "%"),
+				cb.equal(i.get("lipvUtilizable"), true));
+		
 		List<VentLipv> clientes = session.createQuery(criteriaQuery).getResultList();
 
 		return clientes;

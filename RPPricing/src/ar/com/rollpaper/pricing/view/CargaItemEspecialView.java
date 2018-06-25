@@ -16,6 +16,7 @@ import javax.swing.UIManager;
 
 import com.alee.extended.date.WebDateField;
 import com.alee.laf.combobox.WebComboBox;
+import com.alee.laf.label.WebLabel;
 import com.alee.laf.text.WebTextArea;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
@@ -52,6 +53,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 	public JLabel lblLabelPrecio;
 	private JLabel label_1;
 	public RPImporte txtComision;
+	public WebLabel lblEstaEnLista;
 
 	public CargaItemEspecialView() throws Exception {
 		super();
@@ -78,9 +80,9 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		getContentPane().add(panel_1, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[] { 0, 0, 0, 0, 0 };
-		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel_1.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
 		lblLabelArticulo = new JLabel("Articulo ID:");
@@ -108,6 +110,15 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		txtArticuloID = new JTextField();
 		panel_2.add(txtArticuloID, BorderLayout.CENTER);
 		txtArticuloID.setColumns(10);
+		
+		lblEstaEnLista = new WebLabel("lblEstaEnLista");
+		lblEstaEnLista.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lblLblestaenlista = new GridBagConstraints();
+		gbc_lblLblestaenlista.gridwidth = 3;
+		gbc_lblLblestaenlista.insets = new Insets(0, 0, 5, 0);
+		gbc_lblLblestaenlista.gridx = 1;
+		gbc_lblLblestaenlista.gridy = 1;
+		panel_1.add(lblEstaEnLista, gbc_lblLblestaenlista);
 
 		JLabel lblNewLabel_1 = new JLabel("Nombre:");
 		lblNewLabel_1.setFont(Common.getStandarFont());
@@ -115,7 +126,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_1.gridx = 1;
-		gbc_lblNewLabel_1.gridy = 1;
+		gbc_lblNewLabel_1.gridy = 2;
 		panel_1.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		lblNombre = new WebTextArea("lbln");
@@ -127,7 +138,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_textField_1.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_1.fill = GridBagConstraints.BOTH;
 		gbc_textField_1.gridx = 3;
-		gbc_textField_1.gridy = 1;
+		gbc_textField_1.gridy = 2;
 		panel_1.add(lblNombre, gbc_textField_1);
 
 		lblLabelDescipcion = new JLabel("Descripcion: ");
@@ -136,7 +147,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_lblNewLabel_2.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_2.gridx = 1;
-		gbc_lblNewLabel_2.gridy = 2;
+		gbc_lblNewLabel_2.gridy = 3;
 		panel_1.add(lblLabelDescipcion, gbc_lblNewLabel_2);
 
 		lblDescripcion = new WebTextArea("lblde");
@@ -149,7 +160,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_textField_2.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_2.fill = GridBagConstraints.BOTH;
 		gbc_textField_2.gridx = 3;
-		gbc_textField_2.gridy = 2;
+		gbc_textField_2.gridy = 3;
 		panel_1.add(lblDescripcion, gbc_textField_2);
 
 		JLabel lblNewLabel_3 = new JLabel("1er Descuento %:");
@@ -158,7 +169,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_lblNewLabel_3.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_3.gridx = 1;
-		gbc_lblNewLabel_3.gridy = 3;
+		gbc_lblNewLabel_3.gridy = 4;
 		panel_1.add(lblNewLabel_3, gbc_lblNewLabel_3);
 
 		txtDesc1 = new RPImporte();
@@ -168,7 +179,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_textField_3.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_3.gridx = 3;
-		gbc_textField_3.gridy = 3;
+		gbc_textField_3.gridy = 4;
 		panel_1.add(txtDesc1, gbc_textField_3);
 		txtDesc1.setColumns(10);
 
@@ -178,7 +189,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_label.anchor = GridBagConstraints.EAST;
 		gbc_label.insets = new Insets(0, 0, 5, 5);
 		gbc_label.gridx = 1;
-		gbc_label.gridy = 4;
+		gbc_label.gridy = 5;
 		panel_1.add(label, gbc_label);
 
 		txtDesc2 = new RPImporte();
@@ -188,7 +199,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_textField_4.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_4.gridx = 3;
-		gbc_textField_4.gridy = 4;
+		gbc_textField_4.gridy = 5;
 		panel_1.add(txtDesc2, gbc_textField_4);
 		txtDesc2.setColumns(10);
 
@@ -198,7 +209,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_label_1.anchor = GridBagConstraints.EAST;
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 1;
-		gbc_label_1.gridy = 5;
+		gbc_label_1.gridy = 6;
 		panel_1.add(lblLabelMoneda, gbc_label_1);
 
 		cbMoneda = new WebComboBox();
@@ -207,17 +218,17 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_textField_5.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_5.gridx = 3;
-		gbc_textField_5.gridy = 5;
+		gbc_textField_5.gridy = 6;
 		panel_1.add(cbMoneda, gbc_textField_5);
 
 		lblLabelPrecio = new JLabel("Precio:");
 		lblLabelPrecio.setFont(Common.getStandarFont());
-		GridBagConstraints gbc_label_2 = new GridBagConstraints();
-		gbc_label_2.anchor = GridBagConstraints.EAST;
-		gbc_label_2.insets = new Insets(0, 0, 5, 5);
-		gbc_label_2.gridx = 1;
-		gbc_label_2.gridy = 6;
-		panel_1.add(lblLabelPrecio, gbc_label_2);
+		GridBagConstraints gbc_lblLblestaenlistaPrecio = new GridBagConstraints();
+		gbc_lblLblestaenlistaPrecio.anchor = GridBagConstraints.EAST;
+		gbc_lblLblestaenlistaPrecio.insets = new Insets(0, 0, 5, 5);
+		gbc_lblLblestaenlistaPrecio.gridx = 1;
+		gbc_lblLblestaenlistaPrecio.gridy = 7;
+		panel_1.add(lblLabelPrecio, gbc_lblLblestaenlistaPrecio);
 
 		txtPrecio = new RPImporte();
 		txtPrecio.setFont(Common.getStandarFont());
@@ -226,7 +237,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_textField_6.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_6.gridx = 3;
-		gbc_textField_6.gridy = 6;
+		gbc_textField_6.gridy = 7;
 		panel_1.add(txtPrecio, gbc_textField_6);
 		txtPrecio.setColumns(10);
 
@@ -236,7 +247,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_label_3.anchor = GridBagConstraints.EAST;
 		gbc_label_3.insets = new Insets(0, 0, 5, 5);
 		gbc_label_3.gridx = 1;
-		gbc_label_3.gridy = 7;
+		gbc_label_3.gridy = 8;
 		panel_1.add(label_3, gbc_label_3);
 
 		dateFechaDesde = new WebDateField();
@@ -246,7 +257,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_lblNewLabel_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_4.gridx = 3;
-		gbc_lblNewLabel_4.gridy = 7;
+		gbc_lblNewLabel_4.gridy = 8;
 		panel_1.add(dateFechaDesde, gbc_lblNewLabel_4);
 
 		JLabel label_4 = new JLabel("Fecha Hasta:");
@@ -255,7 +266,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_label_4.anchor = GridBagConstraints.EAST;
 		gbc_label_4.insets = new Insets(0, 0, 5, 5);
 		gbc_label_4.gridx = 1;
-		gbc_label_4.gridy = 8;
+		gbc_label_4.gridy = 9;
 		panel_1.add(label_4, gbc_label_4);
 
 		dateFechaHasta = new WebDateField();
@@ -265,7 +276,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_lblNewLabel_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_5.gridx = 3;
-		gbc_lblNewLabel_5.gridy = 8;
+		gbc_lblNewLabel_5.gridy = 9;
 		panel_1.add(dateFechaHasta, gbc_lblNewLabel_5);
 		
 		label_1 = new JLabel("Comision %:");
@@ -274,7 +285,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_label_comision.anchor = GridBagConstraints.EAST;
 		gbc_label_comision.insets = new Insets(0, 0, 5, 5);
 		gbc_label_comision.gridx = 1;
-		gbc_label_comision.gridy = 9;
+		gbc_label_comision.gridy = 10;
 		panel_1.add(label_1, gbc_label_comision);
 		
 		txtComision = new RPImporte();
@@ -285,7 +296,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_txtComision.insets = new Insets(0, 0, 5, 0);
 		gbc_txtComision.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtComision.gridx = 3;
-		gbc_txtComision.gridy = 9;
+		gbc_txtComision.gridy = 10;
 		panel_1.add(txtComision, gbc_txtComision);
 
 		JLabel label_5 = new JLabel("Referencia:");
@@ -294,7 +305,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_label_5.anchor = GridBagConstraints.EAST;
 		gbc_label_5.insets = new Insets(0, 0, 0, 5);
 		gbc_label_5.gridx = 1;
-		gbc_label_5.gridy = 10;
+		gbc_label_5.gridy = 11;
 		panel_1.add(label_5, gbc_label_5);
 
 		txtReferencia = new WebTextArea();
@@ -304,7 +315,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		GridBagConstraints gbc_txtReferencia1 = new GridBagConstraints();
 		gbc_txtReferencia1.fill = GridBagConstraints.BOTH;
 		gbc_txtReferencia1.gridx = 3;
-		gbc_txtReferencia1.gridy = 10;
+		gbc_txtReferencia1.gridy = 11;
 		panel_1.add(txtReferencia, gbc_txtReferencia1);
 		txtReferencia.setColumns(10);
 	}

@@ -67,6 +67,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		view.lblLabelDescipcion.setVisible(false);
 		view.lblLabelPrecio.setVisible(false);
 		view.lblLabelMoneda.setVisible(false);
+		view.lblEstaEnLista.setVisible(false);
 
 		view.txtArticuloID.addFocusListener(new FocusListener() {
 
