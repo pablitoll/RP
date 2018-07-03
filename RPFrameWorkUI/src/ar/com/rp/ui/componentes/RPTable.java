@@ -75,25 +75,27 @@ public class RPTable extends WebTable {
 
 	public void autoSizeAllColumn() {
 		JViewport parent = (JViewport) getParent();
-		JScrollPane enclosing = (JScrollPane) parent.getParent();
-		int anchoTotal = 0;
+		if (parent != null) {
+			JScrollPane enclosing = (JScrollPane) parent.getParent();
+			int anchoTotal = 0;
 
-		for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
-			if (!isColToIgnorar(nroColumn)) {
-				anchoTotal += autoSizeAColumn(nroColumn);
-			} else {
-				anchoTotal += getColumnModel().getColumn(nroColumn).getWidth();
-			}
-		}
-
-		if (anchoTotal < enclosing.getWidth()) {
-			int cantCol = getColumnCount() - (colToIgnorar != null ? colToIgnorar.length : 0);
-			int dif = (enclosing.getWidth() - anchoTotal - cantCol) / cantCol;
 			for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
 				if (!isColToIgnorar(nroColumn)) {
-					TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
-					tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + dif);
-					tableColumn.setWidth(tableColumn.getWidth() + dif);
+					anchoTotal += autoSizeAColumn(nroColumn);
+				} else {
+					anchoTotal += getColumnModel().getColumn(nroColumn).getWidth();
+				}
+			}
+
+			if (anchoTotal < enclosing.getWidth()) {
+				int cantCol = getColumnCount() - (colToIgnorar != null ? colToIgnorar.length : 0);
+				int dif = (enclosing.getWidth() - anchoTotal - cantCol) / cantCol;
+				for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
+					if (!isColToIgnorar(nroColumn)) {
+						TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
+						tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + dif);
+						tableColumn.setWidth(tableColumn.getWidth() + dif);
+					}
 				}
 			}
 		}

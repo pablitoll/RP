@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -41,8 +42,8 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	public JLabel lblNombreLista;
 	public JLabel lblNombreLegal;
 	public JLabel lblNombreCliente;
-	public JButtonRP btnImprimir;
-	public JButtonRP btnImprimirTodo;
+	public JButtonRP btnExpportar;
+	public JButtonRP btnExportarTodo;
 	private JPanel pnlCentral;
 	private JPanel panel;
 	public JButtonRP btnAgregar;
@@ -52,6 +53,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
 	public JButtonRP btnCancelar;
+	
 
 	public CargaClienteEsclavoView() throws Exception {
 		super();
@@ -178,14 +180,16 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);
 
-		btnImprimir = new JButtonRP("Imprimir");
-		btnImprimir.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/extended/language/icons/text.png")));
-		btnImprimir.setFont(Common.getStandarFont());
-		pnlInferiorBotones.add(btnImprimir);
+		btnExpportar = new JButtonRP("Exportar a Excel");
+		btnExpportar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/extended/language/icons/text.png")));
+		btnExpportar.setFont(Common.getStandarFont());
+		btnExpportar.setToolTipText("Exportar a Excel el Cliente Actual y sus Hijos");
+		pnlInferiorBotones.add(btnExpportar);
 
-		btnImprimirTodo = new JButtonRP("Imprimir Todo");
-		btnImprimirTodo.setFont(Common.getStandarFont());
-		pnlInferiorBotones.add(btnImprimirTodo);
+		btnExportarTodo = new JButtonRP("Imprimir Todo");
+		btnExportarTodo.setFont(Common.getStandarFont());
+		btnExportarTodo.setToolTipText("Exportar a Excel TODOS los Clientes con sus Hijos");
+		pnlInferiorBotones.add(btnExportarTodo);
 
 		pnlCentral = new JPanel();
 		getContentPane().add(pnlCentral, BorderLayout.CENTER);
@@ -243,8 +247,8 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnAgregar, ConstantesRP.PantCarClienteEsclabo.AGREGAR.toString());
 		asignarBotonAccion(btnEliminar, ConstantesRP.PantCarClienteEsclabo.BORRAR.toString());
 		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString());
-		asignarBotonAccion(btnImprimir, ConstantesRP.PantCarClienteEsclabo.IMPRIMIR.toString());
-		asignarBotonAccion(btnImprimirTodo, ConstantesRP.PantCarClienteEsclabo.IMPRIMIR_TODO.toString());
+		asignarBotonAccion(btnExpportar, ConstantesRP.PantCarClienteEsclabo.EXPORTAR.toString());
+		asignarBotonAccion(btnExportarTodo, ConstantesRP.PantCarClienteEsclabo.EXPORTAR_TODO.toString());
 	}
 
 	public void setCerrarVisible(Boolean visible) {

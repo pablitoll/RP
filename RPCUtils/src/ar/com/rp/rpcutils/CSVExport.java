@@ -3,7 +3,6 @@ package ar.com.rp.rpcutils;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -13,14 +12,42 @@ import javax.swing.JTable;
 
 public class CSVExport {
 
-	private static final char DEFAULT_SEPARATOR = ',';
+	private static final char DEFAULT_SEPARATOR = ';';
 
 	public static boolean exportToExcel(JTable tabla, String nombreArchivo) throws Exception {
-
 		// Lo genero
+		FileWriter writer = new FileWriter(generarArchivoCSV(nombreArchivo));
+
+		// Exporto la tabla
+		tablaToCSC(writer, tabla);
+
+		writer.flush();
+		writer.close();
+
+		return abrirArchivo(generarArchivoCSV(nombreArchivo));
+	}
+
+	public static boolean abrirArchivo(String nombreCSV) {
+		// Lo abro
+		try {
+			Desktop.getDesktop().open(new File(nombreCSV));
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				String execString = "notepad.exe " + nombreCSV;
+				Runtime run = Runtime.getRuntime();
+				run.exec(execString);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static void tablaToCSC(FileWriter writer, JTable tabla) throws Exception {
 		DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-		String csvFile = nombreArchivo + ".csv";
-		FileWriter writer = new FileWriter(csvFile);
 
 		List<String> linea = new ArrayList<String>();
 		for (int i = -1; i < tabla.getRowCount(); i++) {
@@ -36,28 +63,14 @@ public class CSVExport {
 			writeLine(writer, linea, dfs.getPatternSeparator(), ' ');
 			linea.clear();
 		}
-		writer.flush();
-		writer.close();
 
-		// Lo abro
-		try {
-			Desktop.getDesktop().open(new File(csvFile));
-		} catch (Exception e) {
-			e.printStackTrace();
-			try {
-				String execString = "notepad.exe " + csvFile;
-				Runtime run = Runtime.getRuntime();
-				run.exec(execString);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-				return false;
-			}
-		}
-
-		return true;
 	}
 
-	private static void writeLine(Writer w, List<String> values, char separators, char customQuote) throws IOException {
+	public static String generarArchivoCSV(String nombreArchivo) throws Exception {
+		return nombreArchivo + ".csv";
+	}
+
+	public static void writeLine(Writer w, List<String> values, char separators, char customQuote) throws Exception {
 
 		boolean first = true;
 
