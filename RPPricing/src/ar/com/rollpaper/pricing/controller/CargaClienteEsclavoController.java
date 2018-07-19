@@ -4,9 +4,12 @@ package ar.com.rollpaper.pricing.controller;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.optionpane.WebOptionPane;
@@ -26,7 +29,10 @@ import ar.com.rollpaper.pricing.ui.BuscarClienteEsclavoDialog;
 import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
+import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
+import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincipalController, CargaClienteEsclavoView, CargaClienteEsclavoModel> {
@@ -127,8 +133,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		getView().btnEliminar.setEnabled(tieneCli && tieneLista && !getModel().isEsEscalvoEnAlgunaLista());
 
 		getView().btnCancelar.setVisible(tieneCli);
-		getView().btnImprimir.setVisible(tieneCli);
-		getView().btnImprimirTodo.setVisible(tieneCli);
+		getView().btnExpportar.setVisible(tieneCli);
+		getView().btnExportarTodo.setVisible(tieneCli);
 
 		getView().setCerrarVisible(!tieneCli);
 	}
@@ -248,6 +254,39 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 					}
 
 				}
+			}
+		}
+
+		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.EXPORTAR.toString())) {
+			try {
+				String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "Nro Lista", "Nombre Lista", "Nro Cliente Hijo", "Nombre del Cliente Hijo",
+						"Nombre de Fantasia" };
+				String[][] data = { {} };
+
+				RPTable tableParaExportar = new RPTable();
+				tableParaExportar.setModel(new DefaultTableModel(data, header));
+
+				DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
+
+				Integer nroCliente = getModel().getCliente().getClieCliente();
+				String nombreCliente = getModel().getCliente().getClieNombre();
+				String fantasiaClietne = getModel().getCliente().getClieNombreLegal();
+				Integer nroLista = getModel().getListaCliente().getLipvListaPrecvta();
+				String nombreLista = getModel().getListaCliente().getLipvNombre();
+
+				tableParaExportar.clear();
+				for (int i = 0; i < dm.getRowCount(); i++) {
+					tableParaExportar.addRow(
+							new Object[] { nroCliente, nombreCliente, fantasiaClietne, nroLista, nombreLista, dm.getValueAt(i, 0), dm.getValueAt(i, 1), dm.getValueAt(i, 2) });
+				}
+
+				String nombreArchivo = String.format("Cliente%s_%s", getModel().getCliente().getClieCliente(),
+						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
+
+				CSVExport.exportToExcel(tableParaExportar, nombreArchivo);
+
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al exportar");
 			}
 		}
 	}
