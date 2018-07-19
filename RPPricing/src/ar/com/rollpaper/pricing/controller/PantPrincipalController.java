@@ -60,6 +60,10 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 			salir();
 		}
 		
+		if (accion.equals(ConstantesRP.Acciones.GENERAR_PRECIOS.toString())) {
+			procesoPrecios();
+		}
+		
 		if (accion.equals(ConstantesRP.Acciones.CONSULTA1.toString())) {
 			if (!cmGestordeVentanas.isAlreadyCreated("consulta1")) {
 				// Creo los controladores de VerLogOperacionesDiaria
@@ -119,6 +123,11 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		}
 
 
+	}
+
+	private void procesoPrecios() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

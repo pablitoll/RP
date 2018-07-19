@@ -1,6 +1,7 @@
 package ar.com.rollpaper.pricing.dao;
 // Generated 24/05/2018 09:03:46 by Hibernate Tools 5.3.0.Beta2
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,7 +12,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;
 
+import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
+import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
@@ -125,9 +128,9 @@ public class DescuentoXFamiliasDAO {
 		Root<DescuentoXFamilias> i = criteriaQuery.from(DescuentoXFamilias.class);
 		criteriaQuery.where(cb.equal(i.get("pricFamiliaCliente"), pricFamiliaCliente), cb.equal(i.get("pricFamiliaListaPrecvta"), nroLista));
 
-		List<DescuentoXFamilias> clientes = session.createQuery(criteriaQuery).getResultList();
+		List<DescuentoXFamilias> descuentos = session.createQuery(criteriaQuery).getResultList();
 
-		return clientes;
+		return descuentos;
 	}
 
 	public static List<DescuentoXFamilias> getByCliente(int clieCliente) {
@@ -138,8 +141,13 @@ public class DescuentoXFamiliasDAO {
 		Root<DescuentoXFamilias> i = criteriaQuery.from(DescuentoXFamilias.class);
 		criteriaQuery.where(cb.equal(i.get("pricFamiliaCliente"), clieCliente));
 
-		List<DescuentoXFamilias> clientes = session.createQuery(criteriaQuery).getResultList();
+		List<DescuentoXFamilias> descuentos = session.createQuery(criteriaQuery).getResultList();
 
-		return clientes;
+		return descuentos;
+	}
+
+	public static List<DescuentoXFamilias> getByClienteLista(CcobClie cliente, VentLipv lista, Date fechaVigencia) {
+	
+		return getListaDescuentoByID(cliente.getClieCliente(),lista.getLipvListaPrecvta());
 	}
 }

@@ -1,12 +1,21 @@
 package ar.com.rollpaper.pricing.dao;
 // Generated 21/05/2018 20:09:26 by Hibernate Tools 5.3.0.Beta2
 
+import java.util.List;
+
+import ar.com.rollpaper.pricing.beans.VentArpc;
+
 /**
  * Home object for domain model class VentArpc.
  * @see ar.com.rollpaper.pricing.beans.VentArpc
  * @author Hibernate Tools
  */
 public class VentArpcDAO {
+
+	public static List<VentArpc> findByListaID(int lipvListaPrecvta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 //	private static final Log log = LogFactory.getLog(VentArpcDAO.class);
 

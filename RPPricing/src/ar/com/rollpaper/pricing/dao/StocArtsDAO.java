@@ -136,12 +136,18 @@ public class StocArtsDAO {
 	public static StocArts getArticulo(String idEmp) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
-
 		CriteriaQuery<StocArts> criteriaQuery = session.getCriteriaBuilder().createQuery(StocArts.class);
 		Root<StocArts> i = criteriaQuery.from(StocArts.class);
 		criteriaQuery.where(cb.equal(i.get("artsArticuloEmp"), idEmp));
-
 		return session.createQuery(criteriaQuery).getSingleResult();
-
+	}
+	
+	public static StocArts getArticuloByID(int id) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+		CriteriaQuery<StocArts> criteriaQuery = session.getCriteriaBuilder().createQuery(StocArts.class);
+		Root<StocArts> i = criteriaQuery.from(StocArts.class);
+		criteriaQuery.where(cb.equal(i.get("artsArticulo"), id));
+		return session.createQuery(criteriaQuery).getSingleResult();
 	}
 }

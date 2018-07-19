@@ -3,7 +3,7 @@ package ar.com.rollpaper.pricing.business;
 public class ConstantesRP {
 
 	public enum Acciones {
-		CALCULADORA, SALIR, CONSULTA1, CARGA_PRECIO_CLIENTE, CARGA_CLIENTE_ESCLAVO
+		CALCULADORA, SALIR, CONSULTA1, CARGA_PRECIO_CLIENTE, CARGA_CLIENTE_ESCLAVO ,GENERAR_PRECIOS
 	}
 
 	public enum PantCarPrecio {

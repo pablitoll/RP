@@ -1,7 +1,14 @@
 package ar.com.rollpaper.pricing.dao;
 
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.VentArpv;
 import ar.com.rollpaper.pricing.beans.VentArpvId;
@@ -85,6 +92,23 @@ public class VentArpvDAO {
 //		}
 //	}
 //
+	public static List<VentArpv> findByListaID(int listaID){
+		
+		
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<VentArpv> criteriaQuery = session.getCriteriaBuilder().createQuery(VentArpv.class);
+		Root<VentArpv> i = criteriaQuery.from(VentArpv.class);
+		criteriaQuery.where(cb.equal(i.get("id").get("arpvListaPrecvta"), listaID));
+
+		List<VentArpv> listaPrecios = session.createQuery(criteriaQuery).getResultList();	
+		
+		return listaPrecios;
+
+	}
+	
+	
 	public static VentArpv findById(VentArpvId id) {
 		log.debug("getting VentArpv instance with id: " + id);
 		try {

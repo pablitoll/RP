@@ -22,6 +22,9 @@
         <property generated="never" lazy="false" name="artsDescripcion" optimistic-lock="true" type="string" unique="false">
             <column name="ARTS_DESCRIPCION"/>
         </property>
+        <property generated="never" lazy="false" name="artsClasif1" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="ARTS_CLASIF_1"/>
+        </property>        
         <property generated="never" lazy="false" name="artsClasif2" optimistic-lock="true" type="string" unique="false">
             <column length="10" name="ARTS_CLASIF_2"/>
         </property>

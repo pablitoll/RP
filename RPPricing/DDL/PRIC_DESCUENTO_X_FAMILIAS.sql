@@ -1,4 +1,4 @@
-USE [RPAPER]
+USE [ROLL20170830]
 GO
 
 /****** Object:  Table [dbo].[PRIC_DESCUENTO_X_FAMILIAS]    Script Date: 24/5/2018 08:55:22 ******/

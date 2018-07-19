@@ -1,6 +1,7 @@
 package ar.com.rollpaper.pricing.dao;
 // Generated 22/05/2018 19:11:08 by Hibernate Tools 5.3.0.Beta2
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -12,7 +13,9 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 
+import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
+import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 /**
@@ -149,6 +152,10 @@ public class PreciosEspecialesDAO {
 
 		return clientes;
 
+	}
+
+	public static List<PreciosEspeciales> getByClienteLista(CcobClie cliente, VentLipv lista, java.util.Date hoy) {
+			return getListaPrecioEspeciaByID(cliente.getClieCliente(),lista.getLipvListaPrecvta());
 	}
 
 }

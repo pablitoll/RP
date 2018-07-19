@@ -123,4 +123,21 @@ public class VentLipvDAO {
 		return clientes;
 
 	}
+	
+	public static List<VentLipv> getAllLists() {
+		
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<VentLipv> criteriaQuery = session.getCriteriaBuilder().createQuery(VentLipv.class);
+		Root<VentLipv> i = criteriaQuery.from(VentLipv.class);
+		criteriaQuery.where(cb.like(i.get("lipvNombre"), "%" + "" + "%"),
+				cb.equal(i.get("lipvUtilizable"), true));
+		
+		List<VentLipv> clientes = session.createQuery(criteriaQuery).getResultList();
+
+		return clientes;
+		
+		
+	}
 }

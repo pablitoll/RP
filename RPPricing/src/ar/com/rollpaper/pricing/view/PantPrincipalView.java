@@ -33,6 +33,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private JButtonBarraBotonesRP btnCalculadora = new JButtonBarraBotonesRP("Calculadora");
 
+	private JButtonBarraBotonesRP btnPrecios	 = new JButtonBarraBotonesRP("Generar Precios");
 	private final JMenu mnCarga = new JMenu("Carga");
 	private final JMenu mnConsulta = new JMenu("Consulta");
 	private final JMenu mmAyuda = new JMenu("Ayuda");
@@ -115,12 +116,17 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		agregarBotonStd2Barra(btnCalculadora, Main.class.getResource(ConstantesRP.IMG_CAL));
 		btnCalculadora.setMnemonicControl(true);
 		btnCalculadora.setMnemonic(KeyEvent.VK_A);
+
+
+		agregarBotonStd2Barra(btnPrecios, Main.class.getResource(ConstantesRP.IMG_CAL));
 	}
 
 	@Override
 	public void asignarBotones() {
 		asignarBotonAccion(mntmSalir, ConstantesRP.Acciones.SALIR.toString());
 		asignarBotonAccion(btnCalculadora, ConstantesRP.Acciones.CALCULADORA.toString());
+		asignarBotonAccion(btnPrecios, ConstantesRP.Acciones.GENERAR_PRECIOS.toString());
+		
 		asignarBotonAccion(mntmConsulta1, ConstantesRP.Acciones.CONSULTA1.toString());
 		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		asignarBotonAccion(mntmCargaClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
