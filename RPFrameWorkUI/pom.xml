@@ -32,7 +32,7 @@
 			<artifactId>jdatepicker</artifactId>
 			<version>2.0.3</version>
 		</dependency>
-<dependency>
+		<dependency>
 			<groupId>de.sciss</groupId>
 			<artifactId>weblaf</artifactId>
 			<version>1.28</version>
@@ -41,9 +41,9 @@
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/de.sciss/weblaf-ui -->
 		<dependency>
-			<groupId>de.sciss</groupId>
-			<artifactId>weblaf-ui</artifactId>
-			<version>1.28</version>
+			<groupId>RPCUtils</groupId>
+			<artifactId>RPCUtils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
