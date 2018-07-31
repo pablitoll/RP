@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generated 18/05/2018 07:33:41 by Hibernate Tools 5.3.0.Beta2 --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
+    <class catalog="RPAPER" dynamic-insert="false" dynamic-update="false" mutable="true" name="ar.com.rollpaper.pricing.beans.CcobClie" optimistic-lock="version" polymorphism="implicit" schema="dbo" select-before-update="false" table="CCOB_CLIE">
+        <id name="clieCliente" type="int">
+            <column name="CLIE_CLIENTE"/>
+            <generator class="assigned"/>
+        </id>
+        <property generated="never" lazy="false" name="clieNombre" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="CLIE_NOMBRE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieNombreLegal" optimistic-lock="true" type="string" unique="false">
+            <column length="90" name="CLIE_NOMBRE_LEGAL" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieEsCliGlob" optimistic-lock="true" type="boolean" unique="false">
+            <column name="CLIE_ES_CLI_GLOB" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="clieDomicilio" optimistic-lock="true" type="string" unique="false">
+            <column length="60" name="CLIE_DOMICILIO"/>
+        </property>
+        <property generated="never" lazy="false" name="clieLocalidad" optimistic-lock="true" type="string" unique="false">
+            <column length="50" name="CLIE_LOCALIDAD"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCodPostal" optimistic-lock="true" type="string" unique="false">
+            <column length="10" name="CLIE_COD_POSTAL"/>
+        </property>
+        <property generated="never" lazy="false" name="clieProvincia" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="CLIE_PROVINCIA" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="cliePais" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="CLIE_PAIS" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieTelefono" optimistic-lock="true" type="string" unique="false">
+            <column length="50" name="CLIE_TELEFONO"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFax" optimistic-lock="true" type="string" unique="false">
+            <column length="20" name="CLIE_FAX"/>
+        </property>
+        <property generated="never" lazy="false" name="clieEmail" optimistic-lock="true" type="string" unique="false">
+            <column length="250" name="CLIE_EMAIL"/>
+        </property>
+        <property generated="never" lazy="false" name="clieObservacion" optimistic-lock="true" type="string" unique="false">
+            <column length="50" name="CLIE_OBSERVACION"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCodProveedor" optimistic-lock="true" type="string" unique="false">
+            <column length="15" name="CLIE_COD_PROVEEDOR"/>
+        </property>
+        <property generated="never" lazy="false" name="clieReferencia" optimistic-lock="true" type="string" unique="false">
+            <column length="20" name="CLIE_REFERENCIA"/>
+        </property>
+        <property generated="never" lazy="false" name="clieHoraAtencion" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="CLIE_HORA_ATENCION"/>
+        </property>
+        <property generated="never" lazy="false" name="clieHoraEntrega" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="CLIE_HORA_ENTREGA"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCondicionIva" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CONDICION_IVA" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCuit" optimistic-lock="true" type="string" unique="false">
+            <column length="15" name="CLIE_CUIT"/>
+        </property>
+        <property generated="never" lazy="false" name="clieIngBrutos" optimistic-lock="true" type="string" unique="false">
+            <column length="15" name="CLIE_ING_BRUTOS"/>
+        </property>
+        <property generated="never" lazy="false" name="clieContacVenta" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="CLIE_CONTAC_VENTA"/>
+        </property>
+        <property generated="never" lazy="false" name="clieContacCobro" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="CLIE_CONTAC_COBRO"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCondPago" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="CLIE_COND_PAGO" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieMonedaCte" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="CLIE_MONEDA_CTE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCuentaClie" optimistic-lock="true" type="string" unique="false">
+            <column length="15" name="CLIE_CUENTA_CLIE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieTipoCli" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_TIPO_CLI" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieActividadCli" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_ACTIVIDAD_CLI" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasif1" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_1"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasif2" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_2"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasif3" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_3"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasif4" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_4"/>
+        </property>
+        <property generated="never" lazy="false" name="clieVendedor" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_VENDEDOR" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieZonaVenta" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_ZONA_VENTA" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCobrador" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_COBRADOR" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFlete" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_FLETE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieBloqueadoPed" optimistic-lock="true" type="boolean" unique="false">
+            <column name="CLIE_BLOQUEADO_PED" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="clieBloqueadoFac" optimistic-lock="true" type="boolean" unique="false">
+            <column name="CLIE_BLOQUEADO_FAC" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFechaAlta" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="CLIE_FECHA_ALTA" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFechaBaja" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="CLIE_FECHA_BAJA"/>
+        </property>
+        <property generated="never" lazy="false" name="clieHabilWeb" optimistic-lock="true" type="boolean" unique="false">
+            <column name="CLIE_HABIL_WEB" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="cliePasswordWeb" optimistic-lock="true" type="string" unique="false">
+            <column length="25" name="CLIE_PASSWORD_WEB"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFormatoFimc" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="CLIE_FORMATO_FIMC"/>
+        </property>
+        <property generated="never" lazy="false" name="clieVendedor2" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_VENDEDOR_2"/>
+        </property>
+        <property generated="never" lazy="false" name="clieString1" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="CLIE_STRING_1"/>
+        </property>
+        <property generated="never" lazy="false" name="clieString2" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="CLIE_STRING_2"/>
+        </property>
+        <property generated="never" lazy="false" name="clieString3" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="CLIE_STRING_3"/>
+        </property>
+        <property generated="never" lazy="false" name="clieString4" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="CLIE_STRING_4"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFecha1" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="CLIE_FECHA_1"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFecha2" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="CLIE_FECHA_2"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFecha3" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="CLIE_FECHA_3"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFecha4" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="CLIE_FECHA_4"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasifNpcv1" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_NPCV_1"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasifNpcv2" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_NPCV_2"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasifNpcv3" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_NPCV_3"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasifNpcv4" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_NPCV_4"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasifNpcv5" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_NPCV_5"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasifNpcv6" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_NPCV_6"/>
+        </property>
+        <property generated="never" lazy="false" name="clieHabilCcClie" optimistic-lock="true" type="boolean" unique="false">
+            <column name="CLIE_HABIL_CC_CLIE" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClienteExt" optimistic-lock="true" type="string" unique="false">
+            <column length="25" name="CLIE_CLIENTE_EXT"/>
+        </property>
+        <property generated="never" lazy="false" name="clieFechaProxGc" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="CLIE_FECHA_PROX_GC"/>
+        </property>
+        <property generated="never" lazy="false" name="clieProxGesCobr" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="CLIE_PROX_GES_COBR"/>
+        </property>
+        <property generated="never" lazy="false" name="clieAcctGencbpte" optimistic-lock="true" type="short" unique="false">
+            <column name="CLIE_ACCT_GENCBPTE" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieNodoOrigen" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="CLIE_NODO_ORIGEN"/>
+        </property>
+        <property generated="never" lazy="false" name="clieMunicipio" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="CLIE_MUNICIPIO"/>
+        </property>
+        <property generated="never" lazy="false" name="clieInfTabasto" optimistic-lock="true" type="boolean" unique="false">
+            <column name="CLIE_INF_TABASTO" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCobroCorrel" optimistic-lock="true" type="boolean" unique="false">
+            <column name="CLIE_COBRO_CORREL" not-null="true" precision="1" scale="0"/>
+        </property>
+        <property generated="never" lazy="false" name="clieVehiculo" optimistic-lock="true" type="string" unique="false">
+            <column length="6" name="CLIE_VEHICULO"/>
+        </property>
+        <property generated="never" lazy="false" name="clieDistribuidor" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_DISTRIBUIDOR"/>
+        </property>
+        <property generated="never" lazy="false" name="clieZonaDistrib" optimistic-lock="true" type="string" unique="false">
+            <column length="6" name="CLIE_ZONA_DISTRIB"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCalle" optimistic-lock="true" type="string" unique="false">
+            <column length="40" name="CLIE_CALLE"/>
+        </property>
+        <property generated="never" lazy="false" name="clieNroCalle" optimistic-lock="true" type="java.lang.Integer" unique="false">
+            <column name="CLIE_NRO_CALLE"/>
+        </property>
+        <property generated="never" lazy="false" name="cliePiso" optimistic-lock="true" type="string" unique="false">
+            <column length="3" name="CLIE_PISO"/>
+        </property>
+        <property generated="never" lazy="false" name="clieDepto" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_DEPTO"/>
+        </property>
+        <property generated="never" lazy="false" name="clieBarrio" optimistic-lock="true" type="string" unique="false">
+            <column length="30" name="CLIE_BARRIO"/>
+        </property>
+        <property generated="never" lazy="false" name="clieDiasgrAtrRc" optimistic-lock="true" type="short" unique="false">
+            <column name="CLIE_DIASGR_ATR_RC" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasif5" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_5"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasif6" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_6"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasif7" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_7"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasif8" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_8"/>
+        </property>
+        <property generated="never" lazy="false" name="clieClasif9" optimistic-lock="true" type="string" unique="false">
+            <column length="4" name="CLIE_CLASIF_9"/>
+        </property>
+        <property generated="never" lazy="false" name="clieSitioWeb" optimistic-lock="true" type="string" unique="false">
+            <column length="90" name="CLIE_SITIO_WEB"/>
+        </property>
+    
+        <property generated="never" lazy="false" name="clieFactAnual" optimistic-lock="true" type="java.lang.Integer" unique="false">
+            <column name="CLIE_FACT_ANUAL"/>
+        </property>
+        <property generated="never" lazy="false" name="clieCantEmplead" optimistic-lock="true" type="java.lang.Integer" unique="false">
+            <column name="CLIE_CANT_EMPLEAD"/>
+        </property>
+        <property generated="never" lazy="false" name="clieEcmEmail" optimistic-lock="true" type="string" unique="false">
+            <column length="150" name="CLIE_ECM_EMAIL"/>
+        </property>
+        <property generated="never" lazy="false" name="clieEcmAsunto" optimistic-lock="true" type="string" unique="false">
+            <column length="80" name="CLIE_ECM_ASUNTO"/>
+        </property>
+   
+
+        <property generated="never" lazy="false" name="clieCodCalle" optimistic-lock="true" type="string" unique="false">
+            <column length="16" name="CLIE_COD_CALLE"/>
+        </property>
+        <property generated="never" lazy="false" name="clieErmEmail" optimistic-lock="true" type="string" unique="false">
+            <column length="150" name="CLIE_ERM_EMAIL"/>
+        </property>
+        <property generated="never" lazy="false" name="clieErmAsunto" optimistic-lock="true" type="string" unique="false">
+            <column length="80" name="CLIE_ERM_ASUNTO"/>
+        </property>
+       
+        <property generated="never" lazy="false" name="clieTasaMensInteres" optimistic-lock="true" type="big_decimal" unique="false">
+            <column name="CLIE_TASA_MENS_INTERES" precision="6" scale="4"/>
+        </property>
+        <property generated="never" lazy="false" name="clieHoraProxGc" optimistic-lock="true" type="timestamp" unique="false">
+            <column length="23" name="CLIE_HORA_PROX_GC"/>
+        </property>
+        <property generated="never" lazy="false" name="clieNivelAccesoWeb" optimistic-lock="true" type="java.lang.Short" unique="false">
+            <column name="CLIE_NIVEL_ACCESO_WEB"/>
+        </property>
+        <property generated="never" lazy="false" name="clieBloqueadoReservas" optimistic-lock="true" type="byte" unique="false">
+            <column name="CLIE_BLOQUEADO_RESERVAS" not-null="true"/>
+        </property>
+        <property generated="never" lazy="false" name="clieLogotipoNomOri" optimistic-lock="true" type="string" unique="false">
+            <column length="100" name="CLIE_LOGOTIPO_NOM_ORI"/>
+        </property>
+        <property generated="never" lazy="false" name="clieLogotipoNomAlmac" optimistic-lock="true" type="string" unique="false">
+            <column length="25" name="CLIE_LOGOTIPO_NOM_ALMAC"/>
+        </property>
+    </class>
+</hibernate-mapping>
