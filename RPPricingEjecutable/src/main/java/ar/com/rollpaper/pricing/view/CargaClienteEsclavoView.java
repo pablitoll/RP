@@ -50,7 +50,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
 	public JButtonRP btnCancelar;
-	private WebFormattedTextField txtNroCliente;
+	public WebFormattedTextField txtNroCliente;
 	
 
 	public CargaClienteEsclavoView() throws Exception {
