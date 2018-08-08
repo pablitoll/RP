@@ -35,6 +35,7 @@ import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
+import ar.com.rollpaper.pricing.gp.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialArticuloModel;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
@@ -173,7 +174,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().btnAgregarLista.setEnabled(tieneCli);
 
 		getView().btnCancelar.setVisible(tieneCli);
-		getView().setCerrarVisible(!tieneCli);
+		getView().setCerrarVisible(!tieneCli);		
+		getView().btnImpactarPrecios.setVisible(tieneCli);
 	}
 
 	@Override
@@ -182,12 +184,13 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	@Override
-	protected void resetearPantalla() throws Exception {
-		getView().txtNroCliente.clear();
-		resetearDatosDePantalla();
+	protected void resetearPantalla() throws Exception {		
+		//resetearDatosDePantalla();
 	}
 
 	protected void resetearDatosDePantalla() throws Exception {
+		getView().txtNroCliente.setText("");// clear();
+		
 		getView().lblNombreLista.setText("S/D");
 		getView().lblNombreLegal.setText("S/D");
 		getView().lblNombreCliente.setText("S/D");
@@ -302,14 +305,25 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	@Override
 	public void ejecutarAccion(String accion) {
 
-		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString())) {
+		if (accion.equals(ConstantesRP.PantCarPrecio.CANCELAR.toString())) {
 			if (WebOptionPane.showConfirmDialog(getView(), "¿Cancelamos la carga Actual?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
 					WebOptionPane.QUESTION_MESSAGE) == 0) {
 				try {
-					resetearPantalla();
+					resetearDatosDePantalla();
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cancelar");
 				}
+			}
+		}
+
+		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString())) {
+			if (Dialog.showConfirmDialog(
+					String.format("¿Quiere impactar los precios del cliente %s, para la lista %s?", getModel().getClienteCargado().getClieNombre(),
+							getModel().getListaCargada().getLipvNombre()),
+					"Impacto de Precios", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+				GeneradorDePrecios.generarListaPreciosPorClienteLista(getModel().getClienteCargado(), getModel().getListaCargada());
+
+				Dialog.showMessageDialog("Se termino de aplicar nuevos precios", "Aplicacion de Precios", JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 
@@ -518,7 +532,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			tableActivo.setValueAt(registroPedido.getPricComision() != null ? Common.double2String(registroPedido.getPricComision().doubleValue()) : "", row,
 					CargaPrecioView.COL_COMISION_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_ESPECIFICO);
-			//tableActivo.getModel().setValueAt(registroPedido, row, CargaPrecioView.COL_REGISTRO_ESPECIFICO);
+			// tableActivo.getModel().setValueAt(registroPedido, row,
+			// CargaPrecioView.COL_REGISTRO_ESPECIFICO);
 		} else {
 			DescuentoXFamilias registroFamilia = (DescuentoXFamilias) registro;
 
@@ -533,7 +548,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaComision() != null ? Common.double2String(registroFamilia.getPricFamiliaComision().doubleValue()) : "", row,
 					CargaPrecioView.COL_COMSISION_FAMILIA);
 			tableActivo.setValueAt(registroFamilia.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_FAMILIA);
-			//tableActivo.getModel().setValueAt(registroFamilia, row, CargaPrecioView.COL_REGISTRO_FAMILIA);
+			// tableActivo.getModel().setValueAt(registroFamilia, row,
+			// CargaPrecioView.COL_REGISTRO_FAMILIA);
 		}
 	}
 

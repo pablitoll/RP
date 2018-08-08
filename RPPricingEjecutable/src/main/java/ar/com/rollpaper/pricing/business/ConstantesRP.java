@@ -7,7 +7,7 @@ public class ConstantesRP {
 	}
 
 	public enum PantCarPrecio {
-		AGREGAR, ELIMINAR, CANCELAR, MODIFICAR, AGREGAR_LISTA, ELIMINAR_LISTA
+		AGREGAR, ELIMINAR, CANCELAR, MODIFICAR, AGREGAR_LISTA, ELIMINAR_LISTA, IMPACTAR_PRECIOS
 	}
 
 	public enum PantCarClienteEsclabo {
@@ -24,4 +24,5 @@ public class ConstantesRP {
 	public static String IMG_CAL = "/images/Calculator.png";
 	public static String IMG_MASTER_SLAVE = "/images/masterSlave.png";
 	public static String IMG_PRICE_CONFIG = "/images/priceConfig.png";
+	public static String IMG_PESOS = "/images/pesos.png";
 }

@@ -118,7 +118,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		btnCalculadora.setMnemonic(KeyEvent.VK_A);
 
 
-		agregarBotonStd2Barra(btnPrecios, Main.class.getResource(ConstantesRP.IMG_CAL));
+		agregarBotonStd2Barra(btnPrecios, Main.class.getResource(ConstantesRP.IMG_PESOS));
 	}
 
 	@Override

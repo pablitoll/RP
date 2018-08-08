@@ -22,6 +22,7 @@ import com.alee.laf.tabbedpane.WebTabbedPane;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
@@ -81,6 +82,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public JButtonRP btnAgregarLista;
 	public JButtonRP btnEliminarLista;
 	private JPanel pnlBotonLista;
+	public JButtonRP btnImpactarPrecios;
 
 	public CargaPrecioView() throws Exception {
 		super();
@@ -121,7 +123,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_txtNroCliente.gridy = 0;
 		panelSuperior.add(txtNroCliente, gbc_txtNroCliente);
 		txtNroCliente.setColumns(10);
-		
+
 		lblNombre_1 = new JLabel("Nombre:");
 		lblNombre_1.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNombre_1 = new GridBagConstraints();
@@ -175,8 +177,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_txtNroLista.gridx = 1;
 		gbc_txtNroLista.gridy = 1;
 		panelSuperior.add(cbNroLista, gbc_txtNroLista);
-		
-		
+
 		btnAgregarLista = new JButtonRP("");
 		btnAgregarLista.setLeftRightSpacing(0);
 		btnAgregarLista.setToolTipText("Agregar Lista");
@@ -188,7 +189,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		btnEliminarLista.setToolTipText("Eliminar Lista");
 		btnEliminarLista.setFont(Common.getStandarFont());
 		btnEliminarLista.setIcon(CommonUtils.loadIcon(CargaPrecioView.class.getResource("/com/alee/managers/notification/icons/types/minus.png"), 15, 15));
-		
+
 		pnlBotonLista = new JPanel();
 		FlowLayout fl_pnlBotonLista = new FlowLayout(FlowLayout.CENTER, 0, 0);
 		pnlBotonLista.setLayout(fl_pnlBotonLista);
@@ -329,6 +330,11 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		lblError.setFont(Common.getStandarFontBold());
 		panelCentral.add(lblError, BorderLayout.NORTH);
 
+		btnImpactarPrecios = new JButtonRP("Impactar Precios");
+		btnImpactarPrecios.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_PESOS)));
+		btnImpactarPrecios.setFont(Common.getStandarFont());
+		pnlInferiorBotones.add(btnImpactarPrecios);
+
 		btnCancelar = new JButtonRP("Terminar Carga");
 		btnCancelar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
@@ -345,6 +351,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnModificar, ConstantesRP.PantCarPrecio.MODIFICAR.toString());
 		asignarBotonAccion(btnAgregarLista, ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString());
 		asignarBotonAccion(btnEliminarLista, ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString());
+		asignarBotonAccion(btnImpactarPrecios, ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString());
 
 	}
 

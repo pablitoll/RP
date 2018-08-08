@@ -11,7 +11,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -36,8 +35,6 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	public static final int COL_DESC_LEGAL = 2;
 	public static final int COL_ID_CLIENTE_ESCLAVO = 0;
 	public static final int COL_REGISTRO = 3;
-
-	public WebFormattedTextField txtNroCliente;
 	public RPTable tableEsclavo;
 	public JLabel lblNombreLista;
 	public JLabel lblNombreLegal;
@@ -53,6 +50,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
 	public JButtonRP btnCancelar;
+	private WebFormattedTextField txtNroCliente;
 	
 
 	public CargaClienteEsclavoView() throws Exception {

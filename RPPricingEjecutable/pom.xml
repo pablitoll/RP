@@ -1,10 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>RPPricingEjecutable</groupId>
-  <artifactId>RPPricingEjecutable</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
- 	<build><plugins>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>RPPricingEjecutable</groupId>
+	<artifactId>RPPricingEjecutable</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<build>
+		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.6.1</version>
@@ -74,8 +76,8 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>RPCUtils</groupId>
-			<artifactId>RPCUtils</artifactId>
+			<groupId>RPGeneradorDePrecios</groupId>
+			<artifactId>RPGeneradorDePrecios</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

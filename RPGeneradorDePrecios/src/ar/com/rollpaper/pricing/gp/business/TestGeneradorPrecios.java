@@ -1,8 +1,6 @@
 package ar.com.rollpaper.pricing.gp.business;
 
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
-import ar.com.rollpaper.pricing.dao.StocCa01DAO;
-import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 
 public class TestGeneradorPrecios {
