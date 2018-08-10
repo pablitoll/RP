@@ -90,6 +90,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		setTitle("Carga de Precio de Cliente");
 
 		JPanel panelSuperior = new JPanel();
+		panelSuperior.setFocusable(false);
 		panelSuperior.setBorder(new EmptyBorder(5, 5, 5, 0));
 		getContentPane().add(panelSuperior, BorderLayout.NORTH);
 		GridBagLayout gbl_panelSuperior = new GridBagLayout();

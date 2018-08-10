@@ -185,7 +185,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 	@Override
 	protected void resetearPantalla() throws Exception {		
-		//resetearDatosDePantalla();
+		resetearDatosDePantalla();
 	}
 
 	protected void resetearDatosDePantalla() throws Exception {
