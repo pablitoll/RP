@@ -6,6 +6,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -143,8 +144,10 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 	@Override
 	protected void resetearPantalla() throws Exception {
-		getView().txtNroCliente.clear();
-		limpiarPantalla();
+		if (getModel().getCliente() == null) {
+			getView().txtNroCliente.clear();
+			limpiarPantalla();
+		}
 	}
 
 	protected void limpiarPantalla() throws Exception {
@@ -208,6 +211,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 			if (WebOptionPane.showConfirmDialog(getView(), "¿Cancelamos la carga Actual?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
 					WebOptionPane.QUESTION_MESSAGE) == 0) {
 				try {
+					getModel().setCliente(null);
 					resetearPantalla();
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cancelar");

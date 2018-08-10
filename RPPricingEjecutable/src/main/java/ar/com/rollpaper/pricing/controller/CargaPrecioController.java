@@ -174,7 +174,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().btnAgregarLista.setEnabled(tieneCli);
 
 		getView().btnCancelar.setVisible(tieneCli);
-		getView().setCerrarVisible(!tieneCli);		
+		getView().setCerrarVisible(!tieneCli);
 		getView().btnImpactarPrecios.setVisible(tieneCli);
 	}
 
@@ -184,23 +184,25 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	@Override
-	protected void resetearPantalla() throws Exception {		
+	protected void resetearPantalla() throws Exception {
 		resetearDatosDePantalla();
 	}
 
 	protected void resetearDatosDePantalla() throws Exception {
-		getView().txtNroCliente.setText("");// clear();
-		
-		getView().lblNombreLista.setText("S/D");
-		getView().lblNombreLegal.setText("S/D");
-		getView().lblNombreCliente.setText("S/D");
+		if (getModel().getClienteCargado() == null) {
+			getView().txtNroCliente.clear();
 
-		getModel().setClienteCargado(null);
-		getView().cbNroLista.removeAllItems();
-		getView().lblError.setText("");
+			getView().lblNombreLista.setText("S/D");
+			getView().lblNombreLegal.setText("S/D");
+			getView().lblNombreCliente.setText("S/D");
 
-		resetearTablaEspecifico();
-		resetearTablaFamilia();
+			getModel().setClienteCargado(null);
+			getView().cbNroLista.removeAllItems();
+			getView().lblError.setText("");
+
+			resetearTablaEspecifico();
+			resetearTablaFamilia();
+		}
 
 		setModoPantalla();
 	}
@@ -309,6 +311,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			if (WebOptionPane.showConfirmDialog(getView(), "¿Cancelamos la carga Actual?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
 					WebOptionPane.QUESTION_MESSAGE) == 0) {
 				try {
+					getModel().setClienteCargado(null); //Elimino el cliente actual y reseteo
 					resetearDatosDePantalla();
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cancelar");
@@ -488,7 +491,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				try {
 					perdioFocoCliente(getModel().getClienteCargado().getClieCliente());
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
