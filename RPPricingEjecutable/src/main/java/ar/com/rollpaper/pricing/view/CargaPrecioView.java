@@ -86,7 +86,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 	public CargaPrecioView() throws Exception {
 		super();
-		btnCerrar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		setTitle("Carga de Precio de Cliente");
 
 		JPanel panelSuperior = new JPanel();

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
@@ -47,6 +48,7 @@ public abstract class BaseViewMVCExtendida extends BaseViewMVC {
 		btnCerrar = new JButtonRP("Cerrar");
 		btnCerrar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCerrar.setFont(Common.getStandarFont());
+		btnCerrar.setIcon(new ImageIcon(BaseViewMVCExtendida.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		panel.add(btnCerrar);
 
 	}

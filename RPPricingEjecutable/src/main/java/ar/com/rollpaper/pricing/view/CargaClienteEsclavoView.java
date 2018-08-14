@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -59,7 +58,6 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnCerrar.setIcon(new ImageIcon(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		setTitle("Carga de Cliente/Esclavo");
 
 		JPanel pnlSuperior = new JPanel();

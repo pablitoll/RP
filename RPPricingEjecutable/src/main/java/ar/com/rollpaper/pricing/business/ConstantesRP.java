@@ -3,7 +3,7 @@ package ar.com.rollpaper.pricing.business;
 public class ConstantesRP {
 
 	public enum Acciones {
-		CALCULADORA, SALIR, CONSULTA1, CARGA_PRECIO_CLIENTE, CARGA_CLIENTE_ESCLAVO ,GENERAR_PRECIOS
+		CALCULADORA, SALIR, LISTA_PRECIO_X_CLIENTE, CARGA_PRECIO_CLIENTE, CARGA_CLIENTE_ESCLAVO, GENERAR_PRECIOS
 	}
 
 	public enum PantCarPrecio {
@@ -17,6 +17,10 @@ public class ConstantesRP {
 	public enum AccionesCargaItemFamilia {
 		ACEPTAR, CANCELAR
 	}
+
+	public enum PantListaPrecio {
+		GENERAR_PDF, GENERAR_EXCEL, CANCELAR
+	};
 
 	public static String IMG_ERROR = "/images/error.png";
 	public static String IMG_ICONO_APP = "/images/vector.png";

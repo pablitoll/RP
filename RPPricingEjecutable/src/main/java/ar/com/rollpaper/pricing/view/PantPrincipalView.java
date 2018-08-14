@@ -42,7 +42,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private final JMenuItem mntmSalir = new JMenuItem("Salir de la Aplicacion");
 
-	private final JMenuItem mntmConsulta1 = new JMenuItem("Consulta XX");
+	private final JMenuItem mntmListaPercioxCliente = new JMenuItem("Lista de Precios x Cliente");
 
 	private final JMenuItem mntmCargaPrecioCliente = new JMenuItem("Gestion de Precios");
 
@@ -87,8 +87,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mnConsulta.setFont(Common.getStandarFontMenu());
 		menuBar.add(mnConsulta);
 		mnConsulta.setFont(Common.getStandarFontMenu());
-		mnConsulta.add(mntmConsulta1);
-		mntmConsulta1.setFont(Common.getStandarFontMenu());
+		mnConsulta.add(mntmListaPercioxCliente);
+		mntmListaPercioxCliente.setFont(Common.getStandarFontMenu());
 
 		mnMantenimiento.setFont(Common.getStandarFontMenu());
 		menuBar.add(mnMantenimiento);
@@ -127,7 +127,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		asignarBotonAccion(btnCalculadora, ConstantesRP.Acciones.CALCULADORA.toString());
 		asignarBotonAccion(btnPrecios, ConstantesRP.Acciones.GENERAR_PRECIOS.toString());
 		
-		asignarBotonAccion(mntmConsulta1, ConstantesRP.Acciones.CONSULTA1.toString());
+		asignarBotonAccion(mntmListaPercioxCliente, ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString());
 		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		asignarBotonAccion(mntmCargaClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
 

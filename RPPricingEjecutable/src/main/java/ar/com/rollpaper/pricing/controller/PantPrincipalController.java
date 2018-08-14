@@ -8,13 +8,13 @@ import ar.com.rollpaper.pricing.business.LogBusiness;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
-import ar.com.rollpaper.pricing.model.Consulta1Model;
+import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
 import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
-import ar.com.rollpaper.pricing.view.Consulta1View;
+import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.VentanaCalculadora;
@@ -64,13 +64,12 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 			procesoPrecios();
 		}
 		
-		if (accion.equals(ConstantesRP.Acciones.CONSULTA1.toString())) {
+		if (accion.equals(ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString())) {
 			if (!cmGestordeVentanas.isAlreadyCreated("consulta1")) {
-				// Creo los controladores de VerLogOperacionesDiaria
 				try {
-					Consulta1View vista = new Consulta1View();
-					Consulta1Model modelo = new Consulta1Model();
-					Consulta1Controller consulta1 = new Consulta1Controller(this, vista, modelo);
+					ListaPrecioClienteView vista = new ListaPrecioClienteView();
+					ListaPrecioClienteModel modelo = new ListaPrecioClienteModel();
+					ListaPrecioClienteController consulta1 = new ListaPrecioClienteController(this, vista, modelo);
 					cmGestordeVentanas.add(consulta1, "consulta1");
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al crear pantalla de consulta 1");
