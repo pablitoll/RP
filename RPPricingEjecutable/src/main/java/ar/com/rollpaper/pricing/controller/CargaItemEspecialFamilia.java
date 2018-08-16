@@ -18,6 +18,7 @@ import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
 import ar.com.rp.ui.pantalla.BaseControllerDialog;
@@ -30,8 +31,8 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 		registro.setPricCa01Clasif1(getModel().getFamiliaID());
 
-		if (getView().txtDesc1.getImporte() > 0.0) {
-			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
+		if (!getView().txtDesc1.getText().equals("")) {
+			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getText(), MathContext.DECIMAL64));
 		} else {
 			registro.setPricFamiliaDescuento1(null);
 		}
@@ -73,15 +74,13 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 			@Override
 			public void focusLost(FocusEvent e) {
+				view.txtArticuloID.setText(view.txtArticuloID.getText().toUpperCase());
 
 				String id = view.txtArticuloID.getText();
 
 				if (!id.equals("")) {
 					StocCa01 familiaCargado = StocCa01DAO.findById(id);
-
-					if (familiaCargado != null) {
-						getModel().setFamiliaCargado(familiaCargado);
-					}
+					getModel().setFamiliaCargado(familiaCargado);
 				}
 				RefrescarDatosFamilia();
 			}
@@ -99,7 +98,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 		getView().lblArticuloID.setText("");
 		getView().txtArticuloID.setText("");
-		getView().txtDesc1.limpiar();
+		getView().txtDesc1.setText("");
 		getView().txtDesc2.limpiar();
 		getView().txtReferencia.setText("");
 		getView().dateFechaDesde.clear();
@@ -111,7 +110,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 			getView().lblArticuloID.setText(String.valueOf(getModel().getRegistroFamilia().getPricFamiliaListaPrecvta()));
 
 			if ((getModel().getRegistroFamilia().getPricFamiliaDescuento1() != null) && (getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue() > 0.0)) {
-				getView().txtDesc1.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue());
+				getView().txtDesc1.setText(Common.double2String(getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue()));
 			}
 
 			if ((getModel().getRegistroFamilia().getPricFamiliaDescuento2() != null) && (getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue() > 0.0)) {
@@ -175,7 +174,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 			return false;
 		}
 
-		if ((getView().txtDesc1.isEmpty()) && (getView().txtPrecio.isEmpty())) {
+		if ((getView().txtDesc1.getText().equals("")) && (getView().txtPrecio.isEmpty())) {
 			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio");
 			getView().txtDesc1.requestFocus();
 			return false;

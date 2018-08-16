@@ -21,6 +21,7 @@ import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.ItemComboBox;
 import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
@@ -34,8 +35,8 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		registro.setPricArticulo(getModel().getArticuloID());
 
-		if (getView().txtDesc1.getImporte() > 0.0) {
-			registro.setPricDescuento1(new BigDecimal(getView().txtDesc1.getImporte(), MathContext.DECIMAL64));
+		if (!getView().txtDesc1.getText().equals("")) {
+			registro.setPricDescuento1(new BigDecimal(getView().txtDesc1.getText(), MathContext.DECIMAL64));
 		} else {
 			registro.setPricDescuento1(null);
 		}
@@ -82,6 +83,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 			@Override
 			public void focusLost(FocusEvent e) {
+				view.txtArticuloID.setText(view.txtArticuloID.getText().toUpperCase());
 				if (!view.txtArticuloID.getText().equals("")) {
 					getArticuloByEmp(view.txtArticuloID.getText());
 					RefrescarDatosArticulo();
@@ -107,7 +109,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		getView().lblArticuloID.setText("");
 		getView().txtArticuloID.setText("");
-		getView().txtDesc1.limpiar();
+		getView().txtDesc1.setText("");
 		getView().txtDesc2.limpiar();
 		getView().txtPrecio.limpiar();
 		getView().txtReferencia.setText("");
@@ -122,7 +124,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			getView().lblArticuloID.setText(getModel().getArticuloIDEmp());
 
 			if ((getModel().getRegistro().getPricDescuento1() != null) && (getModel().getRegistro().getPricDescuento1().doubleValue() > 0.0)) {
-				getView().txtDesc1.setImporte(getModel().getRegistro().getPricDescuento1().doubleValue());
+				getView().txtDesc1.setText(Common.double2String(getModel().getRegistro().getPricDescuento1().doubleValue()));
 			}
 			if ((getModel().getRegistro().getPricDescuento2() != null) && (getModel().getRegistro().getPricDescuento2().doubleValue() > 0.0)) {
 				getView().txtDesc2.setImporte(getModel().getRegistro().getPricDescuento2().doubleValue());
@@ -201,13 +203,13 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			return false;
 		}
 
-		if ((getView().txtDesc1.isEmpty()) && (getView().txtPrecio.isEmpty())) {
+		if ((getView().txtDesc1.getText().equals("")) && (getView().txtPrecio.isEmpty())) {
 			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio");
 			getView().txtDesc1.requestFocus();
 			return false;
 		}
 
-		if ((!getView().txtDesc1.isEmpty()) && (!getView().txtPrecio.isEmpty())) {
+		if ((!getView().txtDesc1.getText().equals("")) && (!getView().txtPrecio.isEmpty())) {
 			popUpError.showError(getView().txtDesc1, "No se puede cargar un decuento y precio simultaneamente");
 			getView().txtDesc1.requestFocus();
 			return false;
@@ -225,7 +227,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			return false;
 		}
 		
-		if(!getModel().isArticuloEnLista() && !getView().txtDesc1.isEmpty()) {
+		if(!getModel().isArticuloEnLista() && !getView().txtDesc1.getText().equals("")) {
 			popUpError.showError(getView().txtDesc1, "El articulo no esta en la lista, el descuento es solo por precio");
 			getView().txtDesc1.requestFocus();
 			return false;			
@@ -299,7 +301,13 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 	}
 
 	protected StocArts getArticuloByEmp(String idEmp) {
-		StocArts articulo = StocArtsDAO.getArticulo(idEmp);
+		StocArts articulo = null;
+		try {
+			articulo = StocArtsDAO.getArticulo(idEmp);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		getModel().setArticuloCargado(articulo);
 
 		return articulo;

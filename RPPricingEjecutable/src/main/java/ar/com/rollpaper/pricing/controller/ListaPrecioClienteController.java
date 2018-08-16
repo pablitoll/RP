@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -24,8 +25,11 @@ import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
+import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
+import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
+import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipalController, ListaPrecioClienteView, ListaPrecioClienteModel> {
@@ -175,6 +179,39 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 				resetearDatosDePantalla();
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al limpiar");
+			}
+		}
+		
+		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_EXCEL.toString())) {
+			try {
+//				String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "Nro Lista", "Nombre Lista", "Nro Cliente Hijo", "Nombre del Cliente Hijo",
+//						"Nombre de Fantasia" };
+//				String[][] data = { {} };
+//
+//				RPTable tableParaExportar = new RPTable();
+//				tableParaExportar.setModel(new DefaultTableModel(data, header));
+//
+//				DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
+//
+//				Integer nroCliente = getModel().getCliente().getClieCliente();
+//				String nombreCliente = getModel().getCliente().getClieNombre();
+//				String fantasiaClietne = getModel().getCliente().getClieNombreLegal();
+//				Integer nroLista = getModel().getListaCliente().getLipvListaPrecvta();
+//				String nombreLista = getModel().getListaCliente().getLipvNombre();
+//
+//				tableParaExportar.clear();
+//				for (int i = 0; i < dm.getRowCount(); i++) {
+//					tableParaExportar.addRow(
+//							new Object[] { nroCliente, nombreCliente, fantasiaClietne, nroLista, nombreLista, dm.getValueAt(i, 0), dm.getValueAt(i, 1), dm.getValueAt(i, 2) });
+//				}
+
+				String nombreArchivo = String.format("ListaPrecioCliente%s_%s", getModel().getClienteCargado().getClieCliente(),
+						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
+
+				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo);
+
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al exportar");
 			}
 		}
 	}

@@ -308,18 +308,17 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	public void ejecutarAccion(String accion) {
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.CANCELAR.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "¿Cancelamos la carga Actual?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
-					WebOptionPane.QUESTION_MESSAGE) == 0) {
-				try {
-					getModel().setClienteCargado(null); //Elimino el cliente actual y reseteo
-					resetearDatosDePantalla();
-				} catch (Exception e) {
-					ManejoDeError.showError(e, "Error al cancelar");
-				}
+			try {
+				getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
+				resetearDatosDePantalla();
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al cancelar");
 			}
 		}
 
-		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString())) {
+		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString()))
+
+		{
 			if (Dialog.showConfirmDialog(
 					String.format("¿Quiere impactar los precios del cliente %s, para la lista %s?", getModel().getClienteCargado().getClieNombre(),
 							getModel().getListaCargada().getLipvNombre()),

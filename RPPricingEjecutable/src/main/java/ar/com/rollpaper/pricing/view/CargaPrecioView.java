@@ -336,7 +336,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		pnlInferiorBotones.add(btnImpactarPrecios);
 
 		btnCancelar = new JButtonRP("Terminar Carga");
-		btnCancelar.setIcon(new ImageIcon(CargaPrecioView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_RETORNO)));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);

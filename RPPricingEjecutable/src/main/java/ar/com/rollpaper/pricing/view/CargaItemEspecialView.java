@@ -9,6 +9,7 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -17,6 +18,7 @@ import javax.swing.UIManager;
 import com.alee.extended.date.WebDateField;
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.label.WebLabel;
+import com.alee.laf.text.WebFormattedTextField;
 import com.alee.laf.text.WebTextArea;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
@@ -36,7 +38,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 	public JLabel lblArticuloID;
 	public WebTextArea lblNombre;
 	public WebTextArea lblDescripcion;
-	public RPImporte txtDesc1;
+	public componenteNumerico txtDesc1;
 	public RPImporte txtDesc2;
 	public WebComboBox cbMoneda;
 	public RPImporte txtPrecio;
@@ -172,16 +174,14 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_lblNewLabel_3.gridy = 4;
 		panel_1.add(lblNewLabel_3, gbc_lblNewLabel_3);
 
-		txtDesc1 = new RPImporte();
-		txtDesc1.setFont(Common.getStandarFont());
-		txtDesc1.setCantDecimales(4);
+		txtDesc1 = new componenteNumerico();
 		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
 		gbc_textField_3.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_3.gridx = 3;
 		gbc_textField_3.gridy = 4;
 		panel_1.add(txtDesc1, gbc_textField_3);
-		txtDesc1.setColumns(10);
+		
 
 		JLabel label = new JLabel("2do Descuento%:");
 		label.setFont(Common.getStandarFont());

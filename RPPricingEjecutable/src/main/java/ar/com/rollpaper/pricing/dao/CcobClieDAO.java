@@ -52,7 +52,7 @@ public class CcobClieDAO {
 
 		CriteriaQuery<CcobClie> criteriaQuery = session.getCriteriaBuilder().createQuery(CcobClie.class);
 		Root<CcobClie> i = criteriaQuery.from(CcobClie.class);
-		criteriaQuery.where(cb.or(cb.like(i.get("clieNombre"), "%" + nombre + "%"), cb.equal(i.get("clieCliente"), id)));
+		criteriaQuery.where(cb.or(cb.like(i.get("clieNombre"), "%" + nombre + "%"), cb.equal(i.get("clieCliente"), id), cb.like(i.get("clieNombreLegal"), "%" + nombre + "%")));
 
 		List<CcobClie> clientes = session.createQuery(criteriaQuery).getResultList();
 
