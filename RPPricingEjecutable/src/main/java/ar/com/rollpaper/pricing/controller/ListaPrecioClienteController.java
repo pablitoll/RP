@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -29,7 +28,6 @@ import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
-import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipalController, ListaPrecioClienteView, ListaPrecioClienteModel> {

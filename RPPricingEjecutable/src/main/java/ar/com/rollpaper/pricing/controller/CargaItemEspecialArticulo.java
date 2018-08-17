@@ -41,8 +41,8 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			registro.setPricDescuento1(null);
 		}
 
-		if (getView().txtDesc2.getImporte() > 0.0) {
-			registro.setPricDescuento2(new BigDecimal(getView().txtDesc2.getImporte(), MathContext.DECIMAL64));
+		if (!getView().txtDesc2.getText().equals("")) {
+			registro.setPricDescuento2(new BigDecimal(getView().txtDesc2.getText(), MathContext.DECIMAL64));
 		} else {
 			registro.setPricDescuento2(null);
 		}
@@ -52,12 +52,12 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		if (getView().cbMoneda.getSelectedIndex() > 0) {
 			registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
-			registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getImporte(), MathContext.DECIMAL64));
+			registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getText(), MathContext.DECIMAL64));
 		} else {
 			registro.setPricMoneda(null);
 			registro.setPricPrecio(null);
 		}
-		registro.setPricComision(new BigDecimal(getView().txtComision.getImporte(), MathContext.DECIMAL64));
+		registro.setPricComision(new BigDecimal(getView().txtComision.getText(), MathContext.DECIMAL64));
 
 		registro.setPricReferencia(getView().txtReferencia.getText());
 
@@ -110,12 +110,12 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		getView().lblArticuloID.setText("");
 		getView().txtArticuloID.setText("");
 		getView().txtDesc1.setText("");
-		getView().txtDesc2.limpiar();
-		getView().txtPrecio.limpiar();
+		getView().txtDesc2.setText("");
+		getView().txtPrecio.setText("");
 		getView().txtReferencia.setText("");
 		getView().dateFechaDesde.clear();
 		getView().dateFechaHasta.clear();
-		getView().txtComision.limpiar();
+		getView().txtComision.setText("");
 		getView().cbMoneda.setSelectedIndex(0);
 		getView().lblEstaEnLista.setText("");
 
@@ -127,14 +127,14 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 				getView().txtDesc1.setText(Common.double2String(getModel().getRegistro().getPricDescuento1().doubleValue()));
 			}
 			if ((getModel().getRegistro().getPricDescuento2() != null) && (getModel().getRegistro().getPricDescuento2().doubleValue() > 0.0)) {
-				getView().txtDesc2.setImporte(getModel().getRegistro().getPricDescuento2().doubleValue());
+				getView().txtDesc2.setText(Common.double2String(getModel().getRegistro().getPricDescuento2().doubleValue()));
 			}
 
 			if (getModel().getRegistro().getPricMoneda() != null) {
 				getView().cbMoneda.setSelectedItem(SistMoneDAO.findById(getModel().getRegistro().getPricMoneda()));
 
 				if (getModel().getRegistro().getPricPrecio() != null) {
-					getView().txtPrecio.setImporte(getModel().getRegistro().getPricPrecio().doubleValue());
+					getView().txtPrecio.setText(Common.double2String(getModel().getRegistro().getPricPrecio().doubleValue()));
 				}
 			}
 			if (getModel().getRegistro().getPricFechaDesde() != null) {
@@ -145,7 +145,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 				getView().dateFechaHasta.setDate(getModel().getRegistro().getPricFechaHasta());
 			}
 
-			getView().txtComision.setImporte(getModel().getRegistro().getPricComision().doubleValue());
+			getView().txtComision.setText(Common.double2String(getModel().getRegistro().getPricComision().doubleValue()));
 
 			if (getModel().getRegistro().getPricReferencia() != null) {
 				getView().txtReferencia.setText(getModel().getRegistro().getPricReferencia());
@@ -203,25 +203,25 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			return false;
 		}
 
-		if ((getView().txtDesc1.getText().equals("")) && (getView().txtPrecio.isEmpty())) {
+		if (getView().txtDesc1.getText().equals("") && (getView().txtPrecio.getText().equals(""))) {
 			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio");
 			getView().txtDesc1.requestFocus();
 			return false;
 		}
 
-		if ((!getView().txtDesc1.getText().equals("")) && (!getView().txtPrecio.isEmpty())) {
+		if ((!getView().txtDesc1.getText().equals("")) && (!getView().txtPrecio.getText().equals(""))) {
 			popUpError.showError(getView().txtDesc1, "No se puede cargar un decuento y precio simultaneamente");
 			getView().txtDesc1.requestFocus();
 			return false;
 		}
 
-		if (!getView().txtPrecio.isEmpty() && (getView().cbMoneda.getSelectedIndex() == 0)) {
+		if (!getView().txtPrecio.getText().equals("") && (getView().cbMoneda.getSelectedIndex() == 0)) {
 			popUpError.showError(getView().cbMoneda, "Falta cargar la moneda");
 			getView().cbMoneda.requestFocus();
 			return false;
 		}
 
-		if (getView().txtPrecio.isEmpty() && (getView().cbMoneda.getSelectedIndex() != 0)) {
+		if (getView().txtPrecio.getText().equals("") && (getView().cbMoneda.getSelectedIndex() != 0)) {
 			popUpError.showError(getView().cbMoneda, "Falta cargar el precio para la moneda selecionada");
 			getView().cbMoneda.requestFocus();
 			return false;

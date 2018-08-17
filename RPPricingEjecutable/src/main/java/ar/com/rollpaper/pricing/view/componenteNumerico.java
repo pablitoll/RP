@@ -1,11 +1,6 @@
 //TODO ULI FALTA, de la IDE
 /*
-* Terminar este componente
-
 * poner el icono en espera
-
-*en la pantalla de gestion de precios >descuentos y precios especifico  al dar de alta un articulo que esta en una lista
-falla la validacion del descuento (no deja cargar y no deja eliminar el porcentaje) entra en loop
 
 * en Descuento por familia > en alta de familia > solo mostrar familias que esten en la lista seleccionada 
 
@@ -17,23 +12,25 @@ package ar.com.rollpaper.pricing.view;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
+import com.alee.laf.text.WebTextField;
+
 import ar.com.rp.ui.common.Common;
 
-public class componenteNumerico extends JFormattedTextField {
+public class componenteNumerico extends WebTextField {
 
 	/**
 	 * 
 	 */
 	private int cantEnteros = 2;
-	private int cantDecimales = 0;
+	private int cantDecimales = 2;
 
 	private static final long serialVersionUID = 1L;
 
@@ -44,7 +41,7 @@ public class componenteNumerico extends JFormattedTextField {
 
 			@Override
 			public boolean verify(JComponent arg0) {
-				JFormattedTextField tf = (JFormattedTextField) arg0;
+				WebTextField tf = (WebTextField) arg0;
 				return numeroValido(tf.getText());
 			}
 		});
@@ -54,23 +51,24 @@ public class componenteNumerico extends JFormattedTextField {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (!getText().equals("") && numeroValido(getText()) && (cantDecimales > 0)) {
-					String decimales = getDecimales();
-					String punto = "";
-					if (Integer.valueOf(decimales) == 0) {
-						punto = Common.getGeneralSettings().getSeparadorDecimal();
-					}
-
-					setText((getText() + punto + "00000000").substring(0, cantDecimales + cantEnteros));
+					String decimales = getDecimales(getText());
+					String entero = getEnteros(getText());
+					setText(entero + Common.getGeneralSettings().getSeparadorDecimal() + (decimales + "00000").substring(0, cantDecimales));
 				}
 			}
 
 			@Override
 			public void focusGained(FocusEvent e) {
 				if (!getText().equals("")) {
-					String decimales = getDecimales();
-//					if (decimales.length()) { // le saco los decimales
-						setText(getText().substring(0, cantEnteros));
-//					}
+					String decimales = getDecimales(getText());
+					String entero = getEnteros(getText());
+
+					String parteDecimal = "";
+
+					if (!decimales.equals("")) {
+						parteDecimal = "." + String.valueOf(Integer.valueOf(decimales)); // saco los ceros
+					}
+					setText(entero + parteDecimal);
 				}
 			}
 		});
@@ -83,7 +81,6 @@ public class componenteNumerico extends JFormattedTextField {
 
 				String valorOrginal = getText(0, getLength());
 				String numeroConCaracteres = valorOrginal.substring(0, off) + str + valorOrginal.substring(off, valorOrginal.length()); // inserto el instrin
-
 				if (numeroValido(numeroConCaracteres)) {
 					super.remove(0, getLength());
 					super.insertString(0, numeroConCaracteres, attr);
@@ -93,9 +90,9 @@ public class componenteNumerico extends JFormattedTextField {
 
 	}
 
-	protected String getEnteros() {
+	protected String getEnteros(String numero) {
 		if (!getText().equals("")) {
-			Double d = Common.String2Double(getText()); // Que sea un double valido
+			Double d = Common.String2Double(numero); // Que sea un double valido
 			String aux = Common.double2String(d);
 			String valor[] = aux.split(Common.getGeneralSettings().getSeparadorDecimal());
 			return valor[0].trim();
@@ -103,9 +100,9 @@ public class componenteNumerico extends JFormattedTextField {
 		return "";
 	}
 
-	protected String getDecimales() {
+	protected String getDecimales(String numero) {
 		if (!getText().equals("")) {
-			Double d = Common.String2Double(getText()); // Que sea un double valido
+			Double d = Common.String2Double(numero); // Que sea un double valido
 			String aux = Common.double2String(d);
 			String valor[] = aux.split(Common.getGeneralSettings().getSeparadorDecimal());
 			if (valor.length > 1) {
@@ -124,12 +121,13 @@ public class componenteNumerico extends JFormattedTextField {
 		try {
 			if (!numero.equals("")) {
 
-				Double.valueOf(numero); // Que sea un double valido
-				if (getEnteros().length() > cantEnteros) {
+				// Double.valueOf(numero); // Que sea un double valido
+				Common.String2Double(numero);
+
+				if (getEnteros(numero).length() > cantEnteros) {
 					return false;
 				}
-
-				if (getDecimales().length() > cantDecimales) {
+				if (getDecimales(numero).length() > cantDecimales) {
 					return false;
 				}
 

@@ -36,14 +36,14 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		} else {
 			registro.setPricFamiliaDescuento1(null);
 		}
-		if (getView().txtDesc2.getImporte() > 0.0) {
-			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getImporte(), MathContext.DECIMAL64));
+		if (getView().txtDesc2.getText().equals("")) {
+			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getText(), MathContext.DECIMAL64));
 		} else {
 			registro.setPricFamiliaDescuento2(null);
 		}
 		registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
 		registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
-		registro.setPricFamiliaComision(new BigDecimal(getView().txtComision.getImporte(), MathContext.DECIMAL64));
+		registro.setPricFamiliaComision(new BigDecimal(getView().txtComision.getText(), MathContext.DECIMAL64));
 		registro.setPricReferencia(getView().txtReferencia.getText());
 
 		return registro;
@@ -99,11 +99,11 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		getView().lblArticuloID.setText("");
 		getView().txtArticuloID.setText("");
 		getView().txtDesc1.setText("");
-		getView().txtDesc2.limpiar();
+		getView().txtDesc2.setText("");
 		getView().txtReferencia.setText("");
 		getView().dateFechaDesde.clear();
 		getView().dateFechaHasta.clear();
-		getView().txtComision.limpiar();
+		getView().txtComision.setText("");
 
 		if (getModel().isEdicion()) {
 
@@ -114,7 +114,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 			}
 
 			if ((getModel().getRegistroFamilia().getPricFamiliaDescuento2() != null) && (getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue() > 0.0)) {
-				getView().txtDesc2.setImporte(getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue());
+				getView().txtDesc2.setText(Common.double2String(getModel().getRegistroFamilia().getPricFamiliaDescuento2().doubleValue()));
 			}
 
 			if (getModel().getRegistroFamilia().getPricFamiliaFechaDesde() != null) {
@@ -125,7 +125,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 				getView().dateFechaHasta.setDate(getModel().getRegistroFamilia().getPricFamiliaFechaHasta());
 			}
 
-			getView().txtComision.setImporte(getModel().getRegistroFamilia().getPricFamiliaComision().doubleValue());
+			getView().txtComision.setText(Common.double2String(getModel().getRegistroFamilia().getPricFamiliaComision().doubleValue()));
 
 			if (getModel().getRegistroFamilia().getPricReferencia() != null) {
 				getView().txtReferencia.setText(getModel().getRegistroFamilia().getPricReferencia());
@@ -174,7 +174,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 			return false;
 		}
 
-		if ((getView().txtDesc1.getText().equals("")) && (getView().txtPrecio.isEmpty())) {
+		if ((getView().txtDesc1.getText().equals("")) && (getView().txtPrecio.getText().equals(""))) {
 			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio");
 			getView().txtDesc1.requestFocus();
 			return false;

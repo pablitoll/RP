@@ -9,7 +9,6 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -18,14 +17,12 @@ import javax.swing.UIManager;
 import com.alee.extended.date.WebDateField;
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.label.WebLabel;
-import com.alee.laf.text.WebFormattedTextField;
 import com.alee.laf.text.WebTextArea;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
-import ar.com.rp.ui.componentes.RPImporte;
 import ar.com.rp.ui.pantalla.BaseViewDialog;
 
 public class CargaItemEspecialView extends BaseViewDialog {
@@ -39,9 +36,9 @@ public class CargaItemEspecialView extends BaseViewDialog {
 	public WebTextArea lblNombre;
 	public WebTextArea lblDescripcion;
 	public componenteNumerico txtDesc1;
-	public RPImporte txtDesc2;
+	public componenteNumerico txtDesc2;
 	public WebComboBox cbMoneda;
-	public RPImporte txtPrecio;
+	public componenteNumerico txtPrecio;
 	public WebTextArea txtReferencia;
 	public WebDateField dateFechaDesde;
 	public WebDateField dateFechaHasta;
@@ -54,7 +51,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 	public JLabel lblLabelMoneda;
 	public JLabel lblLabelPrecio;
 	private JLabel label_1;
-	public RPImporte txtComision;
+	public componenteNumerico txtComision;
 	public WebLabel lblEstaEnLista;
 
 	public CargaItemEspecialView() throws Exception {
@@ -192,9 +189,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_label.gridy = 5;
 		panel_1.add(label, gbc_label);
 
-		txtDesc2 = new RPImporte();
-		txtDesc2.setFont(Common.getStandarFont());
-		txtDesc2.setCantDecimales(4);
+		txtDesc2 = new componenteNumerico();
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
 		gbc_textField_4.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
@@ -230,9 +225,8 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_lblLblestaenlistaPrecio.gridy = 7;
 		panel_1.add(lblLabelPrecio, gbc_lblLblestaenlistaPrecio);
 
-		txtPrecio = new RPImporte();
-		txtPrecio.setFont(Common.getStandarFont());
-		txtPrecio.setCantDecimales(4);
+		txtPrecio = new componenteNumerico();
+		txtPrecio.setCantEnteros(8);
 		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
 		gbc_textField_6.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
@@ -288,10 +282,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_label_comision.gridy = 10;
 		panel_1.add(label_1, gbc_label_comision);
 		
-		txtComision = new RPImporte();
-		txtComision.setFont(Common.getStandarFont());
-		txtComision.setColumns(10);
-		txtComision.setCantDecimales(4);
+		txtComision = new componenteNumerico();
 		GridBagConstraints gbc_txtComision = new GridBagConstraints();
 		gbc_txtComision.insets = new Insets(0, 0, 5, 0);
 		gbc_txtComision.fill = GridBagConstraints.HORIZONTAL;

@@ -1,27 +1,27 @@
 package ar.com.rollpaper.pricing.view;
 
-import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
-import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import com.alee.laf.text.WebFormattedTextField;
+import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
 import com.alee.laf.combobox.WebComboBox;
+import com.alee.laf.scroll.WebScrollPane;
+import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
-import com.alee.laf.scroll.WebScrollPane;
 import ar.com.rp.ui.componentes.RPTable;
-import javax.swing.ListSelectionModel;
+import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
 
 public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 
