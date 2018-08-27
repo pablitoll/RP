@@ -51,12 +51,20 @@ public class CSVExport {
 
 		List<String> linea = new ArrayList<String>();
 		for (int i = -1; i < tabla.getRowCount(); i++) {
-			for (int c = 0; c < tabla.getColumnCount() - 1; c++) {
+			for (int c = 0; c < tabla.getColumnCount(); c++) {
 				if (i == -1) {
 					linea.add(tabla.getColumnName(c));
 				} else {
 					Object valor = tabla.getValueAt(i, c);
-					String strValor = valor == null ? "" : valor.toString();
+					String strValor = "";
+					if (valor != null) {
+						if (valor instanceof Double) {
+							strValor = CommonUtils.double2String((Double) valor, ".", ",");
+						} else {
+							strValor = valor.toString().replaceAll("(\\r|\\n|\\t)", " ");
+						}
+					}
+
 					linea.add(strValor);
 				}
 			}

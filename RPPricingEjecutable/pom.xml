@@ -58,8 +58,8 @@
 			<version>1.28</version>
 			<type>pom</type>
 			<scope>test</scope>
+			<!-- https://mvnrepository.com/artifact/de.sciss/weblaf-ui -->
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/de.sciss/weblaf-ui -->
 		<dependency>
 			<groupId>de.sciss</groupId>
 			<artifactId>weblaf-ui</artifactId>
@@ -86,8 +86,12 @@
 			<version>3.8.1</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>net.sf.jasperreports</groupId> <artifactId>jasperreports</artifactId> 
-			<version>6.1.0</version> </dependency> -->
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>3.6.0</version>
+		</dependency>
+
 
 	</dependencies>
 </project>

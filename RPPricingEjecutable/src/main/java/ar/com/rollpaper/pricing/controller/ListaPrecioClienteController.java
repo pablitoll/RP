@@ -20,6 +20,8 @@ import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
+import ar.com.rollpaper.pricing.jasper.ListaPrecioReporteDTO;
+import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
@@ -210,6 +212,17 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al exportar");
+			}
+		}
+		
+		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_PDF.toString())) {
+			ListaPrecioReporteDTO listaPrecioReporte = new ListaPrecioReporteDTO();
+			listaPrecioReporte.setId(getModel().getClienteCargado().getClieCliente());
+			
+			try {
+				Reportes.getReporteListaPrecios(listaPrecioReporte);
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al generar Reprote");
 			}
 		}
 	}

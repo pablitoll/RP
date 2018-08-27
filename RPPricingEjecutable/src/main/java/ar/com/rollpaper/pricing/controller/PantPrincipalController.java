@@ -125,7 +125,7 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 	}
 
 	private void procesoPrecios() {
-		// TODO Auto-generated method stub
+		// TODO Afalta  procesoPrecios() {
 		
 	}
 
