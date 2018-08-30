@@ -6,6 +6,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
@@ -21,6 +22,7 @@ import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
 import ar.com.rollpaper.pricing.jasper.ListaPrecioReporteDTO;
+import ar.com.rollpaper.pricing.jasper.ProductoDTO;
 import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
@@ -87,7 +89,6 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 		}
 
 		setModoPantalla();
-
 	}
 
 	protected void perdioFocoNroLista() {
@@ -181,29 +182,33 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 				ManejoDeError.showError(e, "Error al limpiar");
 			}
 		}
-		
+
 		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_EXCEL.toString())) {
 			try {
-//				String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "Nro Lista", "Nombre Lista", "Nro Cliente Hijo", "Nombre del Cliente Hijo",
-//						"Nombre de Fantasia" };
-//				String[][] data = { {} };
-//
-//				RPTable tableParaExportar = new RPTable();
-//				tableParaExportar.setModel(new DefaultTableModel(data, header));
-//
-//				DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
-//
-//				Integer nroCliente = getModel().getCliente().getClieCliente();
-//				String nombreCliente = getModel().getCliente().getClieNombre();
-//				String fantasiaClietne = getModel().getCliente().getClieNombreLegal();
-//				Integer nroLista = getModel().getListaCliente().getLipvListaPrecvta();
-//				String nombreLista = getModel().getListaCliente().getLipvNombre();
-//
-//				tableParaExportar.clear();
-//				for (int i = 0; i < dm.getRowCount(); i++) {
-//					tableParaExportar.addRow(
-//							new Object[] { nroCliente, nombreCliente, fantasiaClietne, nroLista, nombreLista, dm.getValueAt(i, 0), dm.getValueAt(i, 1), dm.getValueAt(i, 2) });
-//				}
+				// String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de
+				// Fantasia", "Nro Lista", "Nombre Lista", "Nro Cliente Hijo", "Nombre del
+				// Cliente Hijo",
+				// "Nombre de Fantasia" };
+				// String[][] data = { {} };
+				//
+				// RPTable tableParaExportar = new RPTable();
+				// tableParaExportar.setModel(new DefaultTableModel(data, header));
+				//
+				// DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
+				//
+				// Integer nroCliente = getModel().getCliente().getClieCliente();
+				// String nombreCliente = getModel().getCliente().getClieNombre();
+				// String fantasiaClietne = getModel().getCliente().getClieNombreLegal();
+				// Integer nroLista = getModel().getListaCliente().getLipvListaPrecvta();
+				// String nombreLista = getModel().getListaCliente().getLipvNombre();
+				//
+				// tableParaExportar.clear();
+				// for (int i = 0; i < dm.getRowCount(); i++) {
+				// tableParaExportar.addRow(
+				// new Object[] { nroCliente, nombreCliente, fantasiaClietne, nroLista,
+				// nombreLista, dm.getValueAt(i, 0), dm.getValueAt(i, 1), dm.getValueAt(i, 2)
+				// });
+				// }
 
 				String nombreArchivo = String.format("ListaPrecioCliente%s_%s", getModel().getClienteCargado().getClieCliente(),
 						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
@@ -214,11 +219,11 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 				ManejoDeError.showError(e, "Error al exportar");
 			}
 		}
-		
+
 		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_PDF.toString())) {
-			ListaPrecioReporteDTO listaPrecioReporte = new ListaPrecioReporteDTO();
-			listaPrecioReporte.setId(getModel().getClienteCargado().getClieCliente());
-			
+
+			ListaPrecioReporteDTO listaPrecioReporte = getDatosReporte(getModel().getClienteCargado(), getModel().getListaCargada());
+
 			try {
 				Reportes.getReporteListaPrecios(listaPrecioReporte);
 			} catch (Exception e) {
@@ -266,5 +271,22 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 				perdioFocoCliente(cliente.getClieCliente());
 			}
 		}
+	}
+
+	private ListaPrecioReporteDTO getDatosReporte(CcobClie cliente, VentLipv lista) {
+
+		List<ProductoDTO> listaProductos = new ArrayList<ProductoDTO>();
+		for (VentArpv venta : VentArpvDAO.findByListaID(lista.getLipvListaPrecvta())) {
+
+			StocArts stock = StocArtsDAO.getArticuloByID(venta.getId().getArpvArticulo());
+
+			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
+					venta.getSistMoneByArpvMoneda().getMoneSimbolo(), Common.double2String(venta.getArpvPrecioVta().doubleValue()));
+
+			listaProductos.add(producto);
+		}
+
+		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(), cliente.getClieNombreLegal(),
+				String.format("(%s) %s", lista.getLipvListaPrecvta(), lista.getLipvNombre()), listaProductos);
 	}
 }

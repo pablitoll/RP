@@ -94,7 +94,6 @@ public class VentArpvDAO {
 //
 	public static List<VentArpv> findByListaID(int listaID){
 		
-		
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 
