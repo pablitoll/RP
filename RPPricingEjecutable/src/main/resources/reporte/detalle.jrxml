@@ -35,7 +35,7 @@
 	<title>
 		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="69" y="0" width="109" height="20" uuid="3203895a-130d-4394-8712-2e7e1b9dd94c"/>
+				<reportElement x="69" y="0" width="97" height="20" uuid="3203895a-130d-4394-8712-2e7e1b9dd94c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
@@ -53,7 +53,7 @@
 				<text><![CDATA[Precio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="52" height="20" uuid="993c26f3-0312-45bb-87c5-f6ef1f1bb97e"/>
+				<reportElement x="0" y="0" width="58" height="20" uuid="993c26f3-0312-45bb-87c5-f6ef1f1bb97e"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Codigo]]></text>
 			</staticText>
@@ -62,7 +62,7 @@
 	<detail>
 		<band height="30" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="52" height="30" uuid="fa8376c7-fc11-43a6-aa8a-79651fe632e2"/>
+				<reportElement x="0" y="0" width="58" height="30" uuid="fa8376c7-fc11-43a6-aa8a-79651fe632e2"/>
 				<textFieldExpression><![CDATA[$F{codArticulo}]]></textFieldExpression>
 			</textField>
 			<textField>

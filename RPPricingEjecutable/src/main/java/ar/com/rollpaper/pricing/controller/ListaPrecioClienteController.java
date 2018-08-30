@@ -15,11 +15,13 @@ import javax.swing.table.TableRowSorter;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.StocArts;
+import ar.com.rollpaper.pricing.beans.VentArpc;
 import ar.com.rollpaper.pricing.beans.VentArpv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
+import ar.com.rollpaper.pricing.dao.VentArpcDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
 import ar.com.rollpaper.pricing.jasper.ListaPrecioReporteDTO;
 import ar.com.rollpaper.pricing.jasper.ProductoDTO;
@@ -146,10 +148,8 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 	private void cargarProductos() {
 		resetearTabla();
-
-		// TODO ACA
-		// Codigo Articulo", "Nombre", "Descripcion", "Unidad", "moneda""Precio Venta"
-		// };
+		//Aca estan solo los precios customizados
+				
 		for (VentArpv venta : VentArpvDAO.findByListaID(getModel().getListaCargada().getLipvListaPrecvta())) {
 			StocArts stock = StocArtsDAO.getArticuloByID(venta.getId().getArpvArticulo());
 			getView().tableResultado.addRow(new Object[] { stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
@@ -274,8 +274,13 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 	}
 
 	private ListaPrecioReporteDTO getDatosReporte(CcobClie cliente, VentLipv lista) {
-
+		
 		List<ProductoDTO> listaProductos = new ArrayList<ProductoDTO>();
+		
+		//Lista de precios customizados
+		List<VentArpc> listaPreciosCustomizados = VentArpcDAO.findByListaByClient(cliente.getClieCliente(), lista.getLipvListaPrecvta());
+		
+		//Esta es la lista de precios bases
 		for (VentArpv venta : VentArpvDAO.findByListaID(lista.getLipvListaPrecvta())) {
 
 			StocArts stock = StocArtsDAO.getArticuloByID(venta.getId().getArpvArticulo());
@@ -286,7 +291,6 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 			listaProductos.add(producto);
 		}
 
-		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(), cliente.getClieNombreLegal(),
-				String.format("(%s) %s", lista.getLipvListaPrecvta(), lista.getLipvNombre()), listaProductos);
+		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(), cliente.getClieNombreLegal(), lista.getLipvNombre(), listaProductos);
 	}
 }
