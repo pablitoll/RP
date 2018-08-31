@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.business.FamiliaBusiness;
+import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
 import ar.com.rollpaper.pricing.ui.BuscarFamiliaDialog;
@@ -32,18 +34,26 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		registro.setPricCa01Clasif1(getModel().getFamiliaID());
 
 		if (!getView().txtDesc1.getText().equals("")) {
-			registro.setPricFamiliaDescuento1(new BigDecimal(getView().txtDesc1.getText(), MathContext.DECIMAL64));
+			registro.setPricFamiliaDescuento1(new BigDecimal(Common.String2Double(getView().txtDesc1.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricFamiliaDescuento1(null);
 		}
-		if (getView().txtDesc2.getText().equals("")) {
-			registro.setPricFamiliaDescuento2(new BigDecimal(getView().txtDesc2.getText(), MathContext.DECIMAL64));
+		if (!getView().txtDesc2.getText().equals("")) {
+			registro.setPricFamiliaDescuento2(new BigDecimal(Common.String2Double(getView().txtDesc2.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricFamiliaDescuento2(null);
 		}
 		registro.setPricFamiliaFechaDesde(getView().dateFechaDesde.getDate());
 		registro.setPricFamiliaFechaHasta(getView().dateFechaHasta.getDate());
-		registro.setPricFamiliaComision(new BigDecimal(getView().txtComision.getText(), MathContext.DECIMAL64));
+
+		
+		Double comision = 0.0;
+		if(!getView().txtComision.getText().equals("")) {
+			comision = new Double(Common.String2Double(getView().txtComision.getText()));
+		}
+
+		registro.setPricFamiliaComision(new BigDecimal(comision, MathContext.DECIMAL64));
+		
 		registro.setPricReferencia(getView().txtReferencia.getText());
 
 		return registro;
@@ -174,6 +184,12 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 			return false;
 		}
 
+		if (!FamiliaBusiness.estaFamiliaEnLista(getModel().getFamiliaID(), getModel().getListaID())) {
+			popUpError.showError(getView().txtArticuloID, "La familia no pertenece a la lista Original");
+			getView().txtArticuloID.requestFocus();
+			return false;
+		}
+
 		if ((getView().txtDesc1.getText().equals("")) && (getView().txtPrecio.getText().equals(""))) {
 			popUpError.showError(getView().txtDesc1, "Falta cargar el porcentage de descuento o el precio");
 			getView().txtDesc1.requestFocus();
@@ -249,6 +265,13 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 	private void RefrescarDatosFamilia() {
 		getView().lblNombre.setText(getModel().getNombreItem());
+
+		if (!getModel().getFamiliaID().equals("") && !FamiliaBusiness.estaFamiliaEnLista(getModel().getFamiliaID(), getModel().getListaID())) {
+			getView().lblEstaEnLista.setText("La Familia no esta en la lista");
+			getView().lblEstaEnLista.setVisible(true);
+		} else {
+			getView().lblEstaEnLista.setVisible(false);
+		}
 	}
 
 	@Override
@@ -282,7 +305,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 	private String buscarFamilia() throws Exception {
 		String retorno = "";
-		BuscarFamiliaDialog buscarFamiliaDialog = new BuscarFamiliaDialog(getPantallaPrincipal());
+		BuscarFamiliaDialog buscarFamiliaDialog = new BuscarFamiliaDialog(getPantallaPrincipal(), getModel().getListaID());
 		buscarFamiliaDialog.iniciar();
 		if (buscarFamiliaDialog.getNroFamilia() != null) {
 			retorno = String.valueOf(buscarFamiliaDialog.getNroFamilia());

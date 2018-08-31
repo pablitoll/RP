@@ -118,6 +118,18 @@ public class StocArtsDAO {
 		List<StocArts> clientes = session.createQuery(criteriaQuery).getResultList();
 
 		return clientes;
+	}
+
+	public static List<StocArts> getListaArticulosxFamilia(String familiaID) {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<StocArts> criteriaQuery = session.getCriteriaBuilder().createQuery(StocArts.class);
+		Root<StocArts> i = criteriaQuery.from(StocArts.class);
+		criteriaQuery.where(cb.equal(i.get("artsClasif1"), familiaID));
+		List<StocArts> clientes = session.createQuery(criteriaQuery).getResultList();
+
+		return clientes;
 
 	}
 
@@ -139,8 +151,7 @@ public class StocArtsDAO {
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 		CriteriaQuery<StocArts> criteriaQuery = session.getCriteriaBuilder().createQuery(StocArts.class);
 		Root<StocArts> i = criteriaQuery.from(StocArts.class);
-		criteriaQuery.where(cb.equal(i.get("artsArticuloEmp"), idEmp),
-				cb.equal(i.get("artsSeVende"), true));
+		criteriaQuery.where(cb.equal(i.get("artsArticuloEmp"), idEmp), cb.equal(i.get("artsSeVende"), true));
 		return session.createQuery(criteriaQuery).getSingleResult();
 	}
 

@@ -99,7 +99,7 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 			if (lista != null) {
 				getView().lblNombreLista.setText(lista.getLipvNombre());
 				getModel().setListaCargada(lista);
-				cargarProductos();
+				cargarProductos(getModel().getClienteCargado(), getModel().getListaCargada());
 			}
 		}
 	}
@@ -146,22 +146,6 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 	}
 
-	private void cargarProductos() {
-		resetearTabla();
-		//Aca estan solo los precios customizados
-				
-		for (VentArpv venta : VentArpvDAO.findByListaID(getModel().getListaCargada().getLipvListaPrecvta())) {
-			StocArts stock = StocArtsDAO.getArticuloByID(venta.getId().getArpvArticulo());
-			getView().tableResultado.addRow(new Object[] { stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
-					venta.getSistMoneByArpvMoneda().getMoneNombre(), Common.double2String(venta.getArpvPrecioVta().doubleValue()) });
-		}
-
-		sorterTablaResultado.sort();
-
-		// TODO falta la tabla [VENT_ARPC]
-		setModoPantalla();
-	}
-
 	@Override
 	protected String getNombrePantalla() {
 		return "Lista de Precio x Cliente";
@@ -185,31 +169,6 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_EXCEL.toString())) {
 			try {
-				// String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de
-				// Fantasia", "Nro Lista", "Nombre Lista", "Nro Cliente Hijo", "Nombre del
-				// Cliente Hijo",
-				// "Nombre de Fantasia" };
-				// String[][] data = { {} };
-				//
-				// RPTable tableParaExportar = new RPTable();
-				// tableParaExportar.setModel(new DefaultTableModel(data, header));
-				//
-				// DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
-				//
-				// Integer nroCliente = getModel().getCliente().getClieCliente();
-				// String nombreCliente = getModel().getCliente().getClieNombre();
-				// String fantasiaClietne = getModel().getCliente().getClieNombreLegal();
-				// Integer nroLista = getModel().getListaCliente().getLipvListaPrecvta();
-				// String nombreLista = getModel().getListaCliente().getLipvNombre();
-				//
-				// tableParaExportar.clear();
-				// for (int i = 0; i < dm.getRowCount(); i++) {
-				// tableParaExportar.addRow(
-				// new Object[] { nroCliente, nombreCliente, fantasiaClietne, nroLista,
-				// nombreLista, dm.getValueAt(i, 0), dm.getValueAt(i, 1), dm.getValueAt(i, 2)
-				// });
-				// }
-
 				String nombreArchivo = String.format("ListaPrecioCliente%s_%s", getModel().getClienteCargado().getClieCliente(),
 						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
 
@@ -222,7 +181,7 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_PDF.toString())) {
 
-			ListaPrecioReporteDTO listaPrecioReporte = getDatosReporte(getModel().getClienteCargado(), getModel().getListaCargada());
+			ListaPrecioReporteDTO listaPrecioReporte = Reportes.getDatosReporte(getModel().getClienteCargado(), getModel().getListaCargada());
 
 			try {
 				Reportes.getReporteListaPrecios(listaPrecioReporte);
@@ -273,24 +232,19 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 		}
 	}
 
-	private ListaPrecioReporteDTO getDatosReporte(CcobClie cliente, VentLipv lista) {
-		
-		List<ProductoDTO> listaProductos = new ArrayList<ProductoDTO>();
-		
-		//Lista de precios customizados
-		List<VentArpc> listaPreciosCustomizados = VentArpcDAO.findByListaByClient(cliente.getClieCliente(), lista.getLipvListaPrecvta());
-		
-		//Esta es la lista de precios bases
-		for (VentArpv venta : VentArpvDAO.findByListaID(lista.getLipvListaPrecvta())) {
+	private void cargarProductos(CcobClie cliente, VentLipv lista) {
+		resetearTabla();
+		// Aca estan solo los precios customizados
 
-			StocArts stock = StocArtsDAO.getArticuloByID(venta.getId().getArpvArticulo());
-
-			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
-					venta.getSistMoneByArpvMoneda().getMoneSimbolo(), Common.double2String(venta.getArpvPrecioVta().doubleValue()));
-
-			listaProductos.add(producto);
+		for (VentArpc ventaCustomizada : VentArpcDAO.findByListaByClient(cliente.getClieCliente(), lista.getLipvListaPrecvta())) {
+			StocArts stock = StocArtsDAO.getArticuloByID(ventaCustomizada.getId().getArpcArticulo());
+			getView().tableResultado.addRow(new Object[] { stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
+					ventaCustomizada.getArpcMoneda(), Common.double2String(ventaCustomizada.getArpcPrecioVta().doubleValue()) });
 		}
 
-		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(), cliente.getClieNombreLegal(), lista.getLipvNombre(), listaProductos);
+		sorterTablaResultado.sort();
+
+		setModoPantalla();
 	}
+
 }

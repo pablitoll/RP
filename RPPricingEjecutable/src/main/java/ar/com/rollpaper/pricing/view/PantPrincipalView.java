@@ -42,7 +42,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private final JMenuItem mntmSalir = new JMenuItem("Salir de la Aplicacion");
 
-	private final JMenuItem mntmListaPercioxCliente = new JMenuItem("Lista de Precios x Cliente");
+	private final JMenuItem mntmListaPercioxCliente = new JMenuItem("Lista de Articulos Customizados x Cliente");
 
 	private final JMenuItem mntmCargaPrecioCliente = new JMenuItem("Gestion de Precios");
 

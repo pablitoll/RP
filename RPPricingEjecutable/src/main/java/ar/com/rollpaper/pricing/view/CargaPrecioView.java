@@ -351,7 +351,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnAgregarLista, ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString());
 		asignarBotonAccion(btnEliminarLista, ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString());
 		asignarBotonAccion(btnImpactarPrecios, ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString());
-
 	}
 
 	public void setCerrarVisible(Boolean visible) {

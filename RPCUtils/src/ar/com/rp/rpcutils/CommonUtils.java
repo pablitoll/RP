@@ -231,6 +231,7 @@ public class CommonUtils {
 		}
 	}
 
+	
 	public static Double String2Double(String valor, String separadorMiles) {
 		// Si el signo negativo viene al final lo paso a la primera poscion
 		if (valor.substring(valor.length() - 1).equals("-")) {

@@ -5,8 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.beans.StocArts;
+import ar.com.rollpaper.pricing.beans.VentArpc;
+import ar.com.rollpaper.pricing.beans.VentArpv;
+import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.dao.StocArtsDAO;
+import ar.com.rollpaper.pricing.dao.VentArpcDAO;
+import ar.com.rollpaper.pricing.dao.VentArpvDAO;
 import ar.com.rollpaper.pricing.ui.Main;
+import ar.com.rp.ui.common.Common;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -45,10 +54,9 @@ public class Reportes {
 		map.put("nomCliente", listaPrecioReporte.getNomCliente());
 		map.put("nomLegal", listaPrecioReporte.getNomLegal());
 		map.put("listaProductos", listaPrecioReporte.getNroListaProducto());
-		
+
 		map.put("idTC", "detalleProductos");
 
-		
 		// Reporte
 		List<Map<String, ?>> mapsDataSource = new ArrayList<Map<String, ?>>();
 		mapsDataSource.add(map);
@@ -63,5 +71,47 @@ public class Reportes {
 
 		// view report to UI
 		JasperViewer.viewReport(jasperPrint, false);
+	}
+
+	public static ListaPrecioReporteDTO getDatosReporte(CcobClie cliente, VentLipv lista) {
+//TODO FALTA LOS HEREDADOS
+		List<ProductoDTO> listaProductos = new ArrayList<ProductoDTO>();
+
+		// Lista de precios customizados
+		List<VentArpc> listaVentaCustomizada = VentArpcDAO.findByListaByClient(cliente.getClieCliente(), lista.getLipvListaPrecvta());
+		for (VentArpc ventaCustomizada : listaVentaCustomizada) {
+
+			StocArts stock = StocArtsDAO.getArticuloByID(ventaCustomizada.getId().getArpcArticulo());
+
+			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
+					ventaCustomizada.getArpcMoneda(), Common.double2String(ventaCustomizada.getArpcPrecioVta().doubleValue()));
+
+			listaProductos.add(producto);
+		}
+
+		// Esta es la lista de precios bases
+		for (VentArpv ventaBase : VentArpvDAO.findByListaID(lista.getLipvListaPrecvta())) {
+
+			if (!estaArticuloEnListaCustomizada(listaVentaCustomizada, ventaBase)) {
+
+				StocArts stock = StocArtsDAO.getArticuloByID(ventaBase.getId().getArpvArticulo());
+
+				ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
+						ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo(), Common.double2String(ventaBase.getArpvPrecioVta().doubleValue()));
+
+				listaProductos.add(producto);
+			}
+		}
+
+		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(), cliente.getClieNombreLegal(), lista.getLipvNombre(), listaProductos);
+	}
+
+	private static boolean estaArticuloEnListaCustomizada(List<VentArpc> listaVentaCustomizada, VentArpv ventaBase) {
+		for (VentArpc venta : listaVentaCustomizada) {
+			if (venta.getId().getArpcArticulo() == ventaBase.getId().getArpvArticulo()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

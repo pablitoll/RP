@@ -4,6 +4,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.StocCa01;
+import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rp.ui.pantalla.BaseModel;
 
 public class CargaItemEspecialFamiliaModel extends BaseModel {
@@ -12,6 +13,11 @@ public class CargaItemEspecialFamiliaModel extends BaseModel {
 	private String accion = "";
 	private StocCa01 familiaCargado = null;
 	private DefaultTableModel tableModel;
+	private VentLipv listaID;
+
+	public void setListaID(VentLipv listaID) {
+		this.listaID = listaID;
+	}
 
 	public void setFamiliaCargado(StocCa01 familiaCargado) {
 		this.familiaCargado = familiaCargado;
@@ -57,5 +63,9 @@ public class CargaItemEspecialFamiliaModel extends BaseModel {
 
 	public DefaultTableModel getTableModel() {
 		return tableModel;
+	}
+
+	public int getListaID() {
+		return listaID.getLipvListaPrecvta();
 	}
 }

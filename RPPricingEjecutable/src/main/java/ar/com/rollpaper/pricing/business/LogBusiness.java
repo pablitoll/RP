@@ -2,7 +2,6 @@ package ar.com.rollpaper.pricing.business;
 
 import java.util.UUID;
 
-
 public class LogBusiness {
 
 	private static LogManager _LogManager = null;
@@ -47,12 +46,7 @@ public class LogBusiness {
 
 		setCsc_session_id(UUID.randomUUID().toString());
 
-		//TODO Configurar Path
-		String path = ".";
-		if (!path.equals("")) {
-			path += "/";
-		}
-
+		String path =  System.getProperty("user.dir") + "//logs";
 		_LogManager = new LogManager(path, "RollPaper");
 	}
 

@@ -17,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.beans.StocCa01;
-import ar.com.rollpaper.pricing.dao.StocCa01DAO;
+import ar.com.rollpaper.pricing.business.FamiliaBusiness;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -37,15 +37,17 @@ public class BuscarFamiliaDialog extends DialogBase {
 	private JButtonRP btnBuscar;
 	private String nroFamilia = null;
 	private JButtonRP btnTodos;
+	private int listaID;
 
 	public String getNroFamilia() {
 		return nroFamilia;
 	}
 
-	public BuscarFamiliaDialog(BasePantallaPrincipal<?, ?> pantPrincipal) {
+	public BuscarFamiliaDialog(BasePantallaPrincipal<?, ?> pantPrincipal, int listaID) {
 		super(pantPrincipal);
 		setBounds(100, 100, 600, 600);
 		setModal(true);
+		this.listaID = listaID;
 		nroFamilia = null;
 		JPanel panel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
@@ -70,7 +72,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 				cerrar();
 			}
 		});
-		
+
 		btnTodos = new JButtonRP("Visualizar Todos");
 		btnTodos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -108,10 +110,10 @@ public class BuscarFamiliaDialog extends DialogBase {
 		tableFamilia.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent mouseEvent) {
-		        if (mouseEvent.getClickCount() == 2 && tableFamilia.getSelectedRow() != -1) {
-		            btnSeleccionar.doClick(); 
-		        }
-		    }
+				if (mouseEvent.getClickCount() == 2 && tableFamilia.getSelectedRow() != -1) {
+					btnSeleccionar.doClick();
+				}
+			}
 		});
 		tableFamilia.setModel(new DefaultTableModel(data, header));
 		tableFamilia.setEditable(false);
@@ -120,15 +122,14 @@ public class BuscarFamiliaDialog extends DialogBase {
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioArticulo();
 	}
-	
+
 	private void cambioArticulo() {
 		btnSeleccionar.setEnabled(tableFamilia.getRowCount() > 0);
 	}
 
 	protected void buscar(String nombre) {
 		tableFamilia.clear();
-
-		for (StocCa01 art : StocCa01DAO.getListaFamiliaByDesc_ID(nombre)) {
+		for (StocCa01 art : FamiliaBusiness.getListaFamilia(nombre, listaID)) {
 			tableFamilia.addRow(new Object[] { art.getCa01Clasif1(), art.getCa01Nombre() });
 		}
 

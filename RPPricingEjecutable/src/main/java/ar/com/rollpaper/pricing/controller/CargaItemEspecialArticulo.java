@@ -36,13 +36,13 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		registro.setPricArticulo(getModel().getArticuloID());
 
 		if (!getView().txtDesc1.getText().equals("")) {
-			registro.setPricDescuento1(new BigDecimal(getView().txtDesc1.getText(), MathContext.DECIMAL64));
+			registro.setPricDescuento1(new BigDecimal(Common.String2Double(getView().txtDesc1.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricDescuento1(null);
 		}
 
 		if (!getView().txtDesc2.getText().equals("")) {
-			registro.setPricDescuento2(new BigDecimal(getView().txtDesc2.getText(), MathContext.DECIMAL64));
+			registro.setPricDescuento2(new BigDecimal(Common.String2Double(getView().txtDesc2.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricDescuento2(null);
 		}
@@ -52,12 +52,16 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		if (getView().cbMoneda.getSelectedIndex() > 0) {
 			registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
-			registro.setPricPrecio(new BigDecimal(getView().txtPrecio.getText(), MathContext.DECIMAL64));
+			registro.setPricPrecio(new BigDecimal(Common.String2Double(getView().txtPrecio.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricMoneda(null);
 			registro.setPricPrecio(null);
 		}
-		registro.setPricComision(new BigDecimal(getView().txtComision.getText(), MathContext.DECIMAL64));
+		Double comision = 0.0;
+		if (!getView().txtComision.getText().equals("")) {
+			comision = new Double(Common.String2Double(getView().txtComision.getText()));
+		}
+		registro.setPricComision(new BigDecimal(comision, MathContext.DECIMAL64));
 
 		registro.setPricReferencia(getView().txtReferencia.getText());
 
@@ -226,11 +230,11 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 			getView().cbMoneda.requestFocus();
 			return false;
 		}
-		
-		if(!getModel().isArticuloEnLista() && !getView().txtDesc1.getText().equals("")) {
+
+		if (!getModel().isArticuloEnLista() && !getView().txtDesc1.getText().equals("")) {
 			popUpError.showError(getView().txtDesc1, "El articulo no esta en la lista, el descuento es solo por precio");
 			getView().txtDesc1.requestFocus();
-			return false;			
+			return false;
 		}
 
 		if (getView().dateFechaDesde.getDate() == null) {
@@ -303,11 +307,11 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 	protected StocArts getArticuloByEmp(String idEmp) {
 		StocArts articulo = null;
 		try {
-			articulo = StocArtsDAO.getArticulo(idEmp);	
+			articulo = StocArtsDAO.getArticulo(idEmp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		getModel().setArticuloCargado(articulo);
 
 		return articulo;
@@ -322,7 +326,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 	private void RefrescarDatosArticulo() {
 		getView().lblDescripcion.setText(getModel().getDescripcionItem());
 		getView().lblNombre.setText(getModel().getNombreItem());
-		if(getModel().isArticuloEnLista()) {
+		if (getModel().isArticuloEnLista()) {
 			getView().lblEstaEnLista.setText(CommonUtils.SetHTMLColor("ESTA EN LISTA", "blue"));
 		} else {
 			getView().lblEstaEnLista.setText(CommonUtils.SetHTMLColor("NO ESTA EN LISTA", "red"));

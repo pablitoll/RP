@@ -4,8 +4,6 @@
 
 * en Descuento por familia > en alta de familia > solo mostrar familias que esten en la lista seleccionada 
 
-* en el reporte ver de generar un reporte de todos los precios y otro de solo los precios customizados.
-
 */
 
 package ar.com.rollpaper.pricing.view;

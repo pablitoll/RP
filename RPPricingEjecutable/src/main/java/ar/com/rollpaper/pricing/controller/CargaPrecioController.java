@@ -315,7 +315,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				ManejoDeError.showError(e, "Error al cancelar");
 			}
 		}
-
 		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString()))
 
 		{
@@ -337,6 +336,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 					if (isPanelActivoFamilia()) {
 						itemEspecialFamilia.setRegistro(getModel().getRegistroFamilaiEmpty());
 						itemEspecialFamiliaModel.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
+						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada());
 						resutlado = itemEspecialFamilia.iniciar();
 
 						if (!resutlado.equals("")) {
@@ -393,6 +393,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 						int row = getView().tableDescFamilia.getSelectedRow();
 						itemEspecialFamilia.setRegistro((DescuentoXFamilias) getView().tableDescFamilia.getValueAt(row, CargaPrecioView.COL_REGISTRO_FAMILIA));
 						itemEspecialFamiliaModel.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
+						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada());
 						resutlado = itemEspecialFamilia.iniciar();
 
 						if (!resutlado.equals("")) {

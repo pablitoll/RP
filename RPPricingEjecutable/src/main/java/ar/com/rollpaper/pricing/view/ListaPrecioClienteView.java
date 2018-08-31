@@ -42,7 +42,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 
 	public ListaPrecioClienteView() throws Exception {
 		super();
-		setTitle("Lista de Precios por Cliente");
+		setTitle("Lista de Articulos Customizados por Cliente");
 
 		JPanel panel = new JPanel();
 		panel.setFocusable(false);
@@ -164,12 +164,12 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		WebScrollPane webScrollPane = new WebScrollPane(tableResultado);
 		getContentPane().add(webScrollPane, BorderLayout.CENTER);
 		
-		btnCancelar = new JButtonRP("Limpiar");
+		btnCancelar = new JButtonRP("Hacer otra Busqueda");
 		btnCancelar.setIcon(new ImageIcon(BaseViewMVCExtendida.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnCancelar);
 
-		btnGenerarPDF = new JButtonRP("Generar PDF");
+		btnGenerarPDF = new JButtonRP("Generar Lista de Precios Final (PDF)");
 		btnGenerarPDF.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnGenerarPDF);
 
