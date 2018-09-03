@@ -18,6 +18,7 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -170,10 +171,12 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		pnlInferiorBotones.add(btnCancelar);
 
 		btnGenerarPDF = new JButtonRP("Generar Lista de Precios Final (PDF)");
+		btnGenerarPDF.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_PDF), 15, 15));
 		btnGenerarPDF.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnGenerarPDF);
 
 		btnExportarExcel = new JButtonRP("Exportar a Excel");
+		btnExportarExcel.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_EXCEL), 15, 15));
 		btnExportarExcel.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnExportarExcel);
 

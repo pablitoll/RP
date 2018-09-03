@@ -19,6 +19,7 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -171,13 +172,13 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		String[][] data = { {} };
 
 		btnCancelar = new JButtonRP("Cancelar Carga");
-		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png"), 15, 15));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);
 
 		btnExpportar = new JButtonRP("Exportar a Excel");
-		btnExpportar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/extended/language/icons/text.png")));
+		btnExpportar.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_EXCEL), 15, 15));
 		btnExpportar.setFont(Common.getStandarFont());
 		btnExpportar.setToolTipText("Exportar a Excel el Cliente Actual y sus Hijos");
 		pnlInferiorBotones.add(btnExpportar);
@@ -185,6 +186,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		btnExportarTodo = new JButtonRP("Imprimir Todo");
 		btnExportarTodo.setFont(Common.getStandarFont());
 		btnExportarTodo.setToolTipText("Exportar a Excel TODOS los Clientes con sus Hijos");
+		btnExportarTodo.setVisible(false);
 		pnlInferiorBotones.add(btnExportarTodo);
 
 		pnlCentral = new JPanel();

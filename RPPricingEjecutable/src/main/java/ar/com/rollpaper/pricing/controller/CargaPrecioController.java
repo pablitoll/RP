@@ -128,17 +128,22 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	protected void perdioFocoCliente(int id) throws Exception {
-		CcobClie cliente = CcobClieDAO.findById(Integer.valueOf(id));
+		PantPrincipalController.setCursorOcupado();
+		try {
+			CcobClie cliente = CcobClieDAO.findById(Integer.valueOf(id));
 
-		if (cliente != null) {
-			getView().lblNombreCliente.setText(cliente.getClieNombre());
-			getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-			getModel().setClienteCargado(cliente);
-			cargarLista();
-			setModoPantalla();
+			if (cliente != null) {
+				getView().lblNombreCliente.setText(cliente.getClieNombre());
+				getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+				getModel().setClienteCargado(cliente);
+				cargarLista();
+				setModoPantalla();
 
-		} else {
-			resetearDatosDePantalla();
+			} else {
+				resetearDatosDePantalla();
+			}
+		} finally {
+			PantPrincipalController.setRestoreCursor();
 		}
 	}
 

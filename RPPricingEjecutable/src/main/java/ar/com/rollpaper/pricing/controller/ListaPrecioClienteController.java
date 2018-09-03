@@ -6,8 +6,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.TableModel;
@@ -16,15 +14,12 @@ import javax.swing.table.TableRowSorter;
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentArpc;
-import ar.com.rollpaper.pricing.beans.VentArpv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentArpcDAO;
-import ar.com.rollpaper.pricing.dao.VentArpvDAO;
 import ar.com.rollpaper.pricing.jasper.ListaPrecioReporteDTO;
-import ar.com.rollpaper.pricing.jasper.ProductoDTO;
 import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
@@ -35,6 +30,7 @@ import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
+import net.sf.jasperreports.util.IdentitySecretsProviderExtensionsRegistryFactory;
 
 public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipalController, ListaPrecioClienteView, ListaPrecioClienteModel> {
 
@@ -70,17 +66,23 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 	}
 
 	protected void perdioFocoCliente(int id) throws Exception {
-		CcobClie cliente = CcobClieDAO.findById(Integer.valueOf(id));
+		PantPrincipalController.setCursorOcupado();
+		try {
+			CcobClie cliente = CcobClieDAO.findById(Integer.valueOf(id));
 
-		if (cliente != null) {
-			getView().lblNombreCliente.setText(cliente.getClieNombre());
-			getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-			getModel().setClienteCargado(cliente);
-			cargarLista();
-			setModoPantalla();
+			if (cliente != null) {
+				getView().lblNombreCliente.setText(cliente.getClieNombre());
+				getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+				getModel().setClienteCargado(cliente);
+				cargarLista();
+				setModoPantalla();
 
-		} else {
-			resetearDatosDePantalla();
+			} else {
+				resetearDatosDePantalla();
+			}
+
+		} finally {
+			PantPrincipalController.setRestoreCursor();
 		}
 	}
 

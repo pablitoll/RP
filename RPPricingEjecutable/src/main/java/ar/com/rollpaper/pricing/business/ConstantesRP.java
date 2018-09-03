@@ -30,6 +30,9 @@ public class ConstantesRP {
 	public static String IMG_PRICE_CONFIG = "/images/priceConfig.png";
 	public static String IMG_PESOS = "/images/pesos.png";
 	public static String IMG_RETORNO = "/images/retorno.jpg";
+	public static String IMG_EXCEL = "/images/ExcelIcono.png";
+	public static String IMG_PDF = "/images/descargaPDF.png";
+	
 	
 	public static String REPO_LISTA_PRECIO = "/reporte/report1.jasper";
 	public static String REPO_LISTA_PRECIO_DETALLE = "/reporte/";//"/reporte/detalle.jasper";

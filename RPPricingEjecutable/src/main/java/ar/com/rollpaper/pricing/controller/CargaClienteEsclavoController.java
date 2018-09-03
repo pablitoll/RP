@@ -29,6 +29,7 @@ import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
 import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
@@ -49,38 +50,44 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 	}
 
 	protected void perdioFocoCliente() throws Exception {
-		CcobClie cliente = null;
-		getModel().setEsEscalvoEnAlgunaLista(false);
+		PantPrincipalController.setCursorOcupado();
+		try {
 
-		if (!getView().txtNroCliente.getText().equals("")) {
-			String id = getView().txtNroCliente.getText();
-			if (CommonUtils.isNumeric(id)) {
-				cliente = CcobClieDAO.findById(Integer.valueOf(id));
-			}
-		}
+			CcobClie cliente = null;
+			getModel().setEsEscalvoEnAlgunaLista(false);
 
-		if (cliente != null) {
-			if ((getModel().getCliente() == null) || (cliente.getClieCliente() != getModel().getCliente().getClieCliente())) {
-				getModel().setCliente(cliente);
-				getView().lblNombreCliente.setText(cliente.getClieNombre());
-				getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-
-				cargarListaPrecios(cliente);
-				// cargo los esclavos de ese cliente
-				cargarEsclavos(cliente);
-
-				if (MaestroEsclavoDAO.getListaEsclavosByEsclavo(cliente).size() > 0) {
-					Dialog.showMessageDialog("No se puede usar este cliente porque ya es escalvo");
-					getModel().setEsEscalvoEnAlgunaLista(true);
+			if (!getView().txtNroCliente.getText().equals("")) {
+				String id = getView().txtNroCliente.getText();
+				if (CommonUtils.isNumeric(id)) {
+					cliente = CcobClieDAO.findById(Integer.valueOf(id));
 				}
 			}
-		} else {
-			getModel().setCliente(null);
-			limpiarPantalla();
+
+			if (cliente != null) {
+				if ((getModel().getCliente() == null) || (cliente.getClieCliente() != getModel().getCliente().getClieCliente())) {
+					getModel().setCliente(cliente);
+					getView().lblNombreCliente.setText(cliente.getClieNombre());
+					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+
+					cargarListaPrecios(cliente);
+					// cargo los esclavos de ese cliente
+					cargarEsclavos(cliente);
+
+					if (MaestroEsclavoDAO.getListaEsclavosByEsclavo(cliente).size() > 0) {
+						Dialog.showMessageDialog("No se puede usar este cliente porque ya es escalvo");
+						getModel().setEsEscalvoEnAlgunaLista(true);
+					}
+				}
+			} else {
+				getModel().setCliente(null);
+				limpiarPantalla();
+			}
+
+			setModoPantalla();
+
+		} finally {
+			PantPrincipalController.setRestoreCursor();
 		}
-
-		setModoPantalla();
-
 	}
 
 	private void cargarEsclavos(CcobClie cliente) throws Exception {

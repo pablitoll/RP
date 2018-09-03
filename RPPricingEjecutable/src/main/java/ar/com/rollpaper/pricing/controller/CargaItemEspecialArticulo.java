@@ -306,14 +306,18 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 	protected StocArts getArticuloByEmp(String idEmp) {
 		StocArts articulo = null;
+		PantPrincipalController.setCursorOcupado();
 		try {
-			articulo = StocArtsDAO.getArticulo(idEmp);
-		} catch (Exception e) {
-			e.printStackTrace();
+			try {
+				articulo = StocArtsDAO.getArticulo(idEmp);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			getModel().setArticuloCargado(articulo);
+		} finally {
+			PantPrincipalController.setRestoreCursor();
 		}
-
-		getModel().setArticuloCargado(articulo);
-
 		return articulo;
 	}
 
