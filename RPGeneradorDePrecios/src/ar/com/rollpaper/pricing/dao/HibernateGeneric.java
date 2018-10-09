@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;
 
+import ar.com.rollpaper.pricing.beans.VentArpc;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 public class HibernateGeneric {
@@ -11,11 +12,36 @@ public class HibernateGeneric {
 	private static final Log log = LogFactory.getLog(HibernateGeneric.class);
 
 	public static void persist(Object transientInstance) {
-		log.debug("persisting PricPreciosEspeciales instance");
+		log.debug("persisting transientInstance instance");
 		Session session = HibernateUtil.getSession();
 		session.beginTransaction();
 		try {
 			session.persist(transientInstance);
+			session.flush();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			try {
+
+				session.getTransaction().rollback();
+				e.printStackTrace();
+				throw e;
+			} catch (RuntimeException runtimeEx) {
+				System.err.printf("Couldn’t Roll Back Transaction", runtimeEx);
+				runtimeEx.printStackTrace();
+				throw runtimeEx;
+			}
+
+		} finally {
+
+		}
+	}
+
+	public static void attachDirty(Object instance) {
+		log.debug("eliminando esclavo instance");
+		Session session = HibernateUtil.getSession();
+		session.beginTransaction();
+		try {
+			HibernateUtil.getSession().saveOrUpdate(instance);
 			session.flush();
 			session.getTransaction().commit();
 		} catch (Exception e) {

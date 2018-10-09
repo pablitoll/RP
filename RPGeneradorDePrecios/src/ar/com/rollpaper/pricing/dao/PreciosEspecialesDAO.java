@@ -1,6 +1,8 @@
 package ar.com.rollpaper.pricing.dao;
 // Generated 22/05/2018 19:11:08 by Hibernate Tools 5.3.0.Beta2
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,6 +16,8 @@ import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
+import ar.com.rollpaper.pricing.beans.VentArpv;
+import ar.com.rollpaper.pricing.beans.VentArpvId;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
@@ -155,6 +159,28 @@ public class PreciosEspecialesDAO {
 
 	public static List<PreciosEspeciales> getByClienteLista(CcobClie cliente, VentLipv lista, java.util.Date hoy) {
 			return getListaPrecioEspeciaByID(cliente.getClieCliente(),lista.getLipvListaPrecvta());
+	}
+
+	// este metodo me devuelve los precios especiales de los articulos que no estan en la lista que 
+	// recibo como parametro
+	public static List<PreciosEspeciales> getPreciosByCliente(CcobClie cliente, VentLipv lista, Date date) {
+		// traigo todos los precios especiales para este cliente
+		List<PreciosEspeciales> ListaPreciosEspeciales = getByCliente(cliente.getClieCliente());
+		List<PreciosEspeciales> ListaPreciosEspecialesNoEnLista =  new ArrayList<>();
+		
+		for (PreciosEspeciales pe : ListaPreciosEspeciales) {
+				if(pe.isvigente(date)) {
+				VentArpvId x= new VentArpvId(pe.getPricArticulo(),lista.getLipvListaPrecvta());
+				VentArpv y= VentArpvDAO.findById(x);
+				if(y ==null) {
+					
+					ListaPreciosEspecialesNoEnLista.add(pe); 
+					
+				}
+				}
+		}
+		
+		return ListaPreciosEspecialesNoEnLista;
 	}
 
 }

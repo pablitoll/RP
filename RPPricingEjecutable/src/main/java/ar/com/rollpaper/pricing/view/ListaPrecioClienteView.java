@@ -170,7 +170,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		btnCancelar.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnCancelar);
 
-		btnGenerarPDF = new JButtonRP("Generar Lista de Precios Final (PDF)");
+		btnGenerarPDF = new JButtonRP("Lista de Precios Vigente");
 		btnGenerarPDF.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_PDF), 15, 15));
 		btnGenerarPDF.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnGenerarPDF);

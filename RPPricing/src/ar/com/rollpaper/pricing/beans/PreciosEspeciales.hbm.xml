@@ -3,7 +3,7 @@
                                    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 22/05/2018 19:11:07 by Hibernate Tools 5.3.0.Beta2 -->
 <hibernate-mapping>
-	<class catalog="RPAPER"
+	<class catalog="ROLL20170830"
 		name="ar.com.rollpaper.pricing.beans.PreciosEspeciales" schema="dbo"
 		table="PRIC_PRECIOS_ESPECIALES">
 		<id name="pricPreciosEspecialesId" type="int">

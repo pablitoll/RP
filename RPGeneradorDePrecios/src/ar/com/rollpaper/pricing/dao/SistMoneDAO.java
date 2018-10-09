@@ -4,9 +4,11 @@ package ar.com.rollpaper.pricing.dao;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.query.Query;
 
 import ar.com.rollpaper.pricing.beans.SistMone;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
@@ -92,7 +94,8 @@ public class SistMoneDAO {
 	public static SistMone findById(String id) {
 		log.debug("getting SistMone instance with id: " + id);
 		try {
-			SistMone instance = (SistMone) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.SistMone", id);
+			SistMone instance = (SistMone) HibernateUtil.getSession().get("ar.com.rollpaper.pricing.beans.SistMone",
+					id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
@@ -123,6 +126,22 @@ public class SistMoneDAO {
 		criteria.select(criteria.from(SistMone.class));
 		List<SistMone> listaLP = HibernateUtil.getSession().createQuery(criteria).getResultList();
 		return listaLP;
+	}
+
+	public static SistMone getByDesc(String pricMoneda) {
+		log.debug("getting SistMone instance with id: " + pricMoneda);
+		try {
+			    CriteriaQuery<SistMone> criteria = HibernateUtil.getSession().getCriteriaBuilder().createQuery(SistMone.class);
+			    Root<SistMone> from = criteria.from(SistMone.class);
+			    criteria.where(HibernateUtil.getSession().getCriteriaBuilder().equal(from.get("moneMoneda"), pricMoneda));
+			    Query<SistMone> query = HibernateUtil.getSession().createQuery(criteria);
+			    return query.uniqueResult();
+			
+		} catch (RuntimeException re) {
+			log.error("get failed", re);
+			throw re;
+		}
+
 	}
 
 }
