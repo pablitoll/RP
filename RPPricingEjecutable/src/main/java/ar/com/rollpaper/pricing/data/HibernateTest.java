@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
@@ -19,7 +20,7 @@ import ar.com.rollpaper.pricing.dao.VentClivDAO;
 
 public class HibernateTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws HibernateException, Exception {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 

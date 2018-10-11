@@ -1,7 +1,6 @@
 package ar.com.rollpaper.pricing.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JLabel;
@@ -29,7 +28,6 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	public JPanel pnlOnline = new JPanel();
 	public JPanel pnlCentral = new JPanel();
-	public JPanel pnlTeller = new JPanel();
 
 	private JButtonBarraBotonesRP btnCalculadora = new JButtonBarraBotonesRP("Calculadora");
 
@@ -47,12 +45,14 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 	private final JMenuItem mntmCargaPrecioCliente = new JMenuItem("Gestion de Precios");
 
 	private final JMenuItem mnuVersion = new JMenuItem("Version");
+	private final JMenuItem mnuCambiarDB = new JMenuItem("Refrescar DB");
 
 	private final JMenuItem mntmCargaClienteEsclavo = new JMenuItem("Gestion de Cliente/Esclavo");
 
 	private JButtonBarraBotonesRP btnCargaPrecio = new JButtonBarraBotonesRP("Gestion de Precios");
 
 	private JButtonBarraBotonesRP btnClienteEsclavo = new JButtonBarraBotonesRP("Gestion de Cliente/Esclavo");
+	public final JLabel lblDB = new JLabel("lblDB");
 
 	public PantPrincipalView() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
 			UnsupportedLookAndFeelException {
@@ -65,13 +65,12 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		pnlBotton.add(pnlCentral, BorderLayout.CENTER);
 		pnlCentral.setLayout(new BorderLayout(0, 0));
 		pnlBotton.add(pnlOnline, BorderLayout.EAST);
-
-		pnlCentral.add(pnlTeller, BorderLayout.NORTH);
-		pnlTeller.setBorder(null);
-		pnlTeller.setMinimumSize(new Dimension(10, 10));
-		pnlTeller.setLayout(new BorderLayout(0, 0));
-		pnlCentral.add(lblUsr, BorderLayout.SOUTH);
+		
+		
+		pnlCentral.add(lblDB, BorderLayout.EAST);
+		pnlCentral.add(lblUsr, BorderLayout.WEST);
 		lblUsr.setBorder(null);
+		lblDB.setBorder(null);
 
 		pnlOnline.setLayout(new BorderLayout(0, 0));
 
@@ -91,6 +90,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mntmListaPercioxCliente.setFont(Common.getStandarFontMenu());
 
 		mnMantenimiento.setFont(Common.getStandarFontMenu());
+		mnuCambiarDB.setFont(Common.getStandarFontMenu());
+		mnMantenimiento.add(mnuCambiarDB);
 		menuBar.add(mnMantenimiento);
 
 		mmAyuda.setFont(Common.getStandarFontMenu());
@@ -130,6 +131,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		asignarBotonAccion(mntmListaPercioxCliente, ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString());
 		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		asignarBotonAccion(mntmCargaClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
+		asignarBotonAccion(mnuCambiarDB, ConstantesRP.Acciones.CAMBIAR_DB.toString());
 
 		asignarBotonAccion(btnClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
 		asignarBotonAccion(btnCargaPrecio, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());

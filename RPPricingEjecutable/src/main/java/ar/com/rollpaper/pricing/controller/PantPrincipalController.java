@@ -3,6 +3,7 @@ package ar.com.rollpaper.pricing.controller;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import ar.com.rollpaper.pricing.business.ArchivoDePropiedadesBusiness;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.LogBusiness;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
@@ -33,18 +34,19 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 
 	@Override
 	public void iniciar() throws Exception {
-
-		//refreshBarraDeEstadoYBotonos();
-
 		// Agrego los botones de acceso rapido de codigo
 		cargarPermisos();
 
 		// Lanzo panalla principal
 		super.iniciar();
-		
-		getView().lblUsr.setText(System.getProperty("user.name"));
+
+		refrescarBarra();
 	}
 
+	private void refrescarBarra() throws Exception {
+		getView().lblUsr.setText(System.getProperty("user.name"));
+		getView().lblDB.setText(ArchivoDePropiedadesBusiness.getConecctionString());
+	}
 
 	@Override
 	public void ejecutarAccion(String accion) {
@@ -59,11 +61,20 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		if (accion.equals(ConstantesRP.Acciones.SALIR.toString())) {
 			salir();
 		}
-		
+
+		if (accion.equals(ConstantesRP.Acciones.CAMBIAR_DB.toString())) {
+			try {
+				HibernateUtil.reConectar();
+				refrescarBarra();
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al refrescar DB");
+			}
+		}
+
 		if (accion.equals(ConstantesRP.Acciones.GENERAR_PRECIOS.toString())) {
 			procesoPrecios();
 		}
-		
+
 		if (accion.equals(ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString())) {
 			if (!cmGestordeVentanas.isAlreadyCreated("consulta1")) {
 				try {
@@ -81,7 +92,7 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 				ManejoDeError.showError(e, "No se puede acceder a la pantalla de consulta 1");
 			}
 		}
-		
+
 		if (accion.equals(ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString())) {
 			if (!cmGestordeVentanas.isAlreadyCreated("CargaPrecioController")) {
 				// Creo los controladores de VerLogOperacionesDiaria
@@ -100,7 +111,6 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 				ManejoDeError.showError(e, "No se puede acceder a la pantalla de carga de precio por clietne");
 			}
 		}
-		
 
 		if (accion.equals(ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString())) {
 			if (!cmGestordeVentanas.isAlreadyCreated("CargaClienteEsclavoController")) {
@@ -121,22 +131,20 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 			}
 		}
 
-
 	}
 
 	private void procesoPrecios() {
-		// TODO Afalta  procesoPrecios() {
-		
+		// TODO Afalta procesoPrecios() {
+
 	}
 
 	@Override
 	protected void salir() {
 		try {
 
-			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere salir de la aplicacion?",
-					"Confirmacion de Salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null,
-					null);
-			
+			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere salir de la aplicacion?", "Confirmacion de Salida", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, null, null);
+
 			if (confirm == JOptionPane.YES_OPTION) {
 
 				LogBusiness.forzarEscrituraLogs();
@@ -178,6 +186,5 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		getView().revalidate();
 		getView().repaint();
 	}
-
 
 }

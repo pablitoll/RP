@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Generated 13/06/2018 12:29:45 by Hibernate Tools 5.3.0.Beta2 --><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping auto-import="true" default-access="property" default-cascade="none" default-lazy="true">
-    <class catalog="ROLL20170830" dynamic-insert="false" dynamic-update="false" mutable="true" name="ar.com.rollpaper.pricing.beans.SistUnim" optimistic-lock="version" polymorphism="implicit" schema="dbo" select-before-update="false" table="SIST_UNIM">
+    <class  dynamic-insert="false" dynamic-update="false" mutable="true" name="ar.com.rollpaper.pricing.beans.SistUnim" optimistic-lock="version" polymorphism="implicit" schema="dbo" select-before-update="false" table="SIST_UNIM">
         <id name="unimUnimed" type="string">
             <column length="3" name="UNIM_UNIMED"/>
             <generator class="assigned"/>

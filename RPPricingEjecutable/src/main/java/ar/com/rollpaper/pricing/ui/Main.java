@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JOptionPane;
 
+import ar.com.rollpaper.pricing.business.ArchivoDePropiedadesBusiness;
 import ar.com.rollpaper.pricing.business.LogBusiness;
 import ar.com.rollpaper.pricing.controller.PantPrincipalController;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
@@ -21,10 +22,11 @@ public class Main extends MainFramework {
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {					
-					
+				try {
+
 					// Inicializo el font
-					inicializarFont();					
+					inicializarFont();
+					ArchivoDePropiedadesBusiness.setPathToConfig(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
 					
 					// Cargo un log
 					splashMsg("Cargando archivo de Log");
@@ -59,5 +61,4 @@ public class Main extends MainFramework {
 		});
 	}
 
-	
 }
