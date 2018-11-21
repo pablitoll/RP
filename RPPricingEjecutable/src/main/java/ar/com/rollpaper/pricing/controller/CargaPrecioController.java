@@ -35,7 +35,7 @@ import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
-import ar.com.rollpaper.pricing.gp.business.GeneradorDePrecios;
+import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialArticuloModel;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
