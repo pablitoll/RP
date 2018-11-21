@@ -23,7 +23,7 @@
 								<resource>
 									<directory>src/main/resources</directory>
 									<includes>
-										<include>configuracion.properties</include>
+										<include>configuration.properties</include>
 									</includes>
 								</resource>
 							</resources>

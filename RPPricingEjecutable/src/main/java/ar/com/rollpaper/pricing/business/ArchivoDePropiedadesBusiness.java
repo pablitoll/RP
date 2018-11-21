@@ -41,4 +41,9 @@ public class ArchivoDePropiedadesBusiness {
 	public static String getUsr() throws Exception {
 		return getPropiedades().getPropiedad(propiedades.usr);
 	}
+
+	public static void recargar() {
+		pPropiedades = null;
+
+	}
 }

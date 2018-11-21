@@ -35,7 +35,6 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
 import ar.com.rollpaper.pricing.gp.beans.Articulo;
 import ar.com.rollpaper.pricing.gp.beans.generarListaDePreciosResponse;
 
-
 public class GeneradorDePrecios {
 
 	public static void generarPrecios() {
@@ -109,8 +108,15 @@ public class GeneradorDePrecios {
 			BigDecimal precio = calcularDescuentosXFamilia(listaDescuentosXFamiliaVigentes, articulo);
 			System.out.println("<<<<<<<<<<<<<<fin Descuentos por familia>>>>>>>>>>>>>");
 			System.out.println("<<<<<<<<<<<<<<Inicio Descuentos precio Especial>>>>>>>>>>>>>");
-
-			precio = calcularPreciosEspeciales(listaPreciosEspeciales, articulo, precio);
+			// TODO : solo desde el precio de lista general y siempre va ultimo el precio
+			// especifico
+			// no entrar si no tiene descuento especial. para no alterar el precio calculado
+			// por familia
+			if (getPrecioEspecial(listaPreciosEspeciales, articulo).size() > 0) {
+				precio = calcularPreciosEspeciales(listaPreciosEspeciales, articulo, articulo.getArpvPrecioVta());
+			} else {
+				System.out.println("<<<<<<<<<<<<<<<<No Posee Descuentos precio especial>>>>>>>>>>>>>>");
+			}
 			System.out.println("<<<<<<<<<<<<<<<<fin Descuentos precio especial>>>>>>>>>>>>>>");
 
 			listaPreciosFinal.put(articulo, precio);
@@ -130,7 +136,9 @@ public class GeneradorDePrecios {
 		System.out.println("<<<<<Lista de Precios final para " + lista.getLipvNombre() + ">>>>>");
 		System.out.println("A Aplicar a los siguientes clientes:");
 		System.out.println("Maestro :" + cliente.getClieCliente() + "-" + cliente.getClieNombre());
-		for (MaestroEsclavo maestroEsclavo : listaMaestroEsclavo) {
+		for (
+
+		MaestroEsclavo maestroEsclavo : listaMaestroEsclavo) {
 			System.out.println("Esclavo " + maestroEsclavo.getPricEsclavoCliente());
 
 		}
@@ -170,10 +178,7 @@ public class GeneradorDePrecios {
 			VentArpv articulo, BigDecimal precio) {
 		// inicio del proceso que calcula el descuento especial para el articulo
 
-		// busco en los la tabla de descuentos si tiene algun registro para ese articulo
-		List<PreciosEspeciales> descuentoEspecial = listaPreciosEspeciales.stream()
-				.filter(item -> item.getPricArticulo() == articulo.getId().getArpvArticulo())
-				.collect(Collectors.toList());
+		List<PreciosEspeciales> descuentoEspecial = getPrecioEspecial(listaPreciosEspeciales, articulo);
 
 		BigDecimal precioFinal = BigDecimal.ZERO;
 		BigDecimal precio_original = precio;// articulo.getArpvPrecioVta();
@@ -203,14 +208,29 @@ public class GeneradorDePrecios {
 	}
 
 	/**
+	 * @param listaPreciosEspeciales
+	 * @param articulo
+	 * @return
+	 */
+	private static List<PreciosEspeciales> getPrecioEspecial(List<PreciosEspeciales> listaPreciosEspeciales,
+			VentArpv articulo) {
+		// busco en los la tabla de descuentos si tiene algun registro para ese articulo
+		List<PreciosEspeciales> descuentoEspecial = listaPreciosEspeciales.stream()
+				.filter(item -> item.getPricArticulo() == articulo.getId().getArpvArticulo())
+				.collect(Collectors.toList());
+		return descuentoEspecial;
+	}
+
+	/**
 	 * @param listaDescuentosXFamiliaVigentes
 	 * @param v
 	 */
+	
 	private static BigDecimal calcularDescuentosXFamilia(List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes,
 			VentArpv v) {
 		// obtengo la familia de cada articulo (ArtsClasif1)
 		StocArts articulo = StocArtsDAO.getArticuloByID(v.getId().getArpvArticulo());
-		System.out.println("Articulo: " + v.getId().getArpvArticulo() + " familia ->" + articulo.getArtsClasif1());
+		System.out.println("Articulo 1 :  " +articulo.getArtsArticuloEmp() + "-" + v.getId().getArpvArticulo() + " familia ->" + articulo.getArtsClasif1());
 		List<Articulo> ListaPreciosCalculados = new ArrayList<>();
 
 		// articulo a = new Articulo(articulo, v);
@@ -318,10 +338,11 @@ public class GeneradorDePrecios {
 			}
 			HibernateUtil.getSession().clear();
 		} catch (Exception e) {
-			//.showMessageDialog("ERROR en la aplicacion de precios", "Aplicacion de Precios",
-			//		JOptionPane.ERROR_MESSAGE);
+			// .showMessageDialog("ERROR en la aplicacion de precios", "Aplicacion de
+			// Precios",
+			// JOptionPane.ERROR_MESSAGE);
 			e.printStackTrace();
-			throw(e);
+			throw (e);
 		}
 
 	}

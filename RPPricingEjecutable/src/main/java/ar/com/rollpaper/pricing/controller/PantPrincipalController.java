@@ -64,7 +64,9 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 
 		if (accion.equals(ConstantesRP.Acciones.CAMBIAR_DB.toString())) {
 			try {
+				ArchivoDePropiedadesBusiness.recargar();
 				HibernateUtil.reConectar();
+				
 				refrescarBarra();
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al refrescar DB");

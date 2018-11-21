@@ -143,7 +143,9 @@ public class PreciosEspeciales implements java.io.Serializable {
 	}
 
 	public boolean isvigente(Date date) {		
-		return this.pricFechaDesde.compareTo(date) > 0 && this.pricFechaHasta.compareTo(date) > 0 ;
+		boolean x =this.pricFechaHasta.compareTo(date)> 0 ;
+		boolean y =this.pricFechaDesde.compareTo(date) <= 0;
+		return   x &&  y ;
 	}
 
 }
