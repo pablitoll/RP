@@ -29,15 +29,7 @@ public class VentLipv implements java.io.Serializable {
 	private short lipvEsListaRef;
 	private short lipvEsListaAcopio;
 	private Set<?> ventArpvs = new HashSet<Object>(0);
-	private boolean isListaPrincipal;
-	private boolean isListaHeredada = false;;
-
-	@Override
-	public String toString() { // Para el combo
-		String listaPrincipal = isListaPrincipal ? " - PRINCIPAL" : "";
-		String listaHeredada = isListaHeredada ? " - HEREDADA" : "";
-		return "(" + lipvListaPrecvta + ") " + lipvNombre + listaPrincipal + listaHeredada;
-	}
+	
 
 	public VentLipv() {
 	}
@@ -79,6 +71,7 @@ public class VentLipv implements java.io.Serializable {
 		this.lipvEsListaRef = lipvEsListaRef;
 		this.lipvEsListaAcopio = lipvEsListaAcopio;
 		this.ventArpvs = ventArpvs;
+
 	}
 
 	public int getLipvListaPrecvta() {
@@ -199,22 +192,6 @@ public class VentLipv implements java.io.Serializable {
 
 	public void setVentArpvs(Set<?> ventArpvs) {
 		this.ventArpvs = ventArpvs;
-	}
-
-	public void setIsListaPrincipal(boolean isListaPrincipal) {
-		this.isListaPrincipal = isListaPrincipal;
-	}
-
-	public boolean isListaPrincipal() {
-		return isListaPrincipal;
-	}
-
-	public void setIsListaHeredada(boolean isListaHeredada) {
-		this.isListaHeredada = isListaHeredada;
-	}
-
-	public boolean isListaHeredada() {
-		return isListaHeredada;
 	}
 
 }

@@ -16,6 +16,7 @@ import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.jasper.ProductoDTO;
 import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
@@ -84,7 +85,7 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 	@SuppressWarnings("unchecked")
 	private void cargarLista() throws Exception {
 		getView().cbNroLista.removeAllItems();
-		for (VentLipv lista : getModel().getListasToShow()) {
+		for (ListaDTO lista : getModel().getListasToShow()) {
 			getView().cbNroLista.addItem(lista);
 		}
 
@@ -93,11 +94,11 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 	protected void perdioFocoNroLista() {
 		if (getView().cbNroLista.getSelectedIndex() > -1) {
-			VentLipv lista = (VentLipv) getView().cbNroLista.getSelectedItem();
+			ListaDTO lista = (ListaDTO) getView().cbNroLista.getSelectedItem();
 			if (lista != null) {
-				getView().lblNombreLista.setText(lista.getLipvNombre());
+				getView().lblNombreLista.setText(lista.getVentLipv().getLipvNombre());
 				getModel().setListaCargada(lista);
-				cargarProductos(getModel().getClienteCargado(), getModel().getListaCargada());
+				cargarProductos(getModel().getClienteCargado(), getModel().getListaCargada().getVentLipv());
 			}
 		}
 	}

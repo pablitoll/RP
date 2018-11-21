@@ -35,6 +35,7 @@ import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
+import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialArticuloModel;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
@@ -99,9 +100,9 @@ public class CargaPrecioController
 
 	protected void perdioFocoNroLista() {
 		if (getView().cbNroLista.getSelectedIndex() > -1) {
-			VentLipv lista = (VentLipv) getView().cbNroLista.getSelectedItem();
+			ListaDTO lista = (ListaDTO) getView().cbNroLista.getSelectedItem();
 			if (lista != null) {
-				getView().lblNombreLista.setText(lista.getLipvNombre());
+				getView().lblNombreLista.setText(lista.getVentLipv().getLipvNombre());
 				getModel().setListaCargada(lista);
 				cargarProductos();
 			}
@@ -113,13 +114,13 @@ public class CargaPrecioController
 		resetearTablaEspecifico();
 
 		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(
-				getModel().getClienteCargado().getClieCliente(), getModel().getListaCargada().getLipvListaPrecvta())) {
+				getModel().getClienteCargado().getClieCliente(), getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
 			StocCa01 familiaClass = StocCa01DAO.findById(familia.getPricCa01Clasif1());
 			agregarRegistroATablaFamilia(getView().tableDescFamilia, familia, familiaClass.getCa01Nombre());
 		}
 		sorterTablaDesFamilia.sort();
 		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(
-				getModel().getClienteCargado().getClieCliente(), getModel().getListaCargada().getLipvListaPrecvta())) {
+				getModel().getClienteCargado().getClieCliente(), getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
 			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
 			SistUnim unidad = SistUnimDAO.findById(arti.getArtsUnimedStock());
 			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(),
@@ -150,9 +151,10 @@ public class CargaPrecioController
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void cargarLista() throws Exception {
 		getView().cbNroLista.removeAllItems();
-		for (VentLipv lista : getModel().getListasToShow()) {
+		for (ListaDTO lista : getModel().getListasToShow()) {
 			getView().cbNroLista.addItem(lista);
 		}
 
@@ -290,6 +292,7 @@ public class CargaPrecioController
 		return retorno;
 	}
 
+	@SuppressWarnings("unchecked")
 	private void agregarLista() throws Exception {
 		BuscarListaDialog buscarListaDialog = new BuscarListaDialog(getPantallaPrincipal(),
 				getView().cbNroLista.getModel());
@@ -326,11 +329,11 @@ public class CargaPrecioController
 		}
 		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString())) {
 			if (Dialog.showConfirmDialog(String.format("¿Quiere impactar los precios del cliente %s, para la lista %s?",
-					getModel().getClienteCargado().getClieNombre(), getModel().getListaCargada().getLipvNombre()),
+					getModel().getClienteCargado().getClieNombre(), getModel().getListaCargada().getVentLipv().getLipvNombre()),
 					"Impacto de Precios", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null,
 					null) == JOptionPane.YES_OPTION) {
 
-				GeneradorDePrecios.impactarPrecios(getModel().getClienteCargado(),getModel().getListaCargada());
+				GeneradorDePrecios.impactarPrecios(getModel().getClienteCargado(),getModel().getListaCargada().getVentLipv());
 
 			}
 
@@ -350,7 +353,7 @@ public class CargaPrecioController
 						itemEspecialFamilia.setRegistro(getModel().getRegistroFamilaiEmpty());
 						itemEspecialFamiliaModel
 								.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
-						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada());
+						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada().getVentLipv());
 						resutlado = itemEspecialFamilia.iniciar();
 
 						if (!resutlado.equals("")) {
@@ -415,7 +418,7 @@ public class CargaPrecioController
 								CargaPrecioView.COL_REGISTRO_FAMILIA));
 						itemEspecialFamiliaModel
 								.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
-						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada());
+						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada().getVentLipv());
 						resutlado = itemEspecialFamilia.iniciar();
 
 						if (!resutlado.equals("")) {

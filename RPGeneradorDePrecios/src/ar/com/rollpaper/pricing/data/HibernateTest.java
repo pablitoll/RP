@@ -16,7 +16,6 @@ import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
-import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 public class HibernateTest {
 
