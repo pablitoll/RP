@@ -14,12 +14,15 @@ import ar.com.rollpaper.pricing.dao.MaestroEsclavoDAO;
 import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
+import ar.com.rollpaper.pricing.jasper.ListaPrecioReporteDTO;
+import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rp.ui.pantalla.BaseModel;
 
 public class ListaPrecioClienteModel extends BaseModel {
 
 	private CcobClie clienteCargado;
 	private VentLipv listaCargada;
+	private ListaPrecioReporteDTO listaPrecioReporte = null;
 
 	public CcobClie getClienteCargado() {
 		return clienteCargado;
@@ -28,6 +31,7 @@ public class ListaPrecioClienteModel extends BaseModel {
 	public void setClienteCargado(CcobClie clienteCargado) {
 		this.clienteCargado = clienteCargado;
 		listaCargada = null;
+		listaPrecioReporte = null;
 	}
 
 	public PreciosEspeciales getRegistroArticuloEmpty() {
@@ -51,6 +55,7 @@ public class ListaPrecioClienteModel extends BaseModel {
 
 	public void setListaCargada(VentLipv listaCargada) {
 		this.listaCargada = listaCargada;
+		listaPrecioReporte = null;
 	}
 
 	public List<VentLipv> getListasToShow() {
@@ -103,6 +108,13 @@ public class ListaPrecioClienteModel extends BaseModel {
 			}
 		}
 		return false;
+	}
+
+	public ListaPrecioReporteDTO getListaArticulosImpactados() {
+		if (listaPrecioReporte == null) {
+			listaPrecioReporte = Reportes.getDatosReporte(getClienteCargado(), getListaCargada());
+		}
+		return listaPrecioReporte;
 	}
 
 }

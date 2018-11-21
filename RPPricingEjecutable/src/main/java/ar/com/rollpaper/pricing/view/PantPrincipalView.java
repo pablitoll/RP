@@ -31,7 +31,10 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private JButtonBarraBotonesRP btnCalculadora = new JButtonBarraBotonesRP("Calculadora");
 
-	private JButtonBarraBotonesRP btnPrecios	 = new JButtonBarraBotonesRP("Generar Precios");
+	private JButtonBarraBotonesRP btnPrecios = new JButtonBarraBotonesRP("Generar Precios");
+
+	private JButtonBarraBotonesRP btnListaPercioxCliente = new JButtonBarraBotonesRP("Articulos Customizados x Cliente");
+
 	private final JMenu mnCarga = new JMenu("Carga");
 	private final JMenu mnConsulta = new JMenu("Consulta");
 	private final JMenu mmAyuda = new JMenu("Ayuda");
@@ -54,8 +57,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 	private JButtonBarraBotonesRP btnClienteEsclavo = new JButtonBarraBotonesRP("Gestion de Cliente/Esclavo");
 	public final JLabel lblDB = new JLabel("lblDB");
 
-	public PantPrincipalView() throws ClassNotFoundException, InstantiationException, IllegalAccessException,
-			UnsupportedLookAndFeelException {
+	public PantPrincipalView() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		super(null);
 
 		setTitle("RollPaper Pricing");
@@ -65,8 +67,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		pnlBotton.add(pnlCentral, BorderLayout.CENTER);
 		pnlCentral.setLayout(new BorderLayout(0, 0));
 		pnlBotton.add(pnlOnline, BorderLayout.EAST);
-		
-		
+
 		pnlCentral.add(lblDB, BorderLayout.EAST);
 		pnlCentral.add(lblUsr, BorderLayout.WEST);
 		lblUsr.setBorder(null);
@@ -114,12 +115,14 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		btnClienteEsclavo.setMnemonicControl(true);
 		btnClienteEsclavo.setMnemonic(KeyEvent.VK_C);
 
+		agregarBotonStd2Barra(btnPrecios, Main.class.getResource(ConstantesRP.IMG_PESOS));
+
+		agregarBotonStd2Barra(btnListaPercioxCliente, Main.class.getResource(ConstantesRP.IMG_PDF));
+
 		agregarBotonStd2Barra(btnCalculadora, Main.class.getResource(ConstantesRP.IMG_CAL));
 		btnCalculadora.setMnemonicControl(true);
 		btnCalculadora.setMnemonic(KeyEvent.VK_A);
 
-
-		agregarBotonStd2Barra(btnPrecios, Main.class.getResource(ConstantesRP.IMG_PESOS));
 	}
 
 	@Override
@@ -127,7 +130,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		asignarBotonAccion(mntmSalir, ConstantesRP.Acciones.SALIR.toString());
 		asignarBotonAccion(btnCalculadora, ConstantesRP.Acciones.CALCULADORA.toString());
 		asignarBotonAccion(btnPrecios, ConstantesRP.Acciones.GENERAR_PRECIOS.toString());
-		
+
 		asignarBotonAccion(mntmListaPercioxCliente, ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString());
 		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		asignarBotonAccion(mntmCargaClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
@@ -135,6 +138,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 		asignarBotonAccion(btnClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
 		asignarBotonAccion(btnCargaPrecio, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
+		asignarBotonAccion(btnListaPercioxCliente, ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString());
 	}
 
 }

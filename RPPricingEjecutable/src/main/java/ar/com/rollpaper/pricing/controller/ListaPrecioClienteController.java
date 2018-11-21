@@ -13,14 +13,10 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
-import ar.com.rollpaper.pricing.beans.StocArts;
-import ar.com.rollpaper.pricing.beans.VentArpc;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
-import ar.com.rollpaper.pricing.dao.StocArtsDAO;
-import ar.com.rollpaper.pricing.dao.VentArpcDAO;
-import ar.com.rollpaper.pricing.jasper.ListaPrecioReporteDTO;
+import ar.com.rollpaper.pricing.jasper.ProductoDTO;
 import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
@@ -29,7 +25,6 @@ import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
 import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
-import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipalController, ListaPrecioClienteView, ListaPrecioClienteModel> {
@@ -86,6 +81,7 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void cargarLista() throws Exception {
 		getView().cbNroLista.removeAllItems();
 		for (VentLipv lista : getModel().getListasToShow()) {
@@ -182,11 +178,8 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 		}
 
 		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_PDF.toString())) {
-
-			ListaPrecioReporteDTO listaPrecioReporte = Reportes.getDatosReporte(getModel().getClienteCargado(), getModel().getListaCargada());
-
 			try {
-				Reportes.getReporteListaPrecios(listaPrecioReporte);
+				Reportes.getReporteListaPrecios(getModel().getListaArticulosImpactados());
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al generar Reprote");
 			}
@@ -236,17 +229,20 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 	private void cargarProductos(CcobClie cliente, VentLipv lista) {
 		resetearTabla();
-		// Aca estan solo los precios customizados
-
-		for (VentArpc ventaCustomizada : VentArpcDAO.findByListaByClient(cliente.getClieCliente(), lista.getLipvListaPrecvta())) {
-			StocArts stock = StocArtsDAO.getArticuloByID(ventaCustomizada.getId().getArpcArticulo());
-			getView().tableResultado.addRow(new Object[] { stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
-					ventaCustomizada.getArpcMoneda(), Common.double2String(ventaCustomizada.getArpcPrecioVta().doubleValue()) });
-		}
+		
+		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
+			getView().tableResultado.addRow(new Object[] { stock.getCodArticulo(),  stock.getDescArticulo(), stock.getUnidadArticulo(),
+					stock.getMonedaArticulo(), stock.getPrecioArticulo()});
+		}		
 
 		sorterTablaResultado.sort();
 
 		setModoPantalla();
 	}
 
+	@Override
+	protected void cerrarPantalla() {
+		ejecutarAccion(ConstantesRP.PantListaPrecio.CANCELAR.toString());
+		super.cerrarPantalla();
+	}
 }
