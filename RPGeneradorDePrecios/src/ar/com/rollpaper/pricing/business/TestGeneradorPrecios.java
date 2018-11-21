@@ -1,4 +1,4 @@
-package ar.com.rollpaper.pricing.gp.business;
+package ar.com.rollpaper.pricing.business;
 
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;

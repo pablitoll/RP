@@ -163,12 +163,12 @@ public class PreciosEspecialesDAO {
 
 	// este metodo me devuelve los precios especiales de los articulos que no estan en la lista que 
 	// recibo como parametro
-	public static List<PreciosEspeciales> getPreciosByCliente(CcobClie cliente, VentLipv lista, Date date) {
+	public static List<PreciosEspeciales> getPreciosByCliente(CcobClie cliente, VentLipv lista, Date fechaVigencia) {
 		// traigo todos los precios especiales para este cliente
 		List<PreciosEspeciales> ListaPreciosEspeciales = getByCliente(cliente.getClieCliente());
 		List<PreciosEspeciales> ListaPreciosEspecialesNoEnLista =  new ArrayList<>();		
 		for (PreciosEspeciales pe : ListaPreciosEspeciales) {
-				if(pe.isvigente(date)) {
+				if(pe.isvigente(fechaVigencia)) {
 				VentArpvId x= new VentArpvId(pe.getPricArticulo(),lista.getLipvListaPrecvta());
 				VentArpv y= VentArpvDAO.findById(x);
 				if(y ==null) {

@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;
 
-import ar.com.rollpaper.pricing.beans.VentArpc;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
 public class HibernateGeneric {

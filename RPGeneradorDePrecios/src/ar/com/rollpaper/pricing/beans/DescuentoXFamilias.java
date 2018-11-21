@@ -121,5 +121,9 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	public void setPricReferencia(String pricReferencia) {
 		this.pricReferencia = pricReferencia;
 	}
+	
+	public boolean isvigente(Date date) {		
+		return this.pricFamiliaFechaDesde.compareTo(date) > 0 && this.pricFamiliaFechaHasta.compareTo(date) > 0 ;
+	}
 
 }

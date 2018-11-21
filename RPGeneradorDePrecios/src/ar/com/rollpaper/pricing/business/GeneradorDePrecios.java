@@ -1,4 +1,4 @@
-package ar.com.rollpaper.pricing.gp.business;
+package ar.com.rollpaper.pricing.business;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import ar.com.rollpaper.pricing.beans.VentArpcId;
 import ar.com.rollpaper.pricing.beans.VentArpv;
 import ar.com.rollpaper.pricing.beans.VentArpvId;
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.beans.generarListaDePreciosResponse;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
@@ -32,8 +33,6 @@ import ar.com.rollpaper.pricing.dao.VentArpcDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
-import ar.com.rollpaper.pricing.gp.beans.Articulo;
-import ar.com.rollpaper.pricing.gp.beans.generarListaDePreciosResponse;
 
 public class GeneradorDePrecios {
 
@@ -93,8 +92,8 @@ public class GeneradorDePrecios {
 		// busco las familias que tienen un descuento configurado en la tabla de pricing
 		// para esta relacion Cliente-Lista
 		// TODO : falta filtrar correctamente por fecha!!!!!
-		List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes = DescuentoXFamiliasDAO.getByClienteLista(cliente,
-				lista, hoy);
+		List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes = DescuentoXFamiliasDAO
+				.getByClienteListaVigente(cliente, lista, hoy);
 
 		List<PreciosEspeciales> listaPreciosEspeciales = PreciosEspecialesDAO.getByClienteLista(cliente, lista, hoy);
 		// busco los esclavos de este cliente
@@ -225,15 +224,13 @@ public class GeneradorDePrecios {
 	 * @param listaDescuentosXFamiliaVigentes
 	 * @param v
 	 */
-	
+
 	private static BigDecimal calcularDescuentosXFamilia(List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes,
 			VentArpv v) {
 		// obtengo la familia de cada articulo (ArtsClasif1)
 		StocArts articulo = StocArtsDAO.getArticuloByID(v.getId().getArpvArticulo());
-		System.out.println("Articulo 1 :  " +articulo.getArtsArticuloEmp() + "-" + v.getId().getArpvArticulo() + " familia ->" + articulo.getArtsClasif1());
-		List<Articulo> ListaPreciosCalculados = new ArrayList<>();
-
-		// articulo a = new Articulo(articulo, v);
+		System.out.println("Articulo 1 :  " + articulo.getArtsArticuloEmp() + "-" + v.getId().getArpvArticulo()
+				+ " familia ->" + articulo.getArtsClasif1());
 
 		// busco en la tabla de descuentos
 		List<DescuentoXFamilias> DescuentoxFamiliaAAplicar = listaDescuentosXFamiliaVigentes.stream()

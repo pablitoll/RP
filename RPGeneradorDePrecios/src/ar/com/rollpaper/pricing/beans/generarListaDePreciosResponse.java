@@ -1,11 +1,8 @@
-package ar.com.rollpaper.pricing.gp.beans;
+package ar.com.rollpaper.pricing.beans;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
-
-import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
-import ar.com.rollpaper.pricing.beans.VentArpv;
 
 public class generarListaDePreciosResponse {
 	private LinkedHashMap<VentArpv, BigDecimal> listaDePrecios;
