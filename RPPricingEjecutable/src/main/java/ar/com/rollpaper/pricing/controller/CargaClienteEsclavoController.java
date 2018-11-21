@@ -1,6 +1,5 @@
 package ar.com.rollpaper.pricing.controller;
 
-// TODO no entiendo el proposito de la lista de precios en esta tabla
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
@@ -22,6 +21,7 @@ import ar.com.rollpaper.pricing.dao.MaestroEsclavoDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
+import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.BuscarClienteEsclavoDialog;
 import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
@@ -72,8 +72,11 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 					// cargo los esclavos de ese cliente
 					cargarEsclavos(cliente);
 
-					if (MaestroEsclavoDAO.getListaEsclavosByEsclavo(cliente).size() > 0) {
-						Dialog.showMessageDialog("No se puede usar este cliente porque ya es escalvo");
+					List<MaestroEsclavo> listaMaestroEsclavo = MaestroEsclavoDAO.getListaEsclavosByEsclavo(cliente);
+					if (listaMaestroEsclavo.size() > 0) {
+						String maestro = "(" + listaMaestroEsclavo.get(0).getPricMaestroCliente() + ") "
+								+ CcobClieDAO.findById(Integer.valueOf(listaMaestroEsclavo.get(0).getPricMaestroCliente())).getClieNombre();
+						Dialog.showMessageDialog("No se puede usar este cliente porque ya es escalvo de " + maestro);
 						getModel().setEsEscalvoEnAlgunaLista(true);
 					}
 				}
@@ -199,8 +202,17 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		}
 		return retorno;
 	}
-
 	private CcobClie buscarCliente() throws Exception {
+		BuscarClienteDialog buscarClienteDialog = new BuscarClienteDialog(getPantallaPrincipal());
+		buscarClienteDialog.iniciar();
+		if (buscarClienteDialog.getCliente() != null) {
+			return buscarClienteDialog.getCliente();
+		}
+
+		return null;
+	}
+	
+	private CcobClie buscarClienteEsclavo() throws Exception {
 		BuscarClienteEsclavoDialog buscarClienteEsclavoDialog = new BuscarClienteEsclavoDialog(getPantallaPrincipal(), getView().tableEsclavo);
 		buscarClienteEsclavoDialog.iniciar();
 		if (buscarClienteEsclavoDialog.getCliente() != null) {
@@ -226,7 +238,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.AGREGAR.toString())) {
 			try {
-				CcobClie cliente = buscarCliente();
+				CcobClie cliente = buscarClienteEsclavo();
 				if (cliente != null) {
 					MaestroEsclavo maestroEsclavo = new MaestroEsclavo(getModel().getCliente().getClieCliente(), getModel().getListaCliente().getLipvListaPrecvta(),
 							cliente.getClieCliente());
