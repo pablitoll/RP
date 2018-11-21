@@ -34,53 +34,35 @@
 	<field name="precioArticulo" class="java.lang.String"/>
 	<title>
 		<band height="20" splitType="Stretch">
-			<staticText>
-				<reportElement x="69" y="0" width="97" height="20" uuid="3203895a-130d-4394-8712-2e7e1b9dd94c"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Nombre]]></text>
-			</staticText>
 			<line>
 				<reportElement x="0" y="19" width="555" height="1" uuid="930f688c-fa9a-4182-8685-e629e3b98300"/>
 			</line>
 			<staticText>
-				<reportElement x="166" y="0" width="299" height="20" uuid="3989e5c3-0d0e-4b48-81c5-9adaba5e797f"/>
+				<reportElement x="0" y="0" width="439" height="20" uuid="3989e5c3-0d0e-4b48-81c5-9adaba5e797f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Descripcion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="465" y="0" width="90" height="20" uuid="5eb467c1-1486-4fc0-a4d0-6ea8021a100b"/>
+				<reportElement x="439" y="0" width="116" height="20" uuid="5eb467c1-1486-4fc0-a4d0-6ea8021a100b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Precio]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="0" y="0" width="58" height="20" uuid="993c26f3-0312-45bb-87c5-f6ef1f1bb97e"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Codigo]]></text>
 			</staticText>
 		</band>
 	</title>
 	<detail>
-		<band height="30" splitType="Stretch">
+		<band height="17" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="58" height="30" uuid="fa8376c7-fc11-43a6-aa8a-79651fe632e2"/>
-				<textFieldExpression><![CDATA[$F{codArticulo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="69" y="0" width="97" height="30" uuid="54b86fee-4903-4a12-8100-e89f61449a8f"/>
-				<textFieldExpression><![CDATA[$F{nomArticulo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="465" y="0" width="34" height="15" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
+				<reportElement x="439" y="0" width="34" height="15" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{monedaArticulo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="499" y="0" width="55" height="30" uuid="2f9a83a1-017a-48e8-afa9-27fd07084edf"/>
+				<reportElement x="473" y="0" width="81" height="15" uuid="2f9a83a1-017a-48e8-afa9-27fd07084edf"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{precioArticulo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="166" y="0" width="299" height="30" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
+				<reportElement x="0" y="0" width="439" height="15" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
 				<textFieldExpression><![CDATA[$F{descArticulo}]]></textFieldExpression>
 			</textField>
 		</band>

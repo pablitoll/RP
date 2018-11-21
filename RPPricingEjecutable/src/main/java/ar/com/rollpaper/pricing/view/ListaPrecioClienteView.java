@@ -5,7 +5,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -18,6 +17,7 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
@@ -149,7 +149,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_label_7.gridy = 1;
 		panel.add(lblNombreLista, gbc_label_7);
 
-		String[] headerTabla = { "Codigo Articulo", "Nombre", "Descripcion", "Unidad", "Moneda", "Precio Venta" };
+		String[] headerTabla = { "Codigo Articulo", "Descripcion", "Unidad", "Moneda", "Precio Venta" };
 		String[][] dataTabla = { {} };
 
 		tableResultado = new RPTable();
@@ -166,7 +166,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		getContentPane().add(webScrollPane, BorderLayout.CENTER);
 		
 		btnCancelar = new JButtonRP("Hacer otra Busqueda");
-		btnCancelar.setIcon(new ImageIcon(BaseViewMVCExtendida.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_RETORNO)));
 		btnCancelar.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnCancelar);
 

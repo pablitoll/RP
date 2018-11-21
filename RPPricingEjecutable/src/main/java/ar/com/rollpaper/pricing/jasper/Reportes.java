@@ -15,6 +15,7 @@ import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentArpcDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
 import ar.com.rollpaper.pricing.ui.Main;
+import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -25,6 +26,8 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
 public class Reportes {
+
+	private static final String MSG_LEYENDA_FECHA = "Valido al %s";
 
 	public static void getReporteListaPrecios(ListaPrecioReporteDTO listaPrecioReporte) throws JRException {
 		// Parametros
@@ -54,6 +57,7 @@ public class Reportes {
 		map.put("nomCliente", listaPrecioReporte.getNomCliente());
 		map.put("nomLegal", listaPrecioReporte.getNomLegal());
 		map.put("listaProductos", listaPrecioReporte.getNroListaProducto());
+		map.put("leyendaFechaValida", listaPrecioReporte.getLeyendaFechaValida());
 
 		map.put("idTC", "detalleProductos");
 
@@ -74,7 +78,7 @@ public class Reportes {
 	}
 
 	public static ListaPrecioReporteDTO getDatosReporte(CcobClie cliente, VentLipv lista) {
-//TODO FALTA LOS HEREDADOS
+		// TODO FALTA LOS HEREDADOS
 		List<ProductoDTO> listaProductos = new ArrayList<ProductoDTO>();
 
 		// Lista de precios customizados
@@ -102,8 +106,9 @@ public class Reportes {
 				listaProductos.add(producto);
 			}
 		}
+		String leyendaFecha = String.format(MSG_LEYENDA_FECHA, FechaManagerUtil.Date2String(FechaManagerUtil.getDateTimeFromPC()));
 
-		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(), cliente.getClieNombreLegal(), lista.getLipvNombre(), listaProductos);
+		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(), cliente.getClieNombreLegal(), lista.getLipvNombre(), leyendaFecha, listaProductos);
 	}
 
 	private static boolean estaArticuloEnListaCustomizada(List<VentArpc> listaVentaCustomizada, VentArpv ventaBase) {
