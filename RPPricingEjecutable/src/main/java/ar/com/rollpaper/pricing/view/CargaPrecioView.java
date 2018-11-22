@@ -26,6 +26,7 @@ import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
+import ar.com.rp.ui.interfaces.RPTableEvent;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
 
 public class CargaPrecioView extends BaseViewMVCExtendida {
@@ -294,6 +295,15 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
 		tableDescFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		tableDescFamilia.setRpTableEvent(new RPTableEvent() {
+
+			@Override
+			public void doubleClick(Integer fila, Integer columna) {
+				btnModificar.doClick();
+
+			}
+		});
+
 		WebScrollPane spDescLista = new WebScrollPane(tableDescFamilia);
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
@@ -321,6 +331,15 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescEspecifico.getColumnModel().getColumn(COL_COMISION_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
 		tableDescEspecifico.getColumnModel().getColumn(COL_DESDE_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
 		tableDescEspecifico.getColumnModel().getColumn(COL_HASTA_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+
+		tableDescEspecifico.setRpTableEvent(new RPTableEvent() {
+
+			@Override
+			public void doubleClick(Integer fila, Integer columna) {
+				btnModificar.doClick();
+
+			}
+		});
 
 		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
 		tabPanel.addTab("Descuentos y Precios Especificos", spDescEspecifico);

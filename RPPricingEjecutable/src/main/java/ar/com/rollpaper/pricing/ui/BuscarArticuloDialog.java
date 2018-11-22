@@ -19,6 +19,7 @@ import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
+import ar.com.rp.ui.interfaces.RPTableEvent;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.DialogBase;
 
@@ -100,6 +101,15 @@ public class BuscarArticuloDialog extends DialogBase {
 		tableArticulo.setEditable(false);
 		tableArticulo.getColumnModel().removeColumn(tableArticulo.getColumnModel().getColumn(COL_ID_INTERNO));
 		tableArticulo.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableArticulo.setRpTableEvent(new RPTableEvent() {
+
+			@Override
+			public void doubleClick(Integer fila, Integer columna) {
+				btnSeleccionar.doClick();
+
+			}
+		});
+
 		WebScrollPane scrollPane = new WebScrollPane(tableArticulo);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioArticulo();

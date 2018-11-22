@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,6 +19,7 @@ import ar.com.rollpaper.pricing.business.FamiliaBusiness;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
+import ar.com.rp.ui.interfaces.RPTableEvent;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.DialogBase;
 
@@ -107,14 +106,13 @@ public class BuscarFamiliaDialog extends DialogBase {
 		String[] header = { "Nro Familia", "Nombre" };
 		String[][] data = {};
 		tableFamilia = new RPTable();
-		tableFamilia.addMouseListener(new MouseAdapter() {
+		tableFamilia.setRpTableEvent(new RPTableEvent() {
 			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (mouseEvent.getClickCount() == 2 && tableFamilia.getSelectedRow() != -1) {
-					btnSeleccionar.doClick();
-				}
+			public void doubleClick(Integer fila, Integer columna) {
+				btnSeleccionar.doClick();
 			}
 		});
+
 		tableFamilia.setModel(new DefaultTableModel(data, header));
 		tableFamilia.setEditable(false);
 		tableFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

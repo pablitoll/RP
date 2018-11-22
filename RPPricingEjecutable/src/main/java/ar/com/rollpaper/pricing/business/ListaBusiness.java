@@ -1,4 +1,5 @@
-//TODO VentArpvDAO.findByListaID(listaID)
+//TODO falta consulta VentArpvDAO.findByListaID(listaID)
+//TODO FALTA VER SI ANDA BIEN EL TODOS
 package ar.com.rollpaper.pricing.business;
 
 import java.util.ArrayList;

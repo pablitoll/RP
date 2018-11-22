@@ -35,13 +35,13 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		registro.setPricArticulo(getModel().getArticuloID());
 
-		if (!getView().txtDesc1.getText().equals("")) {
+		if (getView().txtDesc1.isVisible() && !getView().txtDesc1.getText().equals("")) {
 			registro.setPricDescuento1(new BigDecimal(Common.String2Double(getView().txtDesc1.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricDescuento1(null);
 		}
 
-		if (!getView().txtDesc2.getText().equals("")) {
+		if (getView().txtDesc2.isVisible() && !getView().txtDesc2.getText().equals("")) {
 			registro.setPricDescuento2(new BigDecimal(Common.String2Double(getView().txtDesc2.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricDescuento2(null);
@@ -335,6 +335,11 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		} else {
 			getView().lblEstaEnLista.setText(CommonUtils.SetHTMLColor("NO ESTA EN LISTA", "red"));
 		}
+		
+		getView().txtDesc1.setVisible(getModel().isArticuloEnLista());
+		getView().lblDesc1.setVisible(getModel().isArticuloEnLista());
+		getView().txtDesc2.setVisible(getModel().isArticuloEnLista());
+		getView().lblDesc2.setVisible(getModel().isArticuloEnLista());
 	}
 
 	public String getDescripcionItem() {

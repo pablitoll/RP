@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,6 +20,7 @@ import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
+import ar.com.rp.ui.interfaces.RPTableEvent;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.DialogBase;
 
@@ -56,12 +55,12 @@ public class BuscarClienteDialog extends DialogBase {
 		btnSeleccionar = new JButtonRP("Seleccionar");
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(puedeSeleccionar()) {
+				if (puedeSeleccionar()) {
 					nroCliente = (CcobClie) tableCliente.getModel().getValueAt(tableCliente.getSelectedRow(), COL_REG_INTERNO);
 					cerrar();
 				}
 			}
-			
+
 		});
 		btnSeleccionar.setFont(Common.getStandarFont());
 		panel.add(btnSeleccionar);
@@ -92,8 +91,8 @@ public class BuscarClienteDialog extends DialogBase {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscar();
-				if(CommonUtils.isNumeric(txtDescCliente.getText())) {
-					if(tableCliente.getRowCount() == 1) {
+				if (CommonUtils.isNumeric(txtDescCliente.getText())) {
+					if (tableCliente.getRowCount() == 1) {
 						btnSeleccionar.doClick();
 					}
 				}
@@ -105,19 +104,17 @@ public class BuscarClienteDialog extends DialogBase {
 		String[] header = { "Nro Cliente", "Nombre", "Nombre Legal", "" };
 		String[][] data = {};
 		tableCliente = new RPTable();
-		tableCliente.addMouseListener(new MouseAdapter() {
+		tableCliente.setRpTableEvent(new RPTableEvent() {
 			@Override
-			public void mousePressed(MouseEvent mouseEvent) {
-				if (mouseEvent.getClickCount() == 2 && tableCliente.getSelectedRow() != -1) {
-					btnSeleccionar.doClick();
-				}
+			public void doubleClick(Integer fila, Integer columna) {
+				btnSeleccionar.doClick();
 			}
 		});
 		tableCliente.setModel(new DefaultTableModel(data, header));
 		tableCliente.setEditable(false);
 		tableCliente.getColumnModel().removeColumn(tableCliente.getColumnModel().getColumn(COL_REG_INTERNO));
 		tableCliente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		WebScrollPane scrollPane = new WebScrollPane(tableCliente);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioCliente();
@@ -131,7 +128,7 @@ public class BuscarClienteDialog extends DialogBase {
 		tableCliente.clear();
 
 		for (CcobClie clie : CcobClieDAO.getListaCliente(txtDescCliente.getText())) {
-			tableCliente.addRow(new Object[] { clie.getClieCliente(), clie.getClieNombre(), clie.getClieNombreLegal(), clie});
+			tableCliente.addRow(new Object[] { clie.getClieCliente(), clie.getClieNombre(), clie.getClieNombreLegal(), clie });
 		}
 
 		if (tableCliente.getRowCount() > 0) {
@@ -163,9 +160,9 @@ public class BuscarClienteDialog extends DialogBase {
 		}
 		return retorno;
 	}
-	
+
 	protected boolean puedeSeleccionar() {
-		return true; //Para el hijo
+		return true; // Para el hijo
 	}
 
 }

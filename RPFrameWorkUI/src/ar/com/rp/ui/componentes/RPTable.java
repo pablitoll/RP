@@ -3,6 +3,8 @@ package ar.com.rp.ui.componentes;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FontMetrics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Vector;
 
 import javax.swing.JLabel;
@@ -21,6 +23,7 @@ import javax.swing.table.TableModel;
 import com.alee.laf.table.WebTable;
 
 import ar.com.rp.ui.common.Common;
+import ar.com.rp.ui.interfaces.RPTableEvent;
 
 public class RPTable extends WebTable {
 
@@ -29,9 +32,18 @@ public class RPTable extends WebTable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Integer colToIgnorar[] = null;
+	private RPTableEvent rpTableEvent = null;
 
 	public Integer[] getColToIgnorar() {
 		return colToIgnorar;
+	}
+
+	public RPTableEvent getRpTableEvent() {
+		return rpTableEvent;
+	}
+
+	public void setRpTableEvent(RPTableEvent rpTableEvent) {
+		this.rpTableEvent = rpTableEvent;
 	}
 
 	public void setColToIgnorar(Integer[] colToIgnorar) {
@@ -155,6 +167,16 @@ public class RPTable extends WebTable {
 		setShowGrid(false);
 		setFont(Common.getStandarFont());
 		getTableHeader().setFont(Common.getStandarFont());
+		addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent mouseEvent) {
+				if (rpTableEvent != null) {
+					RPTable table = (RPTable) mouseEvent.getSource();
+					if ((mouseEvent.getClickCount() == 2) && (table.getSelectedRow() != -1)) {
+						rpTableEvent.doubleClick(table.getSelectedRow(), table.getSelectedColumn());
+					}
+				}
+			}
+		});
 	}
 
 	public RPTable(final TableModel dm) {

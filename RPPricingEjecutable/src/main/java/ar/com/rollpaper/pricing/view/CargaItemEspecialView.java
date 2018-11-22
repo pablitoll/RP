@@ -1,18 +1,21 @@
 package ar.com.rollpaper.pricing.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 import com.alee.extended.date.WebDateField;
 import com.alee.laf.combobox.WebComboBox;
@@ -53,17 +56,20 @@ public class CargaItemEspecialView extends BaseViewDialog {
 	private JLabel label_1;
 	public componenteNumerico txtComision;
 	public WebLabel lblEstaEnLista;
+	public JLabel lblDesc1;
+	public JLabel lblDesc2;
 
 	public CargaItemEspecialView() throws Exception {
 		super();
 
-		JPanel panel = new JPanel();		
+		JPanel panel = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 		flowLayout.setAlignment(FlowLayout.RIGHT);
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		setModal(true);
 		setResizable(false);
 		setSize(new Dimension(600, 500));
+		setLocationRelativeTo(null);
 
 		btnAceptar = new JButtonRP("Aceptar");
 		btnAceptar.setFont(Common.getStandarFont());
@@ -92,7 +98,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_lblNewLabel.gridx = 1;
 		gbc_lblNewLabel.gridy = 0;
 		panel_1.add(lblLabelArticulo, gbc_lblNewLabel);
-		
+
 		panel_2 = new JPanel();
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
 		gbc_panel_2.insets = new Insets(0, 0, 5, 0);
@@ -100,22 +106,21 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_panel_2.gridx = 3;
 		gbc_panel_2.gridy = 0;
 		panel_1.add(panel_2, gbc_panel_2);
-				panel_2.setLayout(new BorderLayout(0, 0));
-		
-				lblArticuloID = new JLabel("lblar");
-				panel_2.add(lblArticuloID, BorderLayout.WEST);
-				lblArticuloID.setFont(Common.getStandarFont());
-		
+		panel_2.setLayout(new BorderLayout(0, 0));
+
+		lblArticuloID = new JLabel("lblar");
+		panel_2.add(lblArticuloID, BorderLayout.WEST);
+		lblArticuloID.setFont(Common.getStandarFont());
+
 		txtArticuloID = new JTextField();
 		panel_2.add(txtArticuloID, BorderLayout.CENTER);
 		txtArticuloID.setColumns(10);
-		
+
 		lblEstaEnLista = new WebLabel("lblEstaEnLista");
 		lblEstaEnLista.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblLblestaenlista = new GridBagConstraints();
-		gbc_lblLblestaenlista.gridwidth = 3;
 		gbc_lblLblestaenlista.insets = new Insets(0, 0, 5, 0);
-		gbc_lblLblestaenlista.gridx = 1;
+		gbc_lblLblestaenlista.gridx = 3;
 		gbc_lblLblestaenlista.gridy = 1;
 		panel_1.add(lblEstaEnLista, gbc_lblLblestaenlista);
 
@@ -130,7 +135,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 
 		lblNombre = new WebTextArea("lbln");
 		lblNombre.setFocusable(false);
-		lblNombre.setBorder(UIManager.getBorder("TextField.border"));
+		lblNombre.setBorder( BorderFactory.createLineBorder(Color.GRAY, 1));
 		lblNombre.setEditable(false);
 		lblNombre.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
@@ -152,7 +157,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		lblDescripcion = new WebTextArea("lblde");
 		lblDescripcion.setFocusable(false);
 		lblDescripcion.setWrapStyleWord(true);
-		lblDescripcion.setBorder(UIManager.getBorder("TextField.border"));
+		lblDescripcion.setBorder( BorderFactory.createLineBorder(Color.GRAY, 1));
 		lblDescripcion.setEditable(false);
 		lblDescripcion.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
@@ -162,14 +167,14 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_textField_2.gridy = 3;
 		panel_1.add(lblDescripcion, gbc_textField_2);
 
-		JLabel lblNewLabel_3 = new JLabel("1er Descuento %:");
-		lblNewLabel_3.setFont(Common.getStandarFont());
+		lblDesc1 = new JLabel("1er Descuento %:");
+		lblDesc1.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
 		gbc_lblNewLabel_3.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_3.gridx = 1;
 		gbc_lblNewLabel_3.gridy = 4;
-		panel_1.add(lblNewLabel_3, gbc_lblNewLabel_3);
+		panel_1.add(lblDesc1, gbc_lblNewLabel_3);
 
 		txtDesc1 = new componenteNumerico();
 		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
@@ -178,16 +183,15 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_textField_3.gridx = 3;
 		gbc_textField_3.gridy = 4;
 		panel_1.add(txtDesc1, gbc_textField_3);
-		
 
-		JLabel label = new JLabel("2do Descuento%:");
-		label.setFont(Common.getStandarFont());
+		lblDesc2 = new JLabel("2do Descuento%:");
+		lblDesc2.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.anchor = GridBagConstraints.EAST;
 		gbc_label.insets = new Insets(0, 0, 5, 5);
 		gbc_label.gridx = 1;
 		gbc_label.gridy = 5;
-		panel_1.add(label, gbc_label);
+		panel_1.add(lblDesc2, gbc_label);
 
 		txtDesc2 = new componenteNumerico();
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
@@ -272,7 +276,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_lblNewLabel_5.gridx = 3;
 		gbc_lblNewLabel_5.gridy = 9;
 		panel_1.add(dateFechaHasta, gbc_lblNewLabel_5);
-		
+
 		label_1 = new JLabel("Comision %:");
 		label_1.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_label_comision = new GridBagConstraints();
@@ -281,7 +285,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_label_comision.gridx = 1;
 		gbc_label_comision.gridy = 10;
 		panel_1.add(label_1, gbc_label_comision);
-		
+
 		txtComision = new componenteNumerico();
 		GridBagConstraints gbc_txtComision = new GridBagConstraints();
 		gbc_txtComision.insets = new Insets(0, 0, 5, 0);
@@ -300,7 +304,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		panel_1.add(label_5, gbc_label_5);
 
 		txtReferencia = new WebTextArea();
-		txtReferencia.setBorder(UIManager.getBorder("TextField.border"));
+		txtReferencia.setBorder( BorderFactory.createLineBorder(Color.GRAY, 1));
 		txtReferencia.setLineWrap(true);
 		txtReferencia.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_txtReferencia1 = new GridBagConstraints();
@@ -309,6 +313,14 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		gbc_txtReferencia1.gridy = 11;
 		panel_1.add(txtReferencia, gbc_txtReferencia1);
 		txtReferencia.setColumns(10);
+
+		
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				btnCancelar.doClick();
+			}
+		});
 	}
 
 	@Override
