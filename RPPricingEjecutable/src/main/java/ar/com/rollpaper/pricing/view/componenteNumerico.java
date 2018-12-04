@@ -1,4 +1,3 @@
-//TODO ULI FALTA, de la IDE
 /*
 * poner el icono en espera
 

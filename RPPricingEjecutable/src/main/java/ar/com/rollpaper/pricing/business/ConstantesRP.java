@@ -3,11 +3,11 @@ package ar.com.rollpaper.pricing.business;
 public class ConstantesRP {
 
 	public enum Acciones {
-		CALCULADORA, SALIR, LISTA_PRECIO_X_CLIENTE, CARGA_PRECIO_CLIENTE, CARGA_CLIENTE_ESCLAVO, GENERAR_PRECIOS, CAMBIAR_DB
+		CALCULADORA, SALIR, LISTA_PRECIO_X_CLIENTE, CARGA_PRECIO_CLIENTE, CARGA_CLIENTE_ESCLAVO, GENERAR_PRECIOS, CAMBIAR_DB, LISTA_PRECIO_GENERALES
 	}
 
 	public enum PantCarPrecio {
-		AGREGAR, ELIMINAR, CANCELAR, MODIFICAR, AGREGAR_LISTA, ELIMINAR_LISTA, IMPACTAR_PRECIOS
+		AGREGAR, ELIMINAR, MODIFICAR, AGREGAR_LISTA, ELIMINAR_LISTA, IMPACTAR_PRECIOS
 	}
 
 	public enum PantCarClienteEsclabo {
@@ -20,7 +20,11 @@ public class ConstantesRP {
 
 	public enum PantListaPrecio {
 		GENERAR_PDF, GENERAR_EXCEL, CANCELAR
-	};
+	}
+
+	public enum PantListaPrecioXLista {
+		GENERAR_PDF, GENERAR_EXCEL, CANCELAR
+	}
 
 	public static String IMG_ERROR = "/images/error.png";
 	public static String IMG_ICONO_APP = "/images/vector.png";
@@ -32,8 +36,7 @@ public class ConstantesRP {
 	public static String IMG_RETORNO = "/images/retorno.jpg";
 	public static String IMG_EXCEL = "/images/ExcelIcono.png";
 	public static String IMG_PDF = "/images/descargaPDF.png";
-	
-	
+
 	public static String REPO_LISTA_PRECIO = "/reporte/report1.jasper";
-	public static String REPO_LISTA_PRECIO_DETALLE = "/reporte/";//"/reporte/detalle.jasper";
+	public static String REPO_LISTA_PRECIO_DETALLE = "/reporte/";// "/reporte/detalle.jasper";
 }

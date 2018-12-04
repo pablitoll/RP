@@ -16,6 +16,8 @@ import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
+import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
+import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -52,6 +54,7 @@ public class BuscarArticuloDialog extends DialogBase {
 		getContentPane().add(panel, BorderLayout.SOUTH);
 
 		btnSeleccionar = new JButtonRP("Seleccionar");
+		btnSeleccionar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/ok.png")));
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nroArticulo = StocArtsDAO.findById((int) tableArticulo.getModel().getValueAt(tableArticulo.getSelectedRow(), COL_ID_INTERNO));
@@ -62,6 +65,7 @@ public class BuscarArticuloDialog extends DialogBase {
 		panel.add(btnSeleccionar);
 
 		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.addActionListener(new ActionListener() {
@@ -86,6 +90,7 @@ public class BuscarArticuloDialog extends DialogBase {
 		txtDescArticulo.setColumns(25);
 
 		btnBuscar = new JButtonRP("Buscar");
+		btnBuscar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/search.png")));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscar();

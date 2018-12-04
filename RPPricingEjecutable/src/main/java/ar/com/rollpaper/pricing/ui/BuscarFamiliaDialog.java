@@ -16,6 +16,8 @@ import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.business.FamiliaBusiness;
+import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
+import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -54,6 +56,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		getContentPane().add(panel, BorderLayout.SOUTH);
 
 		btnSeleccionar = new JButtonRP("Seleccionar");
+		btnSeleccionar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/ok.png")));
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nroFamilia = (String) tableFamilia.getModel().getValueAt(tableFamilia.getSelectedRow(), 0);
@@ -64,6 +67,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		panel.add(btnSeleccionar);
 
 		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.addActionListener(new ActionListener() {
@@ -95,6 +99,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		txtDescFamilia.setColumns(25);
 
 		btnBuscar = new JButtonRP("Buscar");
+		btnBuscar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/search.png")));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscar(txtDescFamilia.getText());

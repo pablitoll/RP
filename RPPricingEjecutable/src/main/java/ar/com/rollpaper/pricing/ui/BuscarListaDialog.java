@@ -17,9 +17,14 @@ import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
+import ar.com.rollpaper.pricing.dto.ListaDTO;
+import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
+import ar.com.rollpaper.pricing.view.CargaPrecioView;
+import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
+import ar.com.rp.ui.interfaces.RPTableEvent;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.DialogBase;
 
@@ -36,13 +41,13 @@ public class BuscarListaDialog extends DialogBase {
 	private JButtonRP btnCancelar;
 	private JButtonRP btnBuscar;
 	private VentLipv listaSeleccionada = null;
-	private ComboBoxModel<VentLipv> cbmLista;
+	private ComboBoxModel<ListaDTO> cbmLista;
 
 	public VentLipv getNroLista() {
 		return listaSeleccionada;
 	}
 
-	public BuscarListaDialog(BasePantallaPrincipal<?, ?> pantPrincipal, ComboBoxModel<VentLipv> cbmLista) {
+	public BuscarListaDialog(BasePantallaPrincipal<?, ?> pantPrincipal, ComboBoxModel<ListaDTO> cbmLista) {
 		super(pantPrincipal);
 		this.cbmLista = cbmLista;
 		setBounds(100, 100, 600, 600);
@@ -54,22 +59,24 @@ public class BuscarListaDialog extends DialogBase {
 		getContentPane().add(panel, BorderLayout.SOUTH);
 
 		btnSeleccionar = new JButtonRP("Seleccionar");
+		btnSeleccionar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/ok.png")));
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (tableLista.getSelectedRow() > -1) {
 					listaSeleccionada = (VentLipv) tableLista.getModel().getValueAt(tableLista.getSelectedRow(), COL_REGISTRO);
-					if (!isListaYaCargada(listaSeleccionada)) {						
+					if (!isListaYaCargada(listaSeleccionada)) {
 						cerrar();
 					} else {
+						listaSeleccionada = null;
 						Dialog.showMessageDialog("La lista ya esta catrgada, no se puede seleccionar");
 					}
 				}
 			}
 		});
 		btnSeleccionar.setFont(Common.getStandarFont());
-		panel.add(btnSeleccionar);
 
 		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.addActionListener(new ActionListener() {
@@ -92,6 +99,7 @@ public class BuscarListaDialog extends DialogBase {
 		txtDescCliente.setColumns(25);
 
 		btnBuscar = new JButtonRP("Buscar");
+		btnBuscar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/search.png")));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscar();
@@ -111,14 +119,22 @@ public class BuscarListaDialog extends DialogBase {
 		tableLista.getColumnModel().getColumn(COL_REGISTRO).setPreferredWidth(0);
 		tableLista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		panel.add(btnSeleccionar);
+		tableLista.setRpTableEvent(new RPTableEvent() {
+			@Override
+			public void doubleClick(Integer fila, Integer columna) {
+				btnSeleccionar.doClick();
+			}
+		});
+
 		WebScrollPane scrollPane = new WebScrollPane(tableLista);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioCliente();
 	}
 
 	protected boolean isListaYaCargada(VentLipv listaSeleccionada) {
-		for(int i = 0; i <cbmLista.getSize(); i++) {
-			if(cbmLista.getElementAt(i).getLipvListaPrecvta() == listaSeleccionada.getLipvListaPrecvta())
+		for (int i = 0; i < cbmLista.getSize(); i++) {
+			if (cbmLista.getElementAt(i).getVentLipv().getLipvListaPrecvta() == listaSeleccionada.getLipvListaPrecvta())
 				return true;
 		}
 		return false;

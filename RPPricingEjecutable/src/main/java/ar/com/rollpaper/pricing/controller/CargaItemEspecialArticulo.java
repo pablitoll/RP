@@ -1,5 +1,7 @@
 package ar.com.rollpaper.pricing.controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -104,6 +106,65 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		for (SistMone reg : SistMoneDAO.getList()) {
 			getView().cbMoneda.addItem(reg);
 		}
+
+		getView().cbMoneda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (getView().cbMoneda.getSelectedIndex() > 0) {
+					cambioMoneda();
+				}
+			}
+		});
+
+		getView().txtPrecio.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (!getView().txtPrecio.getText().equals("")) {
+					cambioMoneda();
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent arg0) {
+			}
+		});
+
+		getView().txtDesc1.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (!getView().txtDesc1.getText().equals("")) {
+					cambioDescuento();
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent arg0) {
+			}
+		});
+		getView().txtDesc2.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (!getView().txtDesc2.getText().equals("")) {
+					cambioDescuento();
+				}
+			}
+
+			@Override
+			public void focusGained(FocusEvent arg0) {
+			}
+		});
+	}
+
+	protected void cambioDescuento() {
+		getView().cbMoneda.setSelectedIndex(0);
+		getView().txtPrecio.clear();
+	}
+
+	protected void cambioMoneda() {
+		getView().txtDesc1.clear();
+		getView().txtDesc2.clear();
 	}
 
 	@Override
@@ -335,7 +396,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		} else {
 			getView().lblEstaEnLista.setText(CommonUtils.SetHTMLColor("NO ESTA EN LISTA", "red"));
 		}
-		
+
 		getView().txtDesc1.setVisible(getModel().isArticuloEnLista());
 		getView().lblDesc1.setVisible(getModel().isArticuloEnLista());
 		getView().txtDesc2.setVisible(getModel().isArticuloEnLista());

@@ -171,8 +171,8 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "" };
 		String[][] data = { {} };
 
-		btnCancelar = new JButtonRP("Cancelar Carga");
-		btnCancelar.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png"), 15, 15));
+		btnCancelar = new JButtonRP("Terminar Carga");
+		btnCancelar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/retorno.jpg")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnCancelar);

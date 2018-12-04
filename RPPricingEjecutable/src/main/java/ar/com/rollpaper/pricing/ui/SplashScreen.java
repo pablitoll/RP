@@ -81,10 +81,8 @@ public class SplashScreen extends JWindow {
 					try {
 						HibernateUtil.getSession();
 					} catch (HibernateException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}

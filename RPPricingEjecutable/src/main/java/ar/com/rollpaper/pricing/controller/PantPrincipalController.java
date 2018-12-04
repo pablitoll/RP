@@ -10,12 +10,14 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
 import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
+import ar.com.rollpaper.pricing.model.ListaPrecioXListaModel;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
 import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
+import ar.com.rollpaper.pricing.view.ListaPrecioXListaView;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.VentanaCalculadora;
@@ -66,7 +68,7 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 			try {
 				ArchivoDePropiedadesBusiness.recargar();
 				HibernateUtil.reConectar();
-				
+
 				refrescarBarra();
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al refrescar DB");
@@ -75,6 +77,25 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 
 		if (accion.equals(ConstantesRP.Acciones.GENERAR_PRECIOS.toString())) {
 			procesoPrecios();
+		}
+
+		if (accion.equals(ConstantesRP.Acciones.LISTA_PRECIO_GENERALES.toString())) {
+			// TODO IMPLEMENTAR
+			if (!cmGestordeVentanas.isAlreadyCreated(ListaPrecioXListaController.class.getName())) {
+				try {
+					ListaPrecioXListaView vista = new ListaPrecioXListaView();
+					ListaPrecioXListaModel modelo = new ListaPrecioXListaModel();
+					ListaPrecioXListaController consulta1 = new ListaPrecioXListaController(this, vista, modelo);
+					cmGestordeVentanas.add(consulta1, ListaPrecioXListaController.class.getName());
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al crear pantalla de consulta de Lista");
+				}
+			}
+			try {
+				cmGestordeVentanas.findOrCreated(ListaPrecioXListaController.class.getName());
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "No se puede acceder a la pantalla de consulta de Lista");
+			}
 		}
 
 		if (accion.equals(ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString())) {

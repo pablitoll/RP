@@ -33,7 +33,9 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private JButtonBarraBotonesRP btnPrecios = new JButtonBarraBotonesRP("Generar Precios");
 
-	private JButtonBarraBotonesRP btnListaPercioxCliente = new JButtonBarraBotonesRP("Articulos Customizados x Cliente");
+	private JButtonBarraBotonesRP btnListaPercioxCliente = new JButtonBarraBotonesRP("Lista de Precios Actualizada (impactados)");
+	private JButtonBarraBotonesRP btnListaPercioGenerales = new JButtonBarraBotonesRP("Lista de Precios Generales");
+	
 
 	private final JMenu mnCarga = new JMenu("Carga");
 	private final JMenu mnConsulta = new JMenu("Consulta");
@@ -43,7 +45,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private final JMenuItem mntmSalir = new JMenuItem("Salir de la Aplicacion");
 
-	private final JMenuItem mntmListaPercioxCliente = new JMenuItem("Lista de Articulos Customizados x Cliente");
+	private final JMenuItem mntmListaPercioxCliente = new JMenuItem("Lista de Precios Actualizada (impactados)");
+	private final JMenuItem mntmListaPercioGenerales = new JMenuItem("Lista de Precios Generales");
 
 	private final JMenuItem mntmCargaPrecioCliente = new JMenuItem("Gestion de Precios");
 
@@ -89,7 +92,10 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mnConsulta.setFont(Common.getStandarFontMenu());
 		mnConsulta.add(mntmListaPercioxCliente);
 		mntmListaPercioxCliente.setFont(Common.getStandarFontMenu());
-
+		
+		mnConsulta.add(mntmListaPercioGenerales);
+		mntmListaPercioGenerales.setFont(Common.getStandarFontMenu());
+		
 		mnMantenimiento.setFont(Common.getStandarFontMenu());
 		mnuCambiarDB.setFont(Common.getStandarFontMenu());
 		mnMantenimiento.add(mnuCambiarDB);
@@ -118,6 +124,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		agregarBotonStd2Barra(btnPrecios, Main.class.getResource(ConstantesRP.IMG_PESOS));
 
 		agregarBotonStd2Barra(btnListaPercioxCliente, Main.class.getResource(ConstantesRP.IMG_PDF));
+		agregarBotonStd2Barra(btnListaPercioGenerales, Main.class.getResource(ConstantesRP.IMG_PDF));
 
 		agregarBotonStd2Barra(btnCalculadora, Main.class.getResource(ConstantesRP.IMG_CAL));
 		btnCalculadora.setMnemonicControl(true);
@@ -131,14 +138,18 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		asignarBotonAccion(btnCalculadora, ConstantesRP.Acciones.CALCULADORA.toString());
 		asignarBotonAccion(btnPrecios, ConstantesRP.Acciones.GENERAR_PRECIOS.toString());
 
-		asignarBotonAccion(mntmListaPercioxCliente, ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString());
-		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
+		asignarBotonAccion(mntmListaPercioxCliente, ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString());		
+		asignarBotonAccion(mntmListaPercioGenerales, ConstantesRP.Acciones.LISTA_PRECIO_GENERALES.toString());
+		
 		asignarBotonAccion(mntmCargaClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
+		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		asignarBotonAccion(mnuCambiarDB, ConstantesRP.Acciones.CAMBIAR_DB.toString());
-
+			
 		asignarBotonAccion(btnClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
 		asignarBotonAccion(btnCargaPrecio, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		asignarBotonAccion(btnListaPercioxCliente, ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString());
+		asignarBotonAccion(btnListaPercioGenerales, ConstantesRP.Acciones.LISTA_PRECIO_GENERALES.toString());
+		
 	}
 
 }

@@ -1,5 +1,4 @@
 //TODO falta consulta VentArpvDAO.findByListaID(listaID)
-//TODO FALTA VER SI ANDA BIEN EL TODOS
 package ar.com.rollpaper.pricing.business;
 
 import java.util.ArrayList;
@@ -73,6 +72,10 @@ public class ListaBusiness {
 			}
 		}
 		return false;
+	}
+
+	public static List<VentLipv> getTodasListas() {
+		return VentLipvDAO.getAllLists();
 	}
 
 }

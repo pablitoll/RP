@@ -68,7 +68,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public JButtonRP btnAgregar;
 	public JButtonRP btnEliminar;
 	public WebTabbedPane tabPanel;
-	public JButtonRP btnCancelar;
 	private JPanel pnlCenter;
 	private JPanel panelCentral;
 	public WebLabel lblError;
@@ -348,16 +347,10 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		lblError.setFont(Common.getStandarFontBold());
 		panelCentral.add(lblError, BorderLayout.NORTH);
 
-		btnImpactarPrecios = new JButtonRP("Impactar Precios");
+		btnImpactarPrecios = new JButtonRP("Terminar Carga e Impactar precios");
 		btnImpactarPrecios.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_PESOS)));
 		btnImpactarPrecios.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnImpactarPrecios);
-
-		btnCancelar = new JButtonRP("Terminar Carga");
-		btnCancelar.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_RETORNO)));
-		btnCancelar.setFont(Common.getStandarFont());
-		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
-		pnlInferiorBotones.add(btnCancelar);
 
 	}
 
@@ -365,7 +358,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public void asignarBotonesPantExtendida() {
 		asignarBotonAccion(btnAgregar, ConstantesRP.PantCarPrecio.AGREGAR.toString());
 		asignarBotonAccion(btnEliminar, ConstantesRP.PantCarPrecio.ELIMINAR.toString());
-		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarPrecio.CANCELAR.toString());
 		asignarBotonAccion(btnModificar, ConstantesRP.PantCarPrecio.MODIFICAR.toString());
 		asignarBotonAccion(btnAgregarLista, ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString());
 		asignarBotonAccion(btnEliminarLista, ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString());

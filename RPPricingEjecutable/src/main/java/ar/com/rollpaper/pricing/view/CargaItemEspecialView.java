@@ -72,11 +72,13 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		setLocationRelativeTo(null);
 
 		btnAceptar = new JButtonRP("Aceptar");
+		btnAceptar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/retorno.jpg")));
 		btnAceptar.setFont(Common.getStandarFont());
 		btnAceptar.setMnemonic(KeyEvent.VK_ENTER);
 		panel.add(btnAceptar);
 
 		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		panel.add(btnCancelar);
@@ -135,7 +137,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 
 		lblNombre = new WebTextArea("lbln");
 		lblNombre.setFocusable(false);
-		lblNombre.setBorder( BorderFactory.createLineBorder(Color.GRAY, 1));
+		lblNombre.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 		lblNombre.setEditable(false);
 		lblNombre.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
@@ -157,7 +159,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		lblDescripcion = new WebTextArea("lblde");
 		lblDescripcion.setFocusable(false);
 		lblDescripcion.setWrapStyleWord(true);
-		lblDescripcion.setBorder( BorderFactory.createLineBorder(Color.GRAY, 1));
+		lblDescripcion.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 		lblDescripcion.setEditable(false);
 		lblDescripcion.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
@@ -304,7 +306,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		panel_1.add(label_5, gbc_label_5);
 
 		txtReferencia = new WebTextArea();
-		txtReferencia.setBorder( BorderFactory.createLineBorder(Color.GRAY, 1));
+		txtReferencia.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
 		txtReferencia.setLineWrap(true);
 		txtReferencia.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_txtReferencia1 = new GridBagConstraints();
@@ -314,7 +316,6 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		panel_1.add(txtReferencia, gbc_txtReferencia1);
 		txtReferencia.setColumns(10);
 
-		
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
