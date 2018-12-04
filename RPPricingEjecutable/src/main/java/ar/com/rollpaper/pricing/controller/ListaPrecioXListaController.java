@@ -52,7 +52,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 			if (lista != null) {
 				getView().lblNombreLista.setText(lista.getVentLipv().getLipvNombre());
 				getModel().setListaCargada(lista);
-				cargarProductos(getModel().getClienteCargado(), getModel().getListaCargada().getVentLipv());
+				cargarProductos(getModel().getListaCargada().getVentLipv());
 			}
 		}
 	}
@@ -64,15 +64,11 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 		getView().tableResultado.setEnabled(tieneCli);
 		getView().btnExportarExcel.setEnabled(tieneCli);
 		getView().btnGenerarPDF.setEnabled(tieneCli);
-		getView().btnCancelar.setEnabled(tieneCli);
 	}
 
 	protected void resetearDatosDePantalla() throws Exception {
-		if (getModel().getClienteCargado() == null) {
-
+		if (getModel().getListaCargada() == null) {
 			getView().lblNombreLista.setText("S/D");
-
-			getModel().setClienteCargado(null);
 			getView().cbNroLista.removeAllItems();
 
 			resetearTabla();
@@ -107,28 +103,21 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 
 	@Override
 	public void ejecutarAccion(String accion) {
-		if (accion.equals(ConstantesRP.PantListaPrecio.CANCELAR.toString())) {
-			try {
-				getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
-				resetearDatosDePantalla();
-			} catch (Exception e) {
-				ManejoDeError.showError(e, "Error al limpiar");
-			}
+		
+
+		if (accion.equals(ConstantesRP.PantListaPrecioXLista.GENERAR_EXCEL.toString())) {
+//			try {
+//				String nombreArchivo = String.format("ListaPrecioLista%s_%s", getModel().getClienteCargado().getClieCliente(),
+//						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
+//
+//				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo);
+//
+//			} catch (Exception e) {
+//				ManejoDeError.showError(e, "Error al exportar");
+//			}
 		}
 
-		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_EXCEL.toString())) {
-			try {
-				String nombreArchivo = String.format("ListaPrecioLista%s_%s", getModel().getClienteCargado().getClieCliente(),
-						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
-
-				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo);
-
-			} catch (Exception e) {
-				ManejoDeError.showError(e, "Error al exportar");
-			}
-		}
-
-		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_PDF.toString())) {
+		if (accion.equals(ConstantesRP.PantListaPrecioXLista.GENERAR_PDF.toString())) {
 			try {
 				//TODO FALTA
 				//Reportes.getReporteListaPrecios(getModel().getListaArticulosImpactados());
@@ -139,7 +128,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 	}
 
 
-	private void cargarProductos(CcobClie cliente, VentLipv lista) {
+	private void cargarProductos(VentLipv lista) {
 		resetearTabla();
 		
 		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
@@ -154,7 +143,6 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 
 	@Override
 	protected void cerrarPantalla() {
-		ejecutarAccion(ConstantesRP.PantListaPrecio.CANCELAR.toString());
 		super.cerrarPantalla();
 	}
 }

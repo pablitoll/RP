@@ -15,7 +15,6 @@ import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
-import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
@@ -34,7 +33,6 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 	public JButtonRP btnExportarExcel;
 	public WebComboBox cbNroLista;
 	public JLabel lblNombreLista;
-	public JButtonRP btnCancelar;
 
 	public ListaPrecioXListaView() throws Exception {
 		super();
@@ -90,22 +88,13 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 		String[][] dataTabla = { {} };
 
 		tableResultado = new RPTable();
-		// tableResultado.setColToIgnorar(new Integer[] { COL_REGISTRO_FAMILIA });
 		tableResultado.setModel(new DefaultTableModel(dataTabla, headerTabla));
 		tableResultado.setRowHeight(30);
 		tableResultado.setEditable(false);
-		// tableResultado.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMaxWidth(0);
-		// tableResultado.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMinWidth(0);
-		// tableResultado.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setPreferredWidth(0);
 		tableResultado.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		WebScrollPane webScrollPane = new WebScrollPane(tableResultado);
 		getContentPane().add(webScrollPane, BorderLayout.CENTER);
-		
-		btnCancelar = new JButtonRP("Hacer otra Busqueda");
-		btnCancelar.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_RETORNO)));
-		btnCancelar.setFont(Common.getStandarFont());
-		pnlInferiorBotones.add(btnCancelar);
 
 		btnGenerarPDF = new JButtonRP("Exportar a PDF");
 		btnGenerarPDF.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_PDF), 15, 15));
@@ -123,8 +112,6 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 	public void asignarBotonesPantExtendida() {
 		asignarBotonAccion(btnGenerarPDF, ConstantesRP.PantListaPrecioXLista.GENERAR_PDF.toString());
 		asignarBotonAccion(btnExportarExcel, ConstantesRP.PantListaPrecioXLista.GENERAR_EXCEL.toString());
-		asignarBotonAccion(btnCancelar, ConstantesRP.PantListaPrecioXLista.CANCELAR.toString());
-		
 	}
 
 }

@@ -23,7 +23,7 @@ public class ConstantesRP {
 	}
 
 	public enum PantListaPrecioXLista {
-		GENERAR_PDF, GENERAR_EXCEL, CANCELAR
+		GENERAR_PDF, GENERAR_EXCEL
 	}
 
 	public static String IMG_ERROR = "/images/error.png";

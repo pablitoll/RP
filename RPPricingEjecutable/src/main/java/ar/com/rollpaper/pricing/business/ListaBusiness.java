@@ -1,4 +1,3 @@
-//TODO falta consulta VentArpvDAO.findByListaID(listaID)
 package ar.com.rollpaper.pricing.business;
 
 import java.util.ArrayList;
