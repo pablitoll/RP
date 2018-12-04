@@ -20,7 +20,6 @@ import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
-import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;

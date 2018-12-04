@@ -8,13 +8,11 @@ import java.awt.Insets;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.scroll.WebScrollPane;
-import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.ui.Main;
@@ -23,8 +21,6 @@ import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 

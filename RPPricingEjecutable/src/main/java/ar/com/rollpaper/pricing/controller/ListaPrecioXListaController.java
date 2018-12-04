@@ -1,10 +1,7 @@
 package ar.com.rollpaper.pricing.controller;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 import javax.swing.RowSorter;
@@ -15,16 +12,13 @@ import javax.swing.table.TableRowSorter;
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
-import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.jasper.ProductoDTO;
-import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rollpaper.pricing.model.ListaPrecioXListaModel;
-import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
 import ar.com.rollpaper.pricing.view.ListaPrecioXListaView;
 import ar.com.rp.rpcutils.CSVExport;
-import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
@@ -64,7 +58,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 	}
 
 	private void setModoPantalla() {
-		Boolean tieneCli = !getView().lblNombreCliente.getText().equals("S/D");
+		Boolean tieneCli = !getView().lblNombreLista.getText().equals("S/D");
 
 		getView().cbNroLista.setEnabled(tieneCli);
 		getView().tableResultado.setEnabled(tieneCli);

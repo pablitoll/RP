@@ -25,6 +25,16 @@ public class ListaBusiness {
 		return VentArpvDAO.findByListaID(listaID);
 	}
 
+	public static List<ListaDTO> getTodasListas() {
+		List<ListaDTO> retorno = new ArrayList<ListaDTO>();
+
+		for (VentLipv listaClienteLista : VentLipvDAO.getAllLists()) {
+			retorno.add(new ListaDTO(listaClienteLista, false, false));
+		}
+
+		return retorno;
+	}
+
 	public static List<ListaDTO> getListaToShow(CcobClie clienteCargado) {
 		List<ListaDTO> retorno = new ArrayList<ListaDTO>();
 
@@ -72,10 +82,6 @@ public class ListaBusiness {
 			}
 		}
 		return false;
-	}
-
-	public static List<VentLipv> getTodasListas() {
-		return VentLipvDAO.getAllLists();
 	}
 
 }
