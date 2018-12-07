@@ -146,15 +146,11 @@ public class PreciosEspecialesDAO {
 	public static List<PreciosEspeciales> getByCliente(int clieCliente) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
-
 		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder().createQuery(PreciosEspeciales.class);
 		Root<PreciosEspeciales> i = criteriaQuery.from(PreciosEspeciales.class);
 		criteriaQuery.where(cb.equal(i.get("pricCliente"), clieCliente));
-
 		List<PreciosEspeciales> clientes = session.createQuery(criteriaQuery).getResultList();
-
 		return clientes;
-
 	}
 
 	public static List<PreciosEspeciales> getByClienteLista(CcobClie cliente, VentLipv lista, java.util.Date hoy) {

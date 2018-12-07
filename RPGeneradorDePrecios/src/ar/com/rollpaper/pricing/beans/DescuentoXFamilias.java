@@ -123,7 +123,9 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	}
 	
 	public boolean isvigente(Date date) {		
-		return this.pricFamiliaFechaDesde.compareTo(date) > 0 && this.pricFamiliaFechaHasta.compareTo(date) > 0 ;
+		
+		
+		return date.after(this.pricFamiliaFechaDesde) && date.before(this.pricFamiliaFechaHasta);
 	}
 
 }

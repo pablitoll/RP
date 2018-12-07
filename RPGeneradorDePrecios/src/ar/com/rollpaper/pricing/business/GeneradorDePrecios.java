@@ -58,7 +58,9 @@ public class GeneradorDePrecios {
 	 * 
 	 **/
 	public static generarListaDePreciosResponse generarListaPreciosPorClienteLista(CcobClie cliente, VentLipv lista) {
-
+  
+		
+		//int a = 1/0;
 		generarListaDePreciosResponse response = new generarListaDePreciosResponse();
 		// Listo los precios para la combinacion cliente lista
 
@@ -111,6 +113,15 @@ public class GeneradorDePrecios {
 			// por familia
 			if (getPrecioEspecial(listaPreciosEspeciales, articulo).size() > 0) {
 				precio = calcularPreciosEspeciales(listaPreciosEspeciales, articulo, articulo.getArpvPrecioVta());
+				
+				// si es un porcentaje no tengo que cambiar la moneda
+				List<PreciosEspeciales> descuento = getPrecioEspecial(listaPreciosEspeciales, articulo);
+				if (descuento.get(0).getPricPrecio()!=null) {
+				
+				SistMone moneda = SistMoneDAO.getByDesc(descuento.get(0).getPricMoneda());
+				articulo.setSistMoneByArpvMoneda(moneda);
+				}
+				
 			} else {
 				System.out.println("<<<<<<<<<<<<<<<<No Posee Descuentos precio especial>>>>>>>>>>>>>>");
 			}
@@ -211,6 +222,8 @@ public class GeneradorDePrecios {
 	 */
 	private static List<PreciosEspeciales> getPrecioEspecial(List<PreciosEspeciales> listaPreciosEspeciales,
 			VentArpv articulo) {
+		
+		System.out.print("id articulo->"+articulo.getId().getArpvArticulo());
 		// busco en los la tabla de descuentos si tiene algun registro para ese articulo
 		List<PreciosEspeciales> descuentoEspecial = listaPreciosEspeciales.stream()
 				.filter(item -> item.getPricArticulo() == articulo.getId().getArpvArticulo())
