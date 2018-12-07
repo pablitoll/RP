@@ -8,6 +8,7 @@ import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.VentArpv;
+import ar.com.rollpaper.pricing.beans.VentArpvId;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
@@ -81,6 +82,12 @@ public class ListaBusiness {
 			}
 		}
 		return false;
+	}
+
+	public static Boolean isArticuloEnLista(Integer idArticulo, Integer idLista) {
+		VentArpvId id = new VentArpvId(idArticulo, idLista);
+		VentArpv resp = VentArpvDAO.findById(id);
+		return resp != null;
 	}
 
 }

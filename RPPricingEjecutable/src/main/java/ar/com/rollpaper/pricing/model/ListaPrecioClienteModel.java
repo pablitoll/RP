@@ -39,7 +39,6 @@ public class ListaPrecioClienteModel extends BaseModel {
 		descuentoXFamilias.setPricFamiliaListaPrecvta(listaCargada.getVentLipv().getLipvListaPrecvta());
 		descuentoXFamilias.setPricFamiliaCliente(clienteCargado.getClieCliente());
 		return descuentoXFamilias;
-
 	}
 
 	public ListaDTO getListaCargada() {
@@ -54,8 +53,6 @@ public class ListaPrecioClienteModel extends BaseModel {
 	public List<ListaDTO> getListasToShow() {
 		return ListaBusiness.getListaToShow(getClienteCargado());
 	}
-
-	
 
 	public ListaPrecioReporteDTO getListaArticulosImpactados() {
 		if (listaPrecioReporte == null) {

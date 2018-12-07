@@ -4,9 +4,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
-import ar.com.rollpaper.pricing.beans.VentArpv;
-import ar.com.rollpaper.pricing.beans.VentArpvId;
-import ar.com.rollpaper.pricing.dao.VentArpvDAO;
+import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rp.ui.pantalla.BaseModel;
 
 public class CargaItemEspecialArticuloModel extends BaseModel {
@@ -86,13 +84,7 @@ public class CargaItemEspecialArticuloModel extends BaseModel {
 	}
 
 	public boolean isArticuloEnLista() {
-		VentArpv resp = null;
-		if (articuloCargado != null) {
-			VentArpvId id = new VentArpvId(articuloCargado.getArtsArticulo(), registro.getPricListaPrecvta());
-			resp = VentArpvDAO.findById(id);
-		}
-
-		return resp != null;
+		return (articuloCargado == null) ? false : ListaBusiness.isArticuloEnLista(articuloCargado.getArtsArticulo(), registro.getPricListaPrecvta());
 	}
 
 }

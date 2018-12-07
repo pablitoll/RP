@@ -1,29 +1,19 @@
 package ar.com.rollpaper.pricing.jasper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.beans.SistMone;
+import ar.com.rollpaper.pricing.beans.SistUnim;
 import ar.com.rollpaper.pricing.beans.StocArts;
-import ar.com.rollpaper.pricing.beans.VentArpc;
 import ar.com.rollpaper.pricing.beans.VentArpv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
-import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.dao.SistMoneDAO;
+import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
-import ar.com.rollpaper.pricing.dao.VentArpcDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
-import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 public class ReportesListas {
 
@@ -84,9 +74,11 @@ public class ReportesListas {
 		for (VentArpv ventaBase : VentArpvDAO.findByListaID(lista.getLipvListaPrecvta())) {
 
 			StocArts stock = StocArtsDAO.getArticuloByID(ventaBase.getId().getArpvArticulo());
-
-			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
-					ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo(), Common.double2String(ventaBase.getArpvPrecioVta().doubleValue()));
+			SistUnim unidad = SistUnimDAO.findById(stock.getArtsUnimedStock());
+			SistMone moneda = SistMoneDAO.findById(ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo());
+			
+			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(),
+					moneda.getMoneNombre(), Common.double2String(ventaBase.getArpvPrecioVta().doubleValue()));
 
 			listaProductos.add(producto);
 		}

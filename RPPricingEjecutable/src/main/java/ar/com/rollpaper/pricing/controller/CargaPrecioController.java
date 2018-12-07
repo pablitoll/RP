@@ -1,5 +1,6 @@
 package ar.com.rollpaper.pricing.controller;
 
+import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
@@ -16,7 +17,6 @@ import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-
 import com.alee.laf.optionpane.WebOptionPane;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
@@ -28,6 +28,7 @@ import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
+import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
@@ -121,7 +122,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
 			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
 			SistUnim unidad = SistUnimDAO.findById(arti.getArtsUnimedStock());
-			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(), arti.getArtsNombre(), arti.getArtsDescripcion(), unidad.getUnimNombre());
+			Boolean estaEnLista = ListaBusiness.isArticuloEnLista(desc.getPricArticulo(), desc.getPricListaPrecvta());
+
+			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(), arti.getArtsNombre(), arti.getArtsDescripcion(), unidad.getUnimNombre(),
+					estaEnLista);
 		}
 		sorterTablaDesEspecifico.sort();
 
@@ -323,27 +327,25 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 				PantPrincipalController.setCursorOcupado();
 				try {
-					GeneradorDePrecios.impactarPrecios(getModel().getClienteCargado(), getModel().getListaCargada().getVentLipv());
-				} finally {
-					PantPrincipalController.setRestoreCursor();
-				}
+					try {
+						GeneradorDePrecios.impactarPrecios(getModel().getClienteCargado(), getModel().getListaCargada().getVentLipv());
+					} finally {
+						PantPrincipalController.setRestoreCursor();
+					}
 
-				Dialog.showMessageDialog("Se termino de aplicar nuevos precios", "Aplicacion de Precios", JOptionPane.INFORMATION_MESSAGE);
+					Dialog.showMessageDialog("Se termino de aplicar nuevos precios", "Aplicacion de Precios", JOptionPane.INFORMATION_MESSAGE);
 
-				// reseto la pantalla
-				try {
+					// reseto la pantalla
 					getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
 					resetearDatosDePantalla();
+
 				} catch (Exception e) {
-					ManejoDeError.showError(e, "Error al Terminar carga");
+					ManejoDeError.showError(e, "Error al Impactar Precio");
 				}
 			}
-
 		}
 
-		if (accion.equals(ConstantesRP.PantCarPrecio.AGREGAR.toString()))
-
-		{
+		if (accion.equals(ConstantesRP.PantCarPrecio.AGREGAR.toString())) {
 
 			if (getModel().getListaCargada() != null) {
 
@@ -367,9 +369,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA, itemEspecialFamilia.getNombreItem(), CargaPrecioView.COL_DESDE_FAMILIA,
 									registro.getPricFamiliaFechaDesde());
-
 						}
-
 					} else {
 						itemEspecialArticuloModel.setTableModel((DefaultTableModel) getView().tableDescEspecifico.getModel());
 						itemEspecialArticulo.setRegistro(getModel().getRegistroArticuloEmpty());
@@ -382,9 +382,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 							HibernateGeneric.persist(registro);
 
 							SistUnim unidad = SistUnimDAO.findById(itemEspecialArticulo.getUnidadItem());
+							Boolean estaEnLista = ListaBusiness.isArticuloEnLista(registro.getPricArticulo(), registro.getPricListaPrecvta());
 
 							agregarRegistroATablaArticulo(getView().tableDescEspecifico, registro, itemEspecialArticulo.getArticuloIDMostrar(),
-									itemEspecialArticulo.getNombreItem(), itemEspecialArticulo.getDescripcionItem(), unidad.getUnimNombre());
+									itemEspecialArticulo.getNombreItem(), itemEspecialArticulo.getDescripcionItem(), unidad.getUnimNombre(), estaEnLista);
 
 							sorterTablaDesEspecifico.sort();
 
@@ -584,16 +585,36 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		}
 	}
 
-	private void agregarRegistroATablaArticulo(RPTable tabla, PreciosEspeciales registro, String id_Articulo, String nombreItem, String descItem, String unidadItem) {
+	private void agregarRegistroATablaArticulo(RPTable tabla, PreciosEspeciales registro, String id_Articulo, String nombreItem, String descItem, String unidadItem,
+			Boolean estaEnLista) {
 
-		tabla.addRow(new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
-				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "",
-				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "",
-				registro.getPricMoneda() != null ? SistMoneDAO.findById(registro.getPricMoneda()).getMoneNombre() : "",
-				registro.getPricPrecio() != null ? Common.double2String(registro.getPricPrecio().doubleValue()) : "",
-				registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
-				registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "",
-				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(), registro });
+		Color[] colorFondo = new Color[tabla.getModel().getColumnCount()];
+		Color[] colorLetra = new Color[tabla.getModel().getColumnCount()];
+
+		colorFondo = rellenarColor(colorFondo, null);
+		colorLetra = rellenarColor(colorLetra, null);
+
+		if (!estaEnLista) {
+			colorFondo = rellenarColor(colorFondo, Color.YELLOW);
+		}
+sasa
+		tabla.addRowColor(
+				new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
+						registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "",
+						registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "",
+						registro.getPricMoneda() != null ? SistMoneDAO.findById(registro.getPricMoneda()).getMoneNombre() : "",
+						registro.getPricPrecio() != null ? Common.double2String(registro.getPricPrecio().doubleValue()) : "",
+						registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
+						registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "",
+						Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(), (estaEnLista ? "SI" : "NO"), registro },
+				colorFondo, colorLetra);
+	}
+
+	private Color[] rellenarColor(Color[] vector, Color color) {
+		for (int x = 0; x < vector.length; x++) {
+			vector[x] = color;
+		}
+		return vector;
 	}
 
 	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro, String nombreItem) {

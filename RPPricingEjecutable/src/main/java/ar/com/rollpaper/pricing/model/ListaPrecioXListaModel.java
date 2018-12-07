@@ -2,13 +2,9 @@ package ar.com.rollpaper.pricing.model;
 
 import java.util.List;
 
-import ar.com.rollpaper.pricing.beans.CcobClie;
-import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
-import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.jasper.ListaPrecioReporteDTO;
-import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rollpaper.pricing.jasper.ReportesListas;
 import ar.com.rp.ui.pantalla.BaseModel;
 
@@ -28,8 +24,6 @@ public class ListaPrecioXListaModel extends BaseModel {
 	public List<ListaDTO> getListasToShow() { 
 		return ListaBusiness.getTodasListas();
 	}
-
-	
 
 	public ListaPrecioReporteDTO getListaArticulosImpactados() {
 		if (listaPrecioReporte == null) {

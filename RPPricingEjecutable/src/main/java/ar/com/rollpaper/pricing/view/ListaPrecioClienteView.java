@@ -31,6 +31,8 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final int COL_COD_ARTICULO = 0;
+	private static final int COL_UNIDAD = 2;
+	private static final int COL_MONEDA_ESPECIFICO = 3;
 	public RPTable tableResultado;
 	public JButtonRP btnGenerarPDF;
 	public JButtonRP btnExportarExcel;
@@ -40,6 +42,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 	public JLabel lblNombreCliente;
 	public JLabel lblNombreLegal;
 	public JButtonRP btnCancelar;
+	private JButtonRP btnRefrescar;
 
 	public ListaPrecioClienteView() throws Exception {
 		super();
@@ -153,18 +156,22 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		String[][] dataTabla = { {} };
 
 		tableResultado = new RPTable();
-		// tableResultado.setColToIgnorar(new Integer[] { COL_REGISTRO_FAMILIA });
 		tableResultado.setModel(new DefaultTableModel(dataTabla, headerTabla));
 		tableResultado.setRowHeight(30);
 		tableResultado.setEditable(false);
-		// tableResultado.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMaxWidth(0);
-		// tableResultado.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMinWidth(0);
-		// tableResultado.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setPreferredWidth(0);
 		tableResultado.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		tableResultado.getColumnModel().getColumn(COL_UNIDAD).setCellRenderer(tableResultado.getCenterRender());
+		tableResultado.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO).setCellRenderer(tableResultado.getCenterRender());
 
 		WebScrollPane webScrollPane = new WebScrollPane(tableResultado);
 		getContentPane().add(webScrollPane, BorderLayout.CENTER);
-		
+
+		btnRefrescar = new JButtonRP("Recargar");
+		btnRefrescar.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_RECARGAR), 15, 15));
+		btnRefrescar.setFont(Common.getStandarFont());
+		pnlInferiorBotones.add(btnRefrescar);
+
 		btnCancelar = new JButtonRP("Hacer otra Busqueda");
 		btnCancelar.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_RETORNO)));
 		btnCancelar.setFont(Common.getStandarFont());
@@ -187,7 +194,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnGenerarPDF, ConstantesRP.PantListaPrecio.GENERAR_PDF.toString());
 		asignarBotonAccion(btnExportarExcel, ConstantesRP.PantListaPrecio.GENERAR_EXCEL.toString());
 		asignarBotonAccion(btnCancelar, ConstantesRP.PantListaPrecio.CANCELAR.toString());
-		
+		asignarBotonAccion(btnRefrescar, ConstantesRP.PantListaPrecio.RECARGAR.toString());
 	}
 
 }

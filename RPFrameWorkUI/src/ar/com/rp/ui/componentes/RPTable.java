@@ -2,23 +2,21 @@ package ar.com.rp.ui.componentes;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.FontMetrics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.alee.laf.table.WebTable;
 
@@ -32,18 +30,20 @@ public class RPTable extends WebTable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Integer colToIgnorar[] = null;
-	private RPTableEvent rpTableEvent = null;
+	private Hashtable<Integer, RowColorDTO> listColor = new Hashtable<Integer, RowColorDTO>();
+	private TableColumnAdjuster tableAdjuster;
+	private RPTableEvent smsvTableEvent = null;
+
+	public RPTableEvent getSmsvTableEvent() {
+		return smsvTableEvent;
+	}
+
+	public void setRpTableEvent(RPTableEvent smsvTableEvent) {
+		this.smsvTableEvent = smsvTableEvent;
+	}
 
 	public Integer[] getColToIgnorar() {
 		return colToIgnorar;
-	}
-
-	public RPTableEvent getRpTableEvent() {
-		return rpTableEvent;
-	}
-
-	public void setRpTableEvent(RPTableEvent rpTableEvent) {
-		this.rpTableEvent = rpTableEvent;
 	}
 
 	public void setColToIgnorar(Integer[] colToIgnorar) {
@@ -54,63 +54,95 @@ public class RPTable extends WebTable {
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 		Component c = super.prepareRenderer(renderer, row, column);
 
-		if (row >= 0) {
-			if (getSelectedRow() != row) {
-				if (row % 2 > 0) {
-					c.setBackground(Color.WHITE);
-				} else {
-					c.setBackground(new Color(230, 230, 230));
+		int selRow = this.getSelectedRow();
+		int selCol = this.getSelectedColumn();
+
+		if ((selRow != row) || (getCellSelectionEnabled() && (column != selCol))) {
+			if (row % 2 > 0) {
+				c.setBackground(Color.WHITE);
+			} else {
+				c.setBackground(new Color(230, 230, 230));
+			}
+		}
+
+		// Color
+		int rowModel = convertRowIndexToModel(row);
+		int selRowModel = selRow;
+		if (selRow > -1) {
+			selRowModel = convertRowIndexToModel(selRow);
+		}
+		if (rowModel != selRowModel) {
+			c.setForeground(Color.BLACK); // el setBackground lo estoy seteando con el gris
+			if ((rowModel != selRowModel) || (getCellSelectionEnabled() && (column != selCol))) {
+				RowColorDTO colorToAplly = listColor.get(rowModel);
+				if (colorToAplly != null) {
+					if ((colorToAplly.getColorFondo() != null) && (colorToAplly.getColorFondo()[column] != null)) {
+						c.setBackground(colorToAplly.getColorFondo()[column]);
+					}
+					if ((colorToAplly.getColorLetra() != null) && (colorToAplly.getColorLetra()[column] != null)) {
+						c.setForeground(colorToAplly.getColorLetra()[column]);
+					}
 				}
 			}
 		}
 
 		return c;
+
 	}
 
 	@Override
 	public void setValueAt(Object aValue, int row, int column) {
 		super.setValueAt(aValue, row, column);
-		autoSizeAllColumn();
 	}
 
 	public void addRow(Object[] row) {
 		DefaultTableModel tableModel = (DefaultTableModel) getModel();
 		tableModel.addRow(row);
-		autoSizeAllColumn();
+	}
+
+	public void addRowColor(Object[] row, Color[] colorFondo, Color[] colorLetra) {
+		addRow(row);
+		listColor.put(getRowCount() - 1, new RowColorDTO(colorFondo, colorLetra));
 	}
 
 	public void clear() {
 		DefaultTableModel tableModel = (DefaultTableModel) getModel();
 		tableModel.getDataVector().removeAllElements();
-		repaint();
+		setRowSorter(new TableRowSorter<DefaultTableModel>(tableModel));
+		if (listColor != null) {
+			listColor.clear();
+		}
 	}
 
-	public void autoSizeAllColumn() {
-		JViewport parent = (JViewport) getParent();
-		if (parent != null) {
-			JScrollPane enclosing = (JScrollPane) parent.getParent();
-			int anchoTotal = 0;
+	public void adjustColumns() {
+		int anchoTotal = tableAdjuster.adjustColumns();
 
+		int anchoMax = 0;
+		if (getParent() instanceof JViewport) {
+			anchoMax = (int) ((JViewport) getParent()).getSize().getWidth();
+		}
+
+		ajustarAncho(anchoTotal, anchoMax);
+	}
+
+	private void ajustarAncho(int anchoTotal, int anchoMax) {
+		if (anchoTotal < anchoMax) {
+			int cantCol = getColumnCount() - (colToIgnorar != null ? colToIgnorar.length : 0);
+			int dif = (anchoMax - anchoTotal - cantCol) / cantCol;
 			for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
 				if (!isColToIgnorar(nroColumn)) {
-					anchoTotal += autoSizeAColumn(nroColumn);
-				} else {
-					anchoTotal += getColumnModel().getColumn(nroColumn).getWidth();
-				}
-			}
-
-			if (anchoTotal < enclosing.getWidth()) {
-				int cantCol = getColumnCount() - (colToIgnorar != null ? colToIgnorar.length : 0);
-				int dif = (enclosing.getWidth() - anchoTotal - cantCol) / cantCol;
-				for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
-					if (!isColToIgnorar(nroColumn)) {
-						TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
-						tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + dif);
-						tableColumn.setWidth(tableColumn.getWidth() + dif);
-					}
+					TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
+					tableColumn.setPreferredWidth(tableColumn.getPreferredWidth() + dif);
+					tableColumn.setWidth(tableColumn.getWidth() + dif);
 				}
 			}
 		}
+	}
+
+	public void adjustColumns(int ajustarA) {
+		int anchoTotal = tableAdjuster.adjustColumns();
+
+		ajustarAncho(anchoTotal, ajustarA);
 	}
 
 	private boolean isColToIgnorar(int nroColumn) {
@@ -124,38 +156,8 @@ public class RPTable extends WebTable {
 		return false;
 	}
 
-	public int autoSizeAColumn(Integer nroColumn) {
-		// verifico que la columan que me pasan exista
-		int preferredWidth = 0;
-		if (getColumnModel().getColumnCount() > nroColumn) {
-			setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-			JTableHeader tableHeader = getTableHeader();
-			FontMetrics headerFontMetrics = tableHeader.getFontMetrics(tableHeader.getFont());
-
-			TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
-			preferredWidth = headerFontMetrics.stringWidth(getColumnName(nroColumn)) + getIntercellSpacing().width + 20; // tama�o del header
-
-			int maxWidth = tableColumn.getMaxWidth();
-
-			for (int row = 0; row < getRowCount(); row++) {
-				TableCellRenderer cellRenderer = getCellRenderer(row, nroColumn);
-				Component c = prepareRenderer(cellRenderer, row, nroColumn);
-				int width = c.getPreferredSize().width + getIntercellSpacing().width;
-				preferredWidth = Math.max(preferredWidth, width);
-
-				// We've exceeded the maximum width, no need to check other rows
-				if (preferredWidth >= maxWidth) {
-					preferredWidth = maxWidth;
-					break;
-				}
-			}
-
-			tableColumn.setPreferredWidth(preferredWidth);
-			tableColumn.setWidth(preferredWidth);
-		}
-
-		return preferredWidth;
+	public int adjustColumn(Integer nroColumn) {
+		return tableAdjuster.adjustColumn(nroColumn);
 	}
 
 	public RPTable() {
@@ -167,16 +169,24 @@ public class RPTable extends WebTable {
 		setShowGrid(false);
 		setFont(Common.getStandarFont());
 		getTableHeader().setFont(Common.getStandarFont());
+		tableAdjuster = new TableColumnAdjuster(this);
+		tableAdjuster.setDynamicAdjustment(true);
+		setRowSorter(new TableRowSorter<TableModel>(getModel()));
+		setAutoCreateRowSorter(true);
 		addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent mouseEvent) {
-				if (rpTableEvent != null) {
+				if (smsvTableEvent != null) {
 					RPTable table = (RPTable) mouseEvent.getSource();
 					if ((mouseEvent.getClickCount() == 2) && (table.getSelectedRow() != -1)) {
-						rpTableEvent.doubleClick(table.getSelectedRow(), table.getSelectedColumn());
+						smsvTableEvent.doubleClick(table.getSelectedRow(), table.getSelectedColumn());
 					}
 				}
 			}
 		});
+	}
+
+	public void setDynamicAdjustment(boolean isDynamicAdjustment) {
+		tableAdjuster.setDynamicAdjustment(isDynamicAdjustment);
 	}
 
 	public RPTable(final TableModel dm) {
@@ -199,7 +209,8 @@ public class RPTable extends WebTable {
 		constructorGenerico();
 	}
 
-	public RPTable(@SuppressWarnings("rawtypes") final Vector rowData, @SuppressWarnings("rawtypes") final Vector columnNames) {
+	public RPTable(@SuppressWarnings("rawtypes") final Vector rowData,
+			@SuppressWarnings("rawtypes") final Vector columnNames) {
 		super(rowData, columnNames);
 		constructorGenerico();
 	}
@@ -225,6 +236,15 @@ public class RPTable extends WebTable {
 		DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
 		leftRenderer.setHorizontalAlignment(JLabel.LEFT);
 		return leftRenderer;
+	}
+
+	@Override
+	public void setModel(TableModel dataModel) {
+		setRowSorter(new TableRowSorter<TableModel>(dataModel));
+		super.setModel(dataModel);
+		if (listColor != null) {
+			listColor.clear();
+		}
 	}
 
 }

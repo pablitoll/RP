@@ -9,7 +9,6 @@ import javax.swing.SortOrder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
@@ -34,7 +33,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 				perdioFocoNroLista();
 			}
 		});
-		
+
 		cargarLista();
 	}
 
@@ -63,7 +62,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 		getView().cbNroLista.setEnabled(tieneCli);
 		getView().tableResultado.setEnabled(tieneCli);
 		getView().btnExportarExcel.setEnabled(tieneCli);
-		getView().btnGenerarPDF.setEnabled(tieneCli);
+//		getView().btnGenerarPDF.setEnabled(tieneCli);
 	}
 
 	protected void resetearDatosDePantalla() throws Exception {
@@ -103,38 +102,40 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 
 	@Override
 	public void ejecutarAccion(String accion) {
-		
 
 		if (accion.equals(ConstantesRP.PantListaPrecioXLista.GENERAR_EXCEL.toString())) {
-//			try {
-//				String nombreArchivo = String.format("ListaPrecioLista%s_%s", getModel().getClienteCargado().getClieCliente(),
-//						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
-//
-//				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo);
-//
-//			} catch (Exception e) {
-//				ManejoDeError.showError(e, "Error al exportar");
-//			}
+			try {
+				String nombreArchivo = String.format("ListaPrecioGenerales_%s_%s", getModel().getListaCargada().getVentLipv().getLipvListaPrecvta(),
+						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
+
+				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo);
+
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al exportar");
+			}
 		}
 
 		if (accion.equals(ConstantesRP.PantListaPrecioXLista.GENERAR_PDF.toString())) {
 			try {
-				//TODO FALTA
-				//Reportes.getReporteListaPrecios(getModel().getListaArticulosImpactados());
+				// TODO FALTA
+				// Reportes.getReporteListaPrecios(getModel().getListaArticulosImpactados());
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al generar Reprote");
 			}
 		}
-	}
 
+		if (accion.equals(ConstantesRP.PantListaPrecioXLista.RECARGAR.toString())) {
+			perdioFocoNroLista();
+		}
+	}
 
 	private void cargarProductos(VentLipv lista) {
 		resetearTabla();
-		
+
 		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
-			getView().tableResultado.addRow(new Object[] { stock.getCodArticulo(),  stock.getDescArticulo(), stock.getUnidadArticulo(),
-					stock.getMonedaArticulo(), stock.getPrecioArticulo()});
-		}		
+			getView().tableResultado
+					.addRow(new Object[] { stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(), stock.getPrecioArticulo() });
+		}
 
 		sorterTablaResultado.sort();
 

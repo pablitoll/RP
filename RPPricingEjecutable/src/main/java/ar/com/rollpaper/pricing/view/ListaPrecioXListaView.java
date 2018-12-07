@@ -28,15 +28,19 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final int COL_COD_ARTICULO = 0;
+	private static final int COL_UNIDAD = 2;
+	private static final int COL_MONEDA_ESPECIFICO = 3;
+
 	public RPTable tableResultado;
-	public JButtonRP btnGenerarPDF;
+	//public JButtonRP btnGenerarPDF;
 	public JButtonRP btnExportarExcel;
 	public WebComboBox cbNroLista;
 	public JLabel lblNombreLista;
+	private JButtonRP btnRefrescar;
 
 	public ListaPrecioXListaView() throws Exception {
 		super();
-		setTitle("Lista de Articulos Customizados por Cliente");
+		setTitle("Lista de Precios por Lista");
 
 		JPanel panel = new JPanel();
 		panel.setFocusable(false);
@@ -93,13 +97,21 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 		tableResultado.setEditable(false);
 		tableResultado.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+		tableResultado.getColumnModel().getColumn(COL_UNIDAD).setCellRenderer(tableResultado.getCenterRender());
+		tableResultado.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO).setCellRenderer(tableResultado.getCenterRender());
+
 		WebScrollPane webScrollPane = new WebScrollPane(tableResultado);
 		getContentPane().add(webScrollPane, BorderLayout.CENTER);
 
-		btnGenerarPDF = new JButtonRP("Exportar a PDF");
-		btnGenerarPDF.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_PDF), 15, 15));
-		btnGenerarPDF.setFont(Common.getStandarFont());
-		pnlInferiorBotones.add(btnGenerarPDF);
+		btnRefrescar = new JButtonRP("Recargar");
+		btnRefrescar.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_RECARGAR), 15, 15));
+		btnRefrescar.setFont(Common.getStandarFont());
+		pnlInferiorBotones.add(btnRefrescar);
+
+//		btnGenerarPDF = new JButtonRP("Exportar a PDF");
+//		btnGenerarPDF.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_PDF), 15, 15));
+//		btnGenerarPDF.setFont(Common.getStandarFont());
+//		pnlInferiorBotones.add(btnGenerarPDF);
 
 		btnExportarExcel = new JButtonRP("Exportar a Excel");
 		btnExportarExcel.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_EXCEL), 15, 15));
@@ -110,8 +122,9 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 
 	@Override
 	public void asignarBotonesPantExtendida() {
-		asignarBotonAccion(btnGenerarPDF, ConstantesRP.PantListaPrecioXLista.GENERAR_PDF.toString());
+		//asignarBotonAccion(btnGenerarPDF, ConstantesRP.PantListaPrecioXLista.GENERAR_PDF.toString());
 		asignarBotonAccion(btnExportarExcel, ConstantesRP.PantListaPrecioXLista.GENERAR_EXCEL.toString());
+		asignarBotonAccion(btnRefrescar, ConstantesRP.PantListaPrecioXLista.RECARGAR.toString());
 	}
 
 }

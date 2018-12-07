@@ -6,11 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.beans.SistMone;
+import ar.com.rollpaper.pricing.beans.SistUnim;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentArpc;
 import ar.com.rollpaper.pricing.beans.VentArpv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.dao.SistMoneDAO;
+import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentArpcDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
@@ -86,9 +90,11 @@ public class Reportes {
 		for (VentArpc ventaCustomizada : listaVentaCustomizada) {
 
 			StocArts stock = StocArtsDAO.getArticuloByID(ventaCustomizada.getId().getArpcArticulo());
+			SistUnim unidad = SistUnimDAO.findById(stock.getArtsUnimedStock());
+			SistMone moneda = SistMoneDAO.findById(ventaCustomizada.getArpcMoneda());
 
-			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
-					ventaCustomizada.getArpcMoneda(), Common.double2String(ventaCustomizada.getArpcPrecioVta().doubleValue()));
+			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
+					Common.double2String(ventaCustomizada.getArpcPrecioVta().doubleValue()));
 
 			listaProductos.add(producto);
 		}
@@ -99,9 +105,11 @@ public class Reportes {
 			if (!estaArticuloEnListaCustomizada(listaVentaCustomizada, ventaBase)) {
 
 				StocArts stock = StocArtsDAO.getArticuloByID(ventaBase.getId().getArpvArticulo());
+				SistUnim unidad = SistUnimDAO.findById(stock.getArtsUnimedStock());
+				SistMone moneda = SistMoneDAO.findById(ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo());
 
-				ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), stock.getArtsUnimedDim(),
-						ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo(), Common.double2String(ventaBase.getArpvPrecioVta().doubleValue()));
+				ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(),
+						moneda.getMoneNombre(), Common.double2String(ventaBase.getArpvPrecioVta().doubleValue()));
 
 				listaProductos.add(producto);
 			}

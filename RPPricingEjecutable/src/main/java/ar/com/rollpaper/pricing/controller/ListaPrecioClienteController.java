@@ -39,7 +39,6 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 			public void focusLost(FocusEvent evento) {
 				try {
-
 					if (!getView().txtNroCliente.getText().equals("")) {
 						String id = getView().txtNroCliente.getText();
 
@@ -47,7 +46,6 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 							perdioFocoCliente(Integer.valueOf(id));
 						}
 					}
-
 				} catch (Exception e1) {
 					ManejoDeError.showError(e1, "Error al buscar cliente");
 				}
@@ -185,6 +183,11 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 				ManejoDeError.showError(e, "Error al generar Reprote");
 			}
 		}
+
+		if (accion.equals(ConstantesRP.PantListaPrecio.RECARGAR.toString())) {
+			perdioFocoNroLista();
+		}
+
 	}
 
 	@Override
@@ -230,11 +233,11 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 	private void cargarProductos(CcobClie cliente, VentLipv lista) {
 		resetearTabla();
-		
+
 		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
-			getView().tableResultado.addRow(new Object[] { stock.getCodArticulo(),  stock.getDescArticulo(), stock.getUnidadArticulo(),
-					stock.getMonedaArticulo(), stock.getPrecioArticulo()});
-		}		
+			getView().tableResultado
+					.addRow(new Object[] { stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(), stock.getPrecioArticulo() });
+		}
 
 		sorterTablaResultado.sort();
 
