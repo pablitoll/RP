@@ -30,6 +30,7 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 	public static final int COL_COD_ARTICULO = 0;
 	private static final int COL_UNIDAD = 2;
 	private static final int COL_MONEDA_ESPECIFICO = 3;
+	private static final int COL_PRECIO = 4;
 
 	public RPTable tableResultado;
 	//public JButtonRP btnGenerarPDF;
@@ -99,6 +100,7 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 
 		tableResultado.getColumnModel().getColumn(COL_UNIDAD).setCellRenderer(tableResultado.getCenterRender());
 		tableResultado.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO).setCellRenderer(tableResultado.getCenterRender());
+		tableResultado.getColumnModel().getColumn(COL_PRECIO).setCellRenderer(tableResultado.getRigthRender());
 
 		WebScrollPane webScrollPane = new WebScrollPane(tableResultado);
 		getContentPane().add(webScrollPane, BorderLayout.CENTER);

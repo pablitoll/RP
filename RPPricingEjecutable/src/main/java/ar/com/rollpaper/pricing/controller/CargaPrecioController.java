@@ -485,7 +485,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 					} catch (Exception e) {
 						ManejoDeError.showError(e, "Error al eliminar registro");
 					}
-
 				}
 			}
 		}
@@ -597,7 +596,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		if (!estaEnLista) {
 			colorFondo = rellenarColor(colorFondo, Color.YELLOW);
 		}
-sasa
+
 		tabla.addRowColor(
 				new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
 						registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "",

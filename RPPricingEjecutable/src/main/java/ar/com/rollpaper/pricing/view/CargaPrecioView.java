@@ -308,12 +308,12 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
 
-		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "Comision", "esta en lista",
-				"Referencia", "" };
+		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "Comision", "Referencia",
+				"Esta en Lista", "" };
 		String[][] dataDesEspecifico = { {} };
 
 		tableDescEspecifico = new RPTable();
-		tableDescEspecifico.setColToIgnorar(new Integer[] { COL_DESC_ESPECIFICO, COL_ESTA_EN_LISTA, COL_REGISTRO_ESPECIFICO });
+		tableDescEspecifico.setColToIgnorar(new Integer[] { COL_DESC_ESPECIFICO, COL_REGISTRO_ESPECIFICO });
 
 		tableDescEspecifico.setModel(new DefaultTableModel(dataDesEspecifico, headerDescEspecifico));
 		tableDescEspecifico.setRowHeight(30);
@@ -332,6 +332,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescEspecifico.getColumnModel().getColumn(COL_COMISION_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
 		tableDescEspecifico.getColumnModel().getColumn(COL_DESDE_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
 		tableDescEspecifico.getColumnModel().getColumn(COL_HASTA_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_ESTA_EN_LISTA).setCellRenderer(tableDescEspecifico.getCenterRender());
 
 		tableDescEspecifico.setRpTableEvent(new RPTableEvent() {
 
