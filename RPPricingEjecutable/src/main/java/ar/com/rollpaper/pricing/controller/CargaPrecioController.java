@@ -1,3 +1,4 @@
+//TODO FIX, cuando preciono en terminar, que procese todas las listas del cliente no solo la lista actual.
 package ar.com.rollpaper.pricing.controller;
 
 import java.awt.Color;
@@ -549,6 +550,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				descMoneda = SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre();
 			}
 
+			Boolean estaVigente = estaVigente(registroPedido.getPricFechaDesde(), registroPedido.getPricFechaHasta());
+
 			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "", row,
 					CargaPrecioView.COL_1DESC_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "", row,
@@ -563,6 +566,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			tableActivo.setValueAt(registroPedido.getPricComision() != null ? Common.double2String(registroPedido.getPricComision().doubleValue()) : "", row,
 					CargaPrecioView.COL_COMISION_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_ESPECIFICO);
+
+			tableActivo.setValueAt((estaVigente ? "SI" : "NO"), row, CargaPrecioView.COL_ESTA_VIGENTE);
 			// tableActivo.getModel().setValueAt(registroPedido, row,
 			// CargaPrecioView.COL_REGISTRO_ESPECIFICO);
 		} else {
@@ -593,20 +598,26 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		colorFondo = rellenarColor(colorFondo, null);
 		colorLetra = rellenarColor(colorLetra, null);
 
+		Boolean estaVigente = estaVigente(registro.getPricFechaDesde(), registro.getPricFechaHasta());
+
 		if (!estaEnLista) {
 			colorFondo = rellenarColor(colorFondo, Color.YELLOW);
 		}
 
-		tabla.addRowColor(
-				new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
-						registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "",
-						registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "",
-						registro.getPricMoneda() != null ? SistMoneDAO.findById(registro.getPricMoneda()).getMoneNombre() : "",
-						registro.getPricPrecio() != null ? Common.double2String(registro.getPricPrecio().doubleValue()) : "",
-						registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
-						registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "",
-						Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(), (estaEnLista ? "SI" : "NO"), registro },
+		tabla.addRowColor(new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
+				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "",
+				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "",
+				registro.getPricMoneda() != null ? SistMoneDAO.findById(registro.getPricMoneda()).getMoneNombre() : "",
+				registro.getPricPrecio() != null ? Common.double2String(registro.getPricPrecio().doubleValue()) : "",
+				registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
+				registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "",
+				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(), (estaVigente ? "SI" : "NO"), (estaEnLista ? "SI" : "NO"), registro },
 				colorFondo, colorLetra);
+	}
+
+	private Boolean estaVigente(Date pricFechaDesde, Date pricFechaHasta) {
+		return (FechaManagerUtil.getDateDiff(pricFechaDesde, FechaManagerUtil.getDateTimeFromPC(), TimeUnit.MINUTES) <= 0)
+				&& (FechaManagerUtil.getDateDiff(pricFechaHasta, FechaManagerUtil.getDateTimeFromPC(), TimeUnit.MINUTES) >= 0);
 	}
 
 	private Color[] rellenarColor(Color[] vector, Color color) {
