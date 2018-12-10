@@ -16,8 +16,10 @@ import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
+import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.MaestroEsclavoDAO;
+import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
@@ -98,8 +100,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		}
 	}
 
-	private void agregarRegistro(CcobClie cliente, MaestroEsclavo me) {
-		getView().tableEsclavo.addRow(new Object[] { cliente.getClieCliente(), cliente.getClieNombre(), cliente.getClieNombreLegal(), me });
+	private void agregarRegistro(CcobClie cliEsclavo, MaestroEsclavo meRegistro) {
+		getView().tableEsclavo.addRow(new Object[] { cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre(), cliEsclavo.getClieNombreLegal(), meRegistro });
 	}
 
 	private void agregarRegistro(MaestroEsclavo me) {
@@ -203,6 +205,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		}
 		return retorno;
 	}
+
 	private CcobClie buscarCliente() throws Exception {
 		BuscarClienteDialog buscarClienteDialog = new BuscarClienteDialog(getPantallaPrincipal());
 		buscarClienteDialog.iniciar();
@@ -212,7 +215,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 		return null;
 	}
-	
+
 	private CcobClie buscarClienteEsclavo() throws Exception {
 		BuscarClienteEsclavoDialog buscarClienteEsclavoDialog = new BuscarClienteEsclavoDialog(getPantallaPrincipal(), getView().tableEsclavo);
 		buscarClienteEsclavoDialog.iniciar();
@@ -239,13 +242,20 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.AGREGAR.toString())) {
 			try {
-				CcobClie cliente = buscarClienteEsclavo();
-				if (cliente != null) {
-					MaestroEsclavo maestroEsclavo = new MaestroEsclavo(getModel().getCliente().getClieCliente(), getModel().getListaCliente().getLipvListaPrecvta(),
-							cliente.getClieCliente());
-					agregarRegistro(cliente, maestroEsclavo);
-					HibernateGeneric.persist(maestroEsclavo);
-					getView().tableEsclavo.setSelectedRow(getView().tableEsclavo.getRowCount() - 1);
+				CcobClie cliEsclavo = buscarClienteEsclavo();
+				if (cliEsclavo != null) {
+
+					if (esclavoTieneCargadoItems(cliEsclavo, getModel().getListaCliente().getLipvListaPrecvta())) {
+						Dialog.showMessageDialog(
+								"El cliente seleccionado tiene datos previos. No puede ser usado como esclavo.\nPara poder seguir adelante, antes debe eliminar todos sus precios vigentes e históricos.",
+								"Cliente con datos previos", JOptionPane.ERROR_MESSAGE);
+					} else {
+						MaestroEsclavo maestroEsclavo = new MaestroEsclavo(getModel().getCliente().getClieCliente(), getModel().getListaCliente().getLipvListaPrecvta(),
+								cliEsclavo.getClieCliente());
+						agregarRegistro(cliEsclavo, maestroEsclavo);
+						HibernateGeneric.persist(maestroEsclavo);
+						getView().tableEsclavo.setSelectedRow(getView().tableEsclavo.getRowCount() - 1);
+					}
 				}
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al agregar registro");
@@ -258,20 +268,24 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 						JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 
 					// obtengo el ID del cliente Esclavo
-					int idEsclavo = (int) getView().tableEsclavo.getModel().getValueAt(getView().tableEsclavo.getSelectedRow(), CargaClienteEsclavoView.COL_ID_CLIENTE_ESCLAVO);
-					int idMaestro = Integer.valueOf(getView().txtNroCliente.getText());
-					MaestroEsclavo me = MaestroEsclavoDAO.findByClienteIdEsclavoID(idMaestro, idEsclavo);
-
 					try {
-						HibernateGeneric.remove(me);
+						int row = getView().tableEsclavo.getSelectedRow();
+						int modelRow = getView().tableEsclavo.convertRowIndexToModel(row);
+						
+						getView().tableEsclavo.setRowSorter(null);
+
+						int idEsclavo = (int) getView().tableEsclavo.getValueAt(row, CargaClienteEsclavoView.COL_ID_CLIENTE_ESCLAVO);
+						int idMaestro = Integer.valueOf(getView().txtNroCliente.getText());
+						MaestroEsclavo me = MaestroEsclavoDAO.findByClienteIdEsclavoID(idMaestro, idEsclavo);
 
 						DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
-						dm.removeRow(getView().tableEsclavo.getSelectedRow());
+						dm.removeRow(modelRow);
+
+						HibernateGeneric.remove(me);
 
 					} catch (Exception ex) {
 						ManejoDeError.showError(ex, "Error al borrar");
 					}
-
 				}
 			}
 		}
@@ -308,6 +322,11 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 				ManejoDeError.showError(e, "Error al exportar");
 			}
 		}
+	}
+
+	private boolean esclavoTieneCargadoItems(CcobClie cliEsclavo, int idLista) {
+		return !DescuentoXFamiliasDAO.getListaDescuentoByID(cliEsclavo.getClieCliente(), idLista).isEmpty()
+				|| !PreciosEspecialesDAO.getListaPrecioEspeciaByID(cliEsclavo.getClieCliente(), idLista).isEmpty();
 	}
 
 }

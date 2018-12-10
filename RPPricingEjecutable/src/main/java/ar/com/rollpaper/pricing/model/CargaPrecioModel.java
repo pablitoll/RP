@@ -1,5 +1,6 @@
 package ar.com.rollpaper.pricing.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
@@ -13,6 +14,7 @@ public class CargaPrecioModel extends BaseModel {
 
 	private CcobClie clienteCargado;
 	private ListaDTO listaCargada;
+	private List<ListaDTO> listasCargadas = null;
 
 	public CcobClie getClienteCargado() {
 		return clienteCargado;
@@ -21,6 +23,7 @@ public class CargaPrecioModel extends BaseModel {
 	public void setClienteCargado(CcobClie clienteCargado) {
 		this.clienteCargado = clienteCargado;
 		listaCargada = null;
+		listasCargadas = null;
 	}
 
 	public PreciosEspeciales getRegistroArticuloEmpty() {
@@ -47,7 +50,17 @@ public class CargaPrecioModel extends BaseModel {
 	}
 
 	public List<ListaDTO> getListasToShow() {
-		return ListaBusiness.getListaToShow(getClienteCargado());
+		if(listasCargadas == null) {
+			listasCargadas = ListaBusiness.getListaToShow(getClienteCargado());
+		}
+		return listasCargadas;
+	}
+
+	public void agregarLista(ListaDTO nuevaLista) {
+		if(listaCargada == null) {
+			listasCargadas = new ArrayList<ListaDTO>();
+		}
+		listasCargadas.add(nuevaLista);
 	}
 
 

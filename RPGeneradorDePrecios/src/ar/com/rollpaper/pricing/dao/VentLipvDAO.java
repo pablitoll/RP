@@ -23,8 +23,8 @@ import ar.com.rollpaper.pricing.data.HibernateUtil;
 public class VentLipvDAO {
 
 	private static final Log log = LogFactory.getLog(SistMoneDAO.class);
-//
-//	public void persist(VentLipv transientInstance) {
+
+//	public static void persist(VentLipv transientInstance) {
 //		log.debug("persisting VentLipv instance");
 //		try {
 //			HibernateUtil.getSession().persist(transientInstance);
@@ -57,7 +57,7 @@ public class VentLipvDAO {
 //		}
 //	}
 //
-//	public void delete(VentLipv persistentInstance) {
+//	public static void delete(VentLipv persistentInstance) {
 //		log.debug("deleting VentLipv instance");
 //		try {
 //			HibernateUtil.getSession().delete(persistentInstance);

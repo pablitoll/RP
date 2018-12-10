@@ -1,4 +1,3 @@
-//TODO FIX, cuando preciono en terminar, que procese todas las listas del cliente no solo la lista actual.
 package ar.com.rollpaper.pricing.controller;
 
 import java.awt.Color;
@@ -19,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import com.alee.laf.optionpane.WebOptionPane;
-
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
@@ -33,6 +31,7 @@ import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
+import ar.com.rollpaper.pricing.dao.MaestroEsclavoDAO;
 import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
@@ -110,8 +109,11 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	private void cargarProductos() {
-		resetearTablaFamilia();
-		resetearTablaEspecifico();
+		getView().tableDescFamilia.clear();
+		getView().tableDescEspecifico.clear();
+
+		setFiltros(getView().tableDescFamilia);
+		setFiltros(getView().tableDescEspecifico);
 
 		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(getModel().getClienteCargado().getClieCliente(),
 				getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
@@ -134,9 +136,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	protected void perdioFocoCliente(int id) throws Exception {
+		CcobClie cliente = null;
 		PantPrincipalController.setCursorOcupado();
 		try {
-			CcobClie cliente = CcobClieDAO.findById(Integer.valueOf(id));
+			cliente = CcobClieDAO.findById(Integer.valueOf(id));
 
 			if (cliente != null) {
 				getView().lblNombreCliente.setText(cliente.getClieNombre());
@@ -144,12 +147,22 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				getModel().setClienteCargado(cliente);
 				cargarLista();
 				setModoPantalla();
-
 			} else {
 				resetearDatosDePantalla();
 			}
 		} finally {
 			PantPrincipalController.setRestoreCursor();
+		}
+
+		if (cliente != null) {
+			if (!MaestroEsclavoDAO.getListaEsclavosByCliente(cliente).isEmpty()) {
+				if (Dialog.showConfirmDialog("IMPORTANTE: Este Cliente tiene esclavos.\nTodos lo que cargue impactará también sobre los mismos!. ¿Continuamos?",
+						"Cliente con Esclavos", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.NO_OPTION) {
+
+					getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
+					resetearDatosDePantalla();
+				}
+			}
 		}
 	}
 
@@ -211,18 +224,28 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			getView().cbNroLista.removeAllItems();
 			getView().lblError.setText("");
 
-			resetearTablaEspecifico();
-			resetearTablaFamilia();
+			getView().tableDescFamilia.clear();
+			getView().tableDescEspecifico.clear();
+
+			setFiltros(getView().tableDescFamilia);
+			setFiltros(getView().tableDescEspecifico);
 		}
 
 		setModoPantalla();
 	}
 
-	private void resetearTablaFamilia() {
-		getView().tableDescFamilia.clear();
+	private void setFiltros(RPTable tabla) {
+		if (tabla == getView().tableDescFamilia) {
+			resetearTablaFamilia(tabla);
+		} else {
+			resetearTablaEspecifico(tabla);
+		}
+	}
+
+	private void resetearTablaFamilia(RPTable tabla) {
 		// Le seteo el order
-		sorterTablaDesFamilia = new TableRowSorter<TableModel>(getView().tableDescFamilia.getModel());
-		getView().tableDescFamilia.setRowSorter(sorterTablaDesFamilia);
+		sorterTablaDesFamilia = new TableRowSorter<TableModel>(tabla.getModel());
+		tabla.setRowSorter(sorterTablaDesFamilia);
 		ArrayList<RowSorter.SortKey> sortKeysFamilia = new ArrayList<RowSorter.SortKey>();
 
 		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_FAMILIA, SortOrder.ASCENDING));
@@ -232,12 +255,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 	}
 
-	private void resetearTablaEspecifico() {
-		getView().tableDescEspecifico.clear();
-
+	private void resetearTablaEspecifico(RPTable tabla) {
 		// Le seteo el order
-		sorterTablaDesEspecifico = new TableRowSorter<TableModel>(getView().tableDescEspecifico.getModel());
-		getView().tableDescEspecifico.setRowSorter(sorterTablaDesEspecifico);
+		sorterTablaDesEspecifico = new TableRowSorter<TableModel>(tabla.getModel());
+		tabla.setRowSorter(sorterTablaDesEspecifico);
 		ArrayList<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 
 		sortKeys.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_ESPECIFICO, SortOrder.ASCENDING));
@@ -299,7 +320,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		buscarListaDialog.iniciar();
 		if (buscarListaDialog.getNroLista() != null) {
 			VentLipv lista = buscarListaDialog.getNroLista();
-			ListaDTO nuevaLista = new ListaDTO(lista, (getView().cbNroLista.getItemCount() == 0), false);
+			ListaDTO nuevaLista = new ListaDTO(lista, false, false);
+			getModel().agregarLista(nuevaLista);
 			getView().cbNroLista.addItem(nuevaLista);
 			getView().cbNroLista.setSelectedIndex(getView().cbNroLista.getItemCount() - 1);
 		}
@@ -322,19 +344,21 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString())) {
 			if (Dialog.showConfirmDialog(
-					String.format("�Quiere impactar los precios del cliente %s, para la lista %s?", getModel().getClienteCargado().getClieNombre(),
+					String.format("¿Quiere impactar los precios del cliente %s, para la lista %s?", getModel().getClienteCargado().getClieNombre(),
 							getModel().getListaCargada().getVentLipv().getLipvNombre()),
 					"Impacto de Precios", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
 
 				PantPrincipalController.setCursorOcupado();
 				try {
 					try {
-						GeneradorDePrecios.impactarPrecios(getModel().getClienteCargado(), getModel().getListaCargada().getVentLipv());
+						for (ListaDTO lista : getModel().getListasToShow()) {
+							GeneradorDePrecios.impactarPrecios(getModel().getClienteCargado(), lista.getVentLipv());
+						}
 					} finally {
 						PantPrincipalController.setRestoreCursor();
 					}
 
-					Dialog.showMessageDialog("Se termino de aplicar nuevos precios", "Aplicacion de Precios", JOptionPane.INFORMATION_MESSAGE);
+					Dialog.showMessageDialog("Se termino de aplicar nuevos precios en todas las lista del cliente", "Aplicación de Precios", JOptionPane.INFORMATION_MESSAGE);
 
 					// reseto la pantalla
 					getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
@@ -473,16 +497,22 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			}
 
 			if (tabla.getSelectedRow() >= 0) {
-				if (WebOptionPane.showConfirmDialog(getView(), "�Borramos el registro?", "Eliminacion de registro", JOptionPane.YES_NO_OPTION,
+				if (WebOptionPane.showConfirmDialog(getView(), "¿Borramos el registro?", "Eliminacion de registro", JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 					try {
 						int row = tabla.getSelectedRow();
 						int modelRow = tabla.convertRowIndexToModel(row);
 
-						Object regis = tabla.getValueAt(row, col_registro);
-						DefaultTableModel dm = (DefaultTableModel) tabla.getModel();
-						dm.removeRow(modelRow);
-						HibernateGeneric.remove(regis);
+						tabla.setRowSorter(null);
+						try {
+							Object regis = tabla.getValueAt(row, col_registro);
+							DefaultTableModel dm = (DefaultTableModel) tabla.getModel();
+							dm.removeRow(modelRow);
+							HibernateGeneric.remove(regis);
+
+						} finally {
+							setFiltros(tabla);
+						}
 					} catch (Exception e) {
 						ManejoDeError.showError(e, "Error al eliminar registro");
 					}
@@ -501,9 +531,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		}
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "�Eliminamos la lista?", "Eliminacion de Lista", JOptionPane.YES_NO_OPTION,
+			if (WebOptionPane.showConfirmDialog(getView(), "¿Eliminamos la lista?", "Eliminacion de Lista", JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
-
 				for (int i = 0; i < getView().tableDescFamilia.getRowCount(); i++) {
 					Object regis = getView().tableDescFamilia.getValueAt(i, CargaPrecioView.COL_REGISTRO_FAMILIA);
 					HibernateGeneric.remove(regis);

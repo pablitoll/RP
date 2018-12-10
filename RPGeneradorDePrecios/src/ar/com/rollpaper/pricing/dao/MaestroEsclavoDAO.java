@@ -139,8 +139,7 @@ public class MaestroEsclavoDAO {
 
 		CriteriaQuery<MaestroEsclavo> criteriaQuery = session.getCriteriaBuilder().createQuery(MaestroEsclavo.class);
 		Root<MaestroEsclavo> i = criteriaQuery.from(MaestroEsclavo.class);
-		criteriaQuery.where(cb.equal(i.get("pricMaestroCliente"), clienteID));
-		cb.and(cb.equal(i.get("pricEsclavoCliente"), esclavoID));
+		criteriaQuery.where(cb.and(cb.equal(i.get("pricMaestroCliente"), clienteID),cb.equal(i.get("pricEsclavoCliente"), esclavoID)));
 		List<MaestroEsclavo> esclavos = session.createQuery(criteriaQuery).getResultList();
 
 		return esclavos.get(0);

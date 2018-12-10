@@ -31,9 +31,9 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int COL_DESC = 1;
-	public static final int COL_DESC_LEGAL = 2;
 	public static final int COL_ID_CLIENTE_ESCLAVO = 0;
+	public static final int COL_DESC = 1;
+	public static final int COL_DESC_LEGAL = 2;	
 	public static final int COL_REGISTRO = 3;
 	public RPTable tableEsclavo;
 	public JLabel lblNombreLista;

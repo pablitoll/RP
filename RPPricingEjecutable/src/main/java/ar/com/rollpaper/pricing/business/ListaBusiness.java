@@ -37,16 +37,18 @@ public class ListaBusiness {
 
 	public static List<ListaDTO> getListaToShow(CcobClie clienteCargado) {
 		List<ListaDTO> retorno = new ArrayList<ListaDTO>();
-
+		VentLipv lista;
 		// Busco la lista principal
 		for (VentCliv listaClienteLista : VentClivDAO.getListaPreciosByCliente(clienteCargado)) {
-			VentLipv lista = VentLipvDAO.findById(listaClienteLista.getClivListaPrecvta());
-			retorno.add(new ListaDTO(lista, true, false));
+			if (listaClienteLista.getClivListaPrecvta() != null) {
+				lista = VentLipvDAO.findById(listaClienteLista.getClivListaPrecvta());
+				retorno.add(new ListaDTO(lista, true, false));
+			}
 		}
 
 		// Busco las lista que tenga en las otras tablas
 		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getByCliente(clienteCargado.getClieCliente())) {
-			VentLipv lista = VentLipvDAO.findById(familia.getPricFamiliaListaPrecvta());
+			lista = VentLipvDAO.findById(familia.getPricFamiliaListaPrecvta());
 			if (lista != null) {
 				if (!isInLista(retorno, lista)) {
 					retorno.add(new ListaDTO(lista, false, false));
@@ -55,7 +57,7 @@ public class ListaBusiness {
 		}
 
 		for (PreciosEspeciales especial : PreciosEspecialesDAO.getByCliente(clienteCargado.getClieCliente())) {
-			VentLipv lista = VentLipvDAO.findById(especial.getPricPreciosEspecialesId());
+			lista = VentLipvDAO.findById(especial.getPricListaPrecvta());
 			if (lista != null) {
 				if (!isInLista(retorno, lista)) {
 					retorno.add(new ListaDTO(lista, false, false));
@@ -64,7 +66,7 @@ public class ListaBusiness {
 		}
 
 		for (MaestroEsclavo maestro : MaestroEsclavoDAO.getListaEsclavosByEsclavo(clienteCargado)) {
-			VentLipv lista = VentLipvDAO.findById(maestro.getPricMEListaPrecvta());
+			lista = VentLipvDAO.findById(maestro.getPricMEListaPrecvta());
 			if (lista != null) {
 				if (!isInLista(retorno, lista)) {
 					retorno.add(new ListaDTO(lista, false, true));
