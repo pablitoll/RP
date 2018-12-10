@@ -169,7 +169,11 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 				String nombreArchivo = String.format("ListaPrecioCliente%s_%s", getModel().getClienteCargado().getClieCliente(),
 						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
 
-				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo);
+				Class<?> vectorClases[] = new Class[getView().tableResultado.getModel().getColumnCount()];
+				vectorClases[0] = String.class;
+				vectorClases[1] = String.class;
+
+				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo, vectorClases);
 
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al exportar");
@@ -235,8 +239,8 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 		resetearTabla();
 
 		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
-			getView().tableResultado
-					.addRow(new Object[] { stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(), stock.getPrecioArticulo() });
+			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(),
+					stock.getMonedaArticulo(), stock.getPrecioArticulo() });
 		}
 
 		sorterTablaResultado.sort();

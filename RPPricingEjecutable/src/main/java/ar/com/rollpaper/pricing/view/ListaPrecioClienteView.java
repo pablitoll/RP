@@ -30,10 +30,10 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int COL_COD_ARTICULO = 0;
-	private static final int COL_UNIDAD = 2;
-	private static final int COL_MONEDA_ESPECIFICO = 3;
-	private static final int COL_PRECIO = 4;
+	public static final int COL_COD_ARTICULO = 1;
+	private static final int COL_UNIDAD = 3;
+	private static final int COL_MONEDA_ESPECIFICO = 4;
+	private static final int COL_PRECIO = 5;
 	public RPTable tableResultado;
 	public JButtonRP btnGenerarPDF;
 	public JButtonRP btnExportarExcel;
@@ -153,7 +153,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_label_7.gridy = 1;
 		panel.add(lblNombreLista, gbc_label_7);
 
-		String[] headerTabla = { "Codigo Articulo", "Descripcion", "Unidad", "Moneda", "Precio Venta" };
+		String[] headerTabla = { "Codigo Familia", "Codigo Articulo", "Descripcion", "Unidad", "Moneda", "Precio Venta" };
 		String[][] dataTabla = { {} };
 
 		tableResultado = new RPTable();

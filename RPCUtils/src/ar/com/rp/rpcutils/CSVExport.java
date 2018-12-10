@@ -14,12 +14,12 @@ public class CSVExport {
 
 	private static final char DEFAULT_SEPARATOR = ';';
 
-	public static boolean exportToExcel(JTable tabla, String nombreArchivo) throws Exception {
+	public static boolean exportToExcel(JTable tabla, String nombreArchivo, Class<?>[] vectorClases) throws Exception {
 		// Lo genero
 		FileWriter writer = new FileWriter(generarArchivoCSV(nombreArchivo));
 
 		// Exporto la tabla
-		tablaToCSC(writer, tabla);
+		tablaToCSC(writer, tabla, vectorClases);
 
 		writer.flush();
 		writer.close();
@@ -46,7 +46,7 @@ public class CSVExport {
 		return true;
 	}
 
-	public static void tablaToCSC(FileWriter writer, JTable tabla) throws Exception {
+	public static void tablaToCSC(FileWriter writer, JTable tabla, Class<?>[] vectorClases) throws Exception {
 		DecimalFormatSymbols dfs = new DecimalFormatSymbols();
 
 		List<String> linea = new ArrayList<String>();
@@ -58,10 +58,19 @@ public class CSVExport {
 					Object valor = tabla.getValueAt(i, c);
 					String strValor = "";
 					if (valor != null) {
+						valor.getClass();
 						if (valor instanceof Double) {
 							strValor = CommonUtils.double2String((Double) valor, ".", ",");
 						} else {
-							strValor = valor.toString().replaceAll("(\\r|\\n|\\t)", " ");
+							String separador = "";
+
+							if ((vectorClases != null) && (vectorClases.length > c) && (vectorClases[c] != null)) {
+								if (vectorClases[c] == String.class) {
+									separador = " ";
+								}
+							}
+
+							strValor = separador + valor.toString().replaceAll("(\\r|\\n|\\t)", " ");
 						}
 					}
 

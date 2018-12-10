@@ -52,7 +52,7 @@
 	<detail>
 		<band height="17" splitType="Stretch">
 			<textField>
-				<reportElement x="439" y="0" width="34" height="15" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
+				<reportElement x="421" y="0" width="52" height="15" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{monedaArticulo}]]></textFieldExpression>
 			</textField>
@@ -62,7 +62,7 @@
 				<textFieldExpression><![CDATA[$F{precioArticulo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="439" height="15" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
+				<reportElement x="0" y="0" width="421" height="15" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
 				<textFieldExpression><![CDATA[$F{descArticulo}]]></textFieldExpression>
 			</textField>
 		</band>

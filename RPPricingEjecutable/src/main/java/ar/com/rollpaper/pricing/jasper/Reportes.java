@@ -1,6 +1,7 @@
 package ar.com.rollpaper.pricing.jasper;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,9 @@ public class Reportes {
 
 		// Detalle
 		List<Map<String, ?>> detalleProductos = new ArrayList<>();
+
+		// Lo ordenamos por familia
+		listaPrecioReporte.getListaProductos().sort(Comparator.comparing(ProductoDTO::getFamiliaCod).reversed());
 
 		for (ProductoDTO producto : listaPrecioReporte.getListaProductos()) {
 
@@ -94,8 +98,7 @@ public class Reportes {
 			SistMone moneda = SistMoneDAO.findById(ventaCustomizada.getArpcMoneda());
 
 			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
-					Common.double2String(ventaCustomizada.getArpcPrecioVta().doubleValue()));
-
+					Common.double2String(ventaCustomizada.getArpcPrecioVta().doubleValue()), stock.getArtsClasif1());
 			listaProductos.add(producto);
 		}
 
@@ -109,7 +112,7 @@ public class Reportes {
 				SistMone moneda = SistMoneDAO.findById(ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo());
 
 				ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(),
-						moneda.getMoneNombre(), Common.double2String(ventaBase.getArpvPrecioVta().doubleValue()));
+						moneda.getMoneNombre(), Common.double2String(ventaBase.getArpvPrecioVta().doubleValue()), stock.getArtsClasif1Cad1());
 
 				listaProductos.add(producto);
 			}

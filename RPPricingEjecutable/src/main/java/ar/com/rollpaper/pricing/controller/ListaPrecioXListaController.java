@@ -62,7 +62,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 		getView().cbNroLista.setEnabled(tieneCli);
 		getView().tableResultado.setEnabled(tieneCli);
 		getView().btnExportarExcel.setEnabled(tieneCli);
-//		getView().btnGenerarPDF.setEnabled(tieneCli);
+		// getView().btnGenerarPDF.setEnabled(tieneCli);
 	}
 
 	protected void resetearDatosDePantalla() throws Exception {
@@ -108,7 +108,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 				String nombreArchivo = String.format("ListaPrecioGenerales_%s_%s", getModel().getListaCargada().getVentLipv().getLipvListaPrecvta(),
 						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
 
-				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo);
+				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo, null);
 
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al exportar");

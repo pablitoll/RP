@@ -302,7 +302,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 				String nombreArchivo = String.format("Cliente%s_%s", getModel().getCliente().getClieCliente(),
 						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
 
-				CSVExport.exportToExcel(tableParaExportar, nombreArchivo);
+				CSVExport.exportToExcel(tableParaExportar, nombreArchivo, null);
 
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al exportar");

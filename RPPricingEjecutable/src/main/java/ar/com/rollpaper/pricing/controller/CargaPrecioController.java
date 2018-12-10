@@ -322,7 +322,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString())) {
 			if (Dialog.showConfirmDialog(
-					String.format("¿Quiere impactar los precios del cliente %s, para la lista %s?", getModel().getClienteCargado().getClieNombre(),
+					String.format("ï¿½Quiere impactar los precios del cliente %s, para la lista %s?", getModel().getClienteCargado().getClieNombre(),
 							getModel().getListaCargada().getVentLipv().getLipvNombre()),
 					"Impacto de Precios", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
 
@@ -473,7 +473,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			}
 
 			if (tabla.getSelectedRow() >= 0) {
-				if (WebOptionPane.showConfirmDialog(getView(), "¿Borramos el registro?", "Eliminacion de registro", JOptionPane.YES_NO_OPTION,
+				if (WebOptionPane.showConfirmDialog(getView(), "ï¿½Borramos el registro?", "Eliminacion de registro", JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 					try {
 						int row = tabla.getSelectedRow();
@@ -501,7 +501,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		}
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "¿Eliminamos la lista?", "Eliminacion de Lista", JOptionPane.YES_NO_OPTION,
+			if (WebOptionPane.showConfirmDialog(getView(), "ï¿½Eliminamos la lista?", "Eliminacion de Lista", JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 
 				for (int i = 0; i < getView().tableDescFamilia.getRowCount(); i++) {

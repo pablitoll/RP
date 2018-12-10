@@ -309,7 +309,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
 
-		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripción", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "Comision", "Referencia",
+		String[] headerDescEspecifico = { "Articulo", "Nombre", "DescripciÃ³n", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "Comision", "Referencia",
 				"Esta Vigente", "Esta en Lista", "" };
 		String[][] dataDesEspecifico = { {} };
 
