@@ -280,13 +280,11 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();
-		tableDescFamilia.setColToIgnorar(new Integer[] { COL_REGISTRO_FAMILIA });
 		tableDescFamilia.setModel(new DefaultTableModel(dataDesFamilia, headerDescFamilia));
 		tableDescFamilia.setRowHeight(30);
 		tableDescFamilia.setEditable(false);
-		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMaxWidth(0);
-		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setMinWidth(0);
-		tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA).setPreferredWidth(0);
+		tableDescFamilia.getColumnModel().removeColumn(tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA));
+		
 		tableDescFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		tableDescFamilia.getColumnModel().getColumn(COL_1DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
@@ -320,10 +318,11 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescEspecifico.setRowHeight(30);
 		tableDescEspecifico.setEditable(false);
 
-		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMaxWidth(0);
-		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMinWidth(0);
-		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setPreferredWidth(0);
-		// tableDescEspecifico.getColumnModel().removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
+//		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMaxWidth(0);
+//		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMinWidth(0);
+//		tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setPreferredWidth(0);
+//		
+		tableDescEspecifico.getColumnModel().removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
 
 		tableDescEspecifico.getColumnModel().getColumn(COL_1DESC_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
 		tableDescEspecifico.getColumnModel().getColumn(COL_2DESC_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());

@@ -19,6 +19,7 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
@@ -49,7 +50,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	private JLabel lblNewLabel;
 	private JLabel lblNewLabel_2;
 	private JLabel lblNewLabel_3;
-	public JButtonRP btnCancelar;
+	public JButtonRP btnTerminarCarga;
 	public WebFormattedTextField txtNroCliente;
 	
 
@@ -171,11 +172,11 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "" };
 		String[][] data = { {} };
 
-		btnCancelar = new JButtonRP("Terminar Carga");
-		btnCancelar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/retorno.jpg")));
-		btnCancelar.setFont(Common.getStandarFont());
-		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
-		pnlInferiorBotones.add(btnCancelar);
+		btnTerminarCarga = new JButtonRP("Terminar Carga e Impactar precios");
+		btnTerminarCarga.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_PESOS)));
+		btnTerminarCarga.setFont(Common.getStandarFont());
+		btnTerminarCarga.setMnemonic(KeyEvent.VK_ESCAPE);
+		pnlInferiorBotones.add(btnTerminarCarga);
 
 		btnExpportar = new JButtonRP("Exportar a Excel");
 		btnExpportar.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_EXCEL), 15, 15));
@@ -197,11 +198,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		tableEsclavo.setEditable(false);
 		tableEsclavo.setFont(Common.getStandarFont());
 		tableEsclavo.setRowHeight(30);
-		tableEsclavo.setColToIgnorar(new Integer[] {COL_REGISTRO});
-		tableEsclavo.getColumnModel().getColumn(COL_REGISTRO).setMaxWidth(0);
-		tableEsclavo.getColumnModel().getColumn(COL_REGISTRO).setMinWidth(0);
-		tableEsclavo.getColumnModel().getColumn(COL_REGISTRO).setPreferredWidth(0);
-		tableEsclavo.getColumnModel().getColumn(COL_REGISTRO).setCellRenderer(tableEsclavo.getCenterRender());
+		tableEsclavo.getColumnModel().removeColumn(tableEsclavo.getColumnModel().getColumn(COL_REGISTRO));
 		tableEsclavo.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		pnlCentral.setLayout(new BorderLayout(0, 0));
@@ -244,7 +241,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	public void asignarBotonesPantExtendida() {
 		asignarBotonAccion(btnAgregar, ConstantesRP.PantCarClienteEsclabo.AGREGAR.toString());
 		asignarBotonAccion(btnEliminar, ConstantesRP.PantCarClienteEsclabo.BORRAR.toString());
-		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString());
+		asignarBotonAccion(btnTerminarCarga, ConstantesRP.PantCarClienteEsclabo.TERMINAR_CARGA.toString());
 		asignarBotonAccion(btnExpportar, ConstantesRP.PantCarClienteEsclabo.EXPORTAR.toString());
 		asignarBotonAccion(btnExportarTodo, ConstantesRP.PantCarClienteEsclabo.EXPORTAR_TODO.toString());
 	}

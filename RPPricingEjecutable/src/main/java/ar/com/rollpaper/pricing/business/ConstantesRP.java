@@ -11,7 +11,7 @@ public class ConstantesRP {
 	}
 
 	public enum PantCarClienteEsclabo {
-		AGREGAR, BORRAR, EXPORTAR, EXPORTAR_TODO, CANCELAR
+		AGREGAR, BORRAR, EXPORTAR, EXPORTAR_TODO, TERMINAR_CARGA
 	};
 
 	public enum AccionesCargaItemFamilia {

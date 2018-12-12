@@ -15,6 +15,7 @@ import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
@@ -141,9 +142,9 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		getView().btnAgregar.setEnabled(tieneCli && tieneLista && !getModel().isEsEscalvoEnAlgunaLista());
 		getView().btnEliminar.setEnabled(tieneCli && tieneLista && !getModel().isEsEscalvoEnAlgunaLista());
 
-		getView().btnCancelar.setVisible(tieneCli);
+		getView().btnTerminarCarga.setVisible(tieneCli);
 		getView().btnExpportar.setVisible(tieneCli);
-		getView().btnExportarTodo.setVisible(tieneCli);
+		// getView().btnExportarTodo.setVisible(tieneCli);
 
 		getView().setCerrarVisible(!tieneCli);
 	}
@@ -228,10 +229,20 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 	@Override
 	public void ejecutarAccion(String accion) {
-		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "¿Terminamos la carga Actual?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
+		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.TERMINAR_CARGA.toString())) {
+			if (WebOptionPane.showConfirmDialog(getView(), "¿Terminamos la carga Actual e Impactamos los procesios?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
 					WebOptionPane.QUESTION_MESSAGE) == 0) {
 				try {
+
+					PantPrincipalController.setCursorOcupado();
+					try {
+						GeneradorDePrecios.impactarPrecios(getModel().getCliente(), getModel().getListaCliente());
+					} finally {
+						PantPrincipalController.setRestoreCursor();
+					}
+
+					Dialog.showMessageDialog("Se termino de aplicar los nuevos precios", "Aplicación de Precios", JOptionPane.INFORMATION_MESSAGE);
+
 					getModel().setCliente(null);
 					resetearPantalla();
 				} catch (Exception e) {
@@ -264,14 +275,15 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.BORRAR.toString())) {
 			if (getView().tableEsclavo.getSelectedRow() >= 0) {
-				if (WebOptionPane.showConfirmDialog(getView(), "¿Borramos el registro?", "Eliminacion de registro", JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
+				if (WebOptionPane.showConfirmDialog(getView(),
+						"IMPORTANTE: Si elimina este cliente como esclavo\n se eliminaran todos los precios que hereda de su maestro.\n¿Borramos el registro?",
+						"Eliminacion de registro", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 
 					// obtengo el ID del cliente Esclavo
 					try {
 						int row = getView().tableEsclavo.getSelectedRow();
 						int modelRow = getView().tableEsclavo.convertRowIndexToModel(row);
-						
+
 						getView().tableEsclavo.setRowSorter(null);
 
 						int idEsclavo = (int) getView().tableEsclavo.getValueAt(row, CargaClienteEsclavoView.COL_ID_CLIENTE_ESCLAVO);

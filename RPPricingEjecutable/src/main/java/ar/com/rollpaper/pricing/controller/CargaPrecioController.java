@@ -17,7 +17,9 @@ import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
 import com.alee.laf.optionpane.WebOptionPane;
+
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
@@ -505,7 +507,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 						tabla.setRowSorter(null);
 						try {
-							Object regis = tabla.getValueAt(row, col_registro);
+							Object regis = tabla.getModel().getValueAt(modelRow, col_registro);
 							DefaultTableModel dm = (DefaultTableModel) tabla.getModel();
 							dm.removeRow(modelRow);
 							HibernateGeneric.remove(regis);
