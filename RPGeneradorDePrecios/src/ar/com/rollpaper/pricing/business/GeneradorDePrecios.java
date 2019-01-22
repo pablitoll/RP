@@ -58,9 +58,8 @@ public class GeneradorDePrecios {
 	 * 
 	 **/
 	public static generarListaDePreciosResponse generarListaPreciosPorClienteLista(CcobClie cliente, VentLipv lista) {
-  
-		
-		//int a = 1/0;
+
+		// int a = 1/0;
 		generarListaDePreciosResponse response = new generarListaDePreciosResponse();
 		// Listo los precios para la combinacion cliente lista
 
@@ -69,8 +68,7 @@ public class GeneradorDePrecios {
 		// Agrego los productos que estan fuera de la lista pero customizados
 		// busco todos los productos que estan en la precios especiales(osea que tienen
 		// un precio especifico) y no en la lista
-		List<PreciosEspeciales> listaPreciosEspecialesNoEnLista = PreciosEspecialesDAO.getPreciosByCliente(cliente,
-				lista, new Date());
+		List<PreciosEspeciales> listaPreciosEspecialesNoEnLista = PreciosEspecialesDAO.getPreciosByCliente(cliente, lista, new Date());
 
 		// listo los precios originales
 		System.out.println("Precios Originales " + lista.getLipvNombre() + " Cliente : " + cliente.getClieNombre());
@@ -92,8 +90,7 @@ public class GeneradorDePrecios {
 		// busco las familias que tienen un descuento configurado en la tabla de pricing
 		// para esta relacion Cliente-Lista
 		// TODO : falta filtrar correctamente por fecha!!!!!
-		List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes = DescuentoXFamiliasDAO
-				.getByClienteListaVigente(cliente, lista, hoy);
+		List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes = DescuentoXFamiliasDAO.getByClienteListaVigente(cliente, lista, hoy);
 
 		List<PreciosEspeciales> listaPreciosEspeciales = PreciosEspecialesDAO.getByClienteLista(cliente, lista, hoy);
 		// busco los esclavos de este cliente
@@ -113,15 +110,15 @@ public class GeneradorDePrecios {
 			// por familia
 			if (getPrecioEspecial(listaPreciosEspeciales, articulo).size() > 0) {
 				precio = calcularPreciosEspeciales(listaPreciosEspeciales, articulo, articulo.getArpvPrecioVta());
-				
+
 				// si es un porcentaje no tengo que cambiar la moneda
 				List<PreciosEspeciales> descuento = getPrecioEspecial(listaPreciosEspeciales, articulo);
-				if (descuento.get(0).getPricPrecio()!=null) {
-				
-				SistMone moneda = SistMoneDAO.getByDesc(descuento.get(0).getPricMoneda());
-				articulo.setSistMoneByArpvMoneda(moneda);
+				if (descuento.get(0).getPricPrecio() != null) {
+
+					SistMone moneda = SistMoneDAO.getByDesc(descuento.get(0).getPricMoneda());
+					articulo.setSistMoneByArpvMoneda(moneda);
 				}
-				
+
 			} else {
 				System.out.println("<<<<<<<<<<<<<<<<No Posee Descuentos precio especial>>>>>>>>>>>>>>");
 			}
@@ -133,8 +130,7 @@ public class GeneradorDePrecios {
 			System.out.println("<<<<<<<<<<<<<<<<inicio Descuentos esclavos>>>>>>>>>>>>>>");
 			for (MaestroEsclavo maestroEsclavo : listaMaestroEsclavo) {
 
-				System.out.println("Maestro:" + maestroEsclavo.getPricMaestroCliente() + " Esclavo:"
-						+ maestroEsclavo.getPricEsclavoCliente());
+				System.out.println("Maestro:" + maestroEsclavo.getPricMaestroCliente() + " Esclavo:" + maestroEsclavo.getPricEsclavoCliente());
 
 			}
 			System.out.println("<<<<<<<<<<<<<<<<fin Descuentos esclavos>>>>>>>>>>>>>>");
@@ -182,8 +178,7 @@ public class GeneradorDePrecios {
 	 * @param articulo
 	 * @param precio
 	 */
-	private static BigDecimal calcularPreciosEspeciales(List<PreciosEspeciales> listaPreciosEspeciales,
-			VentArpv articulo, BigDecimal precio) {
+	private static BigDecimal calcularPreciosEspeciales(List<PreciosEspeciales> listaPreciosEspeciales, VentArpv articulo, BigDecimal precio) {
 		// inicio del proceso que calcula el descuento especial para el articulo
 
 		List<PreciosEspeciales> descuentoEspecial = getPrecioEspecial(listaPreciosEspeciales, articulo);
@@ -197,12 +192,10 @@ public class GeneradorDePrecios {
 			BigDecimal descuento2 = descuentoEspecial.get(0).getPricDescuento2();
 			BigDecimal precioEspecifico = descuentoEspecial.get(0).getPricPrecio();
 			if (descuento1 != null) {
-				precioFinal = (precio_original
-						.multiply(BigDecimal.ONE.subtract(descuento1.divide(BigDecimal.valueOf(100.00)))));
+				precioFinal = (precio_original.multiply(BigDecimal.ONE.subtract(descuento1.divide(BigDecimal.valueOf(100.00)))));
 			}
 			if (descuento2 != null) {
-				precioFinal = precioFinal
-						.multiply(BigDecimal.ONE.subtract(descuento2.divide(BigDecimal.valueOf(100.00))));
+				precioFinal = precioFinal.multiply(BigDecimal.ONE.subtract(descuento2.divide(BigDecimal.valueOf(100.00))));
 			}
 			if (precioEspecifico != null) {
 				precioFinal = precioEspecifico;
@@ -210,8 +203,7 @@ public class GeneradorDePrecios {
 		}
 
 		String nombreArticulo = StocArtsDAO.getArticuloByID(articulo.getId().getArpvArticulo()).getArtsNombre();
-		System.out.println("articulo " + nombreArticulo + " Precio Original " + precio_original
-				+ " Precio con descuento especial:" + precioFinal);
+		System.out.println("articulo " + nombreArticulo + " Precio Original " + precio_original + " Precio con descuento especial:" + precioFinal);
 		return precioFinal;
 	}
 
@@ -220,13 +212,11 @@ public class GeneradorDePrecios {
 	 * @param articulo
 	 * @return
 	 */
-	private static List<PreciosEspeciales> getPrecioEspecial(List<PreciosEspeciales> listaPreciosEspeciales,
-			VentArpv articulo) {
-		
-		System.out.print("id articulo->"+articulo.getId().getArpvArticulo());
+	private static List<PreciosEspeciales> getPrecioEspecial(List<PreciosEspeciales> listaPreciosEspeciales, VentArpv articulo) {
+
+		System.out.print("id articulo->" + articulo.getId().getArpvArticulo());
 		// busco en los la tabla de descuentos si tiene algun registro para ese articulo
-		List<PreciosEspeciales> descuentoEspecial = listaPreciosEspeciales.stream()
-				.filter(item -> item.getPricArticulo() == articulo.getId().getArpvArticulo())
+		List<PreciosEspeciales> descuentoEspecial = listaPreciosEspeciales.stream().filter(item -> item.getPricArticulo() == articulo.getId().getArpvArticulo())
 				.collect(Collectors.toList());
 		return descuentoEspecial;
 	}
@@ -236,16 +226,13 @@ public class GeneradorDePrecios {
 	 * @param v
 	 */
 
-	private static BigDecimal calcularDescuentosXFamilia(List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes,
-			VentArpv v) {
+	private static BigDecimal calcularDescuentosXFamilia(List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes, VentArpv v) {
 		// obtengo la familia de cada articulo (ArtsClasif1)
 		StocArts articulo = StocArtsDAO.getArticuloByID(v.getId().getArpvArticulo());
-		System.out.println("Articulo 1 :  " + articulo.getArtsArticuloEmp() + "-" + v.getId().getArpvArticulo()
-				+ " familia ->" + articulo.getArtsClasif1());
+		System.out.println("Articulo 1 :  " + articulo.getArtsArticuloEmp() + "-" + v.getId().getArpvArticulo() + " familia ->" + articulo.getArtsClasif1());
 
 		// busco en la tabla de descuentos
-		List<DescuentoXFamilias> DescuentoxFamiliaAAplicar = listaDescuentosXFamiliaVigentes.stream()
-				.filter(item -> item.getPricCa01Clasif1().equals(articulo.getArtsClasif1()))
+		List<DescuentoXFamilias> DescuentoxFamiliaAAplicar = listaDescuentosXFamiliaVigentes.stream().filter(item -> item.getPricCa01Clasif1().equals(articulo.getArtsClasif1()))
 				.collect(Collectors.toList());
 
 		// si hay algo en la DescuentoxFamiliaAAplicar debo aplicarse ese descuento al
@@ -259,17 +246,14 @@ public class GeneradorDePrecios {
 
 			BigDecimal descuento1 = DescuentoxFamiliaAAplicar.get(0).getPricFamiliaDescuento1();
 			BigDecimal descuento2 = DescuentoxFamiliaAAplicar.get(0).getPricFamiliaDescuento2();
-			precioFinal = (precio_original
-					.multiply(BigDecimal.ONE.subtract(descuento1.divide(BigDecimal.valueOf(100.00)))));
+			precioFinal = (precio_original.multiply(BigDecimal.ONE.subtract(descuento1.divide(BigDecimal.valueOf(100.00)))));
 			if (descuento2 != null) {
-				precioFinal = precioFinal
-						.multiply(BigDecimal.ONE.subtract(descuento2.divide(BigDecimal.valueOf(100.00))));
+				precioFinal = precioFinal.multiply(BigDecimal.ONE.subtract(descuento2.divide(BigDecimal.valueOf(100.00))));
 			}
 
 		}
 
-		System.out.println("articulo " + articulo.getArtsNombre() + " Precio Original " + precio_original
-				+ " Precio con descuento x familia:" + precioFinal);
+		System.out.println("articulo " + articulo.getArtsNombre() + " Precio Original " + precio_original + " Precio con descuento x familia:" + precioFinal);
 		return precioFinal;
 	}
 
@@ -302,8 +286,7 @@ public class GeneradorDePrecios {
 	}
 
 	public static void impactarPrecios(CcobClie clienteCargado, VentLipv listaCargada) {
-		generarListaDePreciosResponse response = GeneradorDePrecios.generarListaPreciosPorClienteLista(clienteCargado,
-				listaCargada);
+		generarListaDePreciosResponse response = GeneradorDePrecios.generarListaPreciosPorClienteLista(clienteCargado, listaCargada);
 
 		CcobClie c = clienteCargado;
 
@@ -315,10 +298,8 @@ public class GeneradorDePrecios {
 			VentArpv articulo = entry.getKey();
 			BigDecimal precio = entry.getValue();
 			// creo el registro a insertar
-			VentArpcId id = new VentArpcId(articulo.getId().getArpvArticulo(), articulo.getId().getArpvListaPrecvta(),
-					c.getClieCliente());
-			VentArpc registro = new VentArpc(id, c, precio, articulo.getSistMoneByArpvMoneda().getMoneMoneda(), precio,
-					new Date());
+			VentArpcId id = new VentArpcId(articulo.getId().getArpvArticulo(), articulo.getId().getArpvListaPrecvta(), c.getClieCliente());
+			VentArpc registro = new VentArpc(id, c, precio, articulo.getSistMoneByArpvMoneda().getMoneMoneda(), precio, new Date());
 			listaAInsertar.add(registro);
 
 		}
@@ -331,17 +312,17 @@ public class GeneradorDePrecios {
 				VentArpv articulo = entry.getKey();
 				BigDecimal precio = entry.getValue();
 				// creo el registro a insertar
-				VentArpcId id = new VentArpcId(articulo.getId().getArpvArticulo(),
-						articulo.getId().getArpvListaPrecvta(), slave.getPricEsclavoCliente());
-				VentArpc registro = new VentArpc(id, c, precio, articulo.getSistMoneByArpvMoneda().getMoneMoneda(),
-						precio, new Date());
+				VentArpcId id = new VentArpcId(articulo.getId().getArpvArticulo(), articulo.getId().getArpvListaPrecvta(), slave.getPricEsclavoCliente());
+				VentArpc registro = new VentArpc(id, c, precio, articulo.getSistMoneByArpvMoneda().getMoneMoneda(), precio, new Date());
 				listaAInsertar.add(registro);
 
 			}
 		}
+		VentArpc ventArpc_ant = null;
 
 		try {
 			for (VentArpc ventArpc : listaAInsertar) {
+				ventArpc_ant = ventArpc;
 				HibernateGeneric.persist(ventArpc);
 			}
 			HibernateUtil.getSession().clear();
@@ -349,6 +330,7 @@ public class GeneradorDePrecios {
 			// .showMessageDialog("ERROR en la aplicacion de precios", "Aplicacion de
 			// Precios",
 			// JOptionPane.ERROR_MESSAGE);
+			System.out.println(ventArpc_ant);
 			e.printStackTrace();
 			throw (e);
 		}

@@ -121,6 +121,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		lblEstaEnLista = new WebLabel("lblEstaEnLista");
 		lblEstaEnLista.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblLblestaenlista = new GridBagConstraints();
+		gbc_lblLblestaenlista.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblLblestaenlista.insets = new Insets(0, 0, 5, 0);
 		gbc_lblLblestaenlista.gridx = 3;
 		gbc_lblLblestaenlista.gridy = 1;

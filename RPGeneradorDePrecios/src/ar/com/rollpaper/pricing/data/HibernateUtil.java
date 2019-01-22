@@ -16,16 +16,15 @@ public class HibernateUtil {
 	private static Session session;
 
 	public static Session getSession() {
-		if(session == null) {
+		if (session == null) {
 			session = getSessionFactory().openSession();
 		}
-		
+
 		return session;
 	}
 
 	public static SessionFactory getSessionFactory() {
-		
-		
+
 		if (sessionFactory == null) {
 			try {
 				// Create registry
@@ -55,5 +54,5 @@ public class HibernateUtil {
 			StandardServiceRegistryBuilder.destroy(registry);
 		}
 	}
-	
+
 }
