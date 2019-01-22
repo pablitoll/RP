@@ -15,7 +15,6 @@ public class HibernateGeneric {
 		Session session = HibernateUtil.getSession();
 		session.beginTransaction();
 		try {
-			session.flush(); //TODO ACA toque
 			session.persist(transientInstance);
 			session.flush();
 			session.getTransaction().commit();
@@ -66,6 +65,7 @@ public class HibernateGeneric {
 		try {
 			session.delete(transientInstance);
 			session.flush();
+			session.clear();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			try {
