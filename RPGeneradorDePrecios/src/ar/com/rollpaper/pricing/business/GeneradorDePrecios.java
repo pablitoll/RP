@@ -61,8 +61,8 @@ public class GeneradorDePrecios {
 
 		// int a = 1/0;
 		generarListaDePreciosResponse response = new generarListaDePreciosResponse();
+		
 		// Listo los precios para la combinacion cliente lista
-
 		List<VentArpv> listaPrecios = VentArpvDAO.findByListaID(lista.getLipvListaPrecvta());
 
 		// Agrego los productos que estan fuera de la lista pero customizados
@@ -79,6 +79,7 @@ public class GeneradorDePrecios {
 		for (VentArpv v : listaPrecios) {
 			System.out.println("Articulo: " + v.getId().getArpvArticulo() + " Precio ->" + v.getArpvPrecioVta());
 		}
+		System.out.println("Precios Originales NO EN LISTA" + " Cliente : " + cliente.getClieNombre());
 
 		for (PreciosEspeciales pe : listaPreciosEspecialesNoEnLista) {
 			System.out.println("Articulo: " + pe.getPricArticulo() + " Precio ->" + pe.getPricPrecio());
@@ -89,7 +90,6 @@ public class GeneradorDePrecios {
 		// aplico los descuentos por familia
 		// busco las familias que tienen un descuento configurado en la tabla de pricing
 		// para esta relacion Cliente-Lista
-		// TODO : falta filtrar correctamente por fecha!!!!!
 		List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes = DescuentoXFamiliasDAO.getByClienteListaVigente(cliente, lista, hoy);
 
 		List<PreciosEspeciales> listaPreciosEspeciales = PreciosEspecialesDAO.getByClienteLista(cliente, lista, hoy);

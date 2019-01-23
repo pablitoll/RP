@@ -115,25 +115,12 @@ public class PreciosEspecialesDAO {
 		}
 	}
 
-	// public static List findByExample(PreciosEspeciales instance) {
-	// log.debug("finding PricPreciosEspeciales instance by example");
-	// Session session = HibernateUtil.getSession();
-	// try {
-	// List results =
-	// session.createCriteria("ar.com.rollpaper.pricing.beans.PricPreciosEspeciales").add(Example.create(instance)).list();
-	// log.debug("find by example successful, result size: " + results.size());
-	// return results;
-	// } catch (RuntimeException re) {
-	// log.error("find by example failed", re);
-	// throw re;
-	// }
-	// }
-
 	public static List<PreciosEspeciales> getListaPrecioEspeciaByID(Integer pricCliente, Integer nroLista) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 
-		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder().createQuery(PreciosEspeciales.class);
+		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder()
+				.createQuery(PreciosEspeciales.class);
 		Root<PreciosEspeciales> i = criteriaQuery.from(PreciosEspeciales.class);
 		criteriaQuery.where(cb.equal(i.get("pricCliente"), pricCliente), cb.equal(i.get("pricListaPrecvta"), nroLista));
 
@@ -146,7 +133,8 @@ public class PreciosEspecialesDAO {
 	public static List<PreciosEspeciales> getByCliente(int clieCliente) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
-		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder().createQuery(PreciosEspeciales.class);
+		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder()
+				.createQuery(PreciosEspeciales.class);
 		Root<PreciosEspeciales> i = criteriaQuery.from(PreciosEspeciales.class);
 		criteriaQuery.where(cb.equal(i.get("pricCliente"), clieCliente));
 		List<PreciosEspeciales> clientes = session.createQuery(criteriaQuery).getResultList();
@@ -154,26 +142,38 @@ public class PreciosEspecialesDAO {
 	}
 
 	public static List<PreciosEspeciales> getByClienteLista(CcobClie cliente, VentLipv lista, java.util.Date hoy) {
-			return getListaPrecioEspeciaByID(cliente.getClieCliente(),lista.getLipvListaPrecvta());
+
+		List<PreciosEspeciales> listaPreciosVigentes = new ArrayList<>();
+		List<PreciosEspeciales> listaPrecios = getListaPrecioEspeciaByID(cliente.getClieCliente(),
+				lista.getLipvListaPrecvta());
+		for (PreciosEspeciales preciosEspeciales : listaPrecios) {
+			if (preciosEspeciales.isvigente(hoy)) {
+				listaPreciosVigentes.add(preciosEspeciales);
+			}
+		}
+
+		return listaPreciosVigentes;
 	}
 
-	// este metodo me devuelve los precios especiales de los articulos que no estan en la lista que 
+	// este metodo me devuelve los precios especiales de los articulos que no estan
+	// en la lista que
 	// recibo como parametro
 	public static List<PreciosEspeciales> getPreciosByCliente(CcobClie cliente, VentLipv lista, Date fechaVigencia) {
 		// traigo todos los precios especiales para este cliente
-		List<PreciosEspeciales> ListaPreciosEspeciales = getListaPrecioEspeciaByID(cliente.getClieCliente(),lista.getLipvListaPrecvta());
-		List<PreciosEspeciales> ListaPreciosEspecialesNoEnLista =  new ArrayList<>();		
+		List<PreciosEspeciales> ListaPreciosEspeciales = getListaPrecioEspeciaByID(cliente.getClieCliente(),
+				lista.getLipvListaPrecvta());
+		List<PreciosEspeciales> ListaPreciosEspecialesNoEnLista = new ArrayList<>();
 		for (PreciosEspeciales pe : ListaPreciosEspeciales) {
-				if(pe.isvigente(fechaVigencia)) {
-				VentArpvId x= new VentArpvId(pe.getPricArticulo(),lista.getLipvListaPrecvta());
-				VentArpv y= VentArpvDAO.findById(x);
-				if(y ==null) {				
-					//if (y.getArpvListaPrecvta()==lista.getLipvListaPrecvta())
-					ListaPreciosEspecialesNoEnLista.add(pe);					
+			if (pe.isvigente(fechaVigencia)) {
+				VentArpvId x = new VentArpvId(pe.getPricArticulo(), lista.getLipvListaPrecvta());
+				VentArpv y = VentArpvDAO.findById(x);
+				if (y == null) {
+					// if (y.getArpvListaPrecvta()==lista.getLipvListaPrecvta())
+					ListaPreciosEspecialesNoEnLista.add(pe);
 				}
-				}
+			}
 		}
-		
+
 		return ListaPreciosEspecialesNoEnLista;
 	}
 
