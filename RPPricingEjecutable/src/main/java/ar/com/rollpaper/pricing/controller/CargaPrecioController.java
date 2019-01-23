@@ -54,7 +54,6 @@ import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
-import ar.com.rp.ui.componentes.RPImporte;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
@@ -141,31 +140,34 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	}
 
 	protected void perdioFocoCliente(int id) throws Exception {
-		CcobClie cliente = null;
-		PantPrincipalController.setCursorOcupado();
-		try {
-			cliente = CcobClieDAO.findById(Integer.valueOf(id));
+		if ((getModel().getClienteCargado() == null) || (getModel().getClienteCargado().getClieCliente() != id)) {
+
+			CcobClie cliente = null;
+			PantPrincipalController.setCursorOcupado();
+			try {
+				cliente = CcobClieDAO.findById(Integer.valueOf(id));
+
+				if (cliente != null) {
+					getView().lblNombreCliente.setText(cliente.getClieNombre());
+					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+					getModel().setClienteCargado(cliente);
+					cargarLista();
+					setModoPantalla();
+				} else {
+					resetearDatosDePantalla();
+				}
+			} finally {
+				PantPrincipalController.setRestoreCursor();
+			}
 
 			if (cliente != null) {
-				getView().lblNombreCliente.setText(cliente.getClieNombre());
-				getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-				getModel().setClienteCargado(cliente);
-				cargarLista();
-				setModoPantalla();
-			} else {
-				resetearDatosDePantalla();
-			}
-		} finally {
-			PantPrincipalController.setRestoreCursor();
-		}
+				if (!MaestroEsclavoDAO.getListaEsclavosByCliente(cliente).isEmpty()) {
+					if (Dialog.showConfirmDialog("IMPORTANTE: Este Cliente tiene esclavos.\nTodos lo que cargue impactará también sobre los mismos!. ¿Continuamos?",
+							"Cliente con Esclavos", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.NO_OPTION) {
 
-		if (cliente != null) {
-			if (!MaestroEsclavoDAO.getListaEsclavosByCliente(cliente).isEmpty()) {
-				if (Dialog.showConfirmDialog("IMPORTANTE: Este Cliente tiene esclavos.\nTodos lo que cargue impactará también sobre los mismos!. ¿Continuamos?",
-						"Cliente con Esclavos", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.NO_OPTION) {
-
-					getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
-					resetearDatosDePantalla();
+						getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
+						resetearDatosDePantalla();
+					}
 				}
 			}
 		}
@@ -348,10 +350,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	public void ejecutarAccion(String accion) {
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString())) {
-			if (Dialog.showConfirmDialog(
-					String.format("¿Quiere impactar los precios del cliente %s, para la lista %s?", getModel().getClienteCargado().getClieNombre(),
-							getModel().getListaCargada().getVentLipv().getLipvNombre()),
-					"Impacto de Precios", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+			if (Dialog.showConfirmDialog(String.format("¿Quiere impactar los precios del cliente %s?", getModel().getClienteCargado().getClieNombre()), "Impacto de Precios",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
 
 				PantPrincipalController.setCursorOcupado();
 				try {

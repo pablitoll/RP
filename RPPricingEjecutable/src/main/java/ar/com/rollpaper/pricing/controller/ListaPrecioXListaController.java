@@ -14,6 +14,7 @@ import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.jasper.ProductoDTO;
+import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rollpaper.pricing.model.ListaPrecioXListaModel;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
@@ -118,8 +119,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 
 		if (accion.equals(ConstantesRP.PantListaPrecioXLista.GENERAR_PDF.toString())) {
 			try {
-				// TODO FALTA
-				// Reportes.getReporteListaPrecios(getModel().getListaArticulosImpactados());
+				Reportes.getReporteListaPreciosOriginales(getModel().getListaArticulosImpactados());
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al generar Reprote");
 			}

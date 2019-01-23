@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="554" pageHeight="842" columnWidth="554" leftMargin="0" rightMargin="0" topMargin="20" bottomMargin="20" uuid="49e54468-441e-45e9-9d53-dc14e70b3085">
 	<property name="ireport.zoom" value="1.610510000000001"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="13"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -52,7 +52,7 @@
 	<detail>
 		<band height="17" splitType="Stretch">
 			<textField>
-				<reportElement x="421" y="0" width="52" height="15" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
+				<reportElement x="369" y="0" width="104" height="15" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{monedaArticulo}]]></textFieldExpression>
 			</textField>
@@ -62,7 +62,7 @@
 				<textFieldExpression><![CDATA[$F{precioArticulo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="421" height="15" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
+				<reportElement x="0" y="0" width="369" height="15" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
 				<textFieldExpression><![CDATA[$F{descArticulo}]]></textFieldExpression>
 			</textField>
 		</band>

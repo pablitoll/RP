@@ -80,7 +80,6 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		}
 
 		if (accion.equals(ConstantesRP.Acciones.LISTA_PRECIO_GENERALES.toString())) {
-			// TODO IMPLEMENTAR
 			if (!cmGestordeVentanas.isAlreadyCreated(ListaPrecioXListaController.class.getName())) {
 				try {
 					ListaPrecioXListaView vista = new ListaPrecioXListaView();

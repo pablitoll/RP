@@ -37,6 +37,8 @@ import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincipalController, CargaClienteEsclavoView, CargaClienteEsclavoModel> {
 
+	private boolean procesandoCliente = false;
+
 	public CargaClienteEsclavoController(PantPrincipalController pantPrincipal, CargaClienteEsclavoView view, CargaClienteEsclavoModel model) throws Exception {
 		super(pantPrincipal, view, model, null);
 
@@ -52,47 +54,64 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 	}
 
 	protected void perdioFocoCliente() throws Exception {
-		PantPrincipalController.setCursorOcupado();
+
+		String msgError = "";
+		procesandoCliente = true;
 		try {
+			PantPrincipalController.setCursorOcupado();
 
-			CcobClie cliente = null;
-			getModel().setEsEscalvoEnAlgunaLista(false);
+			try {
 
-			if (!getView().txtNroCliente.getText().equals("")) {
-				String id = getView().txtNroCliente.getText();
-				if (CommonUtils.isNumeric(id)) {
-					cliente = CcobClieDAO.findById(Integer.valueOf(id));
+				CcobClie cliente = null;
+
+				if (!getView().txtNroCliente.getText().equals("")) {
+					String id = getView().txtNroCliente.getText();
+					if (CommonUtils.isNumeric(id)) {
+						cliente = CcobClieDAO.findById(Integer.valueOf(id));
+					}
+
+					if (cliente != null) {
+						if ((getModel().getCliente() == null) || (cliente.getClieCliente() != getModel().getCliente().getClieCliente())) {
+							getModel().setCliente(cliente);
+							getView().lblNombreCliente.setText(cliente.getClieNombre());
+							getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+
+							cargarListaPrecios(cliente);
+							// cargo los esclavos de ese cliente
+							cargarEsclavos(cliente);
+
+							List<MaestroEsclavo> listaMaestroEsclavo = MaestroEsclavoDAO.getListaEsclavosByEsclavo(cliente);
+							if (listaMaestroEsclavo.size() > 0) {
+								String maestro = "(" + listaMaestroEsclavo.get(0).getPricMaestroCliente() + ") "
+										+ CcobClieDAO.findById(Integer.valueOf(listaMaestroEsclavo.get(0).getPricMaestroCliente())).getClieNombre();
+								msgError = "No se puede usar este cliente porque ya es Esclavo de " + maestro;
+							}
+
+							if (getModel().getListaCliente() == null) {
+								msgError = "No se puede usar este cliente porque no tiene Listas Asociadas";
+							}
+						}
+					} else {
+						msgError = "No existe el Cliente Ingresado";
+					}
+				} else {
+					getModel().setCliente(null);
+					limpiarPantalla();
 				}
+			} finally {
+				PantPrincipalController.setRestoreCursor();
 			}
 
-			if (cliente != null) {
-				if ((getModel().getCliente() == null) || (cliente.getClieCliente() != getModel().getCliente().getClieCliente())) {
-					getModel().setCliente(cliente);
-					getView().lblNombreCliente.setText(cliente.getClieNombre());
-					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-
-					cargarListaPrecios(cliente);
-					// cargo los esclavos de ese cliente
-					cargarEsclavos(cliente);
-
-					List<MaestroEsclavo> listaMaestroEsclavo = MaestroEsclavoDAO.getListaEsclavosByEsclavo(cliente);
-					if (listaMaestroEsclavo.size() > 0) {
-						String maestro = "(" + listaMaestroEsclavo.get(0).getPricMaestroCliente() + ") "
-								+ CcobClieDAO.findById(Integer.valueOf(listaMaestroEsclavo.get(0).getPricMaestroCliente())).getClieNombre();
-						Dialog.showMessageDialog("No se puede usar este cliente porque ya es escalvo de " + maestro);
-						getModel().setEsEscalvoEnAlgunaLista(true);
-					}
-				}
-			} else {
+			if (!msgError.equals("")) {
+				Dialog.showMessageDialog(msgError, "Carga de Clientes Esclavos", JOptionPane.ERROR_MESSAGE);
 				getModel().setCliente(null);
 				limpiarPantalla();
 			}
-
 			setModoPantalla();
-
 		} finally {
-			PantPrincipalController.setRestoreCursor();
+			procesandoCliente = false;
 		}
+
 	}
 
 	private void cargarEsclavos(CcobClie cliente) throws Exception {
@@ -137,11 +156,11 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		Boolean tieneCli = getModel().getCliente() != null;
 		Boolean tieneLista = getModel().getListaCliente() != null;
 
-		getView().txtNroCliente.setEnabled(!tieneCli || getModel().isEsEscalvoEnAlgunaLista());
+		getView().txtNroCliente.setEnabled(!tieneCli);
 
 		getView().tableEsclavo.setEnabled(tieneCli);
-		getView().btnAgregar.setEnabled(tieneCli && tieneLista && !getModel().isEsEscalvoEnAlgunaLista());
-		getView().btnEliminar.setEnabled(tieneCli && tieneLista && !getModel().isEsEscalvoEnAlgunaLista());
+		getView().btnAgregar.setEnabled(tieneCli && tieneLista);
+		getView().btnEliminar.setEnabled(tieneCli && tieneLista);
 
 		getView().btnTerminarCarga.setVisible(tieneCli);
 		getView().btnExpportar.setVisible(tieneCli);
@@ -158,7 +177,6 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 	@Override
 	protected void resetearPantalla() throws Exception {
 		if (getModel().getCliente() == null) {
-			getView().txtNroCliente.clear();
 			limpiarPantalla();
 		}
 	}
@@ -171,8 +189,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		getView().lblNombreLegal.setText("S/D");
 		getView().lblNombreCliente.setText("S/D");
 
-		getModel().setCliente(null);
-		getView().txtNroCliente.requestFocus();
+		getView().txtNroCliente.clear();
 		getView().tableEsclavo.clear();
 		setModoPantalla();
 	}

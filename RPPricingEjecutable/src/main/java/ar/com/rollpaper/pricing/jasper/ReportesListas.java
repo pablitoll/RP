@@ -8,12 +8,12 @@ import ar.com.rollpaper.pricing.beans.SistUnim;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentArpv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
 import ar.com.rp.rpcutils.FechaManagerUtil;
-import ar.com.rp.ui.common.Common;
 
 public class ReportesListas {
 
@@ -84,7 +84,7 @@ public class ReportesListas {
 			SistMone moneda = SistMoneDAO.findById(ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo());
 
 			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
-					Common.double2String(ventaBase.getArpvPrecioVta().doubleValue()), stock.getArtsClasif1());
+					CommonPricing.formatearImporte(ventaBase.getArpvPrecioVta().doubleValue()), stock.getArtsClasif1());
 
 			listaProductos.add(producto);
 		}

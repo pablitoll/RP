@@ -8,7 +8,6 @@ public class CargaClienteEsclavoModel extends BaseModel {
 
 	private CcobClie cliente;
 	private VentLipv listaCliente;
-	private boolean setEsEscalvoEnAlgunaLista = false;
 
 	public CcobClie getCliente() {
 		return cliente;
@@ -26,13 +25,4 @@ public class CargaClienteEsclavoModel extends BaseModel {
 	public VentLipv getListaCliente() {
 		return listaCliente;
 	}
-
-	public void setEsEscalvoEnAlgunaLista(boolean esEscalvoEnAlgunaLista) {
-		this.setEsEscalvoEnAlgunaLista = esEscalvoEnAlgunaLista;
-	}
-
-	public boolean isEsEscalvoEnAlgunaLista() {
-		return setEsEscalvoEnAlgunaLista;
-	}
-
 }

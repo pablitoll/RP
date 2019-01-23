@@ -43,6 +43,7 @@ public class ConstantesRP {
 	public static String IMG_PDF = "images/descargaPDF.png";
 	public static String IMG_RECARGAR = "images/reload.jpg";
 
+	public static String REPO_LISTA_PRECIO_ORIGINAL = "/reporte/reportOriginal.jasper";
 	public static String REPO_LISTA_PRECIO = "/reporte/report1.jasper";
-	public static String REPO_LISTA_PRECIO_DETALLE = "/reporte/";// "/reporte/detalle.jasper";
+	public static String REPO_LISTA_PRECIO_DETALLE = "/reporte/";
 }

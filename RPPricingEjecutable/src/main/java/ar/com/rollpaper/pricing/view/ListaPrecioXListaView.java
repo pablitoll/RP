@@ -20,7 +20,6 @@ import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
-import java.awt.Font;
 
 public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 
@@ -35,7 +34,7 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 	private static final int COL_PRECIO = 4;
 
 	public RPTable tableResultado;
-	// public JButtonRP btnGenerarPDF;
+	public JButtonRP btnGenerarPDF;
 	public JButtonRP btnExportarExcel;
 	public WebComboBox cbNroLista;
 	public JLabel lblNombreLista;
@@ -123,11 +122,10 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 		btnRefrescar.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnRefrescar);
 
-		// btnGenerarPDF = new JButtonRP("Exportar a PDF");
-		// btnGenerarPDF.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_PDF),
-		// 15, 15));
-		// btnGenerarPDF.setFont(Common.getStandarFont());
-		// pnlInferiorBotones.add(btnGenerarPDF);
+		btnGenerarPDF = new JButtonRP("Exportar a PDF");
+		btnGenerarPDF.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_PDF, 15, 15));
+		btnGenerarPDF.setFont(Common.getStandarFont());
+		pnlInferiorBotones.add(btnGenerarPDF);
 
 		btnExportarExcel = new JButtonRP("Exportar a Excel");
 		btnExportarExcel.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_EXCEL, 15, 15));
@@ -138,8 +136,7 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 
 	@Override
 	public void asignarBotonesPantExtendida() {
-		// asignarBotonAccion(btnGenerarPDF,
-		// ConstantesRP.PantListaPrecioXLista.GENERAR_PDF.toString());
+		asignarBotonAccion(btnGenerarPDF, ConstantesRP.PantListaPrecioXLista.GENERAR_PDF.toString());
 		asignarBotonAccion(btnExportarExcel, ConstantesRP.PantListaPrecioXLista.GENERAR_EXCEL.toString());
 		asignarBotonAccion(btnRefrescar, ConstantesRP.PantListaPrecioXLista.RECARGAR.toString());
 	}

@@ -22,8 +22,6 @@ import ar.com.rollpaper.pricing.dao.VentArpcDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
 import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.FechaManagerUtil;
-import ar.com.rp.ui.common.Common;
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
@@ -35,7 +33,15 @@ public class Reportes {
 
 	private static final String MSG_LEYENDA_FECHA = "Valido al %s";
 
-	public static void getReporteListaPrecios(ListaPrecioReporteDTO listaPrecioReporte) throws JRException {
+	public static void getReporteListaPreciosOriginales(ListaPrecioReporteDTO listaPrecioReporte) throws Exception {
+		getReporteLista(true, listaPrecioReporte, ConstantesRP.REPO_LISTA_PRECIO_ORIGINAL);
+	}
+
+	public static void getReporteListaPrecios(ListaPrecioReporteDTO listaPrecioReporte) throws Exception {
+		getReporteLista(false, listaPrecioReporte, ConstantesRP.REPO_LISTA_PRECIO);
+	}
+
+	private static void getReporteLista(boolean isListaOriginal, ListaPrecioReporteDTO listaPrecioReporte, String reporteArchivo) throws Exception {
 		// Parametros
 		HashMap<String, Object> SIMPLE_DATA = new HashMap<String, Object>();
 		SIMPLE_DATA.put("SubReportPath", Main.class.getResource(ConstantesRP.REPO_LISTA_PRECIO_DETALLE));
@@ -79,7 +85,7 @@ public class Reportes {
 		parametros.put("SIMPLE_DATA", SIMPLE_DATA);
 
 		// compile report
-		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(Main.class.getResource(ConstantesRP.REPO_LISTA_PRECIO));
+		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(Main.class.getResource(reporteArchivo));
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parametros, dataSource);
 
 		// view report to UI
