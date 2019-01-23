@@ -163,16 +163,16 @@ public abstract class BasePantallaPrincipalView extends JFrame implements Manejo
 		addWindowListener(wl);
 	}
 
-	protected void agregarBotonStd2Barra(JButtonBarraBotonesRP boton, URL iconoURL) {
-		boton.setMargenScrollBarra(margenScrollBarra);
-		boton.setAnchoBarra(anchoBarra);
-
-		if (iconoURL != null) {
-			boton.setIcon(Common.loadIcon(iconoURL));
-
-		}
-		toolBarBotones.add(boton);
-	}
+//	protected void agregarBotonStd2Barra(JButtonBarraBotonesRP boton, URL iconoURL) {
+//		boton.setMargenScrollBarra(margenScrollBarra);
+//		boton.setAnchoBarra(anchoBarra);
+//
+//		if (iconoURL != null) {
+//			boton.setIcon(Common.loadIconBoton(iconoURL));
+//
+//		}
+//		toolBarBotones.add(boton);
+//	}
 
 	protected void agregarBotonStd2Barra(JButtonBarraBotonesRP boton) {
 		boton.setMargenScrollBarra(margenScrollBarra);
@@ -185,7 +185,7 @@ public abstract class BasePantallaPrincipalView extends JFrame implements Manejo
 		boton.setAnchoBarra(anchoBarra);
 
 		if (icono != null) {
-			boton.setIcon(Common.loadIcon(icono));
+			boton.setIcon(Common.loadIconBoton(icono));
 		}
 		toolBarBotones.add(boton);
 	}

@@ -14,6 +14,7 @@ import javax.swing.table.TableRowSorter;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
@@ -240,11 +241,17 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
 			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(),
-					stock.getMonedaArticulo(), stock.getPrecioArticulo() });
+					stock.getMonedaArticulo(), CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
 		}
 
 		sorterTablaResultado.sort();
-
+		
+		getView().tableResultado.adjustColumns();
+		
+		getView().tableResultado.getColumnModel().getColumn(ListaPrecioClienteView.COL_DESC).setPreferredWidth(600);
+		getView().tableResultado.getColumnModel().getColumn(ListaPrecioClienteView.COL_DESC).setMinWidth(600);
+		getView().tableResultado.getColumnModel().getColumn(ListaPrecioClienteView.COL_DESC).setWidth(300);
+		
 		setModoPantalla();
 	}
 

@@ -179,7 +179,9 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		getView().txtPrecio.setText("");
 		getView().txtReferencia.setText("");
 		getView().dateFechaDesde.clear();
+		getView().dateFechaDesde.setDate(null);
 		getView().dateFechaHasta.clear();
+		getView().dateFechaHasta.setDate(null);
 		getView().txtComision.setText("");
 		getView().cbMoneda.setSelectedIndex(0);
 		getView().lblEstaEnLista.setText("");
@@ -199,7 +201,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 				getView().cbMoneda.setSelectedItem(SistMoneDAO.findById(getModel().getRegistro().getPricMoneda()));
 
 				if (getModel().getRegistro().getPricPrecio() != null) {
-					getView().txtPrecio.setText(Common.double2String(getModel().getRegistro().getPricPrecio().doubleValue()));
+					getView().txtPrecio.setNumero(getModel().getRegistro().getPricPrecio().doubleValue());
 				}
 			}
 			if (getModel().getRegistro().getPricFechaDesde() != null) {
@@ -231,7 +233,6 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		} else {
 			getView().txtArticuloID.requestFocus();
 		}
-
 	}
 
 	@Override
@@ -353,7 +354,6 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 						getView().dateFechaDesde.requestFocus();
 						return false;
 					}
-
 				}
 			}
 		}

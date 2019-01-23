@@ -19,6 +19,7 @@ import javax.swing.text.PlainDocument;
 
 import com.alee.laf.text.WebTextField;
 
+import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rp.ui.common.Common;
 
 public class componenteNumerico extends WebTextField {
@@ -50,7 +51,7 @@ public class componenteNumerico extends WebTextField {
 				if (!getText().equals("") && numeroValido(getText()) && (cantDecimales > 0)) {
 					String decimales = getDecimales(getText());
 					String entero = getEnteros(getText());
-					setText(entero + Common.getGeneralSettings().getSeparadorDecimal() + (decimales + "00000").substring(0, cantDecimales));
+					setText(CommonPricing.formatearImporte(entero + Common.getGeneralSettings().getSeparadorDecimal() + (decimales + "00000").substring(0, cantDecimales)));
 				}
 			}
 
@@ -78,6 +79,7 @@ public class componenteNumerico extends WebTextField {
 
 				String valorOrginal = getText(0, getLength());
 				String numeroConCaracteres = valorOrginal.substring(0, off) + str + valorOrginal.substring(off, valorOrginal.length()); // inserto el instrin
+				
 				if (numeroValido(numeroConCaracteres)) {
 					super.remove(0, getLength());
 					super.insertString(0, numeroConCaracteres, attr);
@@ -88,7 +90,7 @@ public class componenteNumerico extends WebTextField {
 	}
 
 	protected String getEnteros(String numero) {
-		if (!getText().equals("")) {
+		if (!numero.equals("")) {
 			Double d = Common.String2Double(numero); // Que sea un double valido
 			String aux = Common.double2String(d);
 			String valor[] = aux.split(Common.getGeneralSettings().getSeparadorDecimal());
@@ -98,12 +100,12 @@ public class componenteNumerico extends WebTextField {
 	}
 
 	protected String getDecimales(String numero) {
-		if (!getText().equals("")) {
+		if (!numero.equals("")) {
 			Double d = Common.String2Double(numero); // Que sea un double valido
 			String aux = Common.double2String(d);
 			String valor[] = aux.split(Common.getGeneralSettings().getSeparadorDecimal());
 			if (valor.length > 1) {
-				if (Integer.valueOf(valor[1].trim()) == 0) {
+				if (Long.valueOf(valor[1].trim()) == 0) {
 					return "";
 				}
 
@@ -150,5 +152,9 @@ public class componenteNumerico extends WebTextField {
 
 	public void setCantDecimales(int cantDecimales) {
 		this.cantDecimales = cantDecimales;
+	}
+
+	public void setNumero(double valor) {
+		setText(CommonPricing.formatearImporte(valor));
 	}
 }

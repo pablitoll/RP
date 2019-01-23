@@ -15,9 +15,8 @@ import javax.swing.table.DefaultTableModel;
 import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.beans.StocArts;
+import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
-import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
-import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -54,10 +53,10 @@ public class BuscarArticuloDialog extends DialogBase {
 		getContentPane().add(panel, BorderLayout.SOUTH);
 
 		btnSeleccionar = new JButtonRP("Seleccionar");
-		btnSeleccionar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/ok.png")));
+		btnSeleccionar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_OK));
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				nroArticulo = StocArtsDAO.findById((int) tableArticulo.getModel().getValueAt(tableArticulo.getSelectedRow(), COL_ID_INTERNO));
+				nroArticulo = StocArtsDAO.findById((int) tableArticulo.getModel().getValueAt(tableArticulo.convertRowIndexToModel(tableArticulo.getSelectedRow()), COL_ID_INTERNO));
 				cerrar();
 			}
 		});
@@ -65,7 +64,7 @@ public class BuscarArticuloDialog extends DialogBase {
 		panel.add(btnSeleccionar);
 
 		btnCancelar = new JButtonRP("Cancelar");
-		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar.setIcon(Common.loadIconMenu("com/alee/laf/filechooser/icons/remove.png"));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.addActionListener(new ActionListener() {
@@ -90,7 +89,7 @@ public class BuscarArticuloDialog extends DialogBase {
 		txtDescArticulo.setColumns(25);
 
 		btnBuscar = new JButtonRP("Buscar");
-		btnBuscar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/search.png")));
+		btnBuscar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_SEARCH));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscar();
@@ -105,6 +104,7 @@ public class BuscarArticuloDialog extends DialogBase {
 		tableArticulo.setModel(new DefaultTableModel(data, header));
 		tableArticulo.setEditable(false);
 		tableArticulo.getColumnModel().removeColumn(tableArticulo.getColumnModel().getColumn(COL_ID_INTERNO));
+		tableArticulo.setRowHeight(30);
 		tableArticulo.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableArticulo.setRpTableEvent(new RPTableEvent() {
 
@@ -135,6 +135,8 @@ public class BuscarArticuloDialog extends DialogBase {
 			tableArticulo.setSelectedRow(0);
 			tableArticulo.requestFocus();
 		}
+		
+		tableArticulo.adjustColumns();
 
 		cambioArticulo();
 	}

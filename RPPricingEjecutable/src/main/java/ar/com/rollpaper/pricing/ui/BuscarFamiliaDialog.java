@@ -15,9 +15,8 @@ import javax.swing.table.DefaultTableModel;
 import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.beans.StocCa01;
+import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.FamiliaBusiness;
-import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
-import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -56,7 +55,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		getContentPane().add(panel, BorderLayout.SOUTH);
 
 		btnSeleccionar = new JButtonRP("Seleccionar");
-		btnSeleccionar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/ok.png")));
+		btnSeleccionar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_OK));
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				nroFamilia = (String) tableFamilia.getModel().getValueAt(tableFamilia.getSelectedRow(), 0);
@@ -67,7 +66,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		panel.add(btnSeleccionar);
 
 		btnCancelar = new JButtonRP("Cancelar");
-		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar.setIcon(Common.loadIconMenu("com/alee/laf/filechooser/icons/remove.png"));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.addActionListener(new ActionListener() {
@@ -99,7 +98,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 		txtDescFamilia.setColumns(25);
 
 		btnBuscar = new JButtonRP("Buscar");
-		btnBuscar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/search.png")));
+		btnBuscar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_SEARCH));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscar(txtDescFamilia.getText());
@@ -120,6 +119,8 @@ public class BuscarFamiliaDialog extends DialogBase {
 
 		tableFamilia.setModel(new DefaultTableModel(data, header));
 		tableFamilia.setEditable(false);
+		tableFamilia.setRowHeight(30);
+		tableFamilia.setFont(Common.getStandarFont());
 		tableFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		WebScrollPane scrollPane = new WebScrollPane(tableFamilia);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
@@ -141,6 +142,7 @@ public class BuscarFamiliaDialog extends DialogBase {
 			tableFamilia.requestFocus();
 		}
 
+		tableFamilia.adjustColumns();
 		cambioArticulo();
 	}
 

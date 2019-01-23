@@ -72,13 +72,13 @@ public class CargaItemEspecialView extends BaseViewDialog {
 		setLocationRelativeTo(null);
 
 		btnAceptar = new JButtonRP("Aceptar");
-		btnAceptar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/retorno.jpg")));
+		btnAceptar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_RETORNO));
 		btnAceptar.setFont(Common.getStandarFont());
 		btnAceptar.setMnemonic(KeyEvent.VK_ENTER);
 		panel.add(btnAceptar);
 
 		btnCancelar = new JButtonRP("Cancelar");
-		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar.setIcon(Common.loadIconMenu("com/alee/laf/filechooser/icons/remove.png"));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		panel.add(btnCancelar);
@@ -234,6 +234,7 @@ public class CargaItemEspecialView extends BaseViewDialog {
 
 		txtPrecio = new componenteNumerico();
 		txtPrecio.setCantEnteros(8);
+		txtPrecio.setCantDecimales(4);
 		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
 		gbc_textField_6.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;

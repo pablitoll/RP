@@ -3,7 +3,6 @@ package ar.com.rp.ui.common;
 import ar.com.rp.rpcutils.CommonUtils;
 
 public class CommonRP {
-
 	public static Integer MatriculaLargoMinimo = 6; // incluye DV
 	public static Integer MatriculaLargoMaximo = 7; // incluye DV
 
@@ -60,5 +59,7 @@ public class CommonRP {
 
 		return soloCuenta;
 	}
+
+
 
 }

@@ -13,6 +13,7 @@ import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentArpc;
 import ar.com.rollpaper.pricing.beans.VentArpv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
@@ -98,7 +99,7 @@ public class Reportes {
 			SistMone moneda = SistMoneDAO.findById(ventaCustomizada.getArpcMoneda());
 
 			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
-					Common.double2String(ventaCustomizada.getArpcPrecioVta().doubleValue()), stock.getArtsClasif1());
+					CommonPricing.formatearImporte(ventaCustomizada.getArpcPrecioVta().doubleValue()), stock.getArtsClasif1());
 			listaProductos.add(producto);
 		}
 
@@ -112,7 +113,7 @@ public class Reportes {
 				SistMone moneda = SistMoneDAO.findById(ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo());
 
 				ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(),
-						moneda.getMoneNombre(), Common.double2String(ventaBase.getArpvPrecioVta().doubleValue()), stock.getArtsClasif1Cad1());
+						moneda.getMoneNombre(), CommonPricing.formatearImporte(ventaBase.getArpvPrecioVta().doubleValue()), stock.getArtsClasif1Cad1());
 
 				listaProductos.add(producto);
 			}

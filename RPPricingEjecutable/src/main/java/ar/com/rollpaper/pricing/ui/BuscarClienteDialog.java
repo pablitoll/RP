@@ -15,9 +15,8 @@ import javax.swing.table.DefaultTableModel;
 import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
-import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
-import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
@@ -33,6 +32,7 @@ public class BuscarClienteDialog extends DialogBase {
 	 */
 	private static final long serialVersionUID = 1L;
 	protected static final int COL_REG_INTERNO = 3;
+	private static final int COL_ID = 0;
 	protected RPTable tableCliente;
 	private JTextField txtDescCliente;
 	private JButtonRP btnSeleccionar;
@@ -55,21 +55,20 @@ public class BuscarClienteDialog extends DialogBase {
 		getContentPane().add(panel, BorderLayout.SOUTH);
 
 		btnSeleccionar = new JButtonRP("Seleccionar");
-		btnSeleccionar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/ok.png")));
+		btnSeleccionar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_OK));
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (puedeSeleccionar()) {
-					nroCliente = (CcobClie) tableCliente.getModel().getValueAt(tableCliente.getSelectedRow(), COL_REG_INTERNO);
+					nroCliente = (CcobClie) tableCliente.getModel().getValueAt(tableCliente.convertRowIndexToModel(tableCliente.getSelectedRow()), COL_REG_INTERNO);
 					cerrar();
 				}
 			}
-
 		});
 		btnSeleccionar.setFont(Common.getStandarFont());
 		panel.add(btnSeleccionar);
 
 		btnCancelar = new JButtonRP("Cancelar");
-		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar.setIcon(Common.loadIconMenu("com/alee/laf/filechooser/icons/remove.png"));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.addActionListener(new ActionListener() {
@@ -92,7 +91,7 @@ public class BuscarClienteDialog extends DialogBase {
 		txtDescCliente.setColumns(25);
 
 		btnBuscar = new JButtonRP("Buscar");
-		btnBuscar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/search.png")));
+		btnBuscar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_SEARCH));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscar();
@@ -117,9 +116,10 @@ public class BuscarClienteDialog extends DialogBase {
 		});
 		tableCliente.setModel(new DefaultTableModel(data, header));
 		tableCliente.setEditable(false);
+		tableCliente.setRowHeight(30);
 		tableCliente.getColumnModel().removeColumn(tableCliente.getColumnModel().getColumn(COL_REG_INTERNO));
 		tableCliente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+		tableCliente.getColumnModel().getColumn(COL_ID).setCellRenderer(tableCliente.getCenterRender());
 		WebScrollPane scrollPane = new WebScrollPane(tableCliente);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		cambioCliente();
@@ -141,6 +141,7 @@ public class BuscarClienteDialog extends DialogBase {
 			tableCliente.requestFocus();
 		}
 
+		tableCliente.adjustColumns();
 		cambioCliente();
 	}
 

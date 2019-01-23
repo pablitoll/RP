@@ -17,12 +17,12 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
-import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
+import java.awt.Font;
 
 public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 
@@ -34,6 +34,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 	private static final int COL_UNIDAD = 3;
 	private static final int COL_MONEDA_ESPECIFICO = 4;
 	private static final int COL_PRECIO = 5;
+	public static Integer COL_DESC = 2;
 	public RPTable tableResultado;
 	public JButtonRP btnGenerarPDF;
 	public JButtonRP btnExportarExcel;
@@ -44,10 +45,13 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 	public JLabel lblNombreLegal;
 	public JButtonRP btnCancelar;
 	private JButtonRP btnRefrescar;
+	private JLabel lblTitle;
 
 	public ListaPrecioClienteView() throws Exception {
 		super();
+		lblTitle = new JLabel("lblTitle");
 		setTitle("Lista de Articulos Customizados por Cliente");
+		lblTitle.setText(getTitle());
 
 		JPanel panel = new JPanel();
 		panel.setFocusable(false);
@@ -55,10 +59,18 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		getContentPane().add(panel, BorderLayout.NORTH);
 		GridBagLayout gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] { 76, 100, 50, 46, 46, 50, 0, 0, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0 };
 		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
+			
+		lblTitle.setFont(Common.getStandarFontBold(18));
+		GridBagConstraints gbc_label_22 = new GridBagConstraints();
+		gbc_label_22.gridwidth = 8;
+		gbc_label_22.insets = new Insets(0, 0, 5, 5);
+		gbc_label_22.gridx = 0;
+		gbc_label_22.gridy = 0;
+		panel.add(lblTitle, gbc_label_22);
 
 		JLabel label = new JLabel("Nro. de Cliente:");
 		label.setFont(Common.getStandarFont());
@@ -66,7 +78,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_label.anchor = GridBagConstraints.WEST;
 		gbc_label.insets = new Insets(0, 0, 5, 5);
 		gbc_label.gridx = 0;
-		gbc_label.gridy = 0;
+		gbc_label.gridy = 1;
 		panel.add(label, gbc_label);
 
 		txtNroCliente = new WebFormattedTextField();
@@ -80,7 +92,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_webFormattedTextField.anchor = GridBagConstraints.NORTH;
 		gbc_webFormattedTextField.insets = new Insets(0, 0, 5, 5);
 		gbc_webFormattedTextField.gridx = 1;
-		gbc_webFormattedTextField.gridy = 0;
+		gbc_webFormattedTextField.gridy = 1;
 		panel.add(txtNroCliente, gbc_webFormattedTextField);
 
 		JLabel label_1 = new JLabel("Nombre:");
@@ -88,7 +100,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		GridBagConstraints gbc_label_1 = new GridBagConstraints();
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 3;
-		gbc_label_1.gridy = 0;
+		gbc_label_1.gridy = 1;
 		panel.add(label_1, gbc_label_1);
 
 		lblNombreCliente = new JLabel("xxxxxxxxxxxxxxxxxxxx");
@@ -97,7 +109,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_label_2.anchor = GridBagConstraints.WEST;
 		gbc_label_2.insets = new Insets(0, 0, 5, 5);
 		gbc_label_2.gridx = 4;
-		gbc_label_2.gridy = 0;
+		gbc_label_2.gridy = 1;
 		panel.add(lblNombreCliente, gbc_label_2);
 
 		JLabel label_3 = new JLabel("Nombre Legal:");
@@ -106,7 +118,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_label_3.anchor = GridBagConstraints.EAST;
 		gbc_label_3.insets = new Insets(0, 0, 5, 5);
 		gbc_label_3.gridx = 5;
-		gbc_label_3.gridy = 0;
+		gbc_label_3.gridy = 1;
 		panel.add(label_3, gbc_label_3);
 
 		lblNombreLegal = new JLabel("lblNombreLegal");
@@ -115,7 +127,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_label_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_label_4.insets = new Insets(0, 0, 5, 5);
 		gbc_label_4.gridx = 6;
-		gbc_label_4.gridy = 0;
+		gbc_label_4.gridy = 1;
 		panel.add(lblNombreLegal, gbc_label_4);
 
 		JLabel label_5 = new JLabel("Nro de Lista de Precio");
@@ -124,7 +136,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_label_5.anchor = GridBagConstraints.EAST;
 		gbc_label_5.insets = new Insets(0, 0, 0, 5);
 		gbc_label_5.gridx = 0;
-		gbc_label_5.gridy = 1;
+		gbc_label_5.gridy = 2;
 		panel.add(label_5, gbc_label_5);
 
 		cbNroLista = new WebComboBox();
@@ -133,7 +145,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_webComboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_webComboBox.insets = new Insets(0, 0, 0, 5);
 		gbc_webComboBox.gridx = 1;
-		gbc_webComboBox.gridy = 1;
+		gbc_webComboBox.gridy = 2;
 		panel.add(cbNroLista, gbc_webComboBox);
 
 		JLabel label_6 = new JLabel("Nombre Lista ");
@@ -141,7 +153,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		GridBagConstraints gbc_label_6 = new GridBagConstraints();
 		gbc_label_6.insets = new Insets(0, 0, 0, 5);
 		gbc_label_6.gridx = 3;
-		gbc_label_6.gridy = 1;
+		gbc_label_6.gridy = 2;
 		panel.add(label_6, gbc_label_6);
 
 		lblNombreLista = new JLabel("lblNombreLista");
@@ -150,7 +162,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		gbc_label_7.anchor = GridBagConstraints.WEST;
 		gbc_label_7.insets = new Insets(0, 0, 0, 5);
 		gbc_label_7.gridx = 4;
-		gbc_label_7.gridy = 1;
+		gbc_label_7.gridy = 2;
 		panel.add(lblNombreLista, gbc_label_7);
 
 		String[] headerTabla = { "Codigo Familia", "Codigo Articulo", "Descripcion", "Unidad", "Moneda", "Precio Venta" };
@@ -161,6 +173,11 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		tableResultado.setRowHeight(30);
 		tableResultado.setEditable(false);
 		tableResultado.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+		tableResultado.setColToIgnorar(new Integer[] { COL_DESC});
+		tableResultado.getColumnModel().getColumn(COL_DESC).setPreferredWidth(600);
+		tableResultado.getColumnModel().getColumn(COL_DESC).setMinWidth(600);
+		tableResultado.getColumnModel().getColumn(COL_DESC).setWidth(300);
 		
 		tableResultado.getColumnModel().getColumn(COL_UNIDAD).setCellRenderer(tableResultado.getCenterRender());
 		tableResultado.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO).setCellRenderer(tableResultado.getCenterRender());
@@ -170,22 +187,22 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		getContentPane().add(webScrollPane, BorderLayout.CENTER);
 
 		btnRefrescar = new JButtonRP("Recargar");
-		btnRefrescar.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_RECARGAR), 15, 15));
+		btnRefrescar.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_RECARGAR, 15, 15));
 		btnRefrescar.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnRefrescar);
 
 		btnCancelar = new JButtonRP("Hacer otra Busqueda");
-		btnCancelar.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_RETORNO)));
+		btnCancelar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_RETORNO));
 		btnCancelar.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnCancelar);
 
 		btnGenerarPDF = new JButtonRP("Precios Vigente (PDF)");
-		btnGenerarPDF.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_PDF), 15, 15));
+		btnGenerarPDF.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_PDF, 15, 15));
 		btnGenerarPDF.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnGenerarPDF);
 
 		btnExportarExcel = new JButtonRP("Exportar a Excel");
-		btnExportarExcel.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_EXCEL), 15, 15));
+		btnExportarExcel.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_EXCEL, 15, 15));
 		btnExportarExcel.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnExportarExcel);
 

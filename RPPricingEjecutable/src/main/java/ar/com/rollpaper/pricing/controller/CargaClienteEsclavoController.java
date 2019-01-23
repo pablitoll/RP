@@ -103,6 +103,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 	private void agregarRegistro(CcobClie cliEsclavo, MaestroEsclavo meRegistro) {
 		getView().tableEsclavo.addRow(new Object[] { cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre(), cliEsclavo.getClieNombreLegal(), meRegistro });
+		getView().tableEsclavo.adjustColumns();
 	}
 
 	private void agregarRegistro(MaestroEsclavo me) {

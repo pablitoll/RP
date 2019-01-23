@@ -26,19 +26,22 @@ public class ConstantesRP {
 		GENERAR_PDF, GENERAR_EXCEL, RECARGAR
 	}
 
-	
 
-	public static String IMG_ERROR = "/images/error.png";
-	public static String IMG_ICONO_APP = "/images/vector.png";
-	public static String IMG_EXIT = "/images/exit.png";
-	public static String IMG_CAL = "/images/Calculator.png";
-	public static String IMG_MASTER_SLAVE = "/images/masterSlave.png";
-	public static String IMG_PRICE_CONFIG = "/images/priceConfig.png";
-	public static String IMG_PESOS = "/images/pesos.png";
-	public static String IMG_RETORNO = "/images/retorno.jpg";
-	public static String IMG_EXCEL = "/images/ExcelIcono.png";
-	public static String IMG_PDF = "/images/descargaPDF.png";
-	public static String IMG_RECARGAR = "/images/reload.jpg";
+
+	public static String IMG_EDIT_ICON = "images/edit-icon.png";
+	public static String IMG_OK = "images/ok.png";
+	public static String IMG_SEARCH = "images/search.png";
+	public static String IMG_ERROR = "images/error.png";
+	public static String IMG_ICONO_APP = "images/vector.png";
+	public static String IMG_EXIT = "images/exit.png";
+	public static String IMG_CAL = "images/Calculator.png";
+	public static String IMG_MASTER_SLAVE = "images/masterSlave.png";
+	public static String IMG_PRICE_CONFIG = "images/priceConfig.png";
+	public static String IMG_PESOS = "images/pesos.png";
+	public static String IMG_RETORNO = "images/retorno.jpg";
+	public static String IMG_EXCEL = "images/ExcelIcono.png";
+	public static String IMG_PDF = "images/descargaPDF.png";
+	public static String IMG_RECARGAR = "images/reload.jpg";
 
 	public static String REPO_LISTA_PRECIO = "/reporte/report1.jasper";
 	public static String REPO_LISTA_PRECIO_DETALLE = "/reporte/";// "/reporte/detalle.jasper";

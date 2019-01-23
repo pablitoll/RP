@@ -19,12 +19,13 @@ import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
-import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 
@@ -34,7 +35,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	private static final long serialVersionUID = 1L;
 	public static final int COL_ID_CLIENTE_ESCLAVO = 0;
 	public static final int COL_DESC = 1;
-	public static final int COL_DESC_LEGAL = 2;	
+	public static final int COL_DESC_LEGAL = 2;
 	public static final int COL_REGISTRO = 3;
 	public RPTable tableEsclavo;
 	public JLabel lblNombreLista;
@@ -52,25 +53,33 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	private JLabel lblNewLabel_3;
 	public JButtonRP btnTerminarCarga;
 	public WebFormattedTextField txtNroCliente;
-	
+	private JLabel lblTitle;
 
 	public CargaClienteEsclavoView() throws Exception {
 		super();
-		btnCerrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		lblTitle = new JLabel("lblTitle");
+		lblTitle.setBorder(null);
 		setTitle("Carga de Cliente/Esclavo");
+		lblTitle.setText(getTitle());
 
 		JPanel pnlSuperior = new JPanel();
 		pnlSuperior.setBorder(new EmptyBorder(10, 10, 10, 10));
 		getContentPane().add(pnlSuperior, BorderLayout.NORTH);
 		GridBagLayout gbl_pnlSuperior = new GridBagLayout();
 		gbl_pnlSuperior.columnWidths = new int[] { 76, 100, 100, 111, 150, 0, 0 };
-		gbl_pnlSuperior.rowHeights = new int[] { 0, 0, 0 };
+		gbl_pnlSuperior.rowHeights = new int[] { 0, 0, 0, 0 };
 		gbl_pnlSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_pnlSuperior.rowWeights = new double[] { 0.0, 0.0, Double.MIN_VALUE };
+		gbl_pnlSuperior.rowWeights = new double[] { 1.0, 0.0, 0.0, Double.MIN_VALUE };
 		pnlSuperior.setLayout(gbl_pnlSuperior);
+
+		
+		lblTitle.setFont(Common.getStandarFontBold(18));
+		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
+		gbc_lblTitle.gridwidth = 6;
+		gbc_lblTitle.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTitle.gridx = 0;
+		gbc_lblTitle.gridy = 0;
+		pnlSuperior.add(lblTitle, gbc_lblTitle);
 
 		JLabel lblcliente = new JLabel("Nro. de Cliente:");
 		lblcliente.setFont(Common.getStandarFont());
@@ -78,7 +87,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNroLista.anchor = GridBagConstraints.WEST;
 		gbc_lblNroLista.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNroLista.gridx = 0;
-		gbc_lblNroLista.gridy = 0;
+		gbc_lblNroLista.gridy = 1;
 		pnlSuperior.add(lblcliente, gbc_lblNroLista);
 
 		txtNroCliente = new WebFormattedTextField();
@@ -93,7 +102,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_txtNroCliente.anchor = GridBagConstraints.NORTH;
 		gbc_txtNroCliente.insets = new Insets(0, 0, 5, 5);
 		gbc_txtNroCliente.gridx = 1;
-		gbc_txtNroCliente.gridy = 0;
+		gbc_txtNroCliente.gridy = 1;
 		pnlSuperior.add(txtNroCliente, gbc_txtNroCliente);
 		txtNroCliente.setColumns(10);
 
@@ -103,7 +112,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 2;
-		gbc_lblNewLabel.gridy = 0;
+		gbc_lblNewLabel.gridy = 1;
 		pnlSuperior.add(lblNewLabel, gbc_lblNewLabel);
 
 		lblNombreCliente = new JLabel("New label");
@@ -112,7 +121,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNombreCliente.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNombreCliente.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNombreCliente.gridx = 3;
-		gbc_lblNombreCliente.gridy = 0;
+		gbc_lblNombreCliente.gridy = 1;
 		pnlSuperior.add(lblNombreCliente, gbc_lblNombreCliente);
 
 		lblNewLabel_3 = new JLabel("Nombre Legal:");
@@ -121,7 +130,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel_3.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_3.gridx = 4;
-		gbc_lblNewLabel_3.gridy = 0;
+		gbc_lblNewLabel_3.gridy = 1;
 		pnlSuperior.add(lblNewLabel_3, gbc_lblNewLabel_3);
 
 		lblNombreLegal = new JLabel("New label");
@@ -130,7 +139,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNombreLegal.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNombreLegal.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNombreLegal.gridx = 5;
-		gbc_lblNombreLegal.gridy = 0;
+		gbc_lblNombreLegal.gridy = 1;
 		pnlSuperior.add(lblNombreLegal, gbc_lblNombreLegal);
 
 		JLabel lblNewLabel_1 = new JLabel("Nro de Lista de Precio");
@@ -139,7 +148,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNewLabel_1.gridx = 0;
-		gbc_lblNewLabel_1.gridy = 1;
+		gbc_lblNewLabel_1.gridy = 2;
 		pnlSuperior.add(lblNewLabel_1, gbc_lblNewLabel_1);
 
 		lblNroLista = new JLabel("New label");
@@ -148,7 +157,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNroListaShow.fill = GridBagConstraints.HORIZONTAL;
 		gbc_lblNroListaShow.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNroListaShow.gridx = 1;
-		gbc_lblNroListaShow.gridy = 1;
+		gbc_lblNroListaShow.gridy = 2;
 		pnlSuperior.add(lblNroLista, gbc_lblNroListaShow);
 
 		lblNewLabel_2 = new JLabel("Nombre Lista");
@@ -157,7 +166,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNewLabel_2.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNewLabel_2.gridx = 2;
-		gbc_lblNewLabel_2.gridy = 1;
+		gbc_lblNewLabel_2.gridy = 2;
 		pnlSuperior.add(lblNewLabel_2, gbc_lblNewLabel_2);
 
 		lblNombreLista = new JLabel("New label");
@@ -166,20 +175,20 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNombreLista.fill = GridBagConstraints.BOTH;
 		gbc_lblNombreLista.insets = new Insets(0, 0, 0, 5);
 		gbc_lblNombreLista.gridx = 3;
-		gbc_lblNombreLista.gridy = 1;
+		gbc_lblNombreLista.gridy = 2;
 		pnlSuperior.add(lblNombreLista, gbc_lblNombreLista);
 
 		String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "" };
 		String[][] data = { {} };
 
 		btnTerminarCarga = new JButtonRP("Terminar Carga e Impactar precios");
-		btnTerminarCarga.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_PESOS)));
+		btnTerminarCarga.setIcon(Common.loadIconMenu(ConstantesRP.IMG_PESOS));
 		btnTerminarCarga.setFont(Common.getStandarFont());
 		btnTerminarCarga.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnTerminarCarga);
 
 		btnExpportar = new JButtonRP("Exportar a Excel");
-		btnExpportar.setIcon(CommonUtils.loadIcon(CargaClienteEsclavoView.class.getResource(ConstantesRP.IMG_EXCEL), 15, 15));
+		btnExpportar.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_EXCEL, 15, 15));
 		btnExpportar.setFont(Common.getStandarFont());
 		btnExpportar.setToolTipText("Exportar a Excel el Cliente Actual y sus Hijos");
 		pnlInferiorBotones.add(btnExpportar);
@@ -198,6 +207,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		tableEsclavo.setEditable(false);
 		tableEsclavo.setFont(Common.getStandarFont());
 		tableEsclavo.setRowHeight(30);
+		tableEsclavo.getColumnModel().getColumn(COL_ID_CLIENTE_ESCLAVO).setCellRenderer(tableEsclavo.getCenterRender());
 		tableEsclavo.getColumnModel().removeColumn(tableEsclavo.getColumnModel().getColumn(COL_REGISTRO));
 		tableEsclavo.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -216,7 +226,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		panel.setLayout(gbl_panel);
 
 		btnAgregar = new JButtonRP("Agregar");
-		btnAgregar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/plus.png")));
+		btnAgregar.setIcon(Common.loadIconMenu("com/alee/managers/notification/icons/types/plus.png"));
 		btnAgregar.setFont(Common.getStandarFont());
 		btnAgregar.setMnemonic(KeyEvent.VK_PLUS);
 		GridBagConstraints gbc_btnAgregar = new GridBagConstraints();
@@ -227,7 +237,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		panel.add(btnAgregar, gbc_btnAgregar);
 
 		btnEliminar = new JButtonRP("Eliminar");
-		btnEliminar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/managers/notification/icons/types/minus.png")));
+		btnEliminar.setIcon(Common.loadIconMenu("com/alee/managers/notification/icons/types/minus.png"));
 		btnEliminar.setFont(Common.getStandarFont());
 		btnEliminar.setMnemonic(KeyEvent.VK_MINUS);
 		GridBagConstraints gbc_btnEliminar = new GridBagConstraints();

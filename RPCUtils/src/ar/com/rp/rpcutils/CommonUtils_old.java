@@ -8,10 +8,11 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 
-public class CommonUtils {
+public class CommonUtils_old {
 
 	public static boolean isNumeric(String s) {
 		return s.matches("[-+]?\\d*\\.?\\d+");
@@ -129,44 +130,33 @@ public class CommonUtils {
 	}
 
 	public static Image loadImage(String nombrePicture, Integer alto, Integer ancho) {
-		Image img = loadIcon(nombrePicture).getImage();
+		Image img = new ImageIcon(nombrePicture).getImage();
+		Image newimg = img.getScaledInstance(alto, ancho, java.awt.Image.SCALE_SMOOTH);
+
+		return newimg;
+	}
+	
+	public static Image loadImage(URL nombrePictureURL, Integer alto, Integer ancho) {
+		Image img = new ImageIcon(nombrePictureURL).getImage();
 		Image newimg = img.getScaledInstance(alto, ancho, java.awt.Image.SCALE_SMOOTH);
 
 		return newimg;
 	}
 
-	public static Image loadImage(String nombrePicture) {
-		return loadIcon(nombrePicture).getImage();
-	}
 
-	// public static Image loadImage(URL nombrePictureURL, Integer alto, Integer
-	// ancho) {
-	// Image img = new ImageIcon(nombrePictureURL).getImage();
-	// Image newimg = img.getScaledInstance(alto, ancho,
-	// java.awt.Image.SCALE_SMOOTH);
-	//
-	// return newimg;
-	// }
-
-	// public static ImageIcon loadIcon(URL iconoURL, Integer alto, Integer ancho) {
-	//
-	// ImageIcon icon = new ImageIcon(iconoURL);
-	// Image img = icon.getImage();
-	// Image newimg = img.getScaledInstance(alto, ancho,
-	// java.awt.Image.SCALE_SMOOTH);
-	//
-	// return new ImageIcon(newimg);
-	// }
-
-	public static ImageIcon loadIcon(String nombrePicture, Integer alto, Integer ancho) {
-		Image img = loadIcon(nombrePicture).getImage();
+	public static ImageIcon loadIcon(URL iconoURL, Integer alto, Integer ancho) {
+		ImageIcon icon = new ImageIcon(iconoURL);
+		Image img = icon.getImage();
 		Image newimg = img.getScaledInstance(alto, ancho, java.awt.Image.SCALE_SMOOTH);
+
 		return new ImageIcon(newimg);
 	}
 
-	public static ImageIcon loadIcon(String nombrePicture) {
-		ClassLoader loader = Thread.currentThread().getContextClassLoader();
-		return new ImageIcon(loader.getResource(nombrePicture));
+	public static ImageIcon loadIcon(String nombrePicture, Integer alto, Integer ancho) {
+		Image img = new ImageIcon(nombrePicture).getImage();
+		Image newimg = img.getScaledInstance(alto, ancho, java.awt.Image.SCALE_SMOOTH);
+
+		return new ImageIcon(newimg);
 	}
 
 	public static Integer getHash(String texto) {
@@ -241,6 +231,7 @@ public class CommonUtils {
 		}
 	}
 
+	
 	public static Double String2Double(String valor, String separadorMiles) {
 		// Si el signo negativo viene al final lo paso a la primera poscion
 		if (valor.substring(valor.length() - 1).equals("-")) {
@@ -252,15 +243,13 @@ public class CommonUtils {
 	}
 
 	public static String double2String(Double valor, String separadorMiles, String separadorDecimal) {
-		String strValor = Double.toString(valor);
-		String[] valorSplit = strValor.split("\\.");
-		int cantDecimales = 2; // cant Minimo
-		if (valorSplit.length > 1) {
-			if (valorSplit[1].length() > cantDecimales) {
-				cantDecimales = valorSplit[1].length();
-			}
+		String string = Double.toString(valor);
+		String[] b = string.split( "\\.");
+		int cantDecimales = 2;
+		if(b.length > 1) {
+			cantDecimales = b[1].length();
 		}
-
+		
 		String retorno = String.format("%." + cantDecimales + "f", valor);
 		retorno = retorno.replace(separadorMiles, separadorDecimal); // El String.format("%f", valor) solo agrega el
 																		// separador decimal, me aseguro que
@@ -271,16 +260,6 @@ public class CommonUtils {
 	public static boolean existeArchivo(String nombreArchivo) {
 		File archProp = new File(nombreArchivo);
 		return archProp.exists();
-	}
-
-	public static boolean existeDirectrio(String nombreDirectorio) {
-		File archProp = new File(nombreDirectorio);
-		return existeArchivo(archProp.getAbsolutePath());
-	}
-
-	public static void mkDirectorio(String nombreDirectorio) {
-		File archProp = new File(nombreDirectorio);
-		new File(archProp.getAbsolutePath()).mkdirs();
 	}
 
 	// Method for getting the maximum value
@@ -304,33 +283,5 @@ public class CommonUtils {
 		}
 		return min; // returns the largest object
 	}
-
-	public static Boolean string2Boolean(String valor) throws Exception {
-		if (valor.equalsIgnoreCase("SI") || valor.equalsIgnoreCase("S") || valor.equalsIgnoreCase("true")
-				|| valor.equalsIgnoreCase("t") || valor.equalsIgnoreCase("1")) {
-			return true;
-		} else {
-			if (valor.equalsIgnoreCase("NO") || valor.equalsIgnoreCase("N") || valor.equalsIgnoreCase("false")
-					|| valor.equalsIgnoreCase("f") || valor.equalsIgnoreCase("0")) {
-				return false;
-			}
-		}
-
-		throw new Exception("No es un valor Boolean");
-	}
-
-	public static String boolean2StringLeyenda(Boolean valor) {
-		return valor ? "SI" : "NO";
-	}
-
-	public static Double redondear(Double valor, Integer redondearA) {
-		Double cantRedondeo = Double.valueOf(strLeft("100000000000000", redondearA + 1));
-
-		Double aux = (Math.round(valor * cantRedondeo) / cantRedondeo);
-		
-		return aux;
-	}
-
-
 
 }

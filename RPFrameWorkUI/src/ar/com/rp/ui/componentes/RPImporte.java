@@ -14,8 +14,15 @@ public class RPImporte extends JTextField {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Boolean soloEnteros = false;
-	private Integer cantDecimales = 2;
+	private Integer cantidadMaxDecimales = 2;
+
+	public Integer getCantidadMaxDecimales() {
+		return cantidadMaxDecimales;
+	}
+
+	public void setCantidadMaxDecimales(Integer cantidadMaxDecimales) {
+		this.cantidadMaxDecimales = cantidadMaxDecimales;
+	}
 
 	public RPImporte() {
 		super();
@@ -34,6 +41,16 @@ public class RPImporte extends JTextField {
 				if (CommonUtils.isOnlyNumeric(valoraValidar) && (valoraValidar.length() < 12)) { // 9 + 2 Es por
 																									// restrcciones de
 																									// la coboleta
+					valoraValidar = "000000000000" + valoraValidar;
+					valorConCaracterInsertado = valoraValidar.substring(0, valoraValidar.length() - cantidadMaxDecimales) + Common.getGeneralSettings().getSeparadorDecimal()
+							+ valoraValidar.substring(valoraValidar.length() - cantidadMaxDecimales); // le pongo la
+																										// coma donde
+																										// corresponde,
+																										// de esta
+																										// manera estoy
+																										// haciendo el
+																										// corrimiento
+																										// de la misma
 					String nuevoValor = formatearImporteInterno(valorConCaracterInsertado);
 
 					super.remove(0, getLength());
@@ -46,22 +63,36 @@ public class RPImporte extends JTextField {
 			public void remove(int offs, int len) throws BadLocationException {
 				String valorOrginal = getText(0, getLength());
 
-				if (valorOrginal.substring(offs, offs + len).equals(Common.getGeneralSettings().getSeparadorDecimal())) { // Por si esto parado a la
-																															// izquierda del simbolo
+				// Por si esto parado a la
+				// derecha del simbolo
+				if (valorOrginal.substring(offs, offs + len).equals(Common.getGeneralSettings().getSeparadorDecimal())
+						|| valorOrginal.substring(offs, offs + len).equals(Common.getGeneralSettings().getSeparadorMiles())) {
 					offs--;
 				}
 
 				super.remove(offs, len);
-
 				String valor = getText(0, getLength());
-				valor = formatearImporteInterno(valor);
-				String nuevoValor = valor;
 
+				valor = valor.replace(".", "").replace(",", "").trim();
+				if (!valor.equals("")) {
+					if (cantidadMaxDecimales > 0) {
+
+						if (valor.length() <= cantidadMaxDecimales) {
+							valor = CommonUtils.strRigth("0000000000000" + valor, cantidadMaxDecimales + 1);
+						}
+
+						valor = valor.substring(0, valor.length() - cantidadMaxDecimales) + Common.getGeneralSettings().getSeparadorDecimal()
+								+ valor.substring(valor.length() - cantidadMaxDecimales);
+
+					}
+
+					valor = formatearImporteInterno(valor);
+				}
 				super.remove(0, getLength());
 				super.insertString(0, valor, null);
-
-				ponerCursorEnPosicion(valorOrginal, nuevoValor, offs + 1);
+				ponerCursorEnPosicion(valorOrginal, valor, offs + 1);
 			}
+
 		});
 	}
 
@@ -98,66 +129,163 @@ public class RPImporte extends JTextField {
 		}
 	}
 
-	private String limpiarString(String valor) {
+	private static String limpiarString(String valor) {
 		return valor.replace(Common.getGeneralSettings().getSeparadorMiles(), "").replace(Common.getGeneralSettings().getSeparadorDecimal(), "");
 	}
 
-	public String formatearImporte(Double valor) {
+	public static String formatearImporte(Double valor) {
 		return formatearImporte(Common.double2String(valor), true);
 	}
 
-	public String formatearImporte(String valor, boolean conSeparadorMiles) {
-		return formatearImporte(valor, conSeparadorMiles, true);
+	public static String formatearImporte(String valor, boolean conSeparadorMiles) {
+		return formatearImporte(valor, conSeparadorMiles, 2);
 	}
 
-	public String formatearImporte(String valor, boolean conSeparadorMiles, boolean mostrarDecimales) {
-		return formatearImporteInterno(valor, conSeparadorMiles, mostrarDecimales, false);
+	public static String formatearImporte(String valor, boolean conSeparadorMiles, int cantidadMaxDecimales) {
+		return formatearImporteInterno(valor, conSeparadorMiles, cantidadMaxDecimales);
 	}
 
 	private String formatearImporteInterno(String valor) {
-		return formatearImporteInterno(valor, true, true, isSoloEnteros());
+		return formatearImporteInterno(valor, true, cantidadMaxDecimales);
 	}
 
-	private String formatearImporteInterno(String valor, boolean conSeparadorMiles, boolean mostrarDecimales, boolean soloEnteros) {
-		String parteEntrera = "";
-		String parteDecimal = "";
+	public static String formatearImporte(Double valor, Integer redondearA) {
+		valor = CommonUtils.redondear(valor, redondearA);
+		return formatearImporte(Common.double2String(valor), true);
+	}
 
-		valor = limpiarString(valor).trim();
+	/*
+	 * private static String formatearImporteInterno(String valor, boolean
+	 * conSeparadorMiles, boolean mostrarDecimales, boolean soloEnteros) { String
+	 * parteEntrera = ""; String parteDecimal = "";
+	 * 
+	 * valor = limpiarString(valor).trim();
+	 * 
+	 * if (valor.equals("")) { return ""; } else { valor =
+	 * String.valueOf(Long.valueOf(valor)); // saco los ceros a izquierda boolean
+	 * isNegativo = valor.indexOf("-") > -1; valor = valor.replace("-", "");
+	 * 
+	 * if(soloEnteros) { parteEntrera = formatearImporteParteEntera(valor,
+	 * conSeparadorMiles); } else { if (valor.length() < 3) { // Primero formateo la
+	 * parte derecha de los decimales parteEntrera = "0"; parteDecimal =
+	 * CommonUtils.strRigth("00" + valor, 2); } else { parteEntrera =
+	 * formatearImporteParteEntera(CommonUtils.strLeft(valor, valor.length() - 2),
+	 * conSeparadorMiles); parteDecimal = CommonUtils.strRigth(valor, 2); } }
+	 * 
+	 * if (mostrarDecimales && !soloEnteros) { return (isNegativo ? "-" : "") +
+	 * parteEntrera + Common.getGeneralSettings().getSeparadorDecimal() +
+	 * parteDecimal; } else { return (isNegativo ? "-" : "") + parteEntrera; } } }
+	 */
 
+	private static String sacarCeroADerecha(String numero) {
+		numero = numero.trim();
+		if ((numero.length() > 0) && (numero.substring(numero.length() - 1).equals("0"))) {
+			return sacarCeroADerecha(numero.substring(0, numero.length() - 1));
+		}
+		return numero;
+	}
+
+	// private static String formatearImporteInterno(String valor, boolean
+	// conSeparadorMiles, boolean mostrarDecimales) {
+	// valor = valor.trim();
+	// if (valor.equals("")) {
+	// return "";
+	// } else {
+	// int cantidadDecimales = 2; // por default
+	// String splitValor[] =
+	// valor.split(Common.getGeneralSettings().getSeparadorDecimal());
+	//
+	// if (splitValor.length > 1) {
+	// String parteDecimal = sacarCeroADerecha(splitValor[1]);
+	// if (parteDecimal.length() > cantidadDecimales) {
+	// cantidadDecimales = parteDecimal.length();
+	// }
+	// valor = String.valueOf(Long.valueOf(splitValor[0])) +
+	// Common.getGeneralSettings().getSeparadorDecimal()
+	// + parteDecimal; // saco los ceros a izquierda y derecha
+	// } else {
+	// valor = String.valueOf(Long.valueOf(valor)); // saco los ceros a izquierda
+	// }
+	//
+	// String parteEntrera = "";
+	// String parteDecimal = "";
+	// valor = limpiarString(valor).trim();
+	//
+	// boolean isNegativo = valor.indexOf("-") > -1;
+	// valor = valor.replace("-", "");
+	//
+	// if (!mostrarDecimales) {
+	// parteEntrera = formatearImporteParteEntera(valor, conSeparadorMiles);
+	// return (isNegativo ? "-" : "") + parteEntrera;
+	//
+	// } else {
+	// if (valor.length() < (cantidadDecimales + 1)) { // Primero formateo la parte
+	// derecha de los decimales
+	// parteEntrera = "0";
+	// parteDecimal = CommonUtils.strRigth("00000000000" + valor,
+	// cantidadDecimales);
+	// } else {
+	// parteEntrera = formatearImporteParteEntera(
+	// CommonUtils.strLeft(valor, valor.length() - cantidadDecimales),
+	// conSeparadorMiles);
+	// parteDecimal = CommonUtils.strRigth(valor, cantidadDecimales);
+	// }
+	// return (isNegativo ? "-" : "") + parteEntrera +
+	// Common.getGeneralSettings().getSeparadorDecimal()
+	// + parteDecimal;
+	// }
+	// }
+	// }
+	private static String formatearImporteInterno(String valor, boolean conSeparadorMiles, int cantidadMaxDecimales) {
+		boolean mostrarDecimales = cantidadMaxDecimales > 0;
+		valor = valor.trim();
 		if (valor.equals("")) {
 			return "";
 		} else {
-			valor = String.valueOf(Long.valueOf(valor)); // saco los ceros a izquierda
-			boolean isNegativo = valor.indexOf("-") > -1;
-			valor = valor.replace("-", "");
+			int cantidadDecimales = cantidadMaxDecimales; // por default
+			String splitValor[] = valor.split(Common.getGeneralSettings().getSeparadorDecimal());
 
-			if (soloEnteros) {
-				parteEntrera = formatearImporteParteEntera(valor, conSeparadorMiles);
-			} else {
-				if (valor.length() < (cantDecimales + 1)) { // Primero formateo la parte derecha de los decimales
-					parteEntrera = "0";
-					parteDecimal = CommonUtils.strRigth("00000000" + valor, cantDecimales);
-				} else {
-					parteEntrera = formatearImporteParteEntera(CommonUtils.strLeft(valor, valor.length() - cantDecimales), conSeparadorMiles);
-					parteDecimal = CommonUtils.strRigth(valor, cantDecimales);
+			splitValor[0] = String.valueOf(Long.valueOf(splitValor[0].replace(".", ""))); // saco los ceros a izquierda
+			if (splitValor.length > 1) {
+				splitValor[1] = splitValor[1].trim();
+
+				String parteDecimal = sacarCeroADerecha(splitValor[1]);
+				if (parteDecimal.length() > cantidadDecimales) {
+					cantidadDecimales = parteDecimal.length();
 				}
+			} else {
+				String tmp = splitValor[0];
+				splitValor = new String[2];
+				splitValor[0] = tmp;
+				splitValor[1] = "000000000000".substring(0, cantidadMaxDecimales);
 			}
 
-			if (mostrarDecimales && !soloEnteros) {
-				return (isNegativo ? "-" : "") + parteEntrera + Common.getGeneralSettings().getSeparadorDecimal() + parteDecimal;
+			boolean isNegativo = splitValor[0].indexOf("-") > -1;
+			splitValor[0] = splitValor[0].replace("-", "");
+
+			// Formateamos la parte entera
+			splitValor[0] = (isNegativo ? "-" : "") + formatearImporteParteEntera(splitValor[0], conSeparadorMiles);
+
+			if (!mostrarDecimales) {
+
+				return splitValor[0];
+
 			} else {
-				return (isNegativo ? "-" : "") + parteEntrera;
+				// Formateamos la parte decimal
+				splitValor[1] = CommonUtils.strLeft(splitValor[1] + "00000000000", cantidadDecimales);
+				return splitValor[0] + Common.getGeneralSettings().getSeparadorDecimal() + splitValor[1];
 			}
 		}
 	}
 
-	private String formatearImporteParteEntera(String valor, boolean conSeparadorMiles) {
-		if (valor.length() < (cantDecimales + 2)) { // Grupos de a tres para la parte entera
+	private static String formatearImporteParteEntera(String valor, boolean conSeparadorMiles) {
+		if (valor.length() < 4) { // Grupos de a tres para la parte entera
 			return valor;
 		} else {
-			return formatearImporteParteEntera(CommonUtils.strLeft(valor, valor.length() - (cantDecimales + 1)), conSeparadorMiles)
-					+ (conSeparadorMiles ? Common.getGeneralSettings().getSeparadorMiles() : "") + CommonUtils.strRigth(valor, (cantDecimales + 1));
+			return formatearImporteParteEntera(CommonUtils.strLeft(valor, valor.length() - 3), conSeparadorMiles)
+					+ (conSeparadorMiles ? Common.getGeneralSettings().getSeparadorMiles() : "") + CommonUtils.strRigth(valor, 3);
 		}
+
 	}
 
 	public void limpiar() {
@@ -171,7 +299,7 @@ public class RPImporte extends JTextField {
 	public Double getImporte() {
 		String strImporte = getText().trim();
 		if (!strImporte.equals("")) {
-			if (soloEnteros) { // Le agrego los decimales para que no explote la converison
+			if (cantidadMaxDecimales == 0) { // Le agrego los decimales para que no explote la converison
 				strImporte = strImporte + Common.getGeneralSettings().getSeparadorDecimal() + "00";
 			}
 			return Common.String2Double(strImporte);
@@ -181,36 +309,11 @@ public class RPImporte extends JTextField {
 	}
 
 	public void setImporte(Double importe) {
-		// Obtengo la parte decimal para saber si estan todos los decimales, caso
-		// contrario le agego 0
-		String strImporte = Common.double2String(importe);
-		String decimal = strImporte.split(Common.getGeneralSettings().getSeparadorDecimal())[1];
-
-		for (int i = 0; i < cantDecimales - decimal.length(); i++) {
-			strImporte += "0";
-		}
-
-		setText(strImporte);
+		setText(Common.double2String(importe));
 	}
 
 	public Integer getEnteros() {
 		return getImporte().intValue();
-	}
-
-	public Integer getCantDecimales() {
-		return cantDecimales;
-	}
-
-	public void setCantDecimales(Integer cantDecimales) {
-		this.cantDecimales = cantDecimales;
-	}
-
-	public Boolean isSoloEnteros() {
-		return soloEnteros;
-	}
-
-	public void setSoloEnteros(Boolean soloEnteros) {
-		this.soloEnteros = soloEnteros;
 	}
 
 }

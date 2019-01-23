@@ -28,6 +28,7 @@ import ar.com.rollpaper.pricing.beans.SistUnim;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.business.ListaBusiness;
@@ -53,6 +54,7 @@ import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
+import ar.com.rp.ui.componentes.RPImporte;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
@@ -590,7 +592,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			tableActivo.setValueAt(registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "", row,
 					CargaPrecioView.COL_2DESC_ESPECIFICO);
 			tableActivo.setValueAt(descMoneda, row, CargaPrecioView.COL_MONEDA_ESPECIFICO);
-			tableActivo.setValueAt(registroPedido.getPricPrecio() != null ? Common.double2String(registroPedido.getPricPrecio().doubleValue()) : "", row,
+			tableActivo.setValueAt(registroPedido.getPricPrecio() != null ? CommonPricing.formatearImporte(registroPedido.getPricPrecio().doubleValue()) : "", row,
 					CargaPrecioView.COL_PRECIO_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaDesde()) : "", row,
 					CargaPrecioView.COL_DESDE_ESPECIFICO);
@@ -601,8 +603,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			tableActivo.setValueAt(registroPedido.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_ESPECIFICO);
 
 			tableActivo.setValueAt((estaVigente ? "SI" : "NO"), row, CargaPrecioView.COL_ESTA_VIGENTE_ESPECIFICO);
-			// tableActivo.getModel().setValueAt(registroPedido, row,
-			// CargaPrecioView.COL_REGISTRO_ESPECIFICO);
 		} else {
 			DescuentoXFamilias registroFamilia = (DescuentoXFamilias) registro;
 
@@ -621,8 +621,6 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			Boolean estaVigente = estaVigente(registroFamilia.getPricFamiliaFechaDesde(), registroFamilia.getPricFamiliaFechaHasta());
 
 			tableActivo.setValueAt((estaVigente ? "SI" : "NO"), row, CargaPrecioView.COL_ESTA_VIGENTE_FAMILIA);
-			// tableActivo.getModel().setValueAt(registroFamilia, row,
-			// CargaPrecioView.COL_REGISTRO_FAMILIA);
 		}
 	}
 
@@ -645,11 +643,13 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "",
 				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "",
 				registro.getPricMoneda() != null ? SistMoneDAO.findById(registro.getPricMoneda()).getMoneNombre() : "",
-				registro.getPricPrecio() != null ? Common.double2String(registro.getPricPrecio().doubleValue()) : "",
+				registro.getPricPrecio() != null ? CommonPricing.formatearImporte(registro.getPricPrecio().doubleValue()) : "",
 				registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
 				registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "",
 				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(), (estaVigente ? "SI" : "NO"), (estaEnLista ? "SI" : "NO"), registro },
 				colorFondo, colorLetra);
+
+		tabla.adjustColumns();
 	}
 
 	private Boolean estaVigente(Date pricFechaDesde, Date pricFechaHasta) {
@@ -673,6 +673,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				registro.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFamiliaFechaDesde()) : "",
 				registro.getPricFamiliaFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFamiliaFechaHasta()) : "",
 				Common.double2String(registro.getPricFamiliaComision().doubleValue()), registro.getPricReferencia(), (estaVigente ? "SI" : "NO"), registro });
+
+		tabla.adjustColumns();
 	}
 
 	private boolean isPanelActivoFamilia() {

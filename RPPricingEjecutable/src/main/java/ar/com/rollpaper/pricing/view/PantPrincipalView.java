@@ -10,7 +10,6 @@ import javax.swing.JPanel;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
-import ar.com.rollpaper.pricing.ui.Main;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonBarraBotonesRP;
@@ -64,7 +63,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		super(null);
 
 		setTitle("RollPaper Pricing");
-		setIconImage(CommonUtils.loadImage(Main.class.getResource(ConstantesRP.IMG_ICONO_APP), 80, 80));
+		setIconImage(CommonUtils.loadImage(ConstantesRP.IMG_ICONO_APP, 80, 80));
 		toolBarSuperior.setVisible(false);
 
 		pnlBotton.add(pnlCentral, BorderLayout.CENTER);
@@ -110,23 +109,23 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mnSalir.setFont(Common.getStandarFontMenu());
 		menuBar.add(mnSalir);
 		mntmSalir.setFont(Common.getStandarFontMenu());
-		mntmSalir.setIcon(Common.loadIconMenu(Main.class.getResource(ConstantesRP.IMG_EXIT)));
+		mntmSalir.setIcon(Common.loadIconMenu(ConstantesRP.IMG_EXIT));
 		mnSalir.add(mntmSalir);
 
-		agregarBotonStd2Barra(btnCargaPrecio, Main.class.getResource(ConstantesRP.IMG_PRICE_CONFIG));
+		agregarBotonStd2Barra(btnCargaPrecio, ConstantesRP.IMG_PRICE_CONFIG);
 		btnCargaPrecio.setMnemonicControl(true);
 		btnCargaPrecio.setMnemonic(KeyEvent.VK_P);
 
-		agregarBotonStd2Barra(btnClienteEsclavo, Main.class.getResource(ConstantesRP.IMG_MASTER_SLAVE));
+		agregarBotonStd2Barra(btnClienteEsclavo,ConstantesRP.IMG_MASTER_SLAVE);
 		btnClienteEsclavo.setMnemonicControl(true);
 		btnClienteEsclavo.setMnemonic(KeyEvent.VK_C);
 
-		agregarBotonStd2Barra(btnPrecios, Main.class.getResource(ConstantesRP.IMG_PESOS));
+		agregarBotonStd2Barra(btnPrecios,ConstantesRP.IMG_PESOS);
 
-		agregarBotonStd2Barra(btnListaPercioxCliente, Main.class.getResource(ConstantesRP.IMG_PDF));
-		agregarBotonStd2Barra(btnListaPercioGenerales, Main.class.getResource(ConstantesRP.IMG_PDF));
+		agregarBotonStd2Barra(btnListaPercioxCliente, ConstantesRP.IMG_PDF);
+		agregarBotonStd2Barra(btnListaPercioGenerales, ConstantesRP.IMG_PDF);
 
-		agregarBotonStd2Barra(btnCalculadora, Main.class.getResource(ConstantesRP.IMG_CAL));
+		agregarBotonStd2Barra(btnCalculadora,ConstantesRP.IMG_CAL);
 		btnCalculadora.setMnemonicControl(true);
 		btnCalculadora.setMnemonic(KeyEvent.VK_A);
 

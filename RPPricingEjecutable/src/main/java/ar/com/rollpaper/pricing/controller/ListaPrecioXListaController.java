@@ -10,6 +10,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.jasper.ProductoDTO;
@@ -133,11 +134,16 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 		resetearTabla();
 
 		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
-			getView().tableResultado
-					.addRow(new Object[] { stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(), stock.getPrecioArticulo() });
+			getView().tableResultado.addRow(new Object[] { stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
+					CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
 		}
 
 		sorterTablaResultado.sort();
+
+		getView().tableResultado.adjustColumns();
+		getView().tableResultado.getColumnModel().getColumn(ListaPrecioXListaView.COL_DESC).setPreferredWidth(600);
+		getView().tableResultado.getColumnModel().getColumn(ListaPrecioXListaView.COL_DESC).setMinWidth(600);
+		getView().tableResultado.getColumnModel().getColumn(ListaPrecioXListaView.COL_DESC).setWidth(300);
 
 		setModoPantalla();
 	}

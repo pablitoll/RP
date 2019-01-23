@@ -16,10 +16,9 @@ import javax.swing.table.DefaultTableModel;
 import com.alee.laf.scroll.WebScrollPane;
 
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
-import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
-import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -34,6 +33,9 @@ public class BuscarListaDialog extends DialogBase {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final Integer COL_REGISTRO = 3;
+	private static final Integer COL_ID = 0;
+	private static final int COL_NOMBRE = 1;
+	private static final int COL_MONEDA = 2;
 	private RPTable tableLista;
 	private JTextField txtDescCliente;
 	private JButtonRP btnSeleccionar;
@@ -58,11 +60,11 @@ public class BuscarListaDialog extends DialogBase {
 		getContentPane().add(panel, BorderLayout.SOUTH);
 
 		btnSeleccionar = new JButtonRP("Seleccionar");
-		btnSeleccionar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/ok.png")));
+		btnSeleccionar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_OK));
 		btnSeleccionar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (tableLista.getSelectedRow() > -1) {
-					listaSeleccionada = (VentLipv) tableLista.getModel().getValueAt(tableLista.getSelectedRow(), COL_REGISTRO);
+					listaSeleccionada = (VentLipv) tableLista.getModel().getValueAt(tableLista.convertRowIndexToModel(tableLista.getSelectedRow()), COL_REGISTRO);
 					if (!isListaYaCargada(listaSeleccionada)) {
 						cerrar();
 					} else {
@@ -75,7 +77,7 @@ public class BuscarListaDialog extends DialogBase {
 		btnSeleccionar.setFont(Common.getStandarFont());
 
 		btnCancelar = new JButtonRP("Cancelar");
-		btnCancelar.setIcon(Common.loadIconMenu(CargaClienteEsclavoView.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar.setIcon(Common.loadIconMenu("com/alee/laf/filechooser/icons/remove.png"));
 		btnCancelar.setFont(Common.getStandarFont());
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.addActionListener(new ActionListener() {
@@ -98,7 +100,7 @@ public class BuscarListaDialog extends DialogBase {
 		txtDescCliente.setColumns(25);
 
 		btnBuscar = new JButtonRP("Buscar");
-		btnBuscar.setIcon(Common.loadIconMenu(CargaPrecioView.class.getResource("/images/search.png")));
+		btnBuscar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_SEARCH));
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				buscar();
@@ -112,10 +114,13 @@ public class BuscarListaDialog extends DialogBase {
 		tableLista = new RPTable();
 		tableLista.setModel(new DefaultTableModel(data, header));
 		tableLista.setEditable(false);
-		tableLista.setColToIgnorar(new Integer[] { COL_REGISTRO });
-		tableLista.getColumnModel().getColumn(COL_REGISTRO).setMaxWidth(0);
-		tableLista.getColumnModel().getColumn(COL_REGISTRO).setMinWidth(0);
-		tableLista.getColumnModel().getColumn(COL_REGISTRO).setPreferredWidth(0);
+		tableLista.setRowHeight(30);
+		tableLista.setFont(Common.getStandarFont());
+		tableLista.getColumnModel().getColumn(COL_ID).setCellRenderer(tableLista.getCenterRender());
+		tableLista.getColumnModel().getColumn(COL_NOMBRE).setCellRenderer(tableLista.getCenterRender());
+		tableLista.getColumnModel().getColumn(COL_MONEDA).setCellRenderer(tableLista.getCenterRender());
+		tableLista.getColumnModel().removeColumn(tableLista.getColumnModel().getColumn(COL_REGISTRO));
+		
 		tableLista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		panel.add(btnSeleccionar);
@@ -155,6 +160,7 @@ public class BuscarListaDialog extends DialogBase {
 			tableLista.requestFocus();
 		}
 
+		tableLista.adjustColumns();
 		cambioCliente();
 	}
 
