@@ -9,7 +9,6 @@ import javax.swing.SortOrder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
@@ -53,7 +52,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 			if (lista != null) {
 				getView().lblNombreLista.setText(lista.getVentLipv().getLipvNombre());
 				getModel().setListaCargada(lista);
-				cargarProductos(getModel().getListaCargada().getVentLipv());
+				cargarProductos();
 			}
 		}
 	}
@@ -64,7 +63,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 		getView().cbNroLista.setEnabled(tieneCli);
 		getView().tableResultado.setEnabled(tieneCli);
 		getView().btnExportarExcel.setEnabled(tieneCli);
-		// getView().btnGenerarPDF.setEnabled(tieneCli);
+		getView().btnGenerarPDF.setEnabled(tieneCli);
 	}
 
 	protected void resetearDatosDePantalla() throws Exception {
@@ -130,12 +129,12 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 		}
 	}
 
-	private void cargarProductos(VentLipv lista) {
+	private void cargarProductos() {
 		resetearTabla();
 
 		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
-			getView().tableResultado.addRow(new Object[] { stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
-					CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
+			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(),
+					stock.getMonedaArticulo(), CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
 		}
 
 		sorterTablaResultado.sort();

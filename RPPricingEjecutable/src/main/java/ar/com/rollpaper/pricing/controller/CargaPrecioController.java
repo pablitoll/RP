@@ -163,7 +163,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			if (cliente != null) {
 				if (!MaestroEsclavoDAO.getListaEsclavosByCliente(cliente).isEmpty()) {
 					if (Dialog.showConfirmDialog("IMPORTANTE: Este Cliente tiene esclavos.\nTodos lo que cargue impactará también sobre los mismos!. ¿Continuamos?",
-							"Cliente con Esclavos", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.NO_OPTION) {
+							"Cliente con Esclavos", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) != JOptionPane.YES_OPTION) {
 
 						getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
 						resetearDatosDePantalla();
@@ -350,8 +350,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	public void ejecutarAccion(String accion) {
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString())) {
-			if (Dialog.showConfirmDialog(String.format("¿Quiere impactar los precios del cliente %s?", getModel().getClienteCargado().getClieNombre()), "Impacto de Precios",
-					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+			if (Dialog.showConfirmDialog(String.format("Terminamos la carga Actual e Impactamos los procesios del Cliente %s", getModel().getClienteCargado().getClieNombre()),
+					"Impacto de Precios", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
 
 				PantPrincipalController.setCursorOcupado();
 				try {
@@ -541,27 +541,32 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		}
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "¿Eliminamos la lista?", "Eliminacion de Lista", JOptionPane.YES_NO_OPTION,
+			if (WebOptionPane.showConfirmDialog(getView(), "¿Eliminamos la lista y la Impactamos?", "Eliminacion de Lista", JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 				for (int i = 0; i < getView().tableDescFamilia.getRowCount(); i++) {
-					Object regis = getView().tableDescFamilia.getValueAt(i, CargaPrecioView.COL_REGISTRO_FAMILIA);
+					Object regis = getView().tableDescFamilia.getModel().getValueAt(getView().tableDescFamilia.convertColumnIndexToModel(i), CargaPrecioView.COL_REGISTRO_FAMILIA);
 					HibernateGeneric.remove(regis);
 				}
 
 				for (int i = 0; i < getView().tableDescEspecifico.getRowCount(); i++) {
-					Object regis = getView().tableDescEspecifico.getValueAt(i, CargaPrecioView.COL_REGISTRO_ESPECIFICO);
+					Object regis = getView().tableDescEspecifico.getModel().getValueAt(getView().tableDescEspecifico.convertColumnIndexToModel(i), CargaPrecioView.COL_REGISTRO_ESPECIFICO);
 					HibernateGeneric.remove(regis);
 				}
 
 				try {
-					perdioFocoCliente(getModel().getClienteCargado().getClieCliente());
+					recargar();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
 			}
 		}
 
+	}
+
+	private void recargar() throws Exception {
+		int idCliente = getModel().getClienteCargado().getClieCliente();
+		getModel().setClienteCargado(null);
+		perdioFocoCliente(idCliente);
 	}
 
 	private void buscarRegisro(RPTable tableActivo, int col_nombre, String nombre, int col_desde, Date fechaDesde) {

@@ -3,7 +3,7 @@ package ar.com.rollpaper.pricing.dto;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 
 public class ListaDTO {
-	
+
 	private VentLipv ventLipv;
 	private boolean isListaPrincipal = false;
 	private boolean isListaHeredada = false;;
@@ -13,6 +13,10 @@ public class ListaDTO {
 		String listaPrincipal = isListaPrincipal ? " - PRINCIPAL" : "";
 		String listaHeredada = isListaHeredada ? " - HEREDADA" : "";
 		return "(" + getVentLipv().getLipvListaPrecvta() + ") " + getVentLipv().getLipvNombre() + listaPrincipal + listaHeredada;
+	}
+
+	public boolean equals(ListaDTO listaAComparar) {
+		return ventLipv.getLipvListaPrecvta() == listaAComparar.getVentLipv().getLipvListaPrecvta();
 	}
 
 	public ListaDTO(VentLipv ventLipv, boolean isListaPrincipal, boolean isListaHeredada) {

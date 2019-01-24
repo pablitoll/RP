@@ -54,64 +54,64 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 	}
 
 	protected void perdioFocoCliente() throws Exception {
-
-		String msgError = "";
-		procesandoCliente = true;
-		try {
-			PantPrincipalController.setCursorOcupado();
-
+		if (!procesandoCliente) {
+			String msgError = "";
+			procesandoCliente = true;
 			try {
+				PantPrincipalController.setCursorOcupado();
 
-				CcobClie cliente = null;
+				try {
 
-				if (!getView().txtNroCliente.getText().equals("")) {
-					String id = getView().txtNroCliente.getText();
-					if (CommonUtils.isNumeric(id)) {
-						cliente = CcobClieDAO.findById(Integer.valueOf(id));
-					}
+					CcobClie cliente = null;
 
-					if (cliente != null) {
-						if ((getModel().getCliente() == null) || (cliente.getClieCliente() != getModel().getCliente().getClieCliente())) {
-							getModel().setCliente(cliente);
-							getView().lblNombreCliente.setText(cliente.getClieNombre());
-							getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+					if (!getView().txtNroCliente.getText().equals("")) {
+						String id = getView().txtNroCliente.getText();
+						if (CommonUtils.isNumeric(id)) {
+							cliente = CcobClieDAO.findById(Integer.valueOf(id));
+						}
 
-							cargarListaPrecios(cliente);
-							// cargo los esclavos de ese cliente
-							cargarEsclavos(cliente);
+						if (cliente != null) {
+							if ((getModel().getCliente() == null) || (cliente.getClieCliente() != getModel().getCliente().getClieCliente())) {
+								getModel().setCliente(cliente);
+								getView().lblNombreCliente.setText(cliente.getClieNombre());
+								getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
 
-							List<MaestroEsclavo> listaMaestroEsclavo = MaestroEsclavoDAO.getListaEsclavosByEsclavo(cliente);
-							if (listaMaestroEsclavo.size() > 0) {
-								String maestro = "(" + listaMaestroEsclavo.get(0).getPricMaestroCliente() + ") "
-										+ CcobClieDAO.findById(Integer.valueOf(listaMaestroEsclavo.get(0).getPricMaestroCliente())).getClieNombre();
-								msgError = "No se puede usar este cliente porque ya es Esclavo de " + maestro;
+								cargarListaPrecios(cliente);
+								// cargo los esclavos de ese cliente
+								cargarEsclavos(cliente);
+
+								List<MaestroEsclavo> listaMaestroEsclavo = MaestroEsclavoDAO.getListaEsclavosByEsclavo(cliente);
+								if (listaMaestroEsclavo.size() > 0) {
+									String maestro = "(" + listaMaestroEsclavo.get(0).getPricMaestroCliente() + ") "
+											+ CcobClieDAO.findById(Integer.valueOf(listaMaestroEsclavo.get(0).getPricMaestroCliente())).getClieNombre();
+									msgError = "No se puede usar este cliente porque ya es Esclavo de " + maestro;
+								}
+
+								if (getModel().getListaCliente() == null) {
+									msgError = "No se puede usar este cliente porque no tiene Listas Asociadas";
+								}
 							}
-
-							if (getModel().getListaCliente() == null) {
-								msgError = "No se puede usar este cliente porque no tiene Listas Asociadas";
-							}
+						} else {
+							msgError = "No existe el Cliente Ingresado";
 						}
 					} else {
-						msgError = "No existe el Cliente Ingresado";
+						getModel().setCliente(null);
+						limpiarPantalla();
 					}
-				} else {
+				} finally {
+					PantPrincipalController.setRestoreCursor();
+				}
+
+				if (!msgError.equals("")) {
+					Dialog.showMessageDialog(msgError, "Carga de Clientes Esclavos", JOptionPane.ERROR_MESSAGE);
 					getModel().setCliente(null);
 					limpiarPantalla();
 				}
+				setModoPantalla();
 			} finally {
-				PantPrincipalController.setRestoreCursor();
+				procesandoCliente = false;
 			}
-
-			if (!msgError.equals("")) {
-				Dialog.showMessageDialog(msgError, "Carga de Clientes Esclavos", JOptionPane.ERROR_MESSAGE);
-				getModel().setCliente(null);
-				limpiarPantalla();
-			}
-			setModoPantalla();
-		} finally {
-			procesandoCliente = false;
 		}
-
 	}
 
 	private void cargarEsclavos(CcobClie cliente) throws Exception {
@@ -248,7 +248,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 	@Override
 	public void ejecutarAccion(String accion) {
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.TERMINAR_CARGA.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "¿Terminamos la carga Actual e Impactamos los procesios?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
+			if (WebOptionPane.showConfirmDialog(getView(), "¿Terminamos la carga Actual e Impactamos los Procesios?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
 					WebOptionPane.QUESTION_MESSAGE) == 0) {
 				try {
 

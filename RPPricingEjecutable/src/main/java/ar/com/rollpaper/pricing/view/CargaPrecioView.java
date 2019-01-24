@@ -365,6 +365,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panelCentral.add(lblError, BorderLayout.NORTH);
 
 		btnImpactarPrecios = new JButtonRP("Terminar Carga e Impactar precios");
+		btnImpactarPrecios.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnImpactarPrecios.setIcon(Common.loadIconMenu(ConstantesRP.IMG_PESOS));
 		btnImpactarPrecios.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnImpactarPrecios);

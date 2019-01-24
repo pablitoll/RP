@@ -13,7 +13,6 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
-import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
@@ -97,7 +96,7 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 			if (lista != null) {
 				getView().lblNombreLista.setText(lista.getVentLipv().getLipvNombre());
 				getModel().setListaCargada(lista);
-				cargarProductos(getModel().getClienteCargado(), getModel().getListaCargada().getVentLipv());
+				cargarProductos();
 			}
 		}
 	}
@@ -190,9 +189,25 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 		}
 
 		if (accion.equals(ConstantesRP.PantListaPrecio.RECARGAR.toString())) {
-			perdioFocoNroLista();
+			try {
+				recargar();
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al Recargar Pantalla");
+			}
 		}
 
+	}
+
+	private void recargar() throws Exception {
+		ListaDTO listaActual = getModel().getListaCargada();
+
+		perdioFocoCliente(getModel().getClienteCargado().getClieCliente());
+
+		for (int i = 0; i < getView().cbNroLista.getModel().getSize(); i++) {
+			if (((ListaDTO) getView().cbNroLista.getModel().getElementAt(i)).equals(listaActual)) {
+				getView().cbNroLista.setSelectedIndex(i);
+			}
+		}
 	}
 
 	@Override
@@ -236,7 +251,7 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 		}
 	}
 
-	private void cargarProductos(CcobClie cliente, VentLipv lista) {
+	private void cargarProductos() {
 		resetearTabla();
 
 		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
@@ -245,13 +260,13 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 		}
 
 		sorterTablaResultado.sort();
-		
+
 		getView().tableResultado.adjustColumns();
-		
+
 		getView().tableResultado.getColumnModel().getColumn(ListaPrecioClienteView.COL_DESC).setPreferredWidth(600);
 		getView().tableResultado.getColumnModel().getColumn(ListaPrecioClienteView.COL_DESC).setMinWidth(600);
 		getView().tableResultado.getColumnModel().getColumn(ListaPrecioClienteView.COL_DESC).setWidth(300);
-		
+
 		setModoPantalla();
 	}
 
