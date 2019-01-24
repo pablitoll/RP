@@ -16,7 +16,7 @@ public class ListaDTO {
 	}
 
 	public boolean equals(ListaDTO listaAComparar) {
-		return ventLipv.getLipvListaPrecvta() == listaAComparar.getVentLipv().getLipvListaPrecvta();
+		return (ventLipv != null) && (listaAComparar != null) && (listaAComparar.getVentLipv() != null) && (ventLipv.getLipvListaPrecvta() == listaAComparar.getVentLipv().getLipvListaPrecvta());
 	}
 
 	public ListaDTO(VentLipv ventLipv, boolean isListaPrincipal, boolean isListaHeredada) {

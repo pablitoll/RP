@@ -566,6 +566,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	private void recargar() throws Exception {
 		int idCliente = getModel().getClienteCargado().getClieCliente();
 		getModel().setClienteCargado(null);
+		resetearDatosDePantalla();
+		getView().txtNroCliente.setText(String.valueOf(idCliente));
 		perdioFocoCliente(idCliente);
 	}
 

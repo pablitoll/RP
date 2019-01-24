@@ -200,8 +200,13 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 	private void recargar() throws Exception {
 		ListaDTO listaActual = getModel().getListaCargada();
+		CcobClie clienteCargado = getModel().getClienteCargado();
+		getModel().setClienteCargado(null);
 
-		perdioFocoCliente(getModel().getClienteCargado().getClieCliente());
+		resetearDatosDePantalla();
+		getModel().setClienteCargado(clienteCargado);
+		getView().txtNroCliente.setText(String.valueOf(clienteCargado.getClieCliente()));
+		perdioFocoCliente(clienteCargado.getClieCliente());
 
 		for (int i = 0; i < getView().cbNroLista.getModel().getSize(); i++) {
 			if (((ListaDTO) getView().cbNroLista.getModel().getElementAt(i)).equals(listaActual)) {
