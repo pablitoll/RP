@@ -14,9 +14,7 @@ import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentCliv;
-import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
-import ar.com.rollpaper.pricing.dao.VentClivDAO;
 
 public class HibernateTest {
 
@@ -31,11 +29,11 @@ public class HibernateTest {
 
 		List<CcobClie> clientes = session.createQuery(criteriaQuery).getResultList();
 	
-		Iterator itr = clientes.iterator();
+		Iterator<CcobClie> itr = clientes.iterator();
 		int i = 0;
 		while (itr.hasNext()) {
 
-			CcobClie emp = (CcobClie) itr.next();
+			CcobClie emp = itr.next();
 			System.out.println(emp.getClieNombre()+"-"+ i++);
 
 		}
@@ -48,11 +46,11 @@ public class HibernateTest {
 
 		List<StocArts> stock = session.createQuery(criteriaQuery1).getResultList();
 	
-		Iterator itr1 = stock.iterator();
+		Iterator<StocArts> itr1 = stock.iterator();
 	    i = 0;
 		while (itr1.hasNext()) {
 
-			StocArts emp = (StocArts) itr1.next();
+			StocArts emp = itr1.next();
 			System.out.println(emp.getArtsDescripcion()+"-"+ i++);
 
 		}
@@ -65,23 +63,24 @@ public class HibernateTest {
 
 		List<VentCliv> ListaLP = session.createQuery(criteriaQuery11).getResultList();
 	
-		Iterator itr11 = ListaLP.iterator();
+		Iterator<VentCliv> itr11 = ListaLP.iterator();
 	    i = 0;
 		while (itr11.hasNext()) {
 
-			VentCliv listaprecios = (VentCliv) itr11.next();
+			VentCliv listaprecios = itr11.next();
 			System.out.println(listaprecios.getClivCliente()+"-"+ i++);
 
 		}
 		
 
-		VentClivDAO listaPrecio = new VentClivDAO();		
+//		VentClivDAO listaPrecio = new VentClivDAO();		
 //		VentCliv x = listaPrecio.findById(28);
 		
-		VentClivDAO listaPrecio1 = new VentClivDAO();		
-		List<VentCliv> x1 = listaPrecio1.getListaPreciosByCliente(CcobClieDAO.findById(28));
+//		VentClivDAO listaPrecio1 = new VentClivDAO();		
+//		List<VentCliv> x1 = listaPrecio1.getListaPreciosByCliente(CcobClieDAO.findById(28));
 		
 		
+		@SuppressWarnings("deprecation")
 		PreciosEspeciales pe = new PreciosEspeciales( 28 , 100, 10, 10,
 				new BigDecimal(2.0),new BigDecimal(3.0),
 				"DOL", new BigDecimal(4.0), new Date(2018 ,05,18), new Date(2099,12,31), new BigDecimal(3.0), "");
