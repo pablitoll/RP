@@ -304,7 +304,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 						getView().tableEsclavo.setRowSorter(null);
 
-						int idEsclavo = (int) getView().tableEsclavo.getValueAt(row, CargaClienteEsclavoView.COL_ID_CLIENTE_ESCLAVO);
+						int idEsclavo = (int) getView().tableEsclavo.getModel().getValueAt(modelRow, CargaClienteEsclavoView.COL_ID_CLIENTE_ESCLAVO);
 						int idMaestro = Integer.valueOf(getView().txtNroCliente.getText());
 						MaestroEsclavo me = MaestroEsclavoDAO.findByClienteIdEsclavoID(idMaestro, idEsclavo);
 
@@ -312,6 +312,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 						dm.removeRow(modelRow);
 
 						HibernateGeneric.remove(me);
+
+						GeneradorDePrecios.eliminarListaCustomizada(CcobClieDAO.findById(idEsclavo), getModel().getListaCliente());
 
 					} catch (Exception ex) {
 						ManejoDeError.showError(ex, "Error al borrar");

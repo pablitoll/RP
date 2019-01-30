@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="554" pageHeight="842" columnWidth="554" leftMargin="0" rightMargin="0" topMargin="20" bottomMargin="20" uuid="49e54468-441e-45e9-9d53-dc14e70b3085">
-	<property name="ireport.zoom" value="1.610510000000001"/>
-	<property name="ireport.x" value="13"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="4.177248169415658"/>
+	<property name="ireport.x" value="1572"/>
+	<property name="ireport.y" value="98"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -34,35 +34,42 @@
 	<field name="precioArticulo" class="java.lang.String"/>
 	<title>
 		<band height="20" splitType="Stretch">
-			<line>
-				<reportElement x="0" y="19" width="555" height="1" uuid="930f688c-fa9a-4182-8685-e629e3b98300"/>
-			</line>
 			<staticText>
-				<reportElement x="0" y="0" width="439" height="20" uuid="3989e5c3-0d0e-4b48-81c5-9adaba5e797f"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Descripcion]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="439" y="0" width="116" height="20" uuid="5eb467c1-1486-4fc0-a4d0-6ea8021a100b"/>
+				<reportElement x="369" y="0" width="186" height="20" uuid="5eb467c1-1486-4fc0-a4d0-6ea8021a100b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<text><![CDATA[Precio]]></text>
 			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="369" height="20" uuid="3989e5c3-0d0e-4b48-81c5-9adaba5e797f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="553" height="20" uuid="5e937b8f-7aef-4b1b-85d5-419a26515464"/>
+			</rectangle>
+			<line>
+				<reportElement x="369" y="0" width="1" height="20" uuid="8dd238b9-6d27-46bd-9ae5-9d16a84f4953"/>
+			</line>
 		</band>
 	</title>
 	<detail>
-		<band height="17" splitType="Stretch">
+		<band height="48" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="47" width="554" height="1" uuid="930f688c-fa9a-4182-8685-e629e3b98300"/>
+			</line>
 			<textField>
-				<reportElement x="369" y="0" width="104" height="15" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
-				<textElement textAlignment="Center"/>
+				<reportElement x="369" y="0" width="104" height="45" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{monedaArticulo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="473" y="0" width="81" height="15" uuid="2f9a83a1-017a-48e8-afa9-27fd07084edf"/>
-				<textElement textAlignment="Right"/>
+				<reportElement x="473" y="0" width="80" height="45" uuid="2f9a83a1-017a-48e8-afa9-27fd07084edf"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{precioArticulo}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="0" y="0" width="369" height="15" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="369" height="45" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{descArticulo}]]></textFieldExpression>
 			</textField>
 		</band>

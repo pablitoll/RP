@@ -118,7 +118,7 @@ public class Reportes {
 				SistUnim unidad = SistUnimDAO.findById(stock.getArtsUnimedStock());
 				SistMone moneda = SistMoneDAO.findById(ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo());
 
-				ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(),
+				ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion().trim(), unidad.getUnimNombre(),
 						moneda.getMoneNombre(), CommonPricing.formatearImporte(ventaBase.getArpvPrecioVta().doubleValue()), stock.getArtsClasif1Cad1());
 
 				listaProductos.add(producto);
