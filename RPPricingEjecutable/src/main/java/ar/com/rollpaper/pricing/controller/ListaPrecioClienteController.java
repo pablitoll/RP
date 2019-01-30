@@ -103,12 +103,13 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 	private void setModoPantalla() {
 		Boolean tieneCli = !getView().lblNombreCliente.getText().equals("S/D");
+		Boolean tieneLista = getModel().getListaCargada() != null;
 
 		getView().txtNroCliente.setEnabled(!tieneCli);
 		getView().cbNroLista.setEnabled(tieneCli);
 		getView().tableResultado.setEnabled(tieneCli);
-		getView().btnExportarExcel.setEnabled(tieneCli);
-		getView().btnGenerarPDF.setEnabled(tieneCli);
+		getView().btnExportarExcel.setEnabled(tieneLista);
+		getView().btnGenerarPDF.setEnabled(tieneLista);
 		getView().btnCancelar.setEnabled(tieneCli);
 	}
 
@@ -204,13 +205,15 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 		getModel().setClienteCargado(null);
 
 		resetearDatosDePantalla();
-		getModel().setClienteCargado(clienteCargado);
-		getView().txtNroCliente.setText(String.valueOf(clienteCargado.getClieCliente()));
-		perdioFocoCliente(clienteCargado.getClieCliente());
+		if (clienteCargado != null) {
+			getModel().setClienteCargado(clienteCargado);
+			getView().txtNroCliente.setText(String.valueOf(clienteCargado.getClieCliente()));
+			perdioFocoCliente(clienteCargado.getClieCliente());
 
-		for (int i = 0; i < getView().cbNroLista.getModel().getSize(); i++) {
-			if (((ListaDTO) getView().cbNroLista.getModel().getElementAt(i)).equals(listaActual)) {
-				getView().cbNroLista.setSelectedIndex(i);
+			for (int i = 0; i < getView().cbNroLista.getModel().getSize(); i++) {
+				if (((ListaDTO) getView().cbNroLista.getModel().getElementAt(i)).equals(listaActual)) {
+					getView().cbNroLista.setSelectedIndex(i);
+				}
 			}
 		}
 	}
