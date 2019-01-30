@@ -339,7 +339,7 @@ public class GeneradorDePrecios {
 
 	/**
 	 * @param cliente
-	 * @param lista
+	 * @param lista 
 	 */
 	public static void eliminarListaCustomizada(CcobClie cliente, VentLipv lista) {
 		List<VentArpc> listaABorrar = VentArpcDAO.findByListaByClient(cliente, lista);
