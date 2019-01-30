@@ -22,8 +22,6 @@ public class HibernateTest {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		session.beginTransaction();
 
-		
-
 		CriteriaQuery<CcobClie> criteriaQuery = session.getCriteriaBuilder().createQuery(CcobClie.class);
 		criteriaQuery.from(CcobClie.class);
 
@@ -37,9 +35,6 @@ public class HibernateTest {
 			System.out.println(emp.getClieNombre()+"-"+ i++);
 
 		}
-
-
-		
 		
 		CriteriaQuery<StocArts> criteriaQuery1 = session.getCriteriaBuilder().createQuery(StocArts.class);
 		criteriaQuery1.from(StocArts.class);
