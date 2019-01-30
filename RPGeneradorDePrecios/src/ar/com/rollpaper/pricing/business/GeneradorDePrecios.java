@@ -341,7 +341,7 @@ public class GeneradorDePrecios {
 	 * @param cliente
 	 * @param lista
 	 */
-	private static void eliminarListaCustomizada(CcobClie cliente, VentLipv lista) {
+	public static void eliminarListaCustomizada(CcobClie cliente, VentLipv lista) {
 		List<VentArpc> listaABorrar = VentArpcDAO.findByListaByClient(cliente, lista);
 
 		for (VentArpc ventArpc : listaABorrar) {
