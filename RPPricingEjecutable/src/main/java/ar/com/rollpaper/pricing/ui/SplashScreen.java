@@ -19,12 +19,16 @@ import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
 
 import ar.com.rollpaper.pricing.business.ArchivoDePropiedadesBusiness;
+import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.LogBusiness;
 import ar.com.rollpaper.pricing.controller.PantPrincipalController;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
 import ar.com.rp.ui.main.MainFramework;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 public class SplashScreen extends JWindow {
 
@@ -75,11 +79,28 @@ public class SplashScreen extends JWindow {
 
 				progressBar.setValue(count);
 
-				System.out.println(count);
+				//System.out.println(count);
+				if (count == 20) {
+					// inicializo el jasper
 
+					try {
+						JasperReport jasperReport = (JasperReport) JRLoader.loadObject(Main.class.getResource(ConstantesRP.REPO_LISTA_PRECIO_ORIGINAL));
+					} catch (JRException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
 				if (count == 50) {
 					try {
-						HibernateUtil.getSession();
+						
+						ArchivoDePropiedadesBusiness.setPathToConfig(
+								Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+						HibernateUtil.getSessionFactory(ArchivoDePropiedadesBusiness.getConecctionString(),
+								ArchivoDePropiedadesBusiness.getUsr(), ArchivoDePropiedadesBusiness.getPass());
+
+			//			HibernateUtil.getSession();
+						
 					} catch (HibernateException e) {
 						e.printStackTrace();
 					} catch (Exception e) {
@@ -100,38 +121,7 @@ public class SplashScreen extends JWindow {
 			private void createFrame() throws HeadlessException {
 				EventQueue.invokeLater(new Runnable() {
 					public void run() {
-						try {
-
-							// Inicializo el font
-							MainFramework.inicializarFont();
-							ArchivoDePropiedadesBusiness.setPathToConfig(SplashScreen.class.getProtectionDomain()
-									.getCodeSource().getLocation().toURI().getPath());
-
-							// Cargo un log
-
-							LogBusiness.inicializarLogManager();
-
-							if (MainFramework.isRunning(PORT)) {
-								String[] option = { "Si", "No" };
-								Object confirm = Dialog.showConfirmDialogObject(
-										"<html>Ya hay una instancia del Cliente ejecutandose en este Puesto <br>Desea Abrir otra instancia?</html>",
-										"Nueva Instancia Cliente", JOptionPane.YES_NO_OPTION,
-										JOptionPane.QUESTION_MESSAGE, null, option, option[1]);
-								if (confirm == option[1]) {
-									System.exit(1);
-								}
-							}
-
-							PantPrincipalView vista = new PantPrincipalView();
-							PantPrincipalModel model = new PantPrincipalModel();
-							PantPrincipalController controller = new PantPrincipalController(vista, model);
-
-							controller.iniciar();
-
-						} catch (Exception e) {
-							ManejoDeError.showError(e, "Error al iniciar");
-							System.exit(-1);
-						}
+						Main.Inicio();
 					}
 				});
 			}

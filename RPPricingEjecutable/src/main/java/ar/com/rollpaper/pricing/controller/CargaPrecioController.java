@@ -363,7 +363,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 						PantPrincipalController.setRestoreCursor();
 					}
 
-					Dialog.showMessageDialog("Se termino de aplicar nuevos precios en todas las lista del cliente", "Aplicación de Precios", JOptionPane.INFORMATION_MESSAGE);
+					Dialog.showMessageDialog("Se termino de aplicar nuevos precios en todas las lista del cliente", "Aplicacion de Precios", JOptionPane.INFORMATION_MESSAGE);
 
 					// reseto la pantalla
 					getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo

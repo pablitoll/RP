@@ -5,6 +5,7 @@ import javax.swing.SwingUtilities;
 
 import ar.com.rollpaper.pricing.business.ArchivoDePropiedadesBusiness;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.business.LogBusiness;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
@@ -67,7 +68,10 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		if (accion.equals(ConstantesRP.Acciones.CAMBIAR_DB.toString())) {
 			try {
 				ArchivoDePropiedadesBusiness.recargar();
-				HibernateUtil.reConectar();
+				// HibernateUtil.reConectar();
+
+				HibernateUtil.reConectar(ArchivoDePropiedadesBusiness.getConecctionString(),
+						ArchivoDePropiedadesBusiness.getUsr(), ArchivoDePropiedadesBusiness.getPass());
 
 				refrescarBarra();
 			} catch (Exception e) {
@@ -156,7 +160,25 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 	}
 
 	private void procesoPrecios() {
-		// TODO Afalta procesoPrecios() {
+		try {
+
+			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere Generar los precios de TODOS los Clientes?",
+					"Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+			if (confirm == JOptionPane.YES_OPTION) {
+				PantPrincipalController.setCursorOcupado();
+				try {
+					GeneradorDePrecios.generarPrecios();
+				} finally {
+					PantPrincipalController.setRestoreCursor();
+				}
+
+				Dialog.showMessageDialog("Los precios fueron generados exitosamente.");
+			}
+		} catch (Exception e) {
+			ManejoDeError.showError(e, "Error al Generar Precios");
+			System.exit(0);
+		}
 
 	}
 
@@ -164,8 +186,9 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 	protected void salir() {
 		try {
 
-			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere salir de la aplicacion?", "Confirmacion de Salida", JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere salir de la aplicacion?",
+					"Confirmacion de Salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null,
+					null);
 
 			if (confirm == JOptionPane.YES_OPTION) {
 

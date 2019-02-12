@@ -107,7 +107,7 @@ public class LogManager {
 			msgError += "\n" + error.getStackTrace().toString();
 		}
 
-		System.out.println(msgError);
+		//System.out.println(msgError);
 		logear(archivoLog.Error, msgError, forzarEscritura);
 	}
 
