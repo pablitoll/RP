@@ -140,4 +140,9 @@ public class VentLipvDAO {
 		
 		
 	}
+
+	public static VentLipv getListbyID(int pricListaPrecvta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -177,4 +177,15 @@ public class PreciosEspecialesDAO {
 		return ListaPreciosEspecialesNoEnLista;
 	}
 
+	public static List<PreciosEspeciales> getAll() {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder().createQuery(PreciosEspeciales.class);
+		Root<PreciosEspeciales> i = criteriaQuery.from(PreciosEspeciales.class);
+		//criteriaQuery.where(cb.equal(i.get("pricCliente"), 1));
+		List<PreciosEspeciales> listaPrecios = session.createQuery(criteriaQuery).getResultList();// TODO Auto-generated
+																									// method stub
+		return listaPrecios;
+	}
+
 }

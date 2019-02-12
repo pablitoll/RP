@@ -28,7 +28,6 @@ public class DescuentoXFamiliasDAO {
 
 	private static final Log log = LogFactory.getLog(DescuentoXFamiliasDAO.class);
 
-	
 	public static DescuentoXFamilias findById(int id) {
 		log.debug("getting PricDescuentoXFamilias instance with id: " + id);
 		try {
@@ -92,5 +91,17 @@ public class DescuentoXFamiliasDAO {
 			}
 		}
 		return listasVigentes;
+	}
+
+	public static List<DescuentoXFamilias> getAll() {
+		Session session = HibernateUtil.getSession();
+		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
+
+		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder()
+				.createQuery(DescuentoXFamilias.class);
+		Root<DescuentoXFamilias> i = criteriaQuery.from(DescuentoXFamilias.class);
+		List<DescuentoXFamilias> descuentos = session.createQuery(criteriaQuery).getResultList();
+
+		return descuentos;
 	}
 }
