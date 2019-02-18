@@ -16,12 +16,12 @@ import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
+import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
 import ar.com.rollpaper.pricing.dao.MaestroEsclavoDAO;
 import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
-import ar.com.rollpaper.pricing.dao.VentClivDAO;
 import ar.com.rollpaper.pricing.dao.VentLipvDAO;
 import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
@@ -132,7 +132,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 	private void cargarListaPrecios(CcobClie cliente) throws Exception {
 		getModel().setListaCliente(null);
-		List<VentCliv> listas = VentClivDAO.getListaPreciosByCliente(cliente);
+		List<VentCliv> listas = ListaBusiness.getListaPreciosByCliente(cliente);
 		if (listas.size() > 1) {
 			throw new Exception("El Cliente tiene mas de una lista asociada");
 		}
@@ -273,12 +273,7 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 			try {
 				CcobClie cliEsclavo = buscarClienteEsclavo();
 				if (cliEsclavo != null) {
-
-					if (esclavoTieneCargadoItems(cliEsclavo, getModel().getListaCliente().getLipvListaPrecvta())) {
-						Dialog.showMessageDialog(
-								"El cliente seleccionado tiene datos previos. No puede ser usado como esclavo.\nPara poder seguir adelante, antes debe eliminar todos sus precios vigentes e históricos.",
-								"Cliente con datos previos", JOptionPane.ERROR_MESSAGE);
-					} else {
+					if (isNuevoEscalvoValido(cliEsclavo)) {
 						MaestroEsclavo maestroEsclavo = new MaestroEsclavo(getModel().getCliente().getClieCliente(), getModel().getListaCliente().getLipvListaPrecvta(),
 								cliEsclavo.getClieCliente());
 						agregarRegistro(cliEsclavo, maestroEsclavo);
@@ -354,6 +349,33 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 				ManejoDeError.showError(e, "Error al exportar");
 			}
 		}
+	}
+
+	private boolean isNuevoEscalvoValido(CcobClie cliEsclavo) {
+
+		if (esclavoTieneCargadoItems(cliEsclavo, getModel().getListaCliente().getLipvListaPrecvta())) {
+			Dialog.showMessageDialog(String.format(
+					"El cliente (%s) \"%s\" tiene datos previos. No puede ser usado como esclavo.\nPara poder seguir adelante, antes debe eliminar todos sus precios vigentes e históricos.",
+					cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre()), "Cliente con datos previos", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		if (clienteNuevoTieneListaActual(cliEsclavo)) {
+			Dialog.showMessageDialog(String.format("El Cliente (%s) \"%s\" tiene asignada como Lista Principal \"%s\".\nNo se puede asignar como Esclavo",
+					cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre(), getModel().getListaCliente().getLipvNombre()), "Esclavo no Valdio", JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean clienteNuevoTieneListaActual(CcobClie cliEsclavo) {
+		for (VentCliv ventCliv : ListaBusiness.getListaPreciosByCliente(cliEsclavo)) {
+			if (ventCliv.getClivListaPrecvta().equals(getModel().getListaCliente().getLipvListaPrecvta())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private boolean esclavoTieneCargadoItems(CcobClie cliEsclavo, int idLista) {

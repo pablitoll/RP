@@ -92,4 +92,8 @@ public class ListaBusiness {
 		return resp != null;
 	}
 
+	public static List<VentCliv> getListaPreciosByCliente(CcobClie cliente) {
+		return VentClivDAO.getListaPreciosByCliente(cliente);
+	}
+
 }

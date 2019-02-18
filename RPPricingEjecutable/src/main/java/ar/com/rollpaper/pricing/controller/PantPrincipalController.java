@@ -20,6 +20,7 @@ import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
 import ar.com.rollpaper.pricing.view.ListaPrecioXListaView;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.VentanaCalculadora;
 
@@ -68,14 +69,43 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		if (accion.equals(ConstantesRP.Acciones.CAMBIAR_DB.toString())) {
 			try {
 				ArchivoDePropiedadesBusiness.recargar();
-				// HibernateUtil.reConectar();
-
-				HibernateUtil.reConectar(ArchivoDePropiedadesBusiness.getConecctionString(),
-						ArchivoDePropiedadesBusiness.getUsr(), ArchivoDePropiedadesBusiness.getPass());
-
+				HibernateUtil.reConectar(ArchivoDePropiedadesBusiness.getConecctionString(), ArchivoDePropiedadesBusiness.getUsr(), ArchivoDePropiedadesBusiness.getPass());
 				refrescarBarra();
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al refrescar DB");
+			}
+		}
+
+		if (accion.equals(ConstantesRP.Acciones.CAMBIAR_SEPARADOR_DECIMAL.toString()) || accion.equals(ConstantesRP.Acciones.CAMBIAR_SEPARADOR_MILES.toString())) {
+			try {
+				String msg = "Decimal";
+				Boolean separadorDecimal = true;
+				String valorDefault = ArchivoDePropiedadesBusiness.getSeparadorDecimales();
+
+				if (accion.equals(ConstantesRP.Acciones.CAMBIAR_SEPARADOR_MILES.toString())) {
+					separadorDecimal = false;
+					msg = "de Miles";
+					valorDefault = ArchivoDePropiedadesBusiness.getSeparadorMiles();
+				}
+
+				Object separadorNuevoObj = JOptionPane.showInputDialog(null, String.format("Ingrese el Separador %s a Utilizar", msg),
+						String.format("Configuracion de Separador %s", msg), JOptionPane.QUESTION_MESSAGE, null, null, valorDefault);
+				if (separadorNuevoObj != null) {
+					String separadorNuevo = String.valueOf(separadorNuevoObj).trim();
+					if (separadorNuevo.length() != 1) {
+						Dialog.showMessageDialog("El separador debe ser de un solo caracter");
+					} else {
+						if (separadorDecimal) {
+							ArchivoDePropiedadesBusiness.setSeparadorDecimales(separadorNuevo);
+							Common.getGeneralSettings().setSeparadorDecimal(separadorNuevo);
+						} else {
+							ArchivoDePropiedadesBusiness.setSeparadorMiles(separadorNuevo);
+							Common.getGeneralSettings().setSeparadorMiles(separadorNuevo);
+						}
+					}
+				}
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al cambiar de Separador");
 			}
 		}
 
@@ -156,14 +186,13 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 				ManejoDeError.showError(e, "No se puede acceder a la pantalla de carga de precio por clietne");
 			}
 		}
-
 	}
 
 	private void procesoPrecios() {
 		try {
 
-			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere Generar los precios de TODOS los Clientes?",
-					"Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere Generar los precios de TODOS los Clientes?", "Confirmacion", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (confirm == JOptionPane.YES_OPTION) {
 				PantPrincipalController.setCursorOcupado();
@@ -179,16 +208,14 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 			ManejoDeError.showError(e, "Error al Generar Precios");
 			System.exit(0);
 		}
-
 	}
 
 	@Override
 	protected void salir() {
 		try {
 
-			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere salir de la aplicacion?",
-					"Confirmacion de Salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null,
-					null);
+			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere salir de la aplicacion?", "Confirmacion de Salida", JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (confirm == JOptionPane.YES_OPTION) {
 

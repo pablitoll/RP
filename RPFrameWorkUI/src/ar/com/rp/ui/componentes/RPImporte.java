@@ -1,3 +1,4 @@
+//TODO CAMBIO DECIMAL
 package ar.com.rp.ui.componentes;
 
 import javax.swing.JTextField;
@@ -10,7 +11,7 @@ import ar.com.rp.ui.common.Common;
 
 public class RPImporte extends JTextField {
 
-	/**
+	/**max
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
@@ -73,7 +74,7 @@ public class RPImporte extends JTextField {
 				super.remove(offs, len);
 				String valor = getText(0, getLength());
 
-				valor = valor.replace(".", "").replace(",", "").trim();
+				valor = valor.replace(Common.getGeneralSettings().getSeparadorDecimal(), "").replace(Common.getGeneralSettings().getSeparadorMiles(), "").trim();
 				if (!valor.equals("")) {
 					if (cantidadMaxDecimales > 0) {
 
@@ -236,6 +237,7 @@ public class RPImporte extends JTextField {
 	// }
 	// }
 	// }
+	//TODO DECIMAL
 	private static String formatearImporteInterno(String valor, boolean conSeparadorMiles, int cantidadMaxDecimales) {
 		boolean mostrarDecimales = cantidadMaxDecimales > 0;
 		valor = valor.trim();
@@ -243,9 +245,9 @@ public class RPImporte extends JTextField {
 			return "";
 		} else {
 			int cantidadDecimales = cantidadMaxDecimales; // por default
-			String splitValor[] = valor.split(Common.getGeneralSettings().getSeparadorDecimal());
+			String splitValor[] = valor.split("\\" + Common.getGeneralSettings().getSeparadorDecimal());
 
-			splitValor[0] = String.valueOf(Long.valueOf(splitValor[0].replace(".", ""))); // saco los ceros a izquierda
+			splitValor[0] = String.valueOf(Long.valueOf(splitValor[0].replace(Common.getGeneralSettings().getSeparadorMiles(), ""))); // saco los ceros a izquierda
 			if (splitValor.length > 1) {
 				splitValor[1] = splitValor[1].trim();
 
@@ -296,7 +298,7 @@ public class RPImporte extends JTextField {
 		return getText().equals("");
 	}
 
-	public Double getImporte() {
+	public Double getImporte() throws Exception {
 		String strImporte = getText().trim();
 		if (!strImporte.equals("")) {
 			if (cantidadMaxDecimales == 0) { // Le agrego los decimales para que no explote la converison
@@ -312,7 +314,7 @@ public class RPImporte extends JTextField {
 		setText(Common.double2String(importe));
 	}
 
-	public Integer getEnteros() {
+	public Integer getEnteros() throws Exception {
 		return getImporte().intValue();
 	}
 

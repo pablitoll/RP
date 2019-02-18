@@ -2,6 +2,7 @@ package ar.com.rollpaper.pricing.business;
 
 import java.io.File;
 
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.ArchivoPropiedades;
 
 public class ArchivoDePropiedadesBusiness {
@@ -19,7 +20,7 @@ public class ArchivoDePropiedadesBusiness {
 	}
 
 	public enum propiedades {
-		conecctionString, pass, usr
+		conecctionString, pass, usr, separadorDecimal, separadorMiles
 	};
 
 	public static String getConecctionString() throws Exception {
@@ -38,6 +39,22 @@ public class ArchivoDePropiedadesBusiness {
 		return getPropiedades().getPropiedad(propiedades.pass);
 	}
 
+	public static String getSeparadorDecimales() throws Exception {
+		return getPropiedades().getPropiedad(propiedades.separadorDecimal, Common.getGeneralSettings().getSeparadorDecimal());
+	}
+
+	public static void setSeparadorDecimales(String valor) throws Exception {
+		getPropiedades().setProperty(propiedades.separadorDecimal, valor);
+	}
+
+	public static String getSeparadorMiles() throws Exception {
+		return getPropiedades().getPropiedad(propiedades.separadorMiles, Common.getGeneralSettings().getSeparadorMiles());
+	}
+
+	public static void setSeparadorMiles(String valor) throws Exception {
+		getPropiedades().setProperty(propiedades.separadorMiles, valor);
+	}
+
 	public static String getUsr() throws Exception {
 		return getPropiedades().getPropiedad(propiedades.usr);
 	}
@@ -46,4 +63,5 @@ public class ArchivoDePropiedadesBusiness {
 		pPropiedades = null;
 
 	}
+
 }

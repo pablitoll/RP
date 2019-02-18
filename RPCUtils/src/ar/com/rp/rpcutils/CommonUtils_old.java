@@ -232,15 +232,15 @@ public class CommonUtils_old {
 	}
 
 	
-	public static Double String2Double(String valor, String separadorMiles) {
-		// Si el signo negativo viene al final lo paso a la primera poscion
-		if (valor.substring(valor.length() - 1).equals("-")) {
-			valor = "-" + valor.substring(0, valor.length() - 1).trim();
-		}
-		valor = valor.replace(separadorMiles, ""); // Saco el separador de miles del sistema
-		valor = valor.replace(",", "."); // Si tengo una coma la paso a punto que es el separador que usa el Double
-		return Double.valueOf(valor);
-	}
+//	public static Double String2DoubleNOUSAR(String valor, String separadorMiles) {
+//		// Si el signo negativo viene al final lo paso a la primera poscion
+//		if (valor.substring(valor.length() - 1).equals("-")) {
+//			valor = "-" + valor.substring(0, valor.length() - 1).trim();
+//		}
+//		valor = valor.replace(separadorMiles, ""); // Saco el separador de miles del sistema
+//		valor = valor.replace(",", "."); // Si tengo una coma la paso a punto que es el separador que usa el Double
+//		return Double.valueOf(valor);
+//	}
 
 	public static String double2String(Double valor, String separadorMiles, String separadorDecimal) {
 		String string = Double.toString(valor);

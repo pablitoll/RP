@@ -188,8 +188,7 @@ public class CommonUtils {
 
 	public static boolean isPrintableChar(char c) {
 		Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
-		return (!Character.isISOControl(c)) && c != KeyEvent.CHAR_UNDEFINED && block != null
-				&& block != Character.UnicodeBlock.SPECIALS;
+		return (!Character.isISOControl(c)) && c != KeyEvent.CHAR_UNDEFINED && block != null && block != Character.UnicodeBlock.SPECIALS;
 	}
 
 	public static String agregarComillas(String valor) {
@@ -241,16 +240,35 @@ public class CommonUtils {
 		}
 	}
 
-	public static Double String2Double(String valor, String separadorMiles) {
+	// TODO DECIMAL
+	public static Double String2Double(String valor, String separadorMiles, String separadorDecimal) throws Exception {
+	//	valor = "98*93*96";
 		// Si el signo negativo viene al final lo paso a la primera poscion
 		if (valor.substring(valor.length() - 1).equals("-")) {
 			valor = "-" + valor.substring(0, valor.length() - 1).trim();
 		}
 		valor = valor.replace(separadorMiles, ""); // Saco el separador de miles del sistema
-		valor = valor.replace(",", "."); // Si tengo una coma la paso a punto que es el separador que usa el Double
-		return Double.valueOf(valor);
+		// valor = valor.replace(",", "."); // Si tengo una coma la paso a punto que es
+		// el separador que usa el Double
+		//valor = valor.replace(separadorDecimal, ".");
+		//Solo por control para que no vengan caracteres raros, lo spliteo las dos partes deben ser enteros
+		String[] valorSplit = valor.split("\\" + separadorDecimal);
+		
+		Integer.valueOf(valorSplit[0]);
+		String valorToConvertir = valorSplit[0];
+		if(valorSplit.length == 2) {
+			Integer.valueOf(valorSplit[1]);
+			valorToConvertir += "." + valorSplit[1];
+		} else {
+			if(valorSplit.length > 2) {
+				throw new Exception("Numero no valido para convertir: " + valor);
+			}
+		}
+		
+		return Double.valueOf(valorToConvertir);
 	}
 
+	// TODO CAMBIE POR DECIMAL
 	public static String double2String(Double valor, String separadorMiles, String separadorDecimal) {
 		String strValor = Double.toString(valor);
 		String[] valorSplit = strValor.split("\\.");
@@ -260,11 +278,13 @@ public class CommonUtils {
 				cantDecimales = valorSplit[1].length();
 			}
 		}
+		String retorno = valorSplit[0] + separadorDecimal + strLeft(valorSplit[1] + "000000000000000", cantDecimales);
 
-		String retorno = String.format("%." + cantDecimales + "f", valor);
-		retorno = retorno.replace(separadorMiles, separadorDecimal); // El String.format("%f", valor) solo agrega el
-																		// separador decimal, me aseguro que
-																		// sea el que usa el sismeta
+		// retorno retorno = String.format("%." + cantDecimales + "f", valor);
+		// retorno = retorno.replace(separadorMiles, separadorDecimal); // El
+		// String.format("%f", valor) solo agrega el
+		// separador decimal, me aseguro que
+		// sea el que usa el sismeta
 		return retorno;
 	}
 
@@ -306,12 +326,10 @@ public class CommonUtils {
 	}
 
 	public static Boolean string2Boolean(String valor) throws Exception {
-		if (valor.equalsIgnoreCase("SI") || valor.equalsIgnoreCase("S") || valor.equalsIgnoreCase("true")
-				|| valor.equalsIgnoreCase("t") || valor.equalsIgnoreCase("1")) {
+		if (valor.equalsIgnoreCase("SI") || valor.equalsIgnoreCase("S") || valor.equalsIgnoreCase("true") || valor.equalsIgnoreCase("t") || valor.equalsIgnoreCase("1")) {
 			return true;
 		} else {
-			if (valor.equalsIgnoreCase("NO") || valor.equalsIgnoreCase("N") || valor.equalsIgnoreCase("false")
-					|| valor.equalsIgnoreCase("f") || valor.equalsIgnoreCase("0")) {
+			if (valor.equalsIgnoreCase("NO") || valor.equalsIgnoreCase("N") || valor.equalsIgnoreCase("false") || valor.equalsIgnoreCase("f") || valor.equalsIgnoreCase("0")) {
 				return false;
 			}
 		}
@@ -327,10 +345,8 @@ public class CommonUtils {
 		Double cantRedondeo = Double.valueOf(strLeft("100000000000000", redondearA + 1));
 
 		Double aux = (Math.round(valor * cantRedondeo) / cantRedondeo);
-		
+
 		return aux;
 	}
-
-
 
 }

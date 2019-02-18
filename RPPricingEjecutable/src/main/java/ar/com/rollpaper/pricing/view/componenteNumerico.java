@@ -20,6 +20,7 @@ import javax.swing.text.PlainDocument;
 import com.alee.laf.text.WebTextField;
 
 import ar.com.rollpaper.pricing.business.CommonPricing;
+import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rp.ui.common.Common;
 
 public class componenteNumerico extends WebTextField {
@@ -49,24 +50,33 @@ public class componenteNumerico extends WebTextField {
 			@Override
 			public void focusLost(FocusEvent e) {
 				if (!getText().equals("") && numeroValido(getText()) && (cantDecimales > 0)) {
-					String decimales = getDecimales(getText());
-					String entero = getEnteros(getText());
-					setText(CommonPricing.formatearImporte(entero + Common.getGeneralSettings().getSeparadorDecimal() + (decimales + "00000").substring(0, cantDecimales)));
+					try {
+						String decimales = getDecimales(getText());
+						String entero = getEnteros(getText());
+						setText(CommonPricing.formatearImporte(entero + Common.getGeneralSettings().getSeparadorDecimal() + (decimales + "00000").substring(0, cantDecimales)));
+
+					} catch (Exception e2) {
+						ManejoDeError.showError(e2, "Error al perder Focus");
+					}
 				}
 			}
 
 			@Override
 			public void focusGained(FocusEvent e) {
 				if (!getText().equals("")) {
-					String decimales = getDecimales(getText());
-					String entero = getEnteros(getText());
+					try {
+						String decimales = getDecimales(getText());
+						String entero = getEnteros(getText());
 
-					String parteDecimal = "";
+						String parteDecimal = "";
 
-					if (!decimales.equals("")) {
-						parteDecimal = "." + String.valueOf(Integer.valueOf(decimales)); // saco los ceros
+						if (!decimales.equals("")) {
+							parteDecimal = Common.getGeneralSettings().getSeparadorDecimal() + String.valueOf(Integer.valueOf(decimales)); // saco los ceros
+						}
+						setText(entero + parteDecimal);
+					} catch (Exception e2) {
+						ManejoDeError.showError(e2, "Error al ganar Focus");
 					}
-					setText(entero + parteDecimal);
 				}
 			}
 		});
@@ -79,7 +89,7 @@ public class componenteNumerico extends WebTextField {
 
 				String valorOrginal = getText(0, getLength());
 				String numeroConCaracteres = valorOrginal.substring(0, off) + str + valorOrginal.substring(off, valorOrginal.length()); // inserto el instrin
-				
+
 				if (numeroValido(numeroConCaracteres)) {
 					super.remove(0, getLength());
 					super.insertString(0, numeroConCaracteres, attr);
@@ -89,21 +99,21 @@ public class componenteNumerico extends WebTextField {
 
 	}
 
-	protected String getEnteros(String numero) {
+	protected String getEnteros(String numero) throws Exception {
 		if (!numero.equals("")) {
 			Double d = Common.String2Double(numero); // Que sea un double valido
 			String aux = Common.double2String(d);
-			String valor[] = aux.split(Common.getGeneralSettings().getSeparadorDecimal());
+			String valor[] = aux.split("\\" + Common.getGeneralSettings().getSeparadorDecimal());
 			return valor[0].trim();
 		}
 		return "";
 	}
 
-	protected String getDecimales(String numero) {
+	protected String getDecimales(String numero) throws Exception {
 		if (!numero.equals("")) {
 			Double d = Common.String2Double(numero); // Que sea un double valido
 			String aux = Common.double2String(d);
-			String valor[] = aux.split(Common.getGeneralSettings().getSeparadorDecimal());
+			String valor[] = aux.split("\\" + Common.getGeneralSettings().getSeparadorDecimal());
 			if (valor.length > 1) {
 				if (Long.valueOf(valor[1].trim()) == 0) {
 					return "";

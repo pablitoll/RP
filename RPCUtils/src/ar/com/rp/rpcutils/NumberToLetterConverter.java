@@ -41,6 +41,7 @@ public abstract class NumberToLetterConverter {
 	 * 
 	 * @since 1.0
 	 */
+	
 	public static String convertNumberToLetter(double number, String separadorMiles, String separadorDecimal)  throws NumberFormatException {
 		String converted = new String();
 

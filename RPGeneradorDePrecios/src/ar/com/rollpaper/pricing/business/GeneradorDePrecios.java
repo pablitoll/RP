@@ -322,10 +322,10 @@ public class GeneradorDePrecios {
 	 *            parametros de entrada
 	 * @return an list of ListaPrecios
 	 */
-	private static List<VentLipv> BuscarListasPrecios() {
-
-		return VentLipvDAO.getAllLists();
-	}
+//	private static List<VentLipv> BuscarListasPrecios() {
+//
+//		return VentLipvDAO.getAllLists();
+//	}
 
 	public static void impactarPrecios(CcobClie clienteCargado, VentLipv listaCargada) {
 		generarListaDePreciosResponse response = GeneradorDePrecios.generarListaPreciosPorClienteLista(clienteCargado,

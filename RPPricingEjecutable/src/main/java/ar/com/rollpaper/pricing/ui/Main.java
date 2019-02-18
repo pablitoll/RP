@@ -10,6 +10,7 @@ import ar.com.rollpaper.pricing.controller.PantPrincipalController;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.main.MainFramework;
 
 public class Main extends MainFramework {
@@ -25,11 +26,6 @@ public class Main extends MainFramework {
 			public void run() {
 				Inicio();
 			}
-
-			/**
-			 * 
-			 */
-
 		});
 	}
 	
@@ -41,6 +37,10 @@ public class Main extends MainFramework {
 			ArchivoDePropiedadesBusiness.setPathToConfig(
 					Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
 
+			//Condifuracion regional
+			Common.getGeneralSettings().setSeparadorDecimal(ArchivoDePropiedadesBusiness.getSeparadorDecimales());
+			Common.getGeneralSettings().setSeparadorMiles(ArchivoDePropiedadesBusiness.getSeparadorMiles());
+			
 			// Cargo un log
 			splashMsg("Cargando archivo de Log");
 			LogBusiness.inicializarLogManager();

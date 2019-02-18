@@ -168,7 +168,7 @@ public class RPImporte_old extends JTextField {
 		return getText().equals("");
 	}
 
-	public Double getImporte() {
+	public Double getImporte() throws Exception {
 		String strImporte = getText().trim();
 		if (!strImporte.equals("")) {
 			if (soloEnteros) { // Le agrego los decimales para que no explote la converison
@@ -184,7 +184,7 @@ public class RPImporte_old extends JTextField {
 		// Obtengo la parte decimal para saber si estan todos los decimales, caso
 		// contrario le agego 0
 		String strImporte = Common.double2String(importe);
-		String decimal = strImporte.split(Common.getGeneralSettings().getSeparadorDecimal())[1];
+		String decimal = strImporte.split("\\" + Common.getGeneralSettings().getSeparadorDecimal())[1];
 
 		for (int i = 0; i < cantDecimales - decimal.length(); i++) {
 			strImporte += "0";
@@ -193,7 +193,7 @@ public class RPImporte_old extends JTextField {
 		setText(strImporte);
 	}
 
-	public Integer getEnteros() {
+	public Integer getEnteros() throws Exception {
 		return getImporte().intValue();
 	}
 

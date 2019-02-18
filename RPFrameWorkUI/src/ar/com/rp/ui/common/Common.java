@@ -17,7 +17,6 @@ import ar.com.rp.rpcutils.CommonUtils;
 
 public class Common {
 
-
 	private static GeneralSettings generalSettings = null;
 
 	public static void setGeneralSettings(GeneralSettings generalSettings) {
@@ -53,14 +52,14 @@ public class Common {
 	}
 
 	// Funciones
-//	public static ImageIcon loadIcon(URL iconoURL) {
-//		return CommonUtils.loadIcon(iconoURL, 40, 40);
-//	}
-//	
-//	public static ImageIcon loadIconMenu(URL iconoURL) {
-//		return CommonUtils.loadIcon(iconoURL, 20, 20);
-//	}
-	
+	// public static ImageIcon loadIcon(URL iconoURL) {
+	// return CommonUtils.loadIcon(iconoURL, 40, 40);
+	// }
+	//
+	// public static ImageIcon loadIconMenu(URL iconoURL) {
+	// return CommonUtils.loadIcon(iconoURL, 20, 20);
+	// }
+
 	public static ImageIcon loadIconBoton(String nombrePicture) {
 		return CommonUtils.loadIcon(nombrePicture, 40, 40);
 	}
@@ -108,43 +107,55 @@ public class Common {
 		}
 	}
 
-	public static Double String2Double(String valor) {
-		// Determino de manera dinamica cual es el separador de miles y cual el de decimal
-		String separadorMiles = getSeparasorMiles();
-
-		int posPunto = valor.indexOf(".");
-		int posComa = valor.indexOf(",");
-
-		if (posComa == -1) {
-			posComa = 99;
-		}
-
-		if (posPunto == -1) {
-			posPunto = 99;
-		}
-
-		if ((posComa != 99) && (posPunto == 99)) {
-			// Solo esta la coma
-			separadorMiles = ".";
-		} else {
-			if ((posPunto != 99) && (posComa == 99)) {
-				// Solo esta el punto
-				separadorMiles = ",";
-			} else {
-				// Esta los dos, me fio el que esta a izquierda es el separador de miles
-
-				if ((posPunto < posComa) && (posPunto < 3)) {
-					separadorMiles = ".";
-				}
-
-				if ((posComa < posPunto) && (posComa < 3)) {
-					separadorMiles = ",";
-				}
-			}
-		}
-
-		return CommonUtils.String2Double(valor, separadorMiles);
+	// TODO DECIMAL
+	public static Double String2Double(String valor) throws Exception {
+		return CommonUtils.String2Double(valor, Common.getGeneralSettings().getSeparadorMiles(), Common.getGeneralSettings().getSeparadorDecimal());
 	}
+	// public static Double String2Double(String valor) throws Exception {
+	// // Determino de manera dinamica cual es el separador de miles y cual el de
+	// // decimal
+	// String separadorMiles = getSeparasorMiles();
+	// String separadorDecimal = getSeparasorDecimal();
+	//
+	// int posPunto =
+	// valor.indexOf(Common.getGeneralSettings().getSeparadorMiles());
+	// int posComa =
+	// valor.indexOf(Common.getGeneralSettings().getSeparadorDecimal());
+	//
+	// if (posComa == -1) {
+	// posComa = 99;
+	// }
+	//
+	// if (posPunto == -1) {
+	// posPunto = 99;
+	// }
+	//
+	// if ((posComa != 99) && (posPunto == 99)) {
+	// // Solo esta la coma
+	// separadorMiles = Common.getGeneralSettings().getSeparadorMiles();
+	// separadorDecimal = Common.getGeneralSettings().getSeparadorDecimal();
+	// } else {
+	// if ((posPunto != 99) && (posComa == 99)) {
+	// // Solo esta el punto
+	// separadorMiles = Common.getGeneralSettings().getSeparadorDecimal();
+	// separadorDecimal = Common.getGeneralSettings().getSeparadorMiles();
+	// } else {
+	// // Esta los dos, me fio el que esta a izquierda es el separador de miles
+	//
+	// if ((posPunto < posComa) && (posPunto < 3)) {
+	// separadorMiles = Common.getGeneralSettings().getSeparadorMiles();
+	// separadorDecimal = Common.getGeneralSettings().getSeparadorDecimal();
+	// }
+	//
+	// if ((posComa < posPunto) && (posComa < 3)) {
+	// separadorMiles = Common.getGeneralSettings().getSeparadorDecimal();
+	// separadorDecimal = Common.getGeneralSettings().getSeparadorMiles();
+	// }
+	// }
+	// }
+	//
+	// return CommonUtils.String2Double(valor, separadorMiles, separadorDecimal);
+	// }
 
 	public static String double2String(Double valor) {
 		return CommonUtils.double2String(valor, getSeparasorMiles(), getSeparasorDecimal());
@@ -180,6 +191,5 @@ public class Common {
 	public static Integer graphicSizeToInt(JPanel padre, String Texto) {
 		return padre.getFontMetrics(getStandarFont()).stringWidth(Texto);
 	}
-
 
 }
