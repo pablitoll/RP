@@ -10,7 +10,7 @@ import javax.swing.event.InternalFrameEvent;
 import ar.com.rp.ui.error.ErrorManager;
 import ar.com.rp.ui.interfaces.PermisosInterface;
 
-public abstract class BaseControllerMVC<TipoPatPrincipal extends BasePantallaPrincipal<?,?>, TipoVista extends BaseViewMVC, TipoModelo extends BaseModel> extends BaseController {
+public abstract class BaseControllerMVC<TipoPatPrincipal extends BasePantallaPrincipal<?, ?>, TipoVista extends BaseViewMVC, TipoModelo extends BaseModel> extends BaseController {
 
 	private TipoVista view;
 	private TipoModelo model;
@@ -22,7 +22,7 @@ public abstract class BaseControllerMVC<TipoPatPrincipal extends BasePantallaPri
 
 	public BaseControllerMVC(JDesktopPane desktop, TipoVista view, TipoModelo model, PermisosInterface permisos) throws Exception {
 		super(permisos);
-		crearBaseControllerMVC(null, desktop, view, model);		
+		crearBaseControllerMVC(null, desktop, view, model);
 	}
 
 	public BaseControllerMVC(TipoPatPrincipal pantPrincipal, TipoVista view, TipoModelo model, PermisosInterface permisos) throws Exception {
@@ -45,7 +45,7 @@ public abstract class BaseControllerMVC<TipoPatPrincipal extends BasePantallaPri
 				cerrarPantalla();
 			}
 		});
-		
+
 	}
 
 	public void findOrCreated() throws Exception {
@@ -74,7 +74,7 @@ public abstract class BaseControllerMVC<TipoPatPrincipal extends BasePantallaPri
 	public boolean isActivo() {
 		return view.isVisible();
 	}
-	
+
 	@Override
 	protected void cerrarVentana() {
 		cerrarPantalla();
