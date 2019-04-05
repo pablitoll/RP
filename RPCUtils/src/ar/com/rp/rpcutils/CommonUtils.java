@@ -280,11 +280,6 @@ public class CommonUtils {
 		}
 		String retorno = valorSplit[0] + separadorDecimal + strLeft(valorSplit[1] + "000000000000000", cantDecimales);
 
-		// retorno retorno = String.format("%." + cantDecimales + "f", valor);
-		// retorno = retorno.replace(separadorMiles, separadorDecimal); // El
-		// String.format("%f", valor) solo agrega el
-		// separador decimal, me aseguro que
-		// sea el que usa el sismeta
 		return retorno;
 	}
 
