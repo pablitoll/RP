@@ -254,7 +254,7 @@ public class CommonUtils {
 		//Solo por control para que no vengan caracteres raros, lo spliteo las dos partes deben ser enteros
 		String[] valorSplit = valor.split("\\" + separadorDecimal);
 		
-		Integer.valueOf(valorSplit[0]);
+	//	Integer.valueOf(valorSplit[0]);
 		String valorToConvertir = valorSplit[0];
 		if(valorSplit.length == 2) {
 			Integer.valueOf(valorSplit[1]);
