@@ -257,7 +257,7 @@ public class CommonUtils {
 	//	Integer.valueOf(valorSplit[0]);
 		String valorToConvertir = valorSplit[0];
 		if(valorSplit.length == 2) {
-			Integer.valueOf(valorSplit[1]);
+			//Integer.valueOf(valorSplit[1]);
 			valorToConvertir += "." + valorSplit[1];
 		} else {
 			if(valorSplit.length > 2) {
