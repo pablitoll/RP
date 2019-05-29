@@ -35,11 +35,13 @@ import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
-public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincipalController, CargaClienteEsclavoView, CargaClienteEsclavoModel> {
+public class CargaClienteEsclavoController
+		extends BaseControllerMVC<PantPrincipalController, CargaClienteEsclavoView, CargaClienteEsclavoModel> {
 
 	private boolean procesandoCliente = false;
 
-	public CargaClienteEsclavoController(PantPrincipalController pantPrincipal, CargaClienteEsclavoView view, CargaClienteEsclavoModel model) throws Exception {
+	public CargaClienteEsclavoController(PantPrincipalController pantPrincipal, CargaClienteEsclavoView view,
+			CargaClienteEsclavoModel model) throws Exception {
 		super(pantPrincipal, view, model, null);
 
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
@@ -71,7 +73,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 						}
 
 						if (cliente != null) {
-							if ((getModel().getCliente() == null) || (cliente.getClieCliente() != getModel().getCliente().getClieCliente())) {
+							if ((getModel().getCliente() == null)
+									|| (cliente.getClieCliente() != getModel().getCliente().getClieCliente())) {
 								getModel().setCliente(cliente);
 								getView().lblNombreCliente.setText(cliente.getClieNombre());
 								getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
@@ -80,10 +83,14 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 								// cargo los esclavos de ese cliente
 								cargarEsclavos(cliente);
 
-								List<MaestroEsclavo> listaMaestroEsclavo = MaestroEsclavoDAO.getListaEsclavosByEsclavo(cliente);
+								List<MaestroEsclavo> listaMaestroEsclavo = MaestroEsclavoDAO
+										.getListaEsclavosByEsclavo(cliente);
 								if (listaMaestroEsclavo.size() > 0) {
 									String maestro = "(" + listaMaestroEsclavo.get(0).getPricMaestroCliente() + ") "
-											+ CcobClieDAO.findById(Integer.valueOf(listaMaestroEsclavo.get(0).getPricMaestroCliente())).getClieNombre();
+											+ CcobClieDAO
+													.findById(Integer.valueOf(
+															listaMaestroEsclavo.get(0).getPricMaestroCliente()))
+													.getClieNombre();
 									msgError = "No se puede usar este cliente porque ya es Esclavo de " + maestro;
 								}
 
@@ -121,7 +128,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 	}
 
 	private void agregarRegistro(CcobClie cliEsclavo, MaestroEsclavo meRegistro) {
-		getView().tableEsclavo.addRow(new Object[] { cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre(), cliEsclavo.getClieNombreLegal(), meRegistro });
+		getView().tableEsclavo.addRow(new Object[] { cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre(),
+				cliEsclavo.getClieNombreLegal(), meRegistro });
 		getView().tableEsclavo.adjustColumns();
 	}
 
@@ -162,11 +170,15 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		getView().btnAgregar.setEnabled(tieneCli && tieneLista);
 		getView().btnEliminar.setEnabled(tieneCli && tieneLista);
 
-		getView().btnTerminarCarga.setVisible(tieneCli);
 		getView().btnExpportar.setVisible(tieneCli);
 		// getView().btnExportarTodo.setVisible(tieneCli);
 
-		getView().setCerrarVisible(!tieneCli);
+		if (tieneCli) {
+			if (!getView().btnTerminarCarga.isVisible() && !getView().btnCancelar.isVisible()) {
+				getView().setCerrarVisible(false);
+				getView().btnCancelar.setVisible(true);
+			}
+		}
 	}
 
 	@Override
@@ -179,6 +191,11 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		if (getModel().getCliente() == null) {
 			limpiarPantalla();
 		}
+
+		getView().setCerrarVisible(true);
+		getView().btnTerminarCarga.setVisible(false);
+		getView().btnCancelar.setVisible(false);
+
 	}
 
 	protected void limpiarPantalla() throws Exception {
@@ -236,7 +253,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 	}
 
 	private CcobClie buscarClienteEsclavo() throws Exception {
-		BuscarClienteEsclavoDialog buscarClienteEsclavoDialog = new BuscarClienteEsclavoDialog(getPantallaPrincipal(), getView().tableEsclavo);
+		BuscarClienteEsclavoDialog buscarClienteEsclavoDialog = new BuscarClienteEsclavoDialog(getPantallaPrincipal(),
+				getView().tableEsclavo);
 		buscarClienteEsclavoDialog.iniciar();
 		if (buscarClienteEsclavoDialog.getCliente() != null) {
 			return buscarClienteEsclavoDialog.getCliente();
@@ -248,8 +266,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 	@Override
 	public void ejecutarAccion(String accion) {
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.TERMINAR_CARGA.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "¿Terminamos la carga Actual e Impactamos los Procesios?", "Cancelacion de Carga", WebOptionPane.YES_NO_OPTION,
-					WebOptionPane.QUESTION_MESSAGE) == 0) {
+			if (WebOptionPane.showConfirmDialog(getView(), "¿Terminamos la carga Actual e Impactamos los Procesios?",
+					"Cancelacion de Carga", WebOptionPane.YES_NO_OPTION, WebOptionPane.QUESTION_MESSAGE) == 0) {
 				try {
 
 					PantPrincipalController.setCursorOcupado();
@@ -259,13 +277,22 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 						PantPrincipalController.setRestoreCursor();
 					}
 
-					Dialog.showMessageDialog("Se termino de aplicar los nuevos precios", "Aplicación de Precios", JOptionPane.INFORMATION_MESSAGE);
+					Dialog.showMessageDialog("Se termino de aplicar los nuevos precios", "Aplicación de Precios",
+							JOptionPane.INFORMATION_MESSAGE);
 
-					getModel().setCliente(null);
-					resetearPantalla();
+					ejecutarAccion(ConstantesRP.PantCarPrecio.CANCELAR.toString());
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cancelar");
 				}
+			}
+		}
+
+		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString())) {
+			try {
+				getModel().setCliente(null);
+				resetearPantalla();
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al limpiar pantalla");
 			}
 		}
 
@@ -274,10 +301,11 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 				CcobClie cliEsclavo = buscarClienteEsclavo();
 				if (cliEsclavo != null) {
 					if (isNuevoEscalvoValido(cliEsclavo)) {
-						MaestroEsclavo maestroEsclavo = new MaestroEsclavo(getModel().getCliente().getClieCliente(), getModel().getListaCliente().getLipvListaPrecvta(),
-								cliEsclavo.getClieCliente());
+						MaestroEsclavo maestroEsclavo = new MaestroEsclavo(getModel().getCliente().getClieCliente(),
+								getModel().getListaCliente().getLipvListaPrecvta(), cliEsclavo.getClieCliente());
 						agregarRegistro(cliEsclavo, maestroEsclavo);
 						HibernateGeneric.persist(maestroEsclavo);
+						agregoEditItem();
 						getView().tableEsclavo.setSelectedRow(getView().tableEsclavo.getRowCount() - 1);
 					}
 				}
@@ -290,7 +318,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 			if (getView().tableEsclavo.getSelectedRow() >= 0) {
 				if (WebOptionPane.showConfirmDialog(getView(),
 						"IMPORTANTE: Si elimina este cliente como esclavo\n se eliminaran todos los precios que hereda de su maestro.\n¿Borramos el registro?",
-						"Eliminacion de registro", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
+						"Eliminacion de registro", JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 
 					// obtengo el ID del cliente Esclavo
 					try {
@@ -299,7 +328,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 						getView().tableEsclavo.setRowSorter(null);
 
-						int idEsclavo = (int) getView().tableEsclavo.getModel().getValueAt(modelRow, CargaClienteEsclavoView.COL_ID_CLIENTE_ESCLAVO);
+						int idEsclavo = (int) getView().tableEsclavo.getModel().getValueAt(modelRow,
+								CargaClienteEsclavoView.COL_ID_CLIENTE_ESCLAVO);
 						int idMaestro = Integer.valueOf(getView().txtNroCliente.getText());
 						MaestroEsclavo me = MaestroEsclavoDAO.findByClienteIdEsclavoID(idMaestro, idEsclavo);
 
@@ -307,8 +337,10 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 						dm.removeRow(modelRow);
 
 						HibernateGeneric.remove(me);
+						agregoEditItem();
 
-						GeneradorDePrecios.eliminarListaCustomizada(CcobClieDAO.findById(idEsclavo), getModel().getListaCliente());
+						GeneradorDePrecios.eliminarListaCustomizada(CcobClieDAO.findById(idEsclavo),
+								getModel().getListaCliente());
 
 					} catch (Exception ex) {
 						ManejoDeError.showError(ex, "Error al borrar");
@@ -319,8 +351,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.EXPORTAR.toString())) {
 			try {
-				String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "Nro Lista", "Nombre Lista", "Nro Cliente Hijo", "Nombre del Cliente Hijo",
-						"Nombre de Fantasia" };
+				String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "Nro Lista",
+						"Nombre Lista", "Nro Cliente Hijo", "Nombre del Cliente Hijo", "Nombre de Fantasia" };
 				String[][] data = { {} };
 
 				RPTable tableParaExportar = new RPTable();
@@ -336,8 +368,8 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 
 				tableParaExportar.clear();
 				for (int i = 0; i < dm.getRowCount(); i++) {
-					tableParaExportar.addRow(
-							new Object[] { nroCliente, nombreCliente, fantasiaClietne, nroLista, nombreLista, dm.getValueAt(i, 0), dm.getValueAt(i, 1), dm.getValueAt(i, 2) });
+					tableParaExportar.addRow(new Object[] { nroCliente, nombreCliente, fantasiaClietne, nroLista,
+							nombreLista, dm.getValueAt(i, 0), dm.getValueAt(i, 1), dm.getValueAt(i, 2) });
 				}
 
 				String nombreArchivo = String.format("Cliente%s_%s", getModel().getCliente().getClieCliente(),
@@ -356,13 +388,16 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 		if (esclavoTieneCargadoItems(cliEsclavo, getModel().getListaCliente().getLipvListaPrecvta())) {
 			Dialog.showMessageDialog(String.format(
 					"El cliente (%s) \"%s\" tiene datos previos. No puede ser usado como esclavo.\nPara poder seguir adelante, antes debe eliminar todos sus precios vigentes e históricos.",
-					cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre()), "Cliente con datos previos", JOptionPane.ERROR_MESSAGE);
+					cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre()), "Cliente con datos previos",
+					JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
 		if (clienteNuevoTieneListaActual(cliEsclavo)) {
-			Dialog.showMessageDialog(String.format("El Cliente (%s) \"%s\" tiene asignada como Lista Principal \"%s\".\nNo se puede asignar como Esclavo",
-					cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre(), getModel().getListaCliente().getLipvNombre()), "Esclavo no Valdio", JOptionPane.ERROR_MESSAGE);
+			Dialog.showMessageDialog(String.format(
+					"El Cliente (%s) \"%s\" tiene asignada como Lista Principal \"%s\".\nNo se puede asignar como Esclavo",
+					cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre(),
+					getModel().getListaCliente().getLipvNombre()), "Esclavo no Valdio", JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 
@@ -381,6 +416,17 @@ public class CargaClienteEsclavoController extends BaseControllerMVC<PantPrincip
 	private boolean esclavoTieneCargadoItems(CcobClie cliEsclavo, int idLista) {
 		return !DescuentoXFamiliasDAO.getListaDescuentoByID(cliEsclavo.getClieCliente(), idLista).isEmpty()
 				|| !PreciosEspecialesDAO.getListaPrecioEspeciaByID(cliEsclavo.getClieCliente(), idLista).isEmpty();
+	}
+
+	private void agregoEditItem() {
+		getView().btnTerminarCarga.setVisible(true);
+		getView().setCerrarVisible(false);
+		getView().btnCancelar.setVisible(!getView().btnTerminarCarga.isVisible());
+
+	}
+
+	public boolean isPendienteImpactar() {
+		return getView().btnTerminarCarga.isVisible();
 	}
 
 }

@@ -83,12 +83,15 @@ public class ReportesListas {
 			SistUnim unidad = SistUnimDAO.findById(stock.getArtsUnimedStock());
 			SistMone moneda = SistMoneDAO.findById(ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo());
 
-			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
-					CommonPricing.formatearImporte(ventaBase.getArpvPrecioVta().doubleValue()), stock.getArtsClasif1());
+			ProductoDTO producto = new ProductoDTO(stock.getArtsArticulo(), stock.getArtsArticuloEmp(),
+					stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
+					CommonPricing.formatearImporte(ventaBase.getArpvPrecioVta().doubleValue()), stock.getArtsClasif1(),
+					true);
 
 			listaProductos.add(producto);
 		}
-		String leyendaFecha = String.format(MSG_LEYENDA_FECHA, FechaManagerUtil.Date2String(FechaManagerUtil.getDateTimeFromPC()));
+		String leyendaFecha = String.format(MSG_LEYENDA_FECHA,
+				FechaManagerUtil.Date2String(FechaManagerUtil.getDateTimeFromPC()));
 
 		return new ListaPrecioReporteDTO(-1, "", "", lista.getLipvNombre(), leyendaFecha, listaProductos);
 	}

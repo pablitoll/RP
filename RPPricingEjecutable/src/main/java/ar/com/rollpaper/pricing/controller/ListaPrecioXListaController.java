@@ -22,11 +22,13 @@ import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
-public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipalController, ListaPrecioXListaView, ListaPrecioXListaModel> {
+public class ListaPrecioXListaController
+		extends BaseControllerMVC<PantPrincipalController, ListaPrecioXListaView, ListaPrecioXListaModel> {
 
 	private TableRowSorter<TableModel> sorterTablaResultado;
 
-	public ListaPrecioXListaController(PantPrincipalController pantPrincipal, ListaPrecioXListaView view, ListaPrecioXListaModel model) throws Exception {
+	public ListaPrecioXListaController(PantPrincipalController pantPrincipal, ListaPrecioXListaView view,
+			ListaPrecioXListaModel model) throws Exception {
 		super(pantPrincipal, view, model, null);
 
 		view.cbNroLista.addItemListener(new ItemListener() {
@@ -106,7 +108,8 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 
 		if (accion.equals(ConstantesRP.PantListaPrecioXLista.GENERAR_EXCEL.toString())) {
 			try {
-				String nombreArchivo = String.format("ListaPrecioGenerales_%s_%s", getModel().getListaCargada().getVentLipv().getLipvListaPrecvta(),
+				String nombreArchivo = String.format("ListaPrecioGenerales_%s_%s",
+						getModel().getListaCargada().getVentLipv().getLipvListaPrecvta(),
 						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
 
 				CSVExport.exportToExcel(getView().tableResultado, nombreArchivo, null);
@@ -132,7 +135,7 @@ public class ListaPrecioXListaController extends BaseControllerMVC<PantPrincipal
 	private void cargarProductos() {
 		resetearTabla();
 
-		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
+		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) { 
 			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(),
 					stock.getMonedaArticulo(), CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
 		}

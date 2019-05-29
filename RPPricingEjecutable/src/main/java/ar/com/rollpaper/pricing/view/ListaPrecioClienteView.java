@@ -3,13 +3,17 @@ package ar.com.rollpaper.pricing.view;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.alee.laf.combobox.WebComboBox;
@@ -33,7 +37,15 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 	private static final int COL_UNIDAD = 3;
 	private static final int COL_MONEDA_ESPECIFICO = 4;
 	private static final int COL_PRECIO = 5;
-	public static Integer COL_DESC = 2;
+	public static final int COL_FECHA_VIGENCIA = 6;
+	public static final int COL_DESCUENTOS = 7;
+	public static final int COL_COMISION = 8;
+
+	public static final Integer COL_DESC = 2;
+	public static final String COL_DES_FECHA_VIGENCIA = "Fecha Vigencia";
+	public static final String COL_DES_COMISION = "% Comision";
+	public static final String COL_DES_REFERENCIA = "Referencia";
+	public static final String COL_DES_DESCUENTOS = "Dtos. Aplicados";
 	public RPTable tableResultado;
 	public JButtonRP btnGenerarPDF;
 	public JButtonRP btnExportarExcel;
@@ -45,11 +57,21 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 	public JButtonRP btnCancelar;
 	private JButtonRP btnRefrescar;
 	private JLabel lblTitle;
+	private JPanel panel_1;
+	public JCheckBox chkArticuloEspecifico;
+	public JCheckBox chkArticuloLista;
+	private JPanel panel_2;
+	public JCheckBox chkFechaVigencia;
+	public JCheckBox chkDtoAplicados;
+	public JCheckBox chkReferencia;
+	public JCheckBox chkComision;
+	private JPanel panel_3;
+	public JTextField txtBusqueda;
 
 	public ListaPrecioClienteView() throws Exception {
 		super();
 		lblTitle = new JLabel("lblTitle");
-		setTitle("Lista de Articulos Customizados por Cliente");
+		setTitle("Lista de Precios Actualizada (impactados)");
 		lblTitle.setText(getTitle());
 
 		JPanel panel = new JPanel();
@@ -57,16 +79,17 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		panel.setBorder(new EmptyBorder(5, 5, 5, 0));
 		getContentPane().add(panel, BorderLayout.NORTH);
 		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] { 76, 100, 50, 46, 46, 50, 0, 0, 0 };
-		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0 };
-		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_panel.rowWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel.columnWidths = new int[] { 76, 100, 50, 46, 46, 0, 50, 0, 76, 146, 0, 0, 0 };
+		gbl_panel.rowHeights = new int[] { 0, 0, 0, 0, 0, 0 };
+		gbl_panel.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0,
+				Double.MIN_VALUE };
+		gbl_panel.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panel.setLayout(gbl_panel);
-			
+
 		lblTitle.setFont(Common.getStandarFontBold(18));
 		GridBagConstraints gbc_label_22 = new GridBagConstraints();
-		gbc_label_22.gridwidth = 8;
-		gbc_label_22.insets = new Insets(0, 0, 5, 5);
+		gbc_label_22.gridwidth = 12;
+		gbc_label_22.insets = new Insets(0, 0, 5, 0);
 		gbc_label_22.gridx = 0;
 		gbc_label_22.gridy = 0;
 		panel.add(lblTitle, gbc_label_22);
@@ -123,17 +146,69 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		lblNombreLegal = new JLabel("lblNombreLegal");
 		lblNombreLegal.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_label_4 = new GridBagConstraints();
+		gbc_label_4.gridwidth = 4;
 		gbc_label_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_label_4.insets = new Insets(0, 0, 5, 5);
 		gbc_label_4.gridx = 6;
 		gbc_label_4.gridy = 1;
 		panel.add(lblNombreLegal, gbc_label_4);
 
+		panel_1 = new JPanel();
+		panel_1.setFont(Common.getStandarFont());
+		panel_1.setBorder(new TitledBorder(null, "Filtros", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.gridheight = 3;
+		gbc_panel_1.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 9;
+		gbc_panel_1.gridy = 1;
+		panel.add(panel_1, gbc_panel_1);
+		panel_1.setLayout(new GridLayout(0, 1, 0, 0));
+
+		chkArticuloLista = new JCheckBox("Articulos de Lista");
+		chkArticuloLista.setFont(Common.getStandarFont());
+
+		panel_1.add(chkArticuloLista);
+
+		chkArticuloEspecifico = new JCheckBox("Articulos Específicos");
+		chkArticuloEspecifico.setFont(Common.getStandarFont());
+		panel_1.add(chkArticuloEspecifico);
+
+		panel_2 = new JPanel();
+		panel_2.setFont(Common.getStandarFont());
+		panel_2.setBorder(
+				new TitledBorder(null, "Campos a Incluir", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+		gbc_panel_2.gridheight = 3;
+		gbc_panel_2.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_2.fill = GridBagConstraints.BOTH;
+		gbc_panel_2.gridx = 10;
+		gbc_panel_2.gridy = 1;
+		panel.add(panel_2, gbc_panel_2);
+		panel_2.setLayout(new GridLayout(0, 2, 0, 0));
+
+		chkFechaVigencia = new JCheckBox("Fecha Vigencia");
+
+		chkFechaVigencia.setFont(Common.getStandarFont());
+		panel_2.add(chkFechaVigencia);
+
+		chkComision = new JCheckBox("% Comision");
+		chkComision.setFont(Common.getStandarFont());
+		panel_2.add(chkComision);
+
+		chkReferencia = new JCheckBox("Referencia");
+		chkReferencia.setFont(Common.getStandarFont());
+		panel_2.add(chkReferencia);
+
+		chkDtoAplicados = new JCheckBox("Descuentos Aplicados");
+		chkDtoAplicados.setFont(Common.getStandarFont());
+		panel_2.add(chkDtoAplicados);
+
 		JLabel label_5 = new JLabel("Nro de Lista de Precio");
 		label_5.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_label_5 = new GridBagConstraints();
 		gbc_label_5.anchor = GridBagConstraints.EAST;
-		gbc_label_5.insets = new Insets(0, 0, 0, 5);
+		gbc_label_5.insets = new Insets(0, 0, 5, 5);
 		gbc_label_5.gridx = 0;
 		gbc_label_5.gridy = 2;
 		panel.add(label_5, gbc_label_5);
@@ -142,7 +217,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		cbNroLista.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_webComboBox = new GridBagConstraints();
 		gbc_webComboBox.fill = GridBagConstraints.HORIZONTAL;
-		gbc_webComboBox.insets = new Insets(0, 0, 0, 5);
+		gbc_webComboBox.insets = new Insets(0, 0, 5, 5);
 		gbc_webComboBox.gridx = 1;
 		gbc_webComboBox.gridy = 2;
 		panel.add(cbNroLista, gbc_webComboBox);
@@ -150,7 +225,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		JLabel label_6 = new JLabel("Nombre Lista ");
 		label_6.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_label_6 = new GridBagConstraints();
-		gbc_label_6.insets = new Insets(0, 0, 0, 5);
+		gbc_label_6.insets = new Insets(0, 0, 5, 5);
 		gbc_label_6.gridx = 3;
 		gbc_label_6.gridy = 2;
 		panel.add(label_6, gbc_label_6);
@@ -159,12 +234,29 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		lblNombreLista.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_label_7 = new GridBagConstraints();
 		gbc_label_7.anchor = GridBagConstraints.WEST;
-		gbc_label_7.insets = new Insets(0, 0, 0, 5);
+		gbc_label_7.insets = new Insets(0, 0, 5, 5);
 		gbc_label_7.gridx = 4;
 		gbc_label_7.gridy = 2;
 		panel.add(lblNombreLista, gbc_label_7);
 
-		String[] headerTabla = { "Codigo Familia", "Codigo Articulo", "Descripcion", "Unidad", "Moneda", "Precio Venta" };
+		panel_3 = new JPanel();
+		panel_3.setBorder(
+				new TitledBorder(null, "Filtro por Texto", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
+		gbc_panel_3.gridwidth = 7;
+		gbc_panel_3.insets = new Insets(0, 0, 5, 5);
+		gbc_panel_3.fill = GridBagConstraints.BOTH;
+		gbc_panel_3.gridx = 0;
+		gbc_panel_3.gridy = 3;
+		panel.add(panel_3, gbc_panel_3);
+		panel_3.setLayout(new BorderLayout(0, 0));
+
+		txtBusqueda = new JTextField();
+		panel_3.add(txtBusqueda);
+		txtBusqueda.setColumns(10);
+
+		String[] headerTabla = { "Codigo Familia", "Codigo Articulo", "Descripcion", "Unidad", "Moneda", "Precio Venta",
+				COL_DES_FECHA_VIGENCIA, COL_DES_DESCUENTOS, COL_DES_COMISION, COL_DES_REFERENCIA };
 		String[][] dataTabla = { {} };
 
 		tableResultado = new RPTable();
@@ -173,14 +265,20 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		tableResultado.setEditable(false);
 		tableResultado.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		tableResultado.setColToIgnorar(new Integer[] { COL_DESC});
+		tableResultado.setColToIgnorar(new Integer[] { COL_DESC });
 		tableResultado.getColumnModel().getColumn(COL_DESC).setPreferredWidth(600);
 		tableResultado.getColumnModel().getColumn(COL_DESC).setMinWidth(600);
-		tableResultado.getColumnModel().getColumn(COL_DESC).setWidth(300);
-		
+		tableResultado.getColumnModel().getColumn(COL_DESC).setWidth(600);
+
 		tableResultado.getColumnModel().getColumn(COL_UNIDAD).setCellRenderer(tableResultado.getCenterRender());
-		tableResultado.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO).setCellRenderer(tableResultado.getCenterRender());
+		tableResultado.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO)
+				.setCellRenderer(tableResultado.getCenterRender());
 		tableResultado.getColumnModel().getColumn(COL_PRECIO).setCellRenderer(tableResultado.getRigthRender());
+
+		tableResultado.getColumnModel().getColumn(COL_FECHA_VIGENCIA).setCellRenderer(tableResultado.getCenterRender());
+		tableResultado.getColumnModel().getColumn(COL_DESCUENTOS).setCellRenderer(tableResultado.getCenterRender());
+		tableResultado.getColumnModel().getColumn(COL_COMISION).setCellRenderer(tableResultado.getRigthRender());
+		tableResultado.getColumnModel().getColumn(COL_FECHA_VIGENCIA).setCellRenderer(tableResultado.getCenterRender());
 
 		WebScrollPane webScrollPane = new WebScrollPane(tableResultado);
 		getContentPane().add(webScrollPane, BorderLayout.CENTER);

@@ -44,6 +44,7 @@ public final class TableColumnAdjuster implements PropertyChangeListener, TableM
 	private boolean isOnlyAdjustLarger;
 	private boolean isDynamicAdjustment;
 	private Map<TableColumn, Integer> columnSizes = new HashMap<TableColumn, Integer>();
+	private Integer[] colToIgnorar;
 
 	/*
 	 * Specify the table and use default spacing
@@ -78,6 +79,18 @@ public final class TableColumnAdjuster implements PropertyChangeListener, TableM
 		return anchoTotal;
 	}
 
+	private boolean isColumToIgnore(int column) {
+
+		if (colToIgnorar != null) {
+			for (Integer colToIng : colToIgnorar) {
+				if (column == colToIng) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	/*
 	 * Adjust the width of the specified column in the table
 	 */
@@ -85,15 +98,20 @@ public final class TableColumnAdjuster implements PropertyChangeListener, TableM
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		TableColumn tableColumn = table.getColumnModel().getColumn(column);
 
-		if (!tableColumn.getResizable()) {
-			return 0;
+		if (!isColumToIgnore(column)) {
+
+			if (!tableColumn.getResizable()) {
+				return 0;
+			}
+
+			int columnHeaderWidth = getColumnHeaderWidth(column);
+			int columnDataWidth = getColumnDataWidth(column);
+			int preferredWidth = Math.max(columnHeaderWidth, columnDataWidth);
+
+			return updateTableColumn(column, preferredWidth);
+		} else {
+			return tableColumn.getWidth();
 		}
-
-		int columnHeaderWidth = getColumnHeaderWidth(column);
-		int columnDataWidth = getColumnDataWidth(column);
-		int preferredWidth = Math.max(columnHeaderWidth, columnDataWidth);
-
-		return updateTableColumn(column, preferredWidth);
 	}
 
 	/*
@@ -356,5 +374,10 @@ public final class TableColumnAdjuster implements PropertyChangeListener, TableM
 				setOnlyAdjustLarger(!isOnlyAdjustLarger);
 			}
 		}
+	}
+
+	public void setColToIgnorar(Integer[] colToIgnorar) {
+		this.colToIgnorar = colToIgnorar;
+
 	}
 }

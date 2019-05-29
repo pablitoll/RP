@@ -45,7 +45,7 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 	public ListaPrecioXListaView() throws Exception {
 		super();
 		lblTitle = new JLabel("lblTitle");
-		setTitle("Lista de Precios por Lista");
+		setTitle("Lista de Precios Generales");
 		lblTitle.setText(getTitle());
 
 		JPanel panel = new JPanel();

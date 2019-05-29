@@ -15,6 +15,7 @@ import javax.swing.table.TableRowSorter;
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.business.TableColumnHider;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.jasper.ProductoDTO;
@@ -26,13 +27,17 @@ import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
 import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
-public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipalController, ListaPrecioClienteView, ListaPrecioClienteModel> {
+public class ListaPrecioClienteController
+		extends BaseControllerMVC<PantPrincipalController, ListaPrecioClienteView, ListaPrecioClienteModel> {
 
 	private TableRowSorter<TableModel> sorterTablaResultado;
+	private TableColumnHider hider;
 
-	public ListaPrecioClienteController(PantPrincipalController pantPrincipal, ListaPrecioClienteView view, ListaPrecioClienteModel model) throws Exception {
+	public ListaPrecioClienteController(PantPrincipalController pantPrincipal, ListaPrecioClienteView view,
+			ListaPrecioClienteModel model) throws Exception {
 		super(pantPrincipal, view, model, null);
 
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
@@ -57,6 +62,68 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 				perdioFocoNroLista();
 			}
 		});
+
+		view.chkArticuloEspecifico.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (getModel().getClienteCargado() != null) {
+					cargarProductos();
+				}
+			}
+		});
+
+		view.chkArticuloLista.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (getModel().getClienteCargado() != null) {
+					cargarProductos();
+				}
+			}
+		});
+
+		view.chkFechaVigencia.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				evaluarColDinamica(ListaPrecioClienteView.COL_DES_FECHA_VIGENCIA, view.chkFechaVigencia.isSelected());
+			}
+		});
+
+		view.chkComision.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				evaluarColDinamica(ListaPrecioClienteView.COL_DES_COMISION, view.chkComision.isSelected());
+			}
+		});
+
+		view.chkReferencia.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				evaluarColDinamica(ListaPrecioClienteView.COL_DES_REFERENCIA, view.chkReferencia.isSelected());
+			}
+		});
+
+		view.chkDtoAplicados.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				evaluarColDinamica(ListaPrecioClienteView.COL_DES_DESCUENTOS, view.chkDtoAplicados.isSelected());
+			}
+		});
+
+		view.txtBusqueda.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent evento) {
+				if (getModel().getClienteCargado() != null) {
+					cargarProductos();
+				}
+			}
+		});
+
+		hider = new TableColumnHider(view.tableResultado);
+
+		Integer[] colToIgnore = new Integer[] { ListaPrecioClienteView.COL_DESC };
+		view.tableResultado.setColToIgnorar(colToIgnore);
+	}
+
+	private void evaluarColDinamica(String nombre_col, boolean seleccionada) {
+		if (seleccionada) {
+			hider.show(nombre_col);
+		} else {
+			hider.hide(nombre_col);
+		}
+		ajustarAnchoCol();
 	}
 
 	protected void perdioFocoCliente(int id) throws Exception {
@@ -115,6 +182,19 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 	protected void resetearDatosDePantalla() throws Exception {
 		if (getModel().getClienteCargado() == null) {
+			getView().txtBusqueda.setText("");
+			getView().chkArticuloEspecifico.setSelected(true);
+			getView().chkArticuloLista.setSelected(true);
+
+			getView().chkComision.setSelected(false);
+			evaluarColDinamica(ListaPrecioClienteView.COL_DES_COMISION, false);
+			getView().chkDtoAplicados.setSelected(false);
+			evaluarColDinamica(ListaPrecioClienteView.COL_DES_DESCUENTOS, false);
+			getView().chkFechaVigencia.setSelected(false);
+			evaluarColDinamica(ListaPrecioClienteView.COL_DES_FECHA_VIGENCIA, false);
+			getView().chkReferencia.setSelected(false);
+			evaluarColDinamica(ListaPrecioClienteView.COL_DES_REFERENCIA, false);
+
 			getView().txtNroCliente.clear();
 
 			getView().lblNombreLista.setText("S/D");
@@ -167,7 +247,8 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_EXCEL.toString())) {
 			try {
-				String nombreArchivo = String.format("ListaPrecioCliente%s_%s", getModel().getClienteCargado().getClieCliente(),
+				String nombreArchivo = String.format("ListaPrecioCliente%s_%s",
+						getModel().getClienteCargado().getClieCliente(),
 						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
 
 				Class<?> vectorClases[] = new Class[getView().tableResultado.getModel().getColumnCount()];
@@ -183,7 +264,7 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 
 		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_PDF.toString())) {
 			try {
-				Reportes.getReporteListaPrecios(getModel().getListaArticulosImpactados());
+				Reportes.getReporteListaPrecios(getModel().getListaArticulosImpactadosReporte());
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al generar Reprote");
 			}
@@ -262,20 +343,40 @@ public class ListaPrecioClienteController extends BaseControllerMVC<PantPrincipa
 	private void cargarProductos() {
 		resetearTabla();
 
-		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
-			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(),
-					stock.getMonedaArticulo(), CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
+		for (ProductoDTO stock : getModel().getListProductos(getView().chkArticuloLista.isSelected(),
+				getView().chkArticuloEspecifico.isSelected(), getView().txtBusqueda.getText())) {
+
+			String fechaVigencia = "";
+			if (stock.getVigenciaDesde() != null) {
+				fechaVigencia = String.format("%s - %s", FechaManagerUtil.Date2String(stock.getVigenciaDesde()).trim(),
+						FechaManagerUtil.Date2String(stock.getVigenciaHasta()).trim());
+			}
+			String descuento = "";
+
+			if (stock.getDescuento1() != null) {
+				descuento = String.format("%s - %s", CommonUtils.round(stock.getDescuento1().doubleValue(), 3),
+						CommonUtils.round(stock.getDescuento2().doubleValue(), 3));
+			}
+
+			String comision = stock.getComision() != null
+					? Common.double2String(CommonUtils.round(stock.getComision().doubleValue(), 3))
+					: "";
+
+			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(),
+					stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
+					CommonPricing.formatearImporte(stock.getPrecioArticulo()), fechaVigencia, descuento, comision,
+					stock.getReferencia() == null ? "" : stock.getReferencia().trim() });
 		}
 
 		sorterTablaResultado.sort();
 
-		getView().tableResultado.adjustColumns();
-
-		getView().tableResultado.getColumnModel().getColumn(ListaPrecioClienteView.COL_DESC).setPreferredWidth(600);
-		getView().tableResultado.getColumnModel().getColumn(ListaPrecioClienteView.COL_DESC).setMinWidth(600);
-		getView().tableResultado.getColumnModel().getColumn(ListaPrecioClienteView.COL_DESC).setWidth(300);
+		ajustarAnchoCol();
 
 		setModoPantalla();
+	}
+
+	private void ajustarAnchoCol() {
+		getView().tableResultado.adjustColumns();
 	}
 
 	@Override

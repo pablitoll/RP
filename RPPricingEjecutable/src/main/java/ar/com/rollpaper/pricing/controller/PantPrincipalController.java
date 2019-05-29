@@ -27,6 +27,8 @@ import ar.com.rp.ui.pantalla.VentanaCalculadora;
 public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipalView, PantPrincipalModel> {
 
 	private VentanaCalculadora calculadora = null;
+	private CargaPrecioController cargaPrecioControlador = null;
+	private CargaClienteEsclavoController clienteEsclavoControlador = null;
 	private static PantPrincipalController pantallaPrincipal = null;
 
 	public PantPrincipalController(PantPrincipalView view, PantPrincipalModel model) throws Exception {
@@ -69,14 +71,16 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		if (accion.equals(ConstantesRP.Acciones.CAMBIAR_DB.toString())) {
 			try {
 				ArchivoDePropiedadesBusiness.recargar();
-				HibernateUtil.reConectar(ArchivoDePropiedadesBusiness.getConecctionString(), ArchivoDePropiedadesBusiness.getUsr(), ArchivoDePropiedadesBusiness.getPass());
+				HibernateUtil.reConectar(ArchivoDePropiedadesBusiness.getConecctionString(),
+						ArchivoDePropiedadesBusiness.getUsr(), ArchivoDePropiedadesBusiness.getPass());
 				refrescarBarra();
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al refrescar DB");
 			}
 		}
 
-		if (accion.equals(ConstantesRP.Acciones.CAMBIAR_SEPARADOR_DECIMAL.toString()) || accion.equals(ConstantesRP.Acciones.CAMBIAR_SEPARADOR_MILES.toString())) {
+		if (accion.equals(ConstantesRP.Acciones.CAMBIAR_SEPARADOR_DECIMAL.toString())
+				|| accion.equals(ConstantesRP.Acciones.CAMBIAR_SEPARADOR_MILES.toString())) {
 			try {
 				String msg = "Decimal";
 				Boolean separadorDecimal = true;
@@ -88,8 +92,10 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 					valorDefault = ArchivoDePropiedadesBusiness.getSeparadorMiles();
 				}
 
-				Object separadorNuevoObj = JOptionPane.showInputDialog(null, String.format("Ingrese el Separador %s a Utilizar", msg),
-						String.format("Configuracion de Separador %s", msg), JOptionPane.QUESTION_MESSAGE, null, null, valorDefault);
+				Object separadorNuevoObj = JOptionPane.showInputDialog(null,
+						String.format("Ingrese el Separador %s a Utilizar", msg),
+						String.format("Configuracion de Separador %s", msg), JOptionPane.QUESTION_MESSAGE, null, null,
+						valorDefault);
 				if (separadorNuevoObj != null) {
 					String separadorNuevo = String.valueOf(separadorNuevoObj).trim();
 					if (separadorNuevo.length() != 1) {
@@ -155,8 +161,8 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 				try {
 					CargaPrecioView vista = new CargaPrecioView();
 					CargaPrecioModel modelo = new CargaPrecioModel();
-					CargaPrecioController controlador = new CargaPrecioController(this, vista, modelo);
-					cmGestordeVentanas.add(controlador, "CargaPrecioController");
+					cargaPrecioControlador = new CargaPrecioController(this, vista, modelo);
+					cmGestordeVentanas.add(cargaPrecioControlador, "CargaPrecioController");
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al crear pantalla de carga de precio por cliente");
 				}
@@ -174,8 +180,8 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 				try {
 					CargaClienteEsclavoView vista = new CargaClienteEsclavoView();
 					CargaClienteEsclavoModel modelo = new CargaClienteEsclavoModel();
-					CargaClienteEsclavoController controlador = new CargaClienteEsclavoController(this, vista, modelo);
-					cmGestordeVentanas.add(controlador, "CargaClienteEsclavoController");
+					clienteEsclavoControlador = new CargaClienteEsclavoController(this, vista, modelo);
+					cmGestordeVentanas.add(clienteEsclavoControlador, "CargaClienteEsclavoController");
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al crear pantalla de carga de precio por cliente");
 				}
@@ -191,8 +197,8 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 	private void procesoPrecios() {
 		try {
 
-			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere Generar los precios de TODOS los Clientes?", "Confirmacion", JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere Generar los precios de TODOS los Clientes?",
+					"Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (confirm == JOptionPane.YES_OPTION) {
 				PantPrincipalController.setCursorOcupado();
@@ -212,21 +218,33 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 
 	@Override
 	protected void salir() {
-		try {
+		if ((cargaPrecioControlador != null) && cargaPrecioControlador.isPendienteImpactar()) {
+			Dialog.showMessageDialog("Antes de salir debe impactar los precios de la pantalla \"Precio de Cliente\"",
+					"Cambios Pendientes", JOptionPane.ERROR_MESSAGE);
+		} else {
+			if ((clienteEsclavoControlador != null) && clienteEsclavoControlador.isPendienteImpactar()) {
+				Dialog.showMessageDialog("Antes de salir debe impactar los cambios de la pantalla \"Cliente/Esclavo\"",
+						"Cambios Pendientes", JOptionPane.ERROR_MESSAGE);
+			} else {
+				try {
+					int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere salir de la aplicacion?",
+							"Confirmacion de Salida", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+							null, null);
 
-			int confirm = Dialog.showConfirmDialog("¿Esta Seguro que quiere salir de la aplicacion?", "Confirmacion de Salida", JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE, null, null, null);
+					if (confirm == JOptionPane.YES_OPTION) {
 
-			if (confirm == JOptionPane.YES_OPTION) {
-
-				LogBusiness.forzarEscrituraLogs();
-				HibernateUtil.shutdown();
-				System.exit(0);
+						LogBusiness.forzarEscrituraLogs();
+						HibernateUtil.shutdown();
+						System.exit(0);
+					}
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al salir del sistema");
+					System.exit(0);
+				}
 			}
-		} catch (Exception e) {
-			ManejoDeError.showError(e, "Error al salir del sistema");
-			System.exit(0);
+
 		}
+
 	}
 
 	@Override

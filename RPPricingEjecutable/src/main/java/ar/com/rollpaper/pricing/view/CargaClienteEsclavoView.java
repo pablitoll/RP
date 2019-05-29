@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -50,6 +51,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	public JButtonRP btnTerminarCarga;
 	public WebFormattedTextField txtNroCliente;
 	private JLabel lblTitle;
+	public JButtonRP btnCancelar;
 
 	public CargaClienteEsclavoView() throws Exception {
 		super();
@@ -182,6 +184,13 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		btnTerminarCarga.setFont(Common.getStandarFont());
 		btnTerminarCarga.setMnemonic(KeyEvent.VK_ESCAPE);
 		pnlInferiorBotones.add(btnTerminarCarga);
+		
+		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
+		btnCancelar.setFont(Common.getStandarFont());
+		btnCancelar.setIcon(new ImageIcon(BaseViewMVCExtendida.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		pnlInferiorBotones.add(btnCancelar);
+
 
 		btnExpportar = new JButtonRP("Exportar a Excel");
 		btnExpportar.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_EXCEL, 15, 15));
@@ -250,6 +259,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnTerminarCarga, ConstantesRP.PantCarClienteEsclabo.TERMINAR_CARGA.toString());
 		asignarBotonAccion(btnExpportar, ConstantesRP.PantCarClienteEsclabo.EXPORTAR.toString());
 		asignarBotonAccion(btnExportarTodo, ConstantesRP.PantCarClienteEsclabo.EXPORTAR_TODO.toString());
+		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString());
 	}
 
 	public void setCerrarVisible(Boolean visible) {

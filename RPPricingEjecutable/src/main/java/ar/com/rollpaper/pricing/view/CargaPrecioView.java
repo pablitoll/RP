@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -85,6 +86,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	private JPanel pnlBotonLista;
 	public JButtonRP btnImpactarPrecios;
 	private JLabel lblTitle;
+	public JButtonRP btnCancelar;
 
 	public CargaPrecioView() throws Exception {
 		super();
@@ -363,6 +365,12 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		lblError = new WebLabel("");
 		lblError.setFont(Common.getStandarFontBold());
 		panelCentral.add(lblError, BorderLayout.NORTH);
+		
+		btnCancelar = new JButtonRP("Cancelar");
+		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
+		btnCancelar.setFont(Common.getStandarFont());
+		btnCancelar.setIcon(new ImageIcon(BaseViewMVCExtendida.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		pnlInferiorBotones.add(btnCancelar);
 
 		btnImpactarPrecios = new JButtonRP("Terminar Carga e Impactar precios");
 		btnImpactarPrecios.setMnemonic(KeyEvent.VK_ESCAPE);
@@ -380,6 +388,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnAgregarLista, ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString());
 		asignarBotonAccion(btnEliminarLista, ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString());
 		asignarBotonAccion(btnImpactarPrecios, ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString());
+		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarPrecio.CANCELAR.toString());
 	}
 
 	public void setCerrarVisible(Boolean visible) {

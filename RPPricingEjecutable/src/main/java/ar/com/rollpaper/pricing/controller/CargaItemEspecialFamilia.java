@@ -16,7 +16,8 @@ import ar.com.rollpaper.pricing.dao.StocCa01DAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
 import ar.com.rollpaper.pricing.ui.BuscarFamiliaDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
-import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
+import ar.com.rollpaper.pricing.view.CargaItemEspecialArticuloView;
+import ar.com.rollpaper.pricing.view.CargaItemEspecialFamiliaView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
@@ -24,7 +25,7 @@ import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
 import ar.com.rp.ui.pantalla.BaseControllerDialog;
 
-public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipalController, CargaItemEspecialView, CargaItemEspecialFamiliaModel> {
+public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipalController, CargaItemEspecialFamiliaView, CargaItemEspecialFamiliaModel> {
 
 	public DescuentoXFamilias getRegistro() throws Exception {
 
@@ -67,17 +68,17 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		}
 	}
 
-	public CargaItemEspecialFamilia(PantPrincipalController pantPrincipal, CargaItemEspecialView view, CargaItemEspecialFamiliaModel model, PermisosInterface permisos)
+	public CargaItemEspecialFamilia(PantPrincipalController pantPrincipal, CargaItemEspecialFamiliaView view, CargaItemEspecialFamiliaModel model, PermisosInterface permisos)
 			throws Exception {
 		super(pantPrincipal, view, model, permisos);
-		view.lblLabelArticulo.setText("Familia ID:");
+	//	view.lblLabelArticulo.setText("Familia ID:");
 		view.txtPrecio.setVisible(false);
 		view.cbMoneda.setVisible(false);
-		view.lblDescripcion.setVisible(false);
-		view.lblLabelDescipcion.setVisible(false);
+//		view.lblDescripcion.setVisible(false);
+//		view.lblLabelDescipcion.setVisible(false);
 		view.lblLabelPrecio.setVisible(false);
 		view.lblLabelMoneda.setVisible(false);
-		view.lblEstaEnLista.setVisible(false);
+//		view.lblEstaEnLista.setVisible(false);
 
 		view.txtArticuloID.addFocusListener(new FocusListener() {
 
@@ -88,6 +89,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 				String id = view.txtArticuloID.getText();
 
 				if (!id.equals("")) {
+					
 					StocCa01 familiaCargado = StocCa01DAO.findById(id);
 					getModel().setFamiliaCargado(familiaCargado);
 				}
@@ -102,10 +104,10 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 	@Override
 	protected void cargaPantalla() throws Exception {
-		getView().lblArticuloID.setVisible(getModel().isEdicion());
+//		getView().lblArticuloID.setVisible(getModel().isEdicion());
 		getView().txtArticuloID.setVisible(!getModel().isEdicion());
 
-		getView().lblArticuloID.setText("");
+//		getView().lblArticuloID.setText("");
 		getView().txtArticuloID.setText("");
 		getView().txtDesc1.setText("");
 		getView().txtDesc2.setText("");
@@ -116,7 +118,8 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 		if (getModel().isEdicion()) {
 
-			getView().lblArticuloID.setText(String.valueOf(getModel().getRegistroFamilia().getPricFamiliaListaPrecvta()));
+//			getView().lblArticuloID.setText(String.valueOf(getModel().getRegistroFamilia().getPricFamiliaListaPrecvta()));
+			getView().pnlID.setVisible(false);
 
 			if ((getModel().getRegistroFamilia().getPricFamiliaDescuento1() != null) && (getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue() > 0.0)) {
 				getView().txtDesc1.setText(Common.double2String(getModel().getRegistroFamilia().getPricFamiliaDescuento1().doubleValue()));
@@ -177,11 +180,11 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 
 	private Boolean validar() {
 		// Primero valido que los campos esten bien cargados
-		if (!getModel().isEdicion() && getView().lblNombre.getText().contains("S/D")) {
-			popUpError.showError(getView().txtArticuloID, "Falta cargar un producto valido");
-			getView().txtArticuloID.requestFocus();
-			return false;
-		}
+//		if (!getModel().isEdicion() && getView().lblNombre.getText().contains("S/D")) {
+//			popUpError.showError(getView().txtArticuloID, "Falta cargar un producto valido");
+//			getView().txtArticuloID.requestFocus();
+//			return false;
+//		}
 
 		if (!FamiliaBusiness.estaFamiliaEnLista(getModel().getFamiliaID(), getModel().getListaID())) {
 			popUpError.showError(getView().txtArticuloID, "La familia no pertenece a la lista Original");
@@ -263,14 +266,14 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 	}
 
 	private void RefrescarDatosFamilia() {
-		getView().lblNombre.setText(getModel().getNombreItem());
-
-		if (!getModel().getFamiliaID().equals("") && !FamiliaBusiness.estaFamiliaEnLista(getModel().getFamiliaID(), getModel().getListaID())) {
-			getView().lblEstaEnLista.setText("La Familia no esta en la lista");
-			getView().lblEstaEnLista.setVisible(true);
-		} else {
-			getView().lblEstaEnLista.setVisible(false);
-		}
+//		getView().lblNombre.setText(getModel().getNombreItem());
+//
+//		if (!getModel().getFamiliaID().equals("") && !FamiliaBusiness.estaFamiliaEnLista(getModel().getFamiliaID(), getModel().getListaID())) {
+//			getView().lblEstaEnLista.setText("La Familia no esta en la lista");
+//			getView().lblEstaEnLista.setVisible(true);
+//		} else {
+//			getView().lblEstaEnLista.setVisible(false);
+//		}
 	}
 
 	@Override
@@ -282,8 +285,11 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 			try {
 				String id = buscarFamilia();
 				if (!id.equals("")) {
-					getView().txtArticuloID.setText(id);
-					getView().txtDesc1.requestFocus();
+					//cargar Articulo
+					getView().tableFalimia.addRow(new Object[] { "NO", id, "", ""});
+//					getView().txtArticuloID.setText(id);
+//					getView().txtDesc1.requestFocus();
+					getView().txtArticuloID.requestFocus();
 				}
 
 			} catch (Exception e) {
@@ -308,7 +314,7 @@ public class CargaItemEspecialFamilia extends BaseControllerDialog<PantPrincipal
 		buscarFamiliaDialog.iniciar();
 		if (buscarFamiliaDialog.getNroFamilia() != null) {
 			retorno = String.valueOf(buscarFamiliaDialog.getNroFamilia());
-			getView().txtArticuloID.setText(retorno);
+			//getView().txtArticuloID.setText(retorno);
 		}
 
 		return retorno;

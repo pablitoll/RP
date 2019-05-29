@@ -49,7 +49,8 @@ import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
 import ar.com.rollpaper.pricing.ui.BuscarListaDialog;
 import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
-import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
+import ar.com.rollpaper.pricing.view.CargaItemEspecialArticuloView;
+import ar.com.rollpaper.pricing.view.CargaItemEspecialFamiliaView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
@@ -57,22 +58,24 @@ import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
-public class CargaPrecioController extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
+public class CargaPrecioController
+		extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
 
 	private CargaItemEspecialArticuloModel itemEspecialArticuloModel = new CargaItemEspecialArticuloModel();
-	private CargaItemEspecialView itemEspecialArticuloView = new CargaItemEspecialView();
-	private CargaItemEspecialArticulo itemEspecialArticulo = new CargaItemEspecialArticulo(PantPrincipalController.getPantallaPrincipal(), itemEspecialArticuloView,
-			itemEspecialArticuloModel, null);
+	private CargaItemEspecialArticuloView itemEspecialArticuloView = new CargaItemEspecialArticuloView();
+	private CargaItemEspecialArticulo itemEspecialArticulo = new CargaItemEspecialArticulo(
+			PantPrincipalController.getPantallaPrincipal(), itemEspecialArticuloView, itemEspecialArticuloModel, null);
 
 	private CargaItemEspecialFamiliaModel itemEspecialFamiliaModel = new CargaItemEspecialFamiliaModel();
-	private CargaItemEspecialView itemEspecialFamiliaView = new CargaItemEspecialView();
-	private CargaItemEspecialFamilia itemEspecialFamilia = new CargaItemEspecialFamilia(PantPrincipalController.getPantallaPrincipal(), itemEspecialFamiliaView,
-			itemEspecialFamiliaModel, null);
+	private CargaItemEspecialFamiliaView itemEspecialFamiliaView = new CargaItemEspecialFamiliaView();
+	private CargaItemEspecialFamilia itemEspecialFamilia = new CargaItemEspecialFamilia(
+			PantPrincipalController.getPantallaPrincipal(), itemEspecialFamiliaView, itemEspecialFamiliaModel, null);
 
 	private TableRowSorter<TableModel> sorterTablaDesEspecifico;
 	private TableRowSorter<TableModel> sorterTablaDesFamilia;
 
-	public CargaPrecioController(PantPrincipalController pantPrincipal, CargaPrecioView view, CargaPrecioModel model) throws Exception {
+	public CargaPrecioController(PantPrincipalController pantPrincipal, CargaPrecioView view, CargaPrecioModel model)
+			throws Exception {
 		super(pantPrincipal, view, model, null);
 
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
@@ -119,20 +122,22 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		setFiltros(getView().tableDescFamilia);
 		setFiltros(getView().tableDescEspecifico);
 
-		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(getModel().getClienteCargado().getClieCliente(),
+		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(
+				getModel().getClienteCargado().getClieCliente(),
 				getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
 			StocCa01 familiaClass = StocCa01DAO.findById(familia.getPricCa01Clasif1());
 			agregarRegistroATablaFamilia(getView().tableDescFamilia, familia, familiaClass.getCa01Nombre());
 		}
 		sorterTablaDesFamilia.sort();
-		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(getModel().getClienteCargado().getClieCliente(),
+		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(
+				getModel().getClienteCargado().getClieCliente(),
 				getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
 			StocArts arti = StocArtsDAO.findById(desc.getPricArticulo());
 			SistUnim unidad = SistUnimDAO.findById(arti.getArtsUnimedStock());
 			Boolean estaEnLista = ListaBusiness.isArticuloEnLista(desc.getPricArticulo(), desc.getPricListaPrecvta());
 
-			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(), arti.getArtsNombre(), arti.getArtsDescripcion(), unidad.getUnimNombre(),
-					estaEnLista);
+			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(),
+					arti.getArtsNombre(), arti.getArtsDescripcion(), unidad.getUnimNombre(), estaEnLista);
 		}
 		sorterTablaDesEspecifico.sort();
 
@@ -162,8 +167,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 			if (cliente != null) {
 				if (!MaestroEsclavoDAO.getListaEsclavosByCliente(cliente).isEmpty()) {
-					if (Dialog.showConfirmDialog("IMPORTANTE: Este Cliente tiene esclavos.\nTodos lo que cargue impactará también sobre los mismos!. ¿Continuamos?",
-							"Cliente con Esclavos", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) != JOptionPane.YES_OPTION) {
+					if (Dialog.showConfirmDialog(
+							"IMPORTANTE: Este Cliente tiene esclavos.\nTodos lo que cargue impactará también sobre los mismos!. ¿Continuamos?",
+							"Cliente con Esclavos", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null,
+							null) != JOptionPane.YES_OPTION) {
 
 						getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
 						resetearDatosDePantalla();
@@ -205,8 +212,12 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		getView().btnEliminarLista.setEnabled(habilitaEliminar);
 		getView().btnAgregarLista.setEnabled(tieneCli);
 
-		getView().setCerrarVisible(!tieneCli);
-		getView().btnImpactarPrecios.setVisible(tieneCli);
+		if (tieneCli) {
+			if (!getView().btnImpactarPrecios.isVisible() && !getView().btnCancelar.isVisible()) {
+				getView().setCerrarVisible(false);
+				getView().btnCancelar.setVisible(true);
+			}
+		}
 	}
 
 	@Override
@@ -236,6 +247,10 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 			setFiltros(getView().tableDescFamilia);
 			setFiltros(getView().tableDescEspecifico);
+
+			getView().setCerrarVisible(true);
+			getView().btnImpactarPrecios.setVisible(false);
+			getView().btnCancelar.setVisible(false);
 		}
 
 		setModoPantalla();
@@ -323,7 +338,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 	@SuppressWarnings("unchecked")
 	private void agregarLista() throws Exception {
-		BuscarListaDialog buscarListaDialog = new BuscarListaDialog(getPantallaPrincipal(), getView().cbNroLista.getModel());
+		BuscarListaDialog buscarListaDialog = new BuscarListaDialog(getPantallaPrincipal(),
+				getView().cbNroLista.getModel());
 		buscarListaDialog.iniciar();
 		if (buscarListaDialog.getNroLista() != null) {
 			VentLipv lista = buscarListaDialog.getNroLista();
@@ -350,8 +366,11 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 	public void ejecutarAccion(String accion) {
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString())) {
-			if (Dialog.showConfirmDialog(String.format("Terminamos la carga Actual e Impactamos los procesios del Cliente %s", getModel().getClienteCargado().getClieNombre()),
-					"Impacto de Precios", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+			if (Dialog.showConfirmDialog(
+					String.format("Terminamos la carga Actual e Impactamos los procesios del Cliente %s",
+							getModel().getClienteCargado().getClieNombre()),
+					"Impacto de Precios", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null,
+					null) == JOptionPane.YES_OPTION) {
 
 				PantPrincipalController.setCursorOcupado();
 				try {
@@ -363,15 +382,24 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 						PantPrincipalController.setRestoreCursor();
 					}
 
-					Dialog.showMessageDialog("Se termino de aplicar nuevos precios en todas las lista del cliente", "Aplicacion de Precios", JOptionPane.INFORMATION_MESSAGE);
+					Dialog.showMessageDialog("Se termino de aplicar nuevos precios en todas las lista del cliente",
+							"Aplicacion de Precios", JOptionPane.INFORMATION_MESSAGE);
 
 					// reseto la pantalla
-					getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
-					resetearDatosDePantalla();
+					ejecutarAccion(ConstantesRP.PantCarPrecio.CANCELAR.toString());
 
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al Impactar Precio");
 				}
+			}
+		}
+
+		if (accion.equals(ConstantesRP.PantCarPrecio.CANCELAR.toString())) {
+			try {
+			getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
+			resetearDatosDePantalla();
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al limpiar pantalla");
 			}
 		}
 
@@ -383,7 +411,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				try {
 					if (isPanelActivoFamilia()) {
 						itemEspecialFamilia.setRegistro(getModel().getRegistroFamilaiEmpty());
-						itemEspecialFamiliaModel.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
+						itemEspecialFamiliaModel
+								.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
 						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada().getVentLipv());
 						resutlado = itemEspecialFamilia.iniciar();
 
@@ -392,16 +421,21 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 							DescuentoXFamilias registro = itemEspecialFamilia.getRegistro();
 
 							HibernateGeneric.persist(registro);
+							agregoEditItem();
 
-							agregarRegistroATablaFamilia(getView().tableDescFamilia, registro, itemEspecialFamilia.getNombreItem());
+							agregarRegistroATablaFamilia(getView().tableDescFamilia, registro,
+									itemEspecialFamilia.getNombreItem());
 
 							sorterTablaDesFamilia.sort();
 
-							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA, itemEspecialFamilia.getNombreItem(), CargaPrecioView.COL_DESDE_FAMILIA,
+							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA,
+									itemEspecialFamilia.getNombreItem(), CargaPrecioView.COL_DESDE_FAMILIA,
 									registro.getPricFamiliaFechaDesde());
+
 						}
 					} else {
-						itemEspecialArticuloModel.setTableModel((DefaultTableModel) getView().tableDescEspecifico.getModel());
+						itemEspecialArticuloModel
+								.setTableModel((DefaultTableModel) getView().tableDescEspecifico.getModel());
 						itemEspecialArticulo.setRegistro(getModel().getRegistroArticuloEmpty());
 						resutlado = itemEspecialArticulo.iniciar();
 
@@ -410,17 +444,21 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 							PreciosEspeciales registro = itemEspecialArticulo.getRegistro();
 
 							HibernateGeneric.persist(registro);
+							agregoEditItem();
 
 							SistUnim unidad = SistUnimDAO.findById(itemEspecialArticulo.getUnidadItem());
-							Boolean estaEnLista = ListaBusiness.isArticuloEnLista(registro.getPricArticulo(), registro.getPricListaPrecvta());
+							Boolean estaEnLista = ListaBusiness.isArticuloEnLista(registro.getPricArticulo(),
+									registro.getPricListaPrecvta());
 
-							agregarRegistroATablaArticulo(getView().tableDescEspecifico, registro, itemEspecialArticulo.getArticuloIDMostrar(),
-									itemEspecialArticulo.getNombreItem(), itemEspecialArticulo.getDescripcionItem(), unidad.getUnimNombre(), estaEnLista);
+							agregarRegistroATablaArticulo(getView().tableDescEspecifico, registro,
+									itemEspecialArticulo.getArticuloIDMostrar(), itemEspecialArticulo.getNombreItem(),
+									itemEspecialArticulo.getDescripcionItem(), unidad.getUnimNombre(), estaEnLista);
 
 							sorterTablaDesEspecifico.sort();
 
-							buscarRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO, itemEspecialArticulo.getNombreItem(),
-									CargaPrecioView.COL_DESDE_ESPECIFICO, registro.getPricFechaDesde());
+							buscarRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO,
+									itemEspecialArticulo.getNombreItem(), CargaPrecioView.COL_DESDE_ESPECIFICO,
+									registro.getPricFechaDesde());
 
 						}
 					}
@@ -436,12 +474,15 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			String resutlado = "";
 			try {
 				if (isPanelActivoFamilia()) {
-					if ((getView().tableDescFamilia.getRowCount() > 0) && (getView().tableDescFamilia.getSelectedRow() >= 0)) {
+					if ((getView().tableDescFamilia.getRowCount() > 0)
+							&& (getView().tableDescFamilia.getSelectedRow() >= 0)) {
 						int row = getView().tableDescFamilia.getSelectedRow();
 						int modelRow = getView().tableDescFamilia.convertRowIndexToModel(row);
 
-						itemEspecialFamilia.setRegistro((DescuentoXFamilias) getView().tableDescFamilia.getModel().getValueAt(modelRow, CargaPrecioView.COL_REGISTRO_FAMILIA));
-						itemEspecialFamiliaModel.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
+						itemEspecialFamilia.setRegistro((DescuentoXFamilias) getView().tableDescFamilia.getModel()
+								.getValueAt(modelRow, CargaPrecioView.COL_REGISTRO_FAMILIA));
+						itemEspecialFamiliaModel
+								.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
 						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada().getVentLipv());
 						resutlado = itemEspecialFamilia.iniciar();
 
@@ -449,28 +490,31 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 							DescuentoXFamilias registro = itemEspecialFamilia.getRegistro();
 
-							// HibernateGeneric.persist(registro);
 							HibernateGeneric.attachDirty(registro);
+							agregoEditItem();
 
 							modificarRegistroATabla(getView().tableDescFamilia, registro, row);
 
 							sorterTablaDesFamilia.sort();
 
-							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA, itemEspecialFamilia.getNombreItem(), CargaPrecioView.COL_DESDE_FAMILIA,
+							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA,
+									itemEspecialFamilia.getNombreItem(), CargaPrecioView.COL_DESDE_FAMILIA,
 									registro.getPricFamiliaFechaDesde());
 
 						}
 					}
 
 				} else {
-					if ((getView().tableDescEspecifico.getRowCount() > 0) && (getView().tableDescEspecifico.getSelectedRow() >= 0)) {
+					if ((getView().tableDescEspecifico.getRowCount() > 0)
+							&& (getView().tableDescEspecifico.getSelectedRow() >= 0)) {
 
 						int row = getView().tableDescEspecifico.getSelectedRow();
 						int modelRow = getView().tableDescEspecifico.convertRowIndexToModel(row);
 
-						itemEspecialArticulo
-								.setRegistro((PreciosEspeciales) getView().tableDescEspecifico.getModel().getValueAt(modelRow, CargaPrecioView.COL_REGISTRO_ESPECIFICO));
-						itemEspecialArticuloModel.setTableModel((DefaultTableModel) getView().tableDescEspecifico.getModel());
+						itemEspecialArticulo.setRegistro((PreciosEspeciales) getView().tableDescEspecifico.getModel()
+								.getValueAt(modelRow, CargaPrecioView.COL_REGISTRO_ESPECIFICO));
+						itemEspecialArticuloModel
+								.setTableModel((DefaultTableModel) getView().tableDescEspecifico.getModel());
 
 						resutlado = itemEspecialArticulo.iniciar();
 
@@ -478,14 +522,16 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 							PreciosEspeciales registro = itemEspecialArticulo.getRegistro();
 
-							// HibernateGeneric.persist(registro);
 							PreciosEspecialesDAO.merge(registro);
+							agregoEditItem();
+
 							modificarRegistroATabla(getView().tableDescEspecifico, registro, row);
 
 							sorterTablaDesEspecifico.sort();
 
-							buscarRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO, itemEspecialArticulo.getNombreItem(),
-									CargaPrecioView.COL_DESDE_ESPECIFICO, registro.getPricFechaDesde());
+							buscarRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO,
+									itemEspecialArticulo.getNombreItem(), CargaPrecioView.COL_DESDE_ESPECIFICO,
+									registro.getPricFechaDesde());
 						}
 
 					}
@@ -507,8 +553,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 			}
 
 			if (tabla.getSelectedRow() >= 0) {
-				if (WebOptionPane.showConfirmDialog(getView(), "¿Borramos el registro?", "Eliminacion de registro", JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
+				if (WebOptionPane.showConfirmDialog(getView(), "�Borramos el registro?", "Eliminacion de registro",
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 					try {
 						int row = tabla.getSelectedRow();
 						int modelRow = tabla.convertRowIndexToModel(row);
@@ -519,6 +565,7 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 							DefaultTableModel dm = (DefaultTableModel) tabla.getModel();
 							dm.removeRow(modelRow);
 							HibernateGeneric.remove(regis);
+							agregoEditItem();
 
 						} finally {
 							setFiltros(tabla);
@@ -541,16 +588,23 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		}
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString())) {
-			if (WebOptionPane.showConfirmDialog(getView(), "¿Eliminamos la lista y la Impactamos?", "Eliminacion de Lista", JOptionPane.YES_NO_OPTION,
+			if (WebOptionPane.showConfirmDialog(getView(), "�Eliminamos la lista y la Impactamos?",
+					"Eliminacion de Lista", JOptionPane.YES_NO_OPTION,
 					JOptionPane.QUESTION_MESSAGE) == WebOptionPane.YES_OPTION) {
 				for (int i = 0; i < getView().tableDescFamilia.getRowCount(); i++) {
-					Object regis = getView().tableDescFamilia.getModel().getValueAt(getView().tableDescFamilia.convertColumnIndexToModel(i), CargaPrecioView.COL_REGISTRO_FAMILIA);
+					Object regis = getView().tableDescFamilia.getModel().getValueAt(
+							getView().tableDescFamilia.convertColumnIndexToModel(i),
+							CargaPrecioView.COL_REGISTRO_FAMILIA);
 					HibernateGeneric.remove(regis);
+					agregoEditItem();
 				}
 
 				for (int i = 0; i < getView().tableDescEspecifico.getRowCount(); i++) {
-					Object regis = getView().tableDescEspecifico.getModel().getValueAt(getView().tableDescEspecifico.convertColumnIndexToModel(i), CargaPrecioView.COL_REGISTRO_ESPECIFICO);
+					Object regis = getView().tableDescEspecifico.getModel().getValueAt(
+							getView().tableDescEspecifico.convertColumnIndexToModel(i),
+							CargaPrecioView.COL_REGISTRO_ESPECIFICO);
 					HibernateGeneric.remove(regis);
+					agregoEditItem();
 				}
 
 				try {
@@ -560,6 +614,13 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 				}
 			}
 		}
+
+	}
+
+	private void agregoEditItem() {
+		getView().btnImpactarPrecios.setVisible(true);
+		getView().setCerrarVisible(false);
+		getView().btnCancelar.setVisible(!getView().btnImpactarPrecios.isVisible());
 
 	}
 
@@ -575,7 +636,8 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		String strDesde = FechaManagerUtil.Date2String(fechaDesde);
 
 		for (int i = 0; i < tableActivo.getRowCount(); i++) {
-			if ((tableActivo.getValueAt(i, col_nombre).equals(nombre)) && tableActivo.getValueAt(i, col_desde).equals(strDesde)) {
+			if ((tableActivo.getValueAt(i, col_nombre).equals(nombre))
+					&& tableActivo.getValueAt(i, col_desde).equals(strDesde)) {
 				tableActivo.setSelectedRow(i);
 				i = tableActivo.getRowCount() + 2;
 			}
@@ -594,45 +656,57 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 
 			Boolean estaVigente = estaVigente(registroPedido.getPricFechaDesde(), registroPedido.getPricFechaHasta());
 
-			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null ? Common.double2String(registroPedido.getPricDescuento1().doubleValue()) : "", row,
-					CargaPrecioView.COL_1DESC_ESPECIFICO);
-			tableActivo.setValueAt(registroPedido.getPricDescuento2() != null ? Common.double2String(registroPedido.getPricDescuento2().doubleValue()) : "", row,
-					CargaPrecioView.COL_2DESC_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null
+					? Common.double2String(registroPedido.getPricDescuento1().doubleValue())
+					: "", row, CargaPrecioView.COL_1DESC_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricDescuento2() != null
+					? Common.double2String(registroPedido.getPricDescuento2().doubleValue())
+					: "", row, CargaPrecioView.COL_2DESC_ESPECIFICO);
 			tableActivo.setValueAt(descMoneda, row, CargaPrecioView.COL_MONEDA_ESPECIFICO);
-			tableActivo.setValueAt(registroPedido.getPricPrecio() != null ? CommonPricing.formatearImporte(registroPedido.getPricPrecio().doubleValue()) : "", row,
-					CargaPrecioView.COL_PRECIO_ESPECIFICO);
-			tableActivo.setValueAt(registroPedido.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaDesde()) : "", row,
-					CargaPrecioView.COL_DESDE_ESPECIFICO);
-			tableActivo.setValueAt(registroPedido.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registroPedido.getPricFechaHasta()) : "", row,
-					CargaPrecioView.COL_HASTA_ESPECIFICO);
-			tableActivo.setValueAt(registroPedido.getPricComision() != null ? Common.double2String(registroPedido.getPricComision().doubleValue()) : "", row,
-					CargaPrecioView.COL_COMISION_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricPrecio() != null
+					? CommonPricing.formatearImporte(registroPedido.getPricPrecio().doubleValue())
+					: "", row, CargaPrecioView.COL_PRECIO_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricFechaDesde() != null
+					? FechaManagerUtil.Date2String(registroPedido.getPricFechaDesde())
+					: "", row, CargaPrecioView.COL_DESDE_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricFechaHasta() != null
+					? FechaManagerUtil.Date2String(registroPedido.getPricFechaHasta())
+					: "", row, CargaPrecioView.COL_HASTA_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricComision() != null
+					? Common.double2String(registroPedido.getPricComision().doubleValue())
+					: "", row, CargaPrecioView.COL_COMISION_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_ESPECIFICO);
 
 			tableActivo.setValueAt((estaVigente ? "SI" : "NO"), row, CargaPrecioView.COL_ESTA_VIGENTE_ESPECIFICO);
 		} else {
 			DescuentoXFamilias registroFamilia = (DescuentoXFamilias) registro;
 
-			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento1() != null ? Common.double2String(registroFamilia.getPricFamiliaDescuento1().doubleValue()) : "", row,
-					CargaPrecioView.COL_1DESC_FAMILIA);
-			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento2() != null ? Common.double2String(registroFamilia.getPricFamiliaDescuento2().doubleValue()) : "", row,
-					CargaPrecioView.COL_2DESC_FAMILIA);
-			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaDesde()) : "", row,
-					CargaPrecioView.COL_DESDE_FAMILIA);
-			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaHasta() != null ? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaHasta()) : "", row,
-					CargaPrecioView.COL_HASTA_FAMILIA);
-			tableActivo.setValueAt(registroFamilia.getPricFamiliaComision() != null ? Common.double2String(registroFamilia.getPricFamiliaComision().doubleValue()) : "", row,
-					CargaPrecioView.COL_COMSISION_FAMILIA);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento1() != null
+					? Common.double2String(registroFamilia.getPricFamiliaDescuento1().doubleValue())
+					: "", row, CargaPrecioView.COL_1DESC_FAMILIA);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento2() != null
+					? Common.double2String(registroFamilia.getPricFamiliaDescuento2().doubleValue())
+					: "", row, CargaPrecioView.COL_2DESC_FAMILIA);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaDesde() != null
+					? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaDesde())
+					: "", row, CargaPrecioView.COL_DESDE_FAMILIA);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaHasta() != null
+					? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaHasta())
+					: "", row, CargaPrecioView.COL_HASTA_FAMILIA);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaComision() != null
+					? Common.double2String(registroFamilia.getPricFamiliaComision().doubleValue())
+					: "", row, CargaPrecioView.COL_COMSISION_FAMILIA);
 			tableActivo.setValueAt(registroFamilia.getPricReferencia(), row, CargaPrecioView.COL_REFERENCIA_FAMILIA);
 
-			Boolean estaVigente = estaVigente(registroFamilia.getPricFamiliaFechaDesde(), registroFamilia.getPricFamiliaFechaHasta());
+			Boolean estaVigente = estaVigente(registroFamilia.getPricFamiliaFechaDesde(),
+					registroFamilia.getPricFamiliaFechaHasta());
 
 			tableActivo.setValueAt((estaVigente ? "SI" : "NO"), row, CargaPrecioView.COL_ESTA_VIGENTE_FAMILIA);
 		}
 	}
 
-	private void agregarRegistroATablaArticulo(RPTable tabla, PreciosEspeciales registro, String id_Articulo, String nombreItem, String descItem, String unidadItem,
-			Boolean estaEnLista) {
+	private void agregarRegistroATablaArticulo(RPTable tabla, PreciosEspeciales registro, String id_Articulo,
+			String nombreItem, String descItem, String unidadItem, Boolean estaEnLista) {
 
 		Color[] colorFondo = new Color[tabla.getModel().getColumnCount()];
 		Color[] colorLetra = new Color[tabla.getModel().getColumnCount()];
@@ -647,21 +721,27 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		}
 
 		tabla.addRowColor(new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
-				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue()) : "",
-				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue()) : "",
+				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue())
+						: "",
+				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue())
+						: "",
 				registro.getPricMoneda() != null ? SistMoneDAO.findById(registro.getPricMoneda()).getMoneNombre() : "",
-				registro.getPricPrecio() != null ? CommonPricing.formatearImporte(registro.getPricPrecio().doubleValue()) : "",
+				registro.getPricPrecio() != null
+						? CommonPricing.formatearImporte(registro.getPricPrecio().doubleValue())
+						: "",
 				registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
 				registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "",
-				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(), (estaVigente ? "SI" : "NO"), (estaEnLista ? "SI" : "NO"), registro },
-				colorFondo, colorLetra);
+				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(),
+				(estaVigente ? "SI" : "NO"), (estaEnLista ? "SI" : "NO"), registro }, colorFondo, colorLetra);
 
 		tabla.adjustColumns();
 	}
 
 	private Boolean estaVigente(Date pricFechaDesde, Date pricFechaHasta) {
-		return (FechaManagerUtil.getDateDiff(pricFechaDesde, FechaManagerUtil.getDateTimeFromPC(), TimeUnit.MINUTES) <= 0)
-				&& (FechaManagerUtil.getDateDiff(pricFechaHasta, FechaManagerUtil.getDateTimeFromPC(), TimeUnit.MINUTES) >= 0);
+		return (FechaManagerUtil.getDateDiff(pricFechaDesde, FechaManagerUtil.getDateTimeFromPC(),
+				TimeUnit.MINUTES) <= 0)
+				&& (FechaManagerUtil.getDateDiff(pricFechaHasta, FechaManagerUtil.getDateTimeFromPC(),
+						TimeUnit.MINUTES) >= 0);
 	}
 
 	private Color[] rellenarColor(Color[] vector, Color color) {
@@ -675,17 +755,30 @@ public class CargaPrecioController extends BaseControllerMVC<PantPrincipalContro
 		Boolean estaVigente = estaVigente(registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta());
 
 		tabla.addRow(new Object[] { registro.getPricCa01Clasif1(), nombreItem,
-				registro.getPricFamiliaDescuento1() != null ? Common.double2String(registro.getPricFamiliaDescuento1().doubleValue()) : "",
-				registro.getPricFamiliaDescuento2() != null ? Common.double2String(registro.getPricFamiliaDescuento2().doubleValue()) : "",
-				registro.getPricFamiliaFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFamiliaFechaDesde()) : "",
-				registro.getPricFamiliaFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFamiliaFechaHasta()) : "",
-				Common.double2String(registro.getPricFamiliaComision().doubleValue()), registro.getPricReferencia(), (estaVigente ? "SI" : "NO"), registro });
+				registro.getPricFamiliaDescuento1() != null
+						? Common.double2String(registro.getPricFamiliaDescuento1().doubleValue())
+						: "",
+				registro.getPricFamiliaDescuento2() != null
+						? Common.double2String(registro.getPricFamiliaDescuento2().doubleValue())
+						: "",
+				registro.getPricFamiliaFechaDesde() != null
+						? FechaManagerUtil.Date2String(registro.getPricFamiliaFechaDesde())
+						: "",
+				registro.getPricFamiliaFechaHasta() != null
+						? FechaManagerUtil.Date2String(registro.getPricFamiliaFechaHasta())
+						: "",
+				Common.double2String(registro.getPricFamiliaComision().doubleValue()), registro.getPricReferencia(),
+				(estaVigente ? "SI" : "NO"), registro });
 
 		tabla.adjustColumns();
 	}
 
 	private boolean isPanelActivoFamilia() {
 		return (getView().tabPanel.getSelectedIndex() == 0);
+	}
+
+	public boolean isPendienteImpactar() {
+		return getView().btnImpactarPrecios.isVisible();
 	}
 
 }

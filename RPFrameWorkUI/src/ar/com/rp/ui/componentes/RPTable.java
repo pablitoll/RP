@@ -48,6 +48,7 @@ public class RPTable extends WebTable {
 
 	public void setColToIgnorar(Integer[] colToIgnorar) {
 		this.colToIgnorar = colToIgnorar;
+		this.tableAdjuster.setColToIgnorar(colToIgnorar);
 	}
 
 	@Override
@@ -171,6 +172,7 @@ public class RPTable extends WebTable {
 		getTableHeader().setFont(Common.getStandarFont());
 		tableAdjuster = new TableColumnAdjuster(this);
 		tableAdjuster.setDynamicAdjustment(true);
+		tableAdjuster.setOnlyAdjustLarger(false);
 		setRowSorter(new TableRowSorter<TableModel>(getModel()));
 		setAutoCreateRowSorter(true);
 		addMouseListener(new MouseAdapter() {

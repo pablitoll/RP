@@ -19,7 +19,7 @@ import ar.com.rollpaper.pricing.dao.StocArtsDAO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialArticuloModel;
 import ar.com.rollpaper.pricing.ui.BuscarArticuloDialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
-import ar.com.rollpaper.pricing.view.CargaItemEspecialView;
+import ar.com.rollpaper.pricing.view.CargaItemEspecialArticuloView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
@@ -29,7 +29,7 @@ import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
 import ar.com.rp.ui.pantalla.BaseControllerDialog;
 
-public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipalController, CargaItemEspecialView, CargaItemEspecialArticuloModel> {
+public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipalController, CargaItemEspecialArticuloView, CargaItemEspecialArticuloModel> {
 
 	public PreciosEspeciales getRegistro() throws Exception {
 
@@ -81,7 +81,7 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 	}
 
 	@SuppressWarnings("unchecked")
-	public CargaItemEspecialArticulo(PantPrincipalController pantPrincipal, CargaItemEspecialView view, CargaItemEspecialArticuloModel model, PermisosInterface permisos)
+	public CargaItemEspecialArticulo(PantPrincipalController pantPrincipal, CargaItemEspecialArticuloView view, CargaItemEspecialArticuloModel model, PermisosInterface permisos)
 			throws Exception {
 		super(pantPrincipal, view, model, permisos);
 		view.lblLabelArticulo.setText("Articulo ID:");

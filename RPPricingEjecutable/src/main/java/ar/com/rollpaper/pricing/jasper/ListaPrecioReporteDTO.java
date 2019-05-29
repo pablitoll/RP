@@ -40,7 +40,8 @@ public class ListaPrecioReporteDTO implements Serializable {
 		return leyendaFechaValida;
 	}
 
-	public ListaPrecioReporteDTO(Integer id, String nomCliente, String nomLegal, String nroListaProducto, String leyendaFechaValida, List<ProductoDTO> listaProductos) {
+	public ListaPrecioReporteDTO(Integer id, String nomCliente, String nomLegal, String nroListaProducto,
+			String leyendaFechaValida, List<ProductoDTO> listaProductos) {
 		super();
 		this.id = id;
 		this.nomCliente = nomCliente;

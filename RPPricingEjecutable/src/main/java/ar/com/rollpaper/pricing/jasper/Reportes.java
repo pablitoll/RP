@@ -41,7 +41,8 @@ public class Reportes {
 		getReporteLista(false, listaPrecioReporte, ConstantesRP.REPO_LISTA_PRECIO);
 	}
 
-	private static void getReporteLista(boolean isListaOriginal, ListaPrecioReporteDTO listaPrecioReporte, String reporteArchivo) throws Exception {
+	private static void getReporteLista(boolean isListaOriginal, ListaPrecioReporteDTO listaPrecioReporte,
+			String reporteArchivo) throws Exception {
 		// Parametros
 		HashMap<String, Object> SIMPLE_DATA = new HashMap<String, Object>();
 		SIMPLE_DATA.put("SubReportPath", Main.class.getResource(ConstantesRP.REPO_LISTA_PRECIO_DETALLE));
@@ -93,19 +94,21 @@ public class Reportes {
 	}
 
 	public static ListaPrecioReporteDTO getDatosReporte(CcobClie cliente, VentLipv lista) {
-		// TODO FALTA LOS HEREDADOS
 		List<ProductoDTO> listaProductos = new ArrayList<ProductoDTO>();
 
 		// Lista de precios customizados
-		List<VentArpc> listaVentaCustomizada = VentArpcDAO.findByListaByClient(cliente.getClieCliente(), lista.getLipvListaPrecvta());
+		List<VentArpc> listaVentaCustomizada = VentArpcDAO.findByListaByClient(cliente.getClieCliente(),
+				lista.getLipvListaPrecvta());
 		for (VentArpc ventaCustomizada : listaVentaCustomizada) {
 
 			StocArts stock = StocArtsDAO.getArticuloByID(ventaCustomizada.getId().getArpcArticulo());
 			SistUnim unidad = SistUnimDAO.findById(stock.getArtsUnimedStock());
 			SistMone moneda = SistMoneDAO.findById(ventaCustomizada.getArpcMoneda());
 
-			ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
-					CommonPricing.formatearImporte(ventaCustomizada.getArpcPrecioVta().doubleValue()), stock.getArtsClasif1());
+			ProductoDTO producto = new ProductoDTO(stock.getArtsArticulo(), stock.getArtsArticuloEmp(),
+					stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
+					CommonPricing.formatearImporte(ventaCustomizada.getArpcPrecioVta().doubleValue()),
+					stock.getArtsClasif1(), false);
 			listaProductos.add(producto);
 		}
 
@@ -118,15 +121,31 @@ public class Reportes {
 				SistUnim unidad = SistUnimDAO.findById(stock.getArtsUnimedStock());
 				SistMone moneda = SistMoneDAO.findById(ventaBase.getSistMoneByArpvMoneda().getMoneSimbolo());
 
-				ProductoDTO producto = new ProductoDTO(stock.getArtsArticuloEmp(), stock.getArtsNombre(), stock.getArtsDescripcion().trim(), unidad.getUnimNombre(),
-						moneda.getMoneNombre(), CommonPricing.formatearImporte(ventaBase.getArpvPrecioVta().doubleValue()), stock.getArtsClasif1Cad1());
+				ProductoDTO producto = new ProductoDTO(stock.getArtsArticulo(), stock.getArtsArticuloEmp(),
+						stock.getArtsNombre(), stock.getArtsDescripcion().trim(), unidad.getUnimNombre(),
+						moneda.getMoneNombre(),
+						CommonPricing.formatearImporte(ventaBase.getArpvPrecioVta().doubleValue()),
+						stock.getArtsClasif1Cad1(), true);
 
 				listaProductos.add(producto);
+			} else {
+				actualizarProductoEnLista(listaProductos, ventaBase);
 			}
 		}
-		String leyendaFecha = String.format(MSG_LEYENDA_FECHA, FechaManagerUtil.Date2String(FechaManagerUtil.getDateTimeFromPC()));
+		String leyendaFecha = String.format(MSG_LEYENDA_FECHA,
+				FechaManagerUtil.Date2String(FechaManagerUtil.getDateTimeFromPC()));
 
-		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(), cliente.getClieNombreLegal(), lista.getLipvNombre(), leyendaFecha, listaProductos);
+		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(),
+				cliente.getClieNombreLegal(), lista.getLipvNombre(), leyendaFecha, listaProductos);
+	}
+
+	private static void actualizarProductoEnLista(List<ProductoDTO> listaProductos, VentArpv ventaBase) {
+		StocArts stockABuscar = StocArtsDAO.getArticuloByID(ventaBase.getId().getArpvArticulo());
+		for (ProductoDTO prod : listaProductos) {
+			if (prod.getCodArticulo().equals(stockABuscar.getArtsArticuloEmp())) {
+				prod.setProdListaBase(true);
+			}
+		}
 	}
 
 	private static boolean estaArticuloEnListaCustomizada(List<VentArpc> listaVentaCustomizada, VentArpv ventaBase) {
