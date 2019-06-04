@@ -134,7 +134,7 @@ public class GeneradorDePrecios {
 		// busco las familias que tienen un descuento configurado en la tabla de pricing
 		// para esta relacion Cliente-Lista
 		List<DescuentoXFamilias> listaDescuentosXFamiliaVigentes = DescuentoXFamiliasDAO
-				.getByClienteListaVigente(cliente, lista, hoy);
+				.getByClienteListaVigente(cliente, lista, new java.sql.Date(hoy.getTime()));
 
 		List<PreciosEspeciales> listaPreciosEspeciales = PreciosEspecialesDAO.getByClienteLista(cliente, lista, hoy);
 		// busco los esclavos de este cliente

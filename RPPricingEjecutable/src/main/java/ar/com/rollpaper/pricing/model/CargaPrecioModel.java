@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
-import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
@@ -33,13 +32,13 @@ public class CargaPrecioModel extends BaseModel {
 		return preciosEspeciales;
 	}
 
-	public DescuentoXFamilias getRegistroFamilaiEmpty() {
-		DescuentoXFamilias descuentoXFamilias = new DescuentoXFamilias();
-		descuentoXFamilias.setPricFamiliaListaPrecvta(listaCargada.getVentLipv().getLipvListaPrecvta());
-		descuentoXFamilias.setPricFamiliaCliente(clienteCargado.getClieCliente());
-		return descuentoXFamilias;
-
-	}
+//	public DescuentoXFamilias getRegistroFamilaiEmpty() {
+//		DescuentoXFamilias descuentoXFamilias = new DescuentoXFamilias();
+//		descuentoXFamilias.setPricFamiliaListaPrecvta(listaCargada.getVentLipv().getLipvListaPrecvta());
+//		descuentoXFamilias.setPricFamiliaCliente(clienteCargado.getClieCliente());
+//		return descuentoXFamilias;
+//
+//	}
 
 	public ListaDTO getListaCargada() {
 		return listaCargada;

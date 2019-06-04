@@ -23,12 +23,30 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	private Date pricFamiliaFechaHasta;
 	private BigDecimal pricFamiliaComision;
 	private String pricReferencia;
+	private String nombreFamilia;
 
 	public DescuentoXFamilias() {
 	}
 
-	public DescuentoXFamilias(int pricFamiliaId, int pricFamiliaCliente, int pricFamiliaListaPrecvta, String pricCa01Clasif1, BigDecimal pricFamiliaDescuento1,
-			BigDecimal pricFamiliaDescuento2, Date pricFamiliaFechaDesde, Date pricFamiliaFechaHasta, BigDecimal pricFamiliaComision, String pricReferencia) {
+	public DescuentoXFamilias(DescuentoXFamilias fuente) {
+		super();
+		this.pricFamiliaCliente = fuente.pricFamiliaCliente;
+		this.pricFamiliaListaPrecvta = fuente.pricFamiliaListaPrecvta;
+		this.pricCa01Clasif1 = fuente.pricCa01Clasif1;
+		this.pricFamiliaDescuento1 = fuente.pricFamiliaDescuento1;
+		this.pricFamiliaDescuento2 = fuente.pricFamiliaDescuento2;
+		this.pricFamiliaFechaDesde = fuente.pricFamiliaFechaDesde;
+		this.pricFamiliaFechaHasta = fuente.pricFamiliaFechaHasta;
+		this.pricFamiliaComision = fuente.pricFamiliaComision;
+		this.pricReferencia = fuente.pricReferencia;
+		this.nombreFamilia = fuente.nombreFamilia;
+
+	}
+
+	public DescuentoXFamilias(int pricFamiliaId, int pricFamiliaCliente, int pricFamiliaListaPrecvta,
+			String pricCa01Clasif1, BigDecimal pricFamiliaDescuento1, BigDecimal pricFamiliaDescuento2,
+			Date pricFamiliaFechaDesde, Date pricFamiliaFechaHasta, BigDecimal pricFamiliaComision,
+			String pricReferencia, String nombreFamilia) {
 		super();
 		this.pricFamiliaId = pricFamiliaId;
 		this.pricFamiliaCliente = pricFamiliaCliente;
@@ -40,6 +58,15 @@ public class DescuentoXFamilias implements java.io.Serializable {
 		this.pricFamiliaFechaHasta = pricFamiliaFechaHasta;
 		this.pricFamiliaComision = pricFamiliaComision;
 		this.pricReferencia = pricReferencia;
+		this.nombreFamilia = nombreFamilia;
+	}
+
+	public String getNombreFamilia() {
+		return nombreFamilia;
+	}
+
+	public void setNombreFamilia(String nombreFamilia) {
+		this.nombreFamilia = nombreFamilia;
 	}
 
 	public int getPricFamiliaId() {
@@ -121,10 +148,9 @@ public class DescuentoXFamilias implements java.io.Serializable {
 	public void setPricReferencia(String pricReferencia) {
 		this.pricReferencia = pricReferencia;
 	}
-	
-	public boolean isvigente(Date date) {		
-		
-		
+
+	public boolean isvigente(Date date) {
+
 		return date.after(this.pricFamiliaFechaDesde) && date.before(this.pricFamiliaFechaHasta);
 	}
 

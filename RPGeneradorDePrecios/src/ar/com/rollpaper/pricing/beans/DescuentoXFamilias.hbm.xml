@@ -33,5 +33,6 @@
         <property generated="never" lazy="false" name="pricReferencia" optimistic-lock="true" type="string" unique="false">
             <column length="100" name="PRIC_REFERENCIA"/>
         </property>
+      
     </class>
 </hibernate-mapping>

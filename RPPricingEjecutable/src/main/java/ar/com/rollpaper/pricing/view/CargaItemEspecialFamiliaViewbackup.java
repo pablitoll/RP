@@ -32,7 +32,6 @@ import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.interfaces.RPTableEvent;
 import ar.com.rp.ui.pantalla.BaseViewDialog;
-import javax.swing.JScrollPane;
 
 public class CargaItemEspecialFamiliaViewbackup extends BaseViewDialog {
 

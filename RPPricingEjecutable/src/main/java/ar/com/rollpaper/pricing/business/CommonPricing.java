@@ -11,6 +11,5 @@ public class CommonPricing {
 	
 	public static String formatearImporte(String valor) {
 		 return RPImporte.formatearImporte(valor, true, 4);
-	}
-
+	}	
 }

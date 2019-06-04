@@ -93,7 +93,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		lblTitle = new JLabel("lblTitle");
 		setTitle("Carga de Precio de Cliente");
 		lblTitle.setText(getTitle());
-		
+
 		JPanel panelSuperior = new JPanel();
 		panelSuperior.setFocusable(false);
 		panelSuperior.setBorder(new EmptyBorder(5, 5, 5, 0));
@@ -105,7 +105,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbl_panelSuperior.rowWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
 		panelSuperior.setLayout(gbl_panelSuperior);
 
-		
 		lblTitle.setFont(Common.getStandarFontBold(18));
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.gridwidth = 8;
@@ -290,23 +289,29 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		panelCentral.add(tabPanel);
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 
-		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta", "% Comision", "Referencia", "Esta Vigente", "" };
+		String[] headerDescFamilia = { "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde", "Hasta",
+				"% Comision", "Referencia", "Esta Vigente", "" };
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();
 		tableDescFamilia.setModel(new DefaultTableModel(dataDesFamilia, headerDescFamilia));
 		tableDescFamilia.setRowHeight(30);
 		tableDescFamilia.setEditable(false);
-		tableDescFamilia.getColumnModel().removeColumn(tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA));
+		tableDescFamilia.getColumnModel()
+				.removeColumn(tableDescFamilia.getColumnModel().getColumn(COL_REGISTRO_FAMILIA));
 
 		tableDescFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		tableDescFamilia.getColumnModel().getColumn(COL_1DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
-		tableDescFamilia.getColumnModel().getColumn(COL_2DESC_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
-		tableDescFamilia.getColumnModel().getColumn(COL_COMSISION_FAMILIA).setCellRenderer(tableDescFamilia.getRigthRender());
-		tableDescFamilia.getColumnModel().getColumn(COL_DESDE_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
-		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
-		tableDescFamilia.getColumnModel().getColumn(COL_ESTA_VIGENTE_FAMILIA).setCellRenderer(tableDescFamilia.getCenterRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_1DESC_FAMILIA)
+				.setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_2DESC_FAMILIA)
+				.setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_COMSISION_FAMILIA)
+				.setCellRenderer(tableDescFamilia.getRigthRender());
+		tableDescFamilia.getColumnModel().getColumn(COL_DESDE_FAMILIA).setCellRenderer(new CellRenderFecha());
+		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(new CellRenderFecha());
+		tableDescFamilia.getColumnModel().getColumn(COL_ESTA_VIGENTE_FAMILIA)
+				.setCellRenderer(tableDescFamilia.getCenterRender());
 		tableDescFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		tableDescFamilia.setRpTableEvent(new RPTableEvent() {
@@ -322,8 +327,8 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
 
-		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripcion", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "% Comision", "Referencia",
-				"Esta Vigente", "Esta en Lista", "" };
+		String[] headerDescEspecifico = { "Articulo", "Nombre", "Descripcion", "Unidad", "% Dto. 1", "% Dto. 2",
+				"Moneda", "Precio", "Desde", "Hasta", "% Comision", "Referencia", "Esta Vigente", "Esta en Lista", "" };
 		String[][] dataDesEspecifico = { {} };
 
 		tableDescEspecifico = new RPTable();
@@ -337,18 +342,27 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		// tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMinWidth(0);
 		// tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setPreferredWidth(0);
 		//
-		tableDescEspecifico.getColumnModel().removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
+		tableDescEspecifico.getColumnModel()
+				.removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
 
-		tableDescEspecifico.getColumnModel().getColumn(COL_1DESC_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
-		tableDescEspecifico.getColumnModel().getColumn(COL_2DESC_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
-		tableDescEspecifico.getColumnModel().getColumn(COL_PRECIO_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
-		tableDescEspecifico.getColumnModel().getColumn(COL_UNIDAD_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
-		tableDescEspecifico.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
-		tableDescEspecifico.getColumnModel().getColumn(COL_COMISION_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
-		tableDescEspecifico.getColumnModel().getColumn(COL_DESDE_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
-		tableDescEspecifico.getColumnModel().getColumn(COL_HASTA_ESPECIFICO).setCellRenderer(tableDescEspecifico.getRigthRender());
-		tableDescEspecifico.getColumnModel().getColumn(COL_ESTA_VIGENTE_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
-		tableDescEspecifico.getColumnModel().getColumn(COL_ESTA_EN_LISTA_ESPECIFICO).setCellRenderer(tableDescEspecifico.getCenterRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_1DESC_ESPECIFICO)
+				.setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_2DESC_ESPECIFICO)
+				.setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_PRECIO_ESPECIFICO)
+				.setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_UNIDAD_ESPECIFICO)
+				.setCellRenderer(tableDescEspecifico.getCenterRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO)
+				.setCellRenderer(tableDescEspecifico.getCenterRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_COMISION_ESPECIFICO)
+				.setCellRenderer(tableDescEspecifico.getRigthRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_DESDE_ESPECIFICO).setCellRenderer(new CellRenderFecha());
+		tableDescEspecifico.getColumnModel().getColumn(COL_HASTA_ESPECIFICO).setCellRenderer(new CellRenderFecha());
+		tableDescEspecifico.getColumnModel().getColumn(COL_ESTA_VIGENTE_ESPECIFICO)
+				.setCellRenderer(tableDescEspecifico.getCenterRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_ESTA_EN_LISTA_ESPECIFICO)
+				.setCellRenderer(tableDescEspecifico.getCenterRender());
 
 		tableDescEspecifico.setRpTableEvent(new RPTableEvent() {
 
@@ -365,11 +379,12 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		lblError = new WebLabel("");
 		lblError.setFont(Common.getStandarFontBold());
 		panelCentral.add(lblError, BorderLayout.NORTH);
-		
+
 		btnCancelar = new JButtonRP("Cancelar");
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		btnCancelar.setFont(Common.getStandarFont());
-		btnCancelar.setIcon(new ImageIcon(BaseViewMVCExtendida.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
+		btnCancelar.setIcon(
+				new ImageIcon(BaseViewMVCExtendida.class.getResource("/com/alee/laf/filechooser/icons/remove.png")));
 		pnlInferiorBotones.add(btnCancelar);
 
 		btnImpactarPrecios = new JButtonRP("Terminar Carga e Impactar precios");

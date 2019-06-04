@@ -15,7 +15,7 @@ public class ConstantesRP {
 	};
 
 	public enum AccionesCargaItemFamilia {
-		ACEPTAR, CANCELAR
+		ACEPTAR, CANCELAR, ELIMINAR_FAMILIA
 	}
 
 	public enum PantListaPrecio {

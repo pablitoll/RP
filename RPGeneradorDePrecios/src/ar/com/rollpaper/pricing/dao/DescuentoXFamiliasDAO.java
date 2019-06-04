@@ -15,6 +15,7 @@ import org.hibernate.Session;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
+import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 
@@ -32,43 +33,65 @@ public class DescuentoXFamiliasDAO {
 		log.debug("getting PricDescuentoXFamilias instance with id: " + id);
 		try {
 			Session session = HibernateUtil.getSession();
-			DescuentoXFamilias instance = (DescuentoXFamilias) session.get("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias", id);
+			DescuentoXFamilias instance = (DescuentoXFamilias) session
+					.get("ar.com.rollpaper.pricing.beans.PricDescuentoXFamilias", id);
 			if (instance == null) {
 				log.debug("get successful, no instance found");
 			} else {
 				log.debug("get successful, instance found");
 			}
-			return instance;
+
+			return agregarDescripcion(instance);
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
 			throw re;
 		}
 	}
 
+	// Deberia ser un left join....
+	private static DescuentoXFamilias agregarDescripcion(DescuentoXFamilias descuentoXFamilia) {
+		StocCa01 familiaClass = StocCa01DAO.findById(descuentoXFamilia.getPricCa01Clasif1());
+		descuentoXFamilia.setNombreFamilia(familiaClass.getCa01Nombre());
+		return descuentoXFamilia;
+	}
+
+	private static List<DescuentoXFamilias> agregarDescripcion(List<DescuentoXFamilias> listaDescuentoXFamilia) {
+
+		for (DescuentoXFamilias descuentoXFamilias : listaDescuentoXFamilia) {
+			StocCa01 familiaClass = StocCa01DAO.findById(descuentoXFamilias.getPricCa01Clasif1());
+			descuentoXFamilias.setNombreFamilia(familiaClass.getCa01Nombre());
+		}
+
+		return listaDescuentoXFamilia;
+	}
+
 	public static List<DescuentoXFamilias> getListaDescuentoByID(Integer pricFamiliaCliente, Integer nroLista) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 
-		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder().createQuery(DescuentoXFamilias.class);
+		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder()
+				.createQuery(DescuentoXFamilias.class);
 		Root<DescuentoXFamilias> i = criteriaQuery.from(DescuentoXFamilias.class);
-		criteriaQuery.where(cb.equal(i.get("pricFamiliaCliente"), pricFamiliaCliente), cb.equal(i.get("pricFamiliaListaPrecvta"), nroLista));
+		criteriaQuery.where(cb.equal(i.get("pricFamiliaCliente"), pricFamiliaCliente),
+				cb.equal(i.get("pricFamiliaListaPrecvta"), nroLista));
 
 		List<DescuentoXFamilias> descuentos = session.createQuery(criteriaQuery).getResultList();
 
-		return descuentos;
+		return agregarDescripcion(descuentos);
 	}
 
 	public static List<DescuentoXFamilias> getByCliente(int clieCliente) {
 		Session session = HibernateUtil.getSession();
 		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
 
-		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder().createQuery(DescuentoXFamilias.class);
+		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder()
+				.createQuery(DescuentoXFamilias.class);
 		Root<DescuentoXFamilias> i = criteriaQuery.from(DescuentoXFamilias.class);
 		criteriaQuery.where(cb.equal(i.get("pricFamiliaCliente"), clieCliente));
 
 		List<DescuentoXFamilias> descuentos = session.createQuery(criteriaQuery).getResultList();
 
-		return descuentos;
+		return agregarDescripcion(descuentos);
 	}
 
 	public static List<DescuentoXFamilias> getByClienteLista(CcobClie cliente, VentLipv lista, Date fechaVigencia) {
@@ -76,24 +99,27 @@ public class DescuentoXFamiliasDAO {
 		return getListaDescuentoByID(cliente.getClieCliente(), lista.getLipvListaPrecvta());
 	}
 
-	public static List<DescuentoXFamilias> getByClienteListaVigente(CcobClie cliente, VentLipv lista, Date fechaVigencia) {
+	public static List<DescuentoXFamilias> getByClienteListaVigente(CcobClie cliente, VentLipv lista,
+			Date fechaVigencia) {
 		List<DescuentoXFamilias> listasVigentes = new ArrayList<>();
-		;
+
 		List<DescuentoXFamilias> listas = getListaDescuentoByID(cliente.getClieCliente(), lista.getLipvListaPrecvta());
 		for (DescuentoXFamilias desc : listas) {
 			if (desc.isvigente(fechaVigencia)) {
 				listasVigentes.add(desc);
 			}
 		}
-		return listasVigentes;
+		return agregarDescripcion(listasVigentes);
 	}
 
 	public static List<DescuentoXFamilias> getAll() {
 		Session session = HibernateUtil.getSession();
 
-		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder().createQuery(DescuentoXFamilias.class);
+		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder()
+				.createQuery(DescuentoXFamilias.class);
 		List<DescuentoXFamilias> descuentos = session.createQuery(criteriaQuery).getResultList();
 
-		return descuentos;
+		return agregarDescripcion(descuentos);
 	}
+
 }

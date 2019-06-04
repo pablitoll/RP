@@ -26,12 +26,12 @@ import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.SistUnim;
 import ar.com.rollpaper.pricing.beans.StocArts;
-import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.beans.VentLipv;
 import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.business.ListaBusiness;
+import ar.com.rollpaper.pricing.business.OverloadManager;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
@@ -40,7 +40,6 @@ import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
-import ar.com.rollpaper.pricing.dao.StocCa01DAO;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialArticuloModel;
 import ar.com.rollpaper.pricing.model.CargaItemEspecialFamiliaModel;
@@ -119,16 +118,16 @@ public class CargaPrecioController
 		getView().tableDescFamilia.clear();
 		getView().tableDescEspecifico.clear();
 
-		setFiltros(getView().tableDescFamilia);
-		setFiltros(getView().tableDescEspecifico);
+		setSorter(getView().tableDescFamilia);
+		setSorter(getView().tableDescEspecifico);
 
 		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(
 				getModel().getClienteCargado().getClieCliente(),
 				getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
-			StocCa01 familiaClass = StocCa01DAO.findById(familia.getPricCa01Clasif1());
-			agregarRegistroATablaFamilia(getView().tableDescFamilia, familia, familiaClass.getCa01Nombre());
+			agregarRegistroATablaFamilia(getView().tableDescFamilia, familia);
 		}
 		sorterTablaDesFamilia.sort();
+
 		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(
 				getModel().getClienteCargado().getClieCliente(),
 				getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
@@ -245,8 +244,8 @@ public class CargaPrecioController
 			getView().tableDescFamilia.clear();
 			getView().tableDescEspecifico.clear();
 
-			setFiltros(getView().tableDescFamilia);
-			setFiltros(getView().tableDescEspecifico);
+			setSorter(getView().tableDescFamilia);
+			setSorter(getView().tableDescEspecifico);
 
 			getView().setCerrarVisible(true);
 			getView().btnImpactarPrecios.setVisible(false);
@@ -256,7 +255,7 @@ public class CargaPrecioController
 		setModoPantalla();
 	}
 
-	private void setFiltros(RPTable tabla) {
+	private void setSorter(RPTable tabla) {
 		if (tabla == getView().tableDescFamilia) {
 			resetearTablaFamilia(tabla);
 		} else {
@@ -267,7 +266,6 @@ public class CargaPrecioController
 	private void resetearTablaFamilia(RPTable tabla) {
 		// Le seteo el order
 		sorterTablaDesFamilia = new TableRowSorter<TableModel>(tabla.getModel());
-		tabla.setRowSorter(sorterTablaDesFamilia);
 		ArrayList<RowSorter.SortKey> sortKeysFamilia = new ArrayList<RowSorter.SortKey>();
 
 		sortKeysFamilia.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_FAMILIA, SortOrder.ASCENDING));
@@ -275,6 +273,16 @@ public class CargaPrecioController
 
 		sorterTablaDesFamilia.setSortKeys(sortKeysFamilia);
 
+		sorterTablaDesFamilia.setComparator(CargaPrecioView.COL_DESDE_FAMILIA, new Comparator<Date>() {
+
+			@Override
+			public int compare(Date fecha1, Date fecha2) {
+				return (int) FechaManagerUtil.getDateDiff(fecha1, fecha2, TimeUnit.SECONDS);
+			}
+		});
+
+		tabla.setRowSorter(sorterTablaDesFamilia);
+		sorterTablaDesFamilia.sort();
 	}
 
 	private void resetearTablaEspecifico(RPTable tabla) {
@@ -396,8 +404,8 @@ public class CargaPrecioController
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.CANCELAR.toString())) {
 			try {
-			getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
-			resetearDatosDePantalla();
+				getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
+				resetearDatosDePantalla();
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al limpiar pantalla");
 			}
@@ -410,33 +418,39 @@ public class CargaPrecioController
 				String resutlado = "";
 				try {
 					if (isPanelActivoFamilia()) {
-						itemEspecialFamilia.setRegistro(getModel().getRegistroFamilaiEmpty());
-						itemEspecialFamiliaModel
-								.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
-						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada().getVentLipv());
-						resutlado = itemEspecialFamilia.iniciar();
 
-						if (!resutlado.equals("")) {
+						if (itemEspecialFamilia.iniciarAlta(getModel().getClienteCargado(),
+								getModel().getListaCargada().getVentLipv(),
+								(DefaultTableModel) getView().tableDescFamilia.getModel())) {
 
-							DescuentoXFamilias registro = itemEspecialFamilia.getRegistro();
+							getView().tableDescFamilia.setRowSorter(null);
+							try {
+								for (DescuentoXFamilias registro : itemEspecialFamilia.getRegistro()) {
 
-							HibernateGeneric.persist(registro);
-							agregoEditItem();
+									actualzarFechasCortesFamilia(registro, getView().tableDescFamilia,
+											CargaPrecioView.COL_REGISTRO_FAMILIA);
 
-							agregarRegistroATablaFamilia(getView().tableDescFamilia, registro,
-									itemEspecialFamilia.getNombreItem());
+									HibernateGeneric.persist(registro);
+									agregoEditItem();
 
-							sorterTablaDesFamilia.sort();
+									agregarRegistroATablaFamilia(getView().tableDescFamilia, registro);
+
+								}
+							} finally {
+								setSorter(getView().tableDescFamilia);
+							}
 
 							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA,
-									itemEspecialFamilia.getNombreItem(), CargaPrecioView.COL_DESDE_FAMILIA,
-									registro.getPricFamiliaFechaDesde());
+									itemEspecialFamilia.getRegistro().get(0).getNombreFamilia(),
+									CargaPrecioView.COL_DESDE_FAMILIA,
+									itemEspecialFamilia.getRegistro().get(0).getPricFamiliaFechaDesde());
 
 						}
 					} else {
 						itemEspecialArticuloModel
 								.setTableModel((DefaultTableModel) getView().tableDescEspecifico.getModel());
 						itemEspecialArticulo.setRegistro(getModel().getRegistroArticuloEmpty());
+
 						resutlado = itemEspecialArticulo.iniciar();
 
 						if (!resutlado.equals("")) {
@@ -479,27 +493,35 @@ public class CargaPrecioController
 						int row = getView().tableDescFamilia.getSelectedRow();
 						int modelRow = getView().tableDescFamilia.convertRowIndexToModel(row);
 
-						itemEspecialFamilia.setRegistro((DescuentoXFamilias) getView().tableDescFamilia.getModel()
-								.getValueAt(modelRow, CargaPrecioView.COL_REGISTRO_FAMILIA));
-						itemEspecialFamiliaModel
-								.setTableModel((DefaultTableModel) getView().tableDescFamilia.getModel());
-						itemEspecialFamiliaModel.setListaID(getModel().getListaCargada().getVentLipv());
-						resutlado = itemEspecialFamilia.iniciar();
+						if (itemEspecialFamilia.iniciarModif(getModel().getClienteCargado(),
+								getModel().getListaCargada().getVentLipv(),
+								(DefaultTableModel) getView().tableDescFamilia.getModel(),
+								(DescuentoXFamilias) getView().tableDescFamilia.getModel().getValueAt(modelRow,
+										CargaPrecioView.COL_REGISTRO_FAMILIA))) {
 
-						if (!resutlado.equals("")) {
+							DescuentoXFamilias registro = itemEspecialFamilia.getRegistro().get(0); // Como es
+																									 // edicion
+																									 // es uno solo
+							getView().tableDescFamilia.setRowSorter(null);
+							try {
 
-							DescuentoXFamilias registro = itemEspecialFamilia.getRegistro();
+								actualzarFechasCortesFamilia(registro, getView().tableDescFamilia,
+										CargaPrecioView.COL_REGISTRO_FAMILIA);
 
-							HibernateGeneric.attachDirty(registro);
-							agregoEditItem();
+								HibernateGeneric.attachDirty(registro);
+								agregoEditItem();
 
-							modificarRegistroATabla(getView().tableDescFamilia, registro, row);
+								modificarRegistroATabla(getView().tableDescFamilia, registro, row);
 
-							sorterTablaDesFamilia.sort();
+							} finally {
+								setSorter(getView().tableDescFamilia);
+							}
 
 							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA,
-									itemEspecialFamilia.getNombreItem(), CargaPrecioView.COL_DESDE_FAMILIA,
+									registro.getNombreFamilia(), CargaPrecioView.COL_DESDE_FAMILIA,
 									registro.getPricFamiliaFechaDesde());
+
+							getView().tableDescFamilia.adjustColumns();
 
 						}
 					}
@@ -532,6 +554,8 @@ public class CargaPrecioController
 							buscarRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO,
 									itemEspecialArticulo.getNombreItem(), CargaPrecioView.COL_DESDE_ESPECIFICO,
 									registro.getPricFechaDesde());
+
+							getView().tableDescEspecifico.adjustColumns();
 						}
 
 					}
@@ -568,7 +592,8 @@ public class CargaPrecioController
 							agregoEditItem();
 
 						} finally {
-							setFiltros(tabla);
+							setSorter(tabla);
+							tabla.adjustColumns();
 						}
 					} catch (Exception e) {
 						ManejoDeError.showError(e, "Error al eliminar registro");
@@ -577,9 +602,7 @@ public class CargaPrecioController
 			}
 		}
 
-		if (accion.equals(ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString()))
-
-		{
+		if (accion.equals(ConstantesRP.PantCarPrecio.AGREGAR_LISTA.toString())) {
 			try {
 				agregarLista();
 			} catch (Exception e) {
@@ -615,6 +638,107 @@ public class CargaPrecioController
 			}
 		}
 
+	}
+
+	/*-
+	 * Tengo 7 casos de solapamiento
+	 * 1) A ---------------------
+	 *            B--------------------
+	 * 1B)A    -------
+	*     B          --------
+	 * 
+	 * 
+	 * 2)         A ----------------
+	 *    B --------------
+	 *  
+	 *2B)         A ------
+	 *    B ---------
+	 * 
+	 * 
+	 * 3)	      A -------------
+	 *    B -----------------------------
+	 *    
+	 *    
+	 * 4) A ----------------------
+	*             B ------
+	*
+	*  5) A ----
+	*     B ----
+	*
+	* 6) A          ----------
+	*    B   -----------------
+	* 
+	*    
+	* 7) A    -------
+	*    B    ------------------   
+	* 
+	* 
+	 */
+	private void actualzarFechasCortesFamilia(DescuentoXFamilias registroNuevo, RPTable tableActivo, int col_reg) {
+
+		DefaultTableModel dm = (DefaultTableModel) tableActivo.getModel();
+
+		/// caso 3 o 5
+		for (int i = 0; i < dm.getRowCount(); i++) {
+
+			DescuentoXFamilias regTablaFamilia = (DescuentoXFamilias) dm.getValueAt(i, col_reg);
+
+			if (regTablaFamilia.getPricCa01Clasif1().equals(registroNuevo.getPricCa01Clasif1())) {
+				// A = regTablaFamilia
+				// B = registroNuevo
+
+				if (OverloadManager.isCase3(regTablaFamilia, registroNuevo)
+						|| OverloadManager.isCase5(regTablaFamilia, registroNuevo)
+						|| OverloadManager.isCase6(regTablaFamilia, registroNuevo)
+						|| OverloadManager.isCase7(regTablaFamilia, registroNuevo)) {
+
+					dm.removeRow(i);
+					HibernateGeneric.remove(regTablaFamilia);
+					i--;
+				}
+			}
+		}
+
+		/// resto de casos
+		for (int i = 0; i < dm.getRowCount(); i++) {
+
+			DescuentoXFamilias regTablaFamilia = (DescuentoXFamilias) dm.getValueAt(i, col_reg);
+
+			if (regTablaFamilia.getPricCa01Clasif1().equals(registroNuevo.getPricCa01Clasif1())) {
+
+				if (OverloadManager.isCase1(regTablaFamilia, registroNuevo)) {
+					regTablaFamilia.setPricFamiliaFechaHasta(
+							FechaManagerUtil.addDays(registroNuevo.getPricFamiliaFechaDesde(), -1));
+					HibernateGeneric.attachDirty(regTablaFamilia);
+					modificarRegistroATabla(tableActivo, regTablaFamilia, tableActivo.convertColumnIndexToView(i));
+				}
+
+				if (OverloadManager.isCase2(regTablaFamilia, registroNuevo)) {
+					regTablaFamilia.setPricFamiliaFechaDesde(
+							FechaManagerUtil.addDays(registroNuevo.getPricFamiliaFechaHasta(), 1));
+					HibernateGeneric.attachDirty(regTablaFamilia);
+					modificarRegistroATabla(tableActivo, regTablaFamilia, tableActivo.convertColumnIndexToView(i));
+				}
+
+				if (OverloadManager.isCase4(regTablaFamilia, registroNuevo)) {
+					DescuentoXFamilias regTablaFamilia2 = new DescuentoXFamilias(regTablaFamilia);
+
+					regTablaFamilia.setPricFamiliaFechaHasta(
+							FechaManagerUtil.addDays(registroNuevo.getPricFamiliaFechaDesde(), -1));
+					HibernateGeneric.attachDirty(regTablaFamilia);
+					modificarRegistroATabla(tableActivo, regTablaFamilia, tableActivo.convertColumnIndexToView(i));
+
+					// agrego un registro nuevo
+					regTablaFamilia2.setPricFamiliaFechaDesde(
+							FechaManagerUtil.addDays(registroNuevo.getPricFamiliaFechaHasta(), 1));
+					HibernateGeneric.persist(regTablaFamilia2);
+
+					agregarRegistroATablaFamilia(getView().tableDescFamilia, regTablaFamilia2);
+
+				}
+
+			}
+		}
 	}
 
 	private void agregoEditItem() {
@@ -666,12 +790,8 @@ public class CargaPrecioController
 			tableActivo.setValueAt(registroPedido.getPricPrecio() != null
 					? CommonPricing.formatearImporte(registroPedido.getPricPrecio().doubleValue())
 					: "", row, CargaPrecioView.COL_PRECIO_ESPECIFICO);
-			tableActivo.setValueAt(registroPedido.getPricFechaDesde() != null
-					? FechaManagerUtil.Date2String(registroPedido.getPricFechaDesde())
-					: "", row, CargaPrecioView.COL_DESDE_ESPECIFICO);
-			tableActivo.setValueAt(registroPedido.getPricFechaHasta() != null
-					? FechaManagerUtil.Date2String(registroPedido.getPricFechaHasta())
-					: "", row, CargaPrecioView.COL_HASTA_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricFechaDesde(), row, CargaPrecioView.COL_DESDE_ESPECIFICO);
+			tableActivo.setValueAt(registroPedido.getPricFechaHasta(), row, CargaPrecioView.COL_HASTA_ESPECIFICO);
 			tableActivo.setValueAt(registroPedido.getPricComision() != null
 					? Common.double2String(registroPedido.getPricComision().doubleValue())
 					: "", row, CargaPrecioView.COL_COMISION_ESPECIFICO);
@@ -687,12 +807,8 @@ public class CargaPrecioController
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento2() != null
 					? Common.double2String(registroFamilia.getPricFamiliaDescuento2().doubleValue())
 					: "", row, CargaPrecioView.COL_2DESC_FAMILIA);
-			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaDesde() != null
-					? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaDesde())
-					: "", row, CargaPrecioView.COL_DESDE_FAMILIA);
-			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaHasta() != null
-					? FechaManagerUtil.Date2String(registroFamilia.getPricFamiliaFechaHasta())
-					: "", row, CargaPrecioView.COL_HASTA_FAMILIA);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaDesde(), row, CargaPrecioView.COL_DESDE_FAMILIA);
+			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaHasta(), row, CargaPrecioView.COL_HASTA_FAMILIA);
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaComision() != null
 					? Common.double2String(registroFamilia.getPricFamiliaComision().doubleValue())
 					: "", row, CargaPrecioView.COL_COMSISION_FAMILIA);
@@ -729,8 +845,7 @@ public class CargaPrecioController
 				registro.getPricPrecio() != null
 						? CommonPricing.formatearImporte(registro.getPricPrecio().doubleValue())
 						: "",
-				registro.getPricFechaDesde() != null ? FechaManagerUtil.Date2String(registro.getPricFechaDesde()) : "",
-				registro.getPricFechaHasta() != null ? FechaManagerUtil.Date2String(registro.getPricFechaHasta()) : "",
+				registro.getPricFechaDesde(), registro.getPricFechaHasta(),
 				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(),
 				(estaVigente ? "SI" : "NO"), (estaEnLista ? "SI" : "NO"), registro }, colorFondo, colorLetra);
 
@@ -751,22 +866,17 @@ public class CargaPrecioController
 		return vector;
 	}
 
-	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro, String nombreItem) {
+	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro) {
 		Boolean estaVigente = estaVigente(registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta());
 
-		tabla.addRow(new Object[] { registro.getPricCa01Clasif1(), nombreItem,
+		tabla.addRow(new Object[] { registro.getPricCa01Clasif1(), registro.getNombreFamilia(),
 				registro.getPricFamiliaDescuento1() != null
 						? Common.double2String(registro.getPricFamiliaDescuento1().doubleValue())
 						: "",
 				registro.getPricFamiliaDescuento2() != null
 						? Common.double2String(registro.getPricFamiliaDescuento2().doubleValue())
 						: "",
-				registro.getPricFamiliaFechaDesde() != null
-						? FechaManagerUtil.Date2String(registro.getPricFamiliaFechaDesde())
-						: "",
-				registro.getPricFamiliaFechaHasta() != null
-						? FechaManagerUtil.Date2String(registro.getPricFamiliaFechaHasta())
-						: "",
+				registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta(),
 				Common.double2String(registro.getPricFamiliaComision().doubleValue()), registro.getPricReferencia(),
 				(estaVigente ? "SI" : "NO"), registro });
 

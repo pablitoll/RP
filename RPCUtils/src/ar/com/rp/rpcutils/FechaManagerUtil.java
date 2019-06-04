@@ -206,19 +206,27 @@ public class FechaManagerUtil {
 		return cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 	}
 
-//	@Deprecated
-//	public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-//	    long diffInMillies = date2.getTime() - date1.getTime();
-//	    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
-//	}
+	// @Deprecated
+	// public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+	// long diffInMillies = date2.getTime() - date1.getTime();
+	// return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+	// }
 
 	public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-	    long diffInMillies = date1.getTime() - date2.getTime();
-	    return timeUnit.convert(diffInMillies,TimeUnit.MILLISECONDS);
+		long diffInMillies = date1.getTime() - date2.getTime();
+		return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS);
 	}
 
 	public static boolean fechaIguales(Date fecha1, Date fecha2) {
 		return getDateDiff(fecha1, fecha2, TimeUnit.SECONDS) == 0;
+	}
+
+	public static boolean isMenor(Date fecha1, Date fecha2) {
+		return getDateDiff(fecha1, fecha2, TimeUnit.SECONDS) < 0;
+	}
+
+	public static boolean isMayor(Date fecha1, Date fecha2) {
+		return getDateDiff(fecha1, fecha2, TimeUnit.SECONDS) > 0;
 	}
 
 }
