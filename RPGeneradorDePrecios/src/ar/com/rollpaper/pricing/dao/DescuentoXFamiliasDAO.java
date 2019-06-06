@@ -11,7 +11,9 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
@@ -118,6 +120,29 @@ public class DescuentoXFamiliasDAO {
 		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder()
 				.createQuery(DescuentoXFamilias.class);
 		List<DescuentoXFamilias> descuentos = session.createQuery(criteriaQuery).getResultList();
+
+		return agregarDescripcion(descuentos);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<DescuentoXFamilias> getListaDescuentoByFiltros(Integer idCliente, Date fechaVencidosAl,
+			Date fechaVencidosDesde) {
+		Session session = HibernateUtil.getSession();
+
+		@SuppressWarnings("deprecation")
+		Criteria criteria = session.createCriteria(DescuentoXFamilias.class);
+
+		if (idCliente != null) {
+			criteria.add(Restrictions.eq("pricFamiliaCliente", idCliente));
+		}
+
+		criteria.add(Restrictions.lt("pricFamiliaFechaHasta", fechaVencidosAl));
+
+		if (fechaVencidosDesde != null) {
+			criteria.add(Restrictions. gt("pricFamiliaFechaHasta", fechaVencidosDesde));
+		}
+		
+		List<DescuentoXFamilias> descuentos = criteria.list();
 
 		return agregarDescripcion(descuentos);
 	}

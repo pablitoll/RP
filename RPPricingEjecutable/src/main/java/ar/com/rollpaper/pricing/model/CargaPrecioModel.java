@@ -32,14 +32,6 @@ public class CargaPrecioModel extends BaseModel {
 		return preciosEspeciales;
 	}
 
-//	public DescuentoXFamilias getRegistroFamilaiEmpty() {
-//		DescuentoXFamilias descuentoXFamilias = new DescuentoXFamilias();
-//		descuentoXFamilias.setPricFamiliaListaPrecvta(listaCargada.getVentLipv().getLipvListaPrecvta());
-//		descuentoXFamilias.setPricFamiliaCliente(clienteCargado.getClieCliente());
-//		return descuentoXFamilias;
-//
-//	}
-
 	public ListaDTO getListaCargada() {
 		return listaCargada;
 	}
@@ -49,18 +41,17 @@ public class CargaPrecioModel extends BaseModel {
 	}
 
 	public List<ListaDTO> getListasToShow() {
-		if(listasCargadas == null) {
+		if (listasCargadas == null) {
 			listasCargadas = ListaBusiness.getListaToShow(getClienteCargado());
 		}
 		return listasCargadas;
 	}
 
 	public void agregarLista(ListaDTO nuevaLista) {
-		if(listaCargada == null) {
+		if (listaCargada == null) {
 			listasCargadas = new ArrayList<ListaDTO>();
 		}
 		listasCargadas.add(nuevaLista);
 	}
-
 
 }

@@ -118,15 +118,14 @@ public class CargaPrecioController
 		getView().tableDescFamilia.clear();
 		getView().tableDescEspecifico.clear();
 
-		setSorter(getView().tableDescFamilia);
-		setSorter(getView().tableDescEspecifico);
-
+		getView().tableDescFamilia.setRowSorter(null);
+		getView().tableDescEspecifico.setRowSorter(null);
+		
 		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(
 				getModel().getClienteCargado().getClieCliente(),
 				getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
 			agregarRegistroATablaFamilia(getView().tableDescFamilia, familia);
 		}
-		sorterTablaDesFamilia.sort();
 
 		for (PreciosEspeciales desc : PreciosEspecialesDAO.getListaPrecioEspeciaByID(
 				getModel().getClienteCargado().getClieCliente(),
@@ -138,8 +137,12 @@ public class CargaPrecioController
 			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc, arti.getArtsArticuloEmp(),
 					arti.getArtsNombre(), arti.getArtsDescripcion(), unidad.getUnimNombre(), estaEnLista);
 		}
-		sorterTablaDesEspecifico.sort();
+		setSorter(getView().tableDescFamilia);
+		setSorter(getView().tableDescEspecifico);
 
+		sorterTablaDesEspecifico.sort();
+		sorterTablaDesFamilia.sort();
+		
 		setModoPantalla();
 	}
 
@@ -294,12 +297,9 @@ public class CargaPrecioController
 		sortKeys.add(new RowSorter.SortKey(CargaPrecioView.COL_NOMBRE_ESPECIFICO, SortOrder.ASCENDING));
 		sortKeys.add(new RowSorter.SortKey(CargaPrecioView.COL_DESDE_ESPECIFICO, SortOrder.ASCENDING));
 
-		sorterTablaDesEspecifico.setComparator(CargaPrecioView.COL_DESDE_ESPECIFICO, new Comparator<String>() {
+		sorterTablaDesEspecifico.setComparator(CargaPrecioView.COL_DESDE_ESPECIFICO, new Comparator<Date>() {
 			@Override
-			public int compare(String s1, String s2) {
-				Date date1 = FechaManagerUtil.String2Date(s1);
-				Date date2 = FechaManagerUtil.String2Date(s2);
-
+			public int compare(Date date1, Date date2) {
 				return (int) FechaManagerUtil.getDateDiff(date2, date1, TimeUnit.SECONDS);
 			}
 		});

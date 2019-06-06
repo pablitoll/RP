@@ -1,11 +1,14 @@
 package ar.com.rollpaper.pricing.business;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.beans.VentArpv;
+import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.StocCa01DAO;
 
 public class FamiliaBusiness {
@@ -16,7 +19,8 @@ public class FamiliaBusiness {
 		if (familia != null) {
 			listaFamilia.add(familia);
 
-			return getListaFamilia(listaFamilia, nroLista).size() > 0; // si hay algun producto para la familia, entonces esta
+			return getListaFamilia(listaFamilia, nroLista).size() > 0; // si hay algun producto para la familia,
+																		 // entonces esta
 		}
 		return false;
 	}
@@ -39,7 +43,9 @@ public class FamiliaBusiness {
 			List<StocArts> listaArticulosFamilia = StockBusiness.getListaStockxFamilia(familia.getCa01Clasif1());
 			for (int i = 0; i < listaArticulosFamilia.size() && !estaArtEnLista; i++) { // Articulos de la familia
 				StocArts articuloFamilia = listaArticulosFamilia.get(i);
-				if (estaEnLista(articuloFamilia.getArtsArticulo(), listaStockxLista)) { // Si esta el articulo en la lista, la familia se puede seleccionar
+				if (estaEnLista(articuloFamilia.getArtsArticulo(), listaStockxLista)) { // Si esta el articulo en la
+																						 // lista, la familia se puede
+																						 // seleccionar
 					retorno.add(familia);
 					estaArtEnLista = true;
 				}
@@ -56,6 +62,28 @@ public class FamiliaBusiness {
 			}
 		}
 		return false;
+	}
+
+	public static List<DescuentoXFamilias> getListaDescuentoByFiltros(Integer idCliente, Date fechaVencidosAl,
+			Date fechaVencidosDesde, String busqueda) {
+
+		List<DescuentoXFamilias> aux = DescuentoXFamiliasDAO.getListaDescuentoByFiltros(idCliente, fechaVencidosAl,
+				fechaVencidosDesde);
+		List<DescuentoXFamilias> retorno = new ArrayList<DescuentoXFamilias>();
+
+		if (busqueda != null) {
+			busqueda = busqueda.toLowerCase();
+			for (DescuentoXFamilias des : aux) {
+				if (des.getNombreFamilia().toLowerCase().contains(busqueda)
+						|| des.getPricCa01Clasif1().toLowerCase().contains(busqueda)) {
+					retorno.add(des);
+				}
+			}
+
+		} else {
+			retorno = aux;
+		}
+		return retorno;
 	}
 
 }

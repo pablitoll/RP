@@ -2,6 +2,7 @@ package ar.com.rollpaper.pricing.view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -13,12 +14,15 @@ import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+
+import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import com.alee.extended.date.WebDateField;
 import com.alee.laf.combobox.WebComboBox;
@@ -34,9 +38,6 @@ import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.interfaces.RPTableEvent;
 import ar.com.rp.ui.pantalla.BaseViewDialog;
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-import java.awt.Component;
-import javax.swing.JButton;
 
 public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 

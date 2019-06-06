@@ -25,7 +25,7 @@ public class CellRenderFecha implements TableCellRenderer {
 			rightRenderer.setText(FechaManagerUtil.Date2String(aux));
 		}
 
-		if(arg2) {
+		if (arg2) {
 			rightRenderer.setBackground(arg0.getSelectionBackground());
 			rightRenderer.setForeground(arg0.getSelectionForeground());
 		}

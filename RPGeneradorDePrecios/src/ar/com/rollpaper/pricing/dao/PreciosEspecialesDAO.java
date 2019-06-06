@@ -11,8 +11,10 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
@@ -179,13 +181,34 @@ public class PreciosEspecialesDAO {
 
 	public static List<PreciosEspeciales> getAll() {
 		Session session = HibernateUtil.getSession();
-//		CriteriaBuilder cb = session.getEntityManagerFactory().getCriteriaBuilder();
-		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder().createQuery(PreciosEspeciales.class);
-//		Root<PreciosEspeciales> i = criteriaQuery.from(PreciosEspeciales.class);
-		//criteriaQuery.where(cb.equal(i.get("pricCliente"), 1));
+		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder()
+				.createQuery(PreciosEspeciales.class);
 		List<PreciosEspeciales> listaPrecios = session.createQuery(criteriaQuery).getResultList();// TODO Auto-generated
 																									// method stub
 		return listaPrecios;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<PreciosEspeciales> getListaPrecioEspeciaByFiltros(Integer idCliente, Date fechaVencidosAl,
+			Date fechaVencidosDesde) {
+
+		Session session = HibernateUtil.getSession();
+		Criteria criteria = session.createCriteria(PreciosEspeciales.class);
+
+		if (idCliente != null) {
+			criteria.add(Restrictions.eq("pricCliente", idCliente));
+		}
+
+		criteria.add(Restrictions.lt("pricFechaHasta", fechaVencidosAl));
+
+		if (fechaVencidosDesde != null) {
+			criteria.add(Restrictions.gt("pricFechaHasta", fechaVencidosDesde));
+		}
+
+		List<PreciosEspeciales> descuentos = criteria.list();
+
+		return descuentos;
+
 	}
 
 }

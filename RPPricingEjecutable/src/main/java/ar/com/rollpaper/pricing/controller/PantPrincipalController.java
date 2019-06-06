@@ -8,6 +8,7 @@ import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.business.LogBusiness;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
+import ar.com.rollpaper.pricing.model.BusquedaVencidoModel;
 import ar.com.rollpaper.pricing.model.CargaClienteEsclavoModel;
 import ar.com.rollpaper.pricing.model.CargaPrecioModel;
 import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
@@ -15,6 +16,7 @@ import ar.com.rollpaper.pricing.model.ListaPrecioXListaModel;
 import ar.com.rollpaper.pricing.model.PantPrincipalModel;
 import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
+import ar.com.rollpaper.pricing.view.BusquedaVencidoView;
 import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
@@ -152,6 +154,24 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 				cmGestordeVentanas.findOrCreated("consulta1");
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "No se puede acceder a la pantalla de consulta 1");
+			}
+		}
+
+		if (accion.equals(ConstantesRP.Acciones.BUSQUEDA_VENCIDOS.toString())) {
+			if (!cmGestordeVentanas.isAlreadyCreated(BusquedaVencidoController.class.getName())) {
+				try {
+					BusquedaVencidoView vista = new BusquedaVencidoView();
+					BusquedaVencidoModel modelo = new BusquedaVencidoModel();
+					BusquedaVencidoController busqueda = new BusquedaVencidoController(this, vista, modelo);
+					cmGestordeVentanas.add(busqueda, BusquedaVencidoController.class.getName());
+				} catch (Exception e) {
+					ManejoDeError.showError(e, "Error al crear pantalla de Busqueda de Vencidos");
+				}
+			}
+			try {
+				cmGestordeVentanas.findOrCreated(BusquedaVencidoController.class.getName());
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "No se puede acceder a la pantalla de Busqueda de Vencidos");
 			}
 		}
 

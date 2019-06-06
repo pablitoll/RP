@@ -34,6 +34,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private JButtonBarraBotonesRP btnListaPercioxCliente = new JButtonBarraBotonesRP("Lista de Precios Actualizada (impactados)");
 	private JButtonBarraBotonesRP btnListaPercioGenerales = new JButtonBarraBotonesRP("Lista de Precios Generales");
+	private JButtonBarraBotonesRP btnBusquedaVencidos = new JButtonBarraBotonesRP("Busqueda de Vencidos");
 
 	private final JMenu mnCarga = new JMenu("Carga");
 	private final JMenu mnConsulta = new JMenu("Consulta");
@@ -45,6 +46,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 	private final JMenuItem mntmListaPercioxCliente = new JMenuItem("Lista de Precios Actualizada (impactados)");
 	private final JMenuItem mntmListaPercioGenerales = new JMenuItem("Lista de Precios Generales");
+	private final JMenuItem mntmBusquedaDeVencidos = new JMenuItem("Busqueda de Vencidos");
 
 	private final JMenuItem mntmCargaPrecioCliente = new JMenuItem("Gestion de Precios");
 
@@ -96,6 +98,10 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		mnConsulta.add(mntmListaPercioGenerales);
 		mntmListaPercioGenerales.setFont(Common.getStandarFontMenu());
 
+		mnConsulta.add(mntmBusquedaDeVencidos);
+		mntmBusquedaDeVencidos.setFont(Common.getStandarFontMenu());
+		
+		
 		mnMantenimiento.setFont(Common.getStandarFontMenu());
 		mnuCambiarDB.setFont(Common.getStandarFontMenu());
 		mnMantenimiento.add(mnuCambiarDB);
@@ -132,6 +138,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 		agregarBotonStd2Barra(btnListaPercioxCliente, ConstantesRP.IMG_PDF);
 		agregarBotonStd2Barra(btnListaPercioGenerales, ConstantesRP.IMG_PDF);
+		agregarBotonStd2Barra(btnBusquedaVencidos, ConstantesRP.IMG_SEARCH);
+		
 
 		agregarBotonStd2Barra(btnCalculadora, ConstantesRP.IMG_CAL);
 		btnCalculadora.setMnemonicControl(true);
@@ -147,7 +155,8 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 		asignarBotonAccion(mntmListaPercioxCliente, ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString());
 		asignarBotonAccion(mntmListaPercioGenerales, ConstantesRP.Acciones.LISTA_PRECIO_GENERALES.toString());
-
+		asignarBotonAccion(mntmBusquedaDeVencidos, ConstantesRP.Acciones.BUSQUEDA_VENCIDOS.toString());
+		
 		asignarBotonAccion(mntmCargaClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
 		asignarBotonAccion(mntmCargaPrecioCliente, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		asignarBotonAccion(mnuCambiarDB, ConstantesRP.Acciones.CAMBIAR_DB.toString());
@@ -159,6 +168,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 		asignarBotonAccion(btnCargaPrecio, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());
 		asignarBotonAccion(btnListaPercioxCliente, ConstantesRP.Acciones.LISTA_PRECIO_X_CLIENTE.toString());
 		asignarBotonAccion(btnListaPercioGenerales, ConstantesRP.Acciones.LISTA_PRECIO_GENERALES.toString());
+		asignarBotonAccion(btnBusquedaVencidos, ConstantesRP.Acciones.BUSQUEDA_VENCIDOS.toString());
 
 	}
 
