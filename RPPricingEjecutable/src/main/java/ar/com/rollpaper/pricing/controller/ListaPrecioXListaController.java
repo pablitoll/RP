@@ -135,9 +135,10 @@ public class ListaPrecioXListaController
 	private void cargarProductos() {
 		resetearTabla();
 
-		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) { 
-			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(), stock.getDescArticulo(), stock.getUnidadArticulo(),
-					stock.getMonedaArticulo(), CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
+		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
+			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(),
+					stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
+					CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
 		}
 
 		sorterTablaResultado.sort();

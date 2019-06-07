@@ -8,6 +8,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -122,7 +123,7 @@ public class RPTable extends WebTable {
 		if (getParent() instanceof JViewport) {
 			anchoMax = (int) ((JViewport) getParent()).getSize().getWidth();
 		}
-
+		
 		ajustarAncho(anchoTotal, anchoMax);
 	}
 

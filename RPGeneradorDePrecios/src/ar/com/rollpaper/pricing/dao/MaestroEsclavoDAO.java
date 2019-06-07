@@ -9,8 +9,9 @@ import javax.persistence.criteria.Root;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
-
+import org.hibernate.criterion.Order;
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
@@ -158,5 +159,15 @@ public class MaestroEsclavoDAO {
 		return esclavos;
 
 		
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	public static List<MaestroEsclavo> getListaMaestroEsclavos() {
+		Session session = HibernateUtil.getSession();
+		Criteria criteria = session.createCriteria(MaestroEsclavo.class).addOrder(Order.asc("pricMaestroEsclavoId")).addOrder(Order.asc("pricEsclavoCliente"));
+
+		List<MaestroEsclavo> esclavos = criteria.list();
+
+		return esclavos;
 	}
 }

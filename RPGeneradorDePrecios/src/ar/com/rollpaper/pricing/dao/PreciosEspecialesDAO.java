@@ -188,7 +188,7 @@ public class PreciosEspecialesDAO {
 		return listaPrecios;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static List<PreciosEspeciales> getListaPrecioEspeciaByFiltros(Integer idCliente, Date fechaVencidosAl,
 			Date fechaVencidosDesde) {
 

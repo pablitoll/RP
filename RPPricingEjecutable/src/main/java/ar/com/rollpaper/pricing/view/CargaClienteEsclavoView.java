@@ -198,10 +198,10 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		btnExpportar.setToolTipText("Exportar a Excel el Cliente Actual y sus Hijos");
 		pnlInferiorBotones.add(btnExpportar);
 
-		btnExportarTodo = new JButtonRP("Imprimir Todo");
+		btnExportarTodo = new JButtonRP("Exportar Todos a Excel");
 		btnExportarTodo.setFont(Common.getStandarFont());
+		btnExportarTodo.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_EXCEL, 15, 15));
 		btnExportarTodo.setToolTipText("Exportar a Excel TODOS los Clientes con sus Hijos");
-		btnExportarTodo.setVisible(false);
 		pnlInferiorBotones.add(btnExportarTodo);
 
 		pnlCentral = new JPanel();

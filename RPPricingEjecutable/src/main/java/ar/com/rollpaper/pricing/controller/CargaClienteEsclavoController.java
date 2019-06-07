@@ -3,10 +3,15 @@ package ar.com.rollpaper.pricing.controller;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import com.alee.laf.optionpane.WebOptionPane;
 
@@ -61,9 +66,7 @@ public class CargaClienteEsclavoController
 			procesandoCliente = true;
 			try {
 				PantPrincipalController.setCursorOcupado();
-
 				try {
-
 					CcobClie cliente = null;
 
 					if (!getView().txtNroCliente.getText().equals("")) {
@@ -171,7 +174,6 @@ public class CargaClienteEsclavoController
 		getView().btnEliminar.setEnabled(tieneCli && tieneLista);
 
 		getView().btnExpportar.setVisible(tieneCli);
-		// getView().btnExportarTodo.setVisible(tieneCli);
 
 		if (tieneCli) {
 			if (!getView().btnTerminarCarga.isVisible() && !getView().btnCancelar.isVisible()) {
@@ -351,14 +353,14 @@ public class CargaClienteEsclavoController
 
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.EXPORTAR.toString())) {
 			try {
+				DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
+
 				String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "Nro Lista",
 						"Nombre Lista", "Nro Cliente Hijo", "Nombre del Cliente Hijo", "Nombre de Fantasia" };
 				String[][] data = { {} };
 
 				RPTable tableParaExportar = new RPTable();
 				tableParaExportar.setModel(new DefaultTableModel(data, header));
-
-				DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
 
 				Integer nroCliente = getModel().getCliente().getClieCliente();
 				String nombreCliente = getModel().getCliente().getClieNombre();
@@ -376,11 +378,77 @@ public class CargaClienteEsclavoController
 						FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
 
 				CSVExport.exportToExcel(tableParaExportar, nombreArchivo, null);
-
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al exportar");
 			}
 		}
+
+		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.EXPORTAR_TODO.toString())) {
+
+			try {
+				PantPrincipalController.setCursorOcupado();
+				try {
+
+					String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "Nro Lista",
+							"Nombre Lista", "Nro Cliente Hijo", "Nombre del Cliente Hijo", "Nombre de Fantasia" };
+					String[][] data = { {} };
+
+					RPTable tableParaExportar = new RPTable();
+					tableParaExportar.setModel(new DefaultTableModel(data, header));
+
+					tableParaExportar.clear();
+
+					CcobClie clientePadre = null;
+					VentLipv lista = null;
+
+					for (MaestroEsclavo maestroEsclavo : MaestroEsclavoDAO.getListaMaestroEsclavos()) {
+
+						if ((clientePadre == null)
+								|| (clientePadre.getClieCliente() != maestroEsclavo.getPricMaestroCliente())) {
+							clientePadre = CcobClieDAO
+									.findById(Integer.valueOf(maestroEsclavo.getPricMaestroCliente()));
+						}
+
+						CcobClie clienteHijo = CcobClieDAO
+								.findById(Integer.valueOf(maestroEsclavo.getPricEsclavoCliente()));
+
+						if ((lista == null)
+								|| (lista.getLipvListaPrecvta() != maestroEsclavo.getPricMEListaPrecvta())) {
+							lista = VentLipvDAO.findById(maestroEsclavo.getPricMEListaPrecvta());
+						}
+
+						tableParaExportar.addRow(
+								new Object[] { maestroEsclavo.getPricMaestroCliente(), clientePadre.getClieNombre(),
+										clientePadre.getClieNombreLegal(), maestroEsclavo.getPricMEListaPrecvta(),
+										lista.getLipvNombre(), maestroEsclavo.getPricMaestroEsclavoId(),
+										clienteHijo.getClieNombre(), clienteHijo.getClieNombreLegal() });
+					}
+
+					// SORT
+					TableRowSorter<TableModel> sortertableParaExportar = new TableRowSorter<TableModel>(
+							tableParaExportar.getModel());
+					ArrayList<RowSorter.SortKey> sortKeysFamilia = new ArrayList<RowSorter.SortKey>();
+
+					sortKeysFamilia.add(new RowSorter.SortKey(1, SortOrder.ASCENDING));
+					sortKeysFamilia.add(new RowSorter.SortKey(6, SortOrder.ASCENDING));
+
+					sortertableParaExportar.setSortKeys(sortKeysFamilia);
+
+					tableParaExportar.setRowSorter(sortertableParaExportar);
+					sortertableParaExportar.sort();
+
+					String nombreArchivo = String.format("TodosClientesEsclavos_%s", FechaManagerUtil
+							.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
+
+					CSVExport.exportToExcel(tableParaExportar, nombreArchivo, null);
+				} finally {
+					PantPrincipalController.setRestoreCursor();
+				}
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al exportar");
+			}
+		}
+
 	}
 
 	private boolean isNuevoEscalvoValido(CcobClie cliEsclavo) {

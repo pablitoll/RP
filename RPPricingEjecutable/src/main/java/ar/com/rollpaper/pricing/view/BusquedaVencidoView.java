@@ -93,7 +93,8 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		GridBagLayout gbl_panelSuperior = new GridBagLayout();
 		gbl_panelSuperior.columnWidths = new int[] { 76, 150, 46, 150, 0, 0, 50, 0, 0, 0 };
 		gbl_panelSuperior.rowHeights = new int[] { 0, 0, 0, 0, 0 };
-		gbl_panelSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
+		gbl_panelSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0,
+				Double.MIN_VALUE };
 		gbl_panelSuperior.rowWeights = new double[] { 0.0, 1.0, 1.0, 0.0, Double.MIN_VALUE };
 		panelSuperior.setLayout(gbl_panelSuperior);
 
@@ -202,25 +203,25 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		gbc_webFormattedTextField_1.gridx = 3;
 		gbc_webFormattedTextField_1.gridy = 3;
 		panelSuperior.add(txtVencidosDesde, gbc_webFormattedTextField_1);
-		
-				label_2 = new JLabel("Búsqueda:");
-				label_2.setFont(Common.getStandarFont());
-				GridBagConstraints gbc_label_2 = new GridBagConstraints();
-				gbc_label_2.anchor = GridBagConstraints.EAST;
-				gbc_label_2.insets = new Insets(0, 0, 0, 5);
-				gbc_label_2.gridx = 4;
-				gbc_label_2.gridy = 3;
-				panelSuperior.add(label_2, gbc_label_2);
-		
-				txtBusqueda = new WebFormattedTextField();
-				txtBusqueda.setFont(Common.getStandarFont());
-				GridBagConstraints gbc_webFormattedTextField_2 = new GridBagConstraints();
-				gbc_webFormattedTextField_2.gridwidth = 3;
-				gbc_webFormattedTextField_2.insets = new Insets(0, 0, 0, 5);
-				gbc_webFormattedTextField_2.fill = GridBagConstraints.HORIZONTAL;
-				gbc_webFormattedTextField_2.gridx = 5;
-				gbc_webFormattedTextField_2.gridy = 3;
-				panelSuperior.add(txtBusqueda, gbc_webFormattedTextField_2);
+
+		label_2 = new JLabel("Búsqueda:");
+		label_2.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_label_2 = new GridBagConstraints();
+		gbc_label_2.anchor = GridBagConstraints.EAST;
+		gbc_label_2.insets = new Insets(0, 0, 0, 5);
+		gbc_label_2.gridx = 4;
+		gbc_label_2.gridy = 3;
+		panelSuperior.add(label_2, gbc_label_2);
+
+		txtBusqueda = new WebFormattedTextField();
+		txtBusqueda.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_webFormattedTextField_2 = new GridBagConstraints();
+		gbc_webFormattedTextField_2.gridwidth = 3;
+		gbc_webFormattedTextField_2.insets = new Insets(0, 0, 0, 5);
+		gbc_webFormattedTextField_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_webFormattedTextField_2.gridx = 5;
+		gbc_webFormattedTextField_2.gridy = 3;
+		panelSuperior.add(txtBusqueda, gbc_webFormattedTextField_2);
 
 		pnlCenter = new JPanel();
 		getContentPane().add(pnlCenter, BorderLayout.WEST);
@@ -264,8 +265,7 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		tabPanel.addTab("Descuento por Familia", spDescLista);
 
 		String[] headerDescEspecifico = { "Cod. Cliente", "Articulo", "Nombre", "Descripcion", "Unidad", "% Dto. 1",
-				"% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "% Comision", "Referencia", "Esta Vigente",
-				 "" };
+				"% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "% Comision", "Referencia", "Esta Vigente", "" };
 		String[][] dataDesEspecifico = { {} };
 
 		tableDescEspecifico = new RPTable();
@@ -304,6 +304,7 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 
 		btnLimpiar = new JButtonRP("Limpiar");
 		btnLimpiar.setFont(Common.getStandarFont());
+		btnLimpiar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_LIMPIAR));
 		pnlInferiorBotones.add(btnLimpiar);
 
 		btnBuscar = new JButtonRP("Buscar");

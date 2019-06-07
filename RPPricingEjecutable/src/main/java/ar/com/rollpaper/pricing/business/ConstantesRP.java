@@ -12,7 +12,7 @@ public class ConstantesRP {
 
 	public enum PantCarClienteEsclabo {
 		AGREGAR, BORRAR, EXPORTAR, EXPORTAR_TODO, TERMINAR_CARGA, CANCELAR
-	};
+	}
 
 	public enum AccionesCargaItemFamilia {
 		ACEPTAR, CANCELAR, ELIMINAR_FAMILIA
@@ -30,6 +30,7 @@ public class ConstantesRP {
 		BUSCAR, LIMPIAR
 	}
 
+
 	public static String IMG_EDIT_ICON = "images/edit-icon.png";
 	public static String IMG_OK = "images/ok.png";
 	public static String IMG_SEARCH = "images/search.png";
@@ -44,6 +45,7 @@ public class ConstantesRP {
 	public static String IMG_EXCEL = "images/ExcelIcono.png";
 	public static String IMG_PDF = "images/descargaPDF.png";
 	public static String IMG_RECARGAR = "images/reload.jpg";
+	public static String IMG_LIMPIAR = "images/limpiar.png";											   
 
 	public static String REPO_LISTA_PRECIO_ORIGINAL = "/reporte/reportOriginal.jasper";
 	public static String REPO_LISTA_PRECIO = "/reporte/report1.jasper";
