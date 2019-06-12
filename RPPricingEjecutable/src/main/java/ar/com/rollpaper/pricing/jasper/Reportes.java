@@ -1,6 +1,7 @@
 package ar.com.rollpaper.pricing.jasper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.SistMone;
 import ar.com.rollpaper.pricing.beans.SistUnim;
 import ar.com.rollpaper.pricing.beans.StocArts;
+import ar.com.rollpaper.pricing.beans.StocCa01;
 import ar.com.rollpaper.pricing.beans.VentArpc;
 import ar.com.rollpaper.pricing.beans.VentArpv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
@@ -18,6 +20,7 @@ import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
 import ar.com.rollpaper.pricing.dao.StocArtsDAO;
+import ar.com.rollpaper.pricing.dao.StocCa01DAO;
 import ar.com.rollpaper.pricing.dao.VentArpcDAO;
 import ar.com.rollpaper.pricing.dao.VentArpvDAO;
 import ar.com.rollpaper.pricing.ui.Main;
@@ -50,12 +53,23 @@ public class Reportes {
 		// Detalle
 		List<Map<String, ?>> detalleProductos = new ArrayList<>();
 
-		// Lo ordenamos por familia
-		listaPrecioReporte.getListaProductos().sort(Comparator.comparing(ProductoDTO::getFamiliaCod).reversed());
+		// Lo ordenamos por familia y articulo
+		Collections.sort(listaPrecioReporte.getListaProductos(), new SortByProducto());
 
+		String codFamilia = "";
 		for (ProductoDTO producto : listaPrecioReporte.getListaProductos()) {
 
 			Map<String, String> map_renglon = new HashMap<String, String>();
+			if (!codFamilia.equals(producto.getFamiliaCod())) {
+
+				StocCa01 familiaClass = StocCa01DAO.findById(producto.getFamiliaCod());
+
+				map_renglon.put("nombreFamilia",
+						String.format("%s - %s", producto.getFamiliaCod(), familiaClass.getCa01Nombre()));
+				codFamilia = producto.getFamiliaCod();
+			} else {
+				map_renglon.put("nombreFamilia", "");
+			}
 			map_renglon.put("codArticulo", producto.getCodArticulo());
 			map_renglon.put("nomArticulo", producto.getNomArticulo());
 			map_renglon.put("descArticulo", producto.getDescArticulo());
@@ -91,6 +105,31 @@ public class Reportes {
 
 		// view report to UI
 		JasperViewer.viewReport(jasperPrint, false);
+	}
+
+	public static ListaPrecioReporteDTO getDatosReporteFiltrado(CcobClie cliente, VentLipv lista,
+			List<ProductoDTO> listaProductos) {
+//TODO ACA
+		List<ProductoDTO> listaProductosToAdd = new ArrayList<ProductoDTO>();
+
+		for (ProductoDTO prod : listaProductos) {
+
+			StocArts stock = StocArtsDAO.getArticuloByID(prod.getArtsArticulo());
+			SistUnim unidad = SistUnimDAO.findById(stock.getArtsUnimedStock());
+			SistMone moneda = SistMoneDAO.findById(prod.getMonedaArticulo());
+
+			ProductoDTO producto = new ProductoDTO(stock.getArtsArticulo(), stock.getArtsArticuloEmp(),
+					stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
+					// CommonPricing.formatearImporte(prod.getPrecioArticulo().doubleValue()),
+					prod.getPrecioArticulo(), stock.getArtsClasif1(), false);
+			listaProductosToAdd.add(producto);
+		}
+
+		String leyendaFecha = String.format(MSG_LEYENDA_FECHA,
+				FechaManagerUtil.Date2String(FechaManagerUtil.getDateTimeFromPC()));
+
+		return new ListaPrecioReporteDTO(cliente.getClieCliente(), cliente.getClieNombre(),
+				cliente.getClieNombreLegal(), lista.getLipvNombre(), leyendaFecha, listaProductosToAdd);
 	}
 
 	public static ListaPrecioReporteDTO getDatosReporte(CcobClie cliente, VentLipv lista) {
@@ -156,4 +195,18 @@ public class Reportes {
 		}
 		return false;
 	}
+}
+
+class SortByProducto implements Comparator<ProductoDTO> {
+
+	@Override
+	public int compare(ProductoDTO prod0, ProductoDTO prod1) {
+		int value1 = prod0.getFamiliaCod().compareTo(prod1.getFamiliaCod());
+		if (value1 == 0) {
+			return prod0.getArtsArticulo() - prod1.getArtsArticulo();
+		} else {
+			return value1;
+		}
+	}
+
 }

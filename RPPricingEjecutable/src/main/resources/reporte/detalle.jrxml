@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="554" pageHeight="842" columnWidth="554" leftMargin="0" rightMargin="0" topMargin="20" bottomMargin="20" uuid="49e54468-441e-45e9-9d53-dc14e70b3085">
-	<property name="ireport.zoom" value="4.177248169415658"/>
-	<property name="ireport.x" value="1572"/>
-	<property name="ireport.y" value="98"/>
+	<property name="ireport.zoom" value="1.7715610000000024"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -32,8 +32,9 @@
 	<field name="descArticulo" class="java.lang.String"/>
 	<field name="monedaArticulo" class="java.lang.String"/>
 	<field name="precioArticulo" class="java.lang.String"/>
-	<title>
-		<band height="20" splitType="Stretch">
+	<field name="nombreFamilia" class="java.lang.String"/>
+	<pageHeader>
+		<band height="21">
 			<staticText>
 				<reportElement x="369" y="0" width="186" height="20" uuid="5eb467c1-1486-4fc0-a4d0-6ea8021a100b"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
@@ -51,24 +52,38 @@
 				<reportElement x="369" y="0" width="1" height="20" uuid="8dd238b9-6d27-46bd-9ae5-9d16a84f4953"/>
 			</line>
 		</band>
-	</title>
+	</pageHeader>
 	<detail>
-		<band height="48" splitType="Stretch">
+		<band height="18" splitType="Stretch">
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="47" width="554" height="1" uuid="930f688c-fa9a-4182-8685-e629e3b98300"/>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="17" width="554" height="1" uuid="19ab91ba-ac5a-46f7-8bef-d0ba55dce62f">
+					<printWhenExpression><![CDATA[!$F{nombreFamilia}.equals("")]]></printWhenExpression>
+				</reportElement>
 			</line>
 			<textField>
-				<reportElement x="369" y="0" width="104" height="45" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
+				<reportElement x="0" y="0" width="552" height="18" isRemoveLineWhenBlank="true" uuid="1a531044-885e-4c18-ae56-27c5324ee135"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreFamilia}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="46">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="1" y="45" width="554" height="1" uuid="930f688c-fa9a-4182-8685-e629e3b98300"/>
+			</line>
+			<textField>
+				<reportElement x="371" y="0" width="104" height="45" uuid="9ca64545-324a-40a1-8ac6-e5564d208276"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{monedaArticulo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="473" y="0" width="80" height="45" uuid="2f9a83a1-017a-48e8-afa9-27fd07084edf"/>
+				<reportElement x="475" y="0" width="80" height="45" uuid="2f9a83a1-017a-48e8-afa9-27fd07084edf"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{precioArticulo}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="369" height="45" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="369" height="45" uuid="7248c448-7a1f-4312-b9c6-b8fc6be7c9fc"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{descArticulo}]]></textFieldExpression>
 			</textField>

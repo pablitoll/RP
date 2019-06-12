@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
@@ -87,6 +88,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public JButtonRP btnImpactarPrecios;
 	private JLabel lblTitle;
 	public JButtonRP btnCancelar;
+	public JCheckBox chkSoloVigentes;
 
 	public CargaPrecioView() throws Exception {
 		super();
@@ -108,7 +110,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		lblTitle.setFont(Common.getStandarFontBold(18));
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.gridwidth = 8;
-		gbc_label.insets = new Insets(0, 0, 5, 5);
+		gbc_label.insets = new Insets(0, 0, 5, 0);
 		gbc_label.gridx = 0;
 		gbc_label.gridy = 0;
 		panelSuperior.add(lblTitle, gbc_label);
@@ -232,6 +234,15 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNombreLista.gridx = 4;
 		gbc_lblNombreLista.gridy = 2;
 		panelSuperior.add(lblNombreLista, gbc_lblNombreLista);
+		
+		chkSoloVigentes = new JCheckBox("Ver solo Vigentes");
+		chkSoloVigentes.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_chckbxNewCheckBox = new GridBagConstraints();
+		gbc_chckbxNewCheckBox.anchor = GridBagConstraints.EAST;
+		gbc_chckbxNewCheckBox.insets = new Insets(0, 0, 0, 5);
+		gbc_chckbxNewCheckBox.gridx = 6;
+		gbc_chckbxNewCheckBox.gridy = 2;
+		panelSuperior.add(chkSoloVigentes, gbc_chckbxNewCheckBox);
 
 		pnlBotonesTabla = new JPanel();
 		getContentPane().add(pnlBotonesTabla, BorderLayout.EAST);
@@ -312,7 +323,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescFamilia.getColumnModel().getColumn(COL_HASTA_FAMILIA).setCellRenderer(new CellRenderFecha());
 		tableDescFamilia.getColumnModel().getColumn(COL_ESTA_VIGENTE_FAMILIA)
 				.setCellRenderer(tableDescFamilia.getCenterRender());
-		tableDescFamilia.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		tableDescFamilia.setRpTableEvent(new RPTableEvent() {
 
@@ -337,6 +347,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescEspecifico.setModel(new DefaultTableModel(dataDesEspecifico, headerDescEspecifico));
 		tableDescEspecifico.setRowHeight(30);
 		tableDescEspecifico.setEditable(false);
+		tableDescEspecifico.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		// tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMaxWidth(0);
 		// tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMinWidth(0);

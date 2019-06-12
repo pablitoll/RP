@@ -90,6 +90,7 @@ public class ReportesListas {
 
 			listaProductos.add(producto);
 		}
+
 		String leyendaFecha = String.format(MSG_LEYENDA_FECHA,
 				FechaManagerUtil.Date2String(FechaManagerUtil.getDateTimeFromPC()));
 

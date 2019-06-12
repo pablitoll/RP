@@ -263,12 +263,8 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		tableResultado.setModel(new DefaultTableModel(dataTabla, headerTabla));
 		tableResultado.setRowHeight(30);
 		tableResultado.setEditable(false);
-		tableResultado.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		tableResultado.setColToIgnorar(new Integer[] { COL_DESC });
-		tableResultado.getColumnModel().getColumn(COL_DESC).setPreferredWidth(600);
-		tableResultado.getColumnModel().getColumn(COL_DESC).setMinWidth(600);
-		tableResultado.getColumnModel().getColumn(COL_DESC).setWidth(600);
+		tableResultado.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		tableResultado.setRowSelectionAllowed(true);
 
 		tableResultado.getColumnModel().getColumn(COL_UNIDAD).setCellRenderer(tableResultado.getCenterRender());
 		tableResultado.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO)
@@ -302,7 +298,6 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		btnExportarExcel.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_EXCEL, 15, 15));
 		btnExportarExcel.setFont(Common.getStandarFont());
 		pnlInferiorBotones.add(btnExportarExcel);
-
 	}
 
 	@Override

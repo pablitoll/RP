@@ -111,7 +111,7 @@ public class VentArpvDAO {
 		}
 
 		return listaPrecios;
-
+		
 	}
 
 	public static VentArpv findById(VentArpvId id) {

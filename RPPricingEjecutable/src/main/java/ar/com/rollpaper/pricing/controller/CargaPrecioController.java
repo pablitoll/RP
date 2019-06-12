@@ -13,8 +13,11 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -32,6 +35,7 @@ import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rollpaper.pricing.business.OverloadManager;
+import ar.com.rollpaper.pricing.business.TableAnchoManager;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.HibernateGeneric;
@@ -101,6 +105,15 @@ public class CargaPrecioController
 				perdioFocoNroLista();
 			}
 		});
+
+		view.chkSoloVigentes.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				filtroVigentes(getView().chkSoloVigentes.isSelected());
+			}
+		});
+		
+		TableAnchoManager.registrarEvento(view.tableDescFamilia, "tablaCargaPrecioFamilia");
+		TableAnchoManager.registrarEvento(view.tableDescEspecifico, "tablaCargaPrecioEspecifico");
 	}
 
 	protected void perdioFocoNroLista() {
@@ -120,7 +133,7 @@ public class CargaPrecioController
 
 		getView().tableDescFamilia.setRowSorter(null);
 		getView().tableDescEspecifico.setRowSorter(null);
-		
+
 		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getListaDescuentoByID(
 				getModel().getClienteCargado().getClieCliente(),
 				getModel().getListaCargada().getVentLipv().getLipvListaPrecvta())) {
@@ -142,7 +155,7 @@ public class CargaPrecioController
 
 		sorterTablaDesEspecifico.sort();
 		sorterTablaDesFamilia.sort();
-		
+
 		setModoPantalla();
 	}
 
@@ -170,7 +183,7 @@ public class CargaPrecioController
 			if (cliente != null) {
 				if (!MaestroEsclavoDAO.getListaEsclavosByCliente(cliente).isEmpty()) {
 					if (Dialog.showConfirmDialog(
-							"IMPORTANTE: Este Cliente tiene esclavos.\nTodos lo que cargue impactarÃ¡ tambiÃ©n sobre los mismos!. Â¿Continuamos?",
+							"IMPORTANTE: Este Cliente tiene esclavos.\nTodos lo que cargue impactará tambien sobre los mismos!. ¿Continuamos?",
 							"Cliente con Esclavos", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null,
 							null) != JOptionPane.YES_OPTION) {
 
@@ -253,6 +266,8 @@ public class CargaPrecioController
 			getView().setCerrarVisible(true);
 			getView().btnImpactarPrecios.setVisible(false);
 			getView().btnCancelar.setVisible(false);
+
+			getView().chkSoloVigentes.setSelected(false);
 		}
 
 		setModoPantalla();
@@ -284,6 +299,10 @@ public class CargaPrecioController
 			}
 		});
 
+		if (getView().chkSoloVigentes.isSelected()) {
+			sorterTablaDesFamilia.setRowFilter(RowFilter.regexFilter("SI", CargaPrecioView.COL_ESTA_VIGENTE_FAMILIA));
+		}
+
 		tabla.setRowSorter(sorterTablaDesFamilia);
 		sorterTablaDesFamilia.sort();
 	}
@@ -303,6 +322,11 @@ public class CargaPrecioController
 				return (int) FechaManagerUtil.getDateDiff(date2, date1, TimeUnit.SECONDS);
 			}
 		});
+
+		if (getView().chkSoloVigentes.isSelected()) {
+			sorterTablaDesEspecifico
+					.setRowFilter(RowFilter.regexFilter("SI", CargaPrecioView.COL_ESTA_VIGENTE_ESPECIFICO));
+		}
 
 		sorterTablaDesEspecifico.setSortKeys(sortKeys);
 	}
@@ -836,6 +860,10 @@ public class CargaPrecioController
 			colorFondo = rellenarColor(colorFondo, Color.YELLOW);
 		}
 
+		if (!estaVigente) {
+			colorLetra = rellenarColor(colorLetra, Color.RED);
+		}
+
 		tabla.addRowColor(new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
 				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue())
 						: "",
@@ -869,7 +897,14 @@ public class CargaPrecioController
 	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro) {
 		Boolean estaVigente = estaVigente(registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta());
 
-		tabla.addRow(new Object[] { registro.getPricCa01Clasif1(), registro.getNombreFamilia(),
+		Color[] colorFondo = new Color[tabla.getModel().getColumnCount()];
+		Color[] colorLetra = new Color[tabla.getModel().getColumnCount()];
+
+		if (!estaVigente) {
+			colorLetra = rellenarColor(colorLetra, Color.RED);
+		}
+		
+		tabla.addRowColor(new Object[] { registro.getPricCa01Clasif1(), registro.getNombreFamilia(),
 				registro.getPricFamiliaDescuento1() != null
 						? Common.double2String(registro.getPricFamiliaDescuento1().doubleValue())
 						: "",
@@ -878,7 +913,7 @@ public class CargaPrecioController
 						: "",
 				registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta(),
 				Common.double2String(registro.getPricFamiliaComision().doubleValue()), registro.getPricReferencia(),
-				(estaVigente ? "SI" : "NO"), registro });
+				(estaVigente ? "SI" : "NO"), registro }, colorFondo, colorLetra);
 
 		tabla.adjustColumns();
 	}
@@ -889,6 +924,20 @@ public class CargaPrecioController
 
 	public boolean isPendienteImpactar() {
 		return getView().btnImpactarPrecios.isVisible();
+	}
+
+	protected void filtroVigentes(boolean selected) {
+
+		if (selected) {
+			sorterTablaDesEspecifico
+					.setRowFilter(RowFilter.regexFilter("SI", CargaPrecioView.COL_ESTA_VIGENTE_ESPECIFICO));
+			sorterTablaDesFamilia.setRowFilter(RowFilter.regexFilter("SI", CargaPrecioView.COL_ESTA_VIGENTE_FAMILIA));
+
+		} else {
+			sorterTablaDesEspecifico.setRowFilter(null);
+			sorterTablaDesFamilia.setRowFilter(null);
+		}
+
 	}
 
 }

@@ -1,6 +1,7 @@
 package ar.com.rollpaper.pricing.jasper;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListaPrecioReporteDTO implements Serializable {
@@ -36,6 +37,10 @@ public class ListaPrecioReporteDTO implements Serializable {
 		return listaProductos;
 	}
 
+	public void setListaProductos(List<ProductoDTO> listaProductos) {
+		this.listaProductos = listaProductos;
+	}
+
 	public String getLeyendaFechaValida() {
 		return leyendaFechaValida;
 	}
@@ -49,6 +54,14 @@ public class ListaPrecioReporteDTO implements Serializable {
 		this.nroListaProducto = nroListaProducto;
 		this.listaProductos = listaProductos;
 		this.leyendaFechaValida = leyendaFechaValida;
+	}
+
+	@Override
+	public ListaPrecioReporteDTO clone() {
+		List<ProductoDTO> aux = new ArrayList<ProductoDTO>();
+		aux.addAll(listaProductos);
+
+		return new ListaPrecioReporteDTO(id, nomCliente, nomLegal, nroListaProducto, leyendaFechaValida, aux);
 	}
 
 }

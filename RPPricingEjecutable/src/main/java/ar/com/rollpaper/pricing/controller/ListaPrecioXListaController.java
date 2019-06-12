@@ -11,6 +11,7 @@ import javax.swing.table.TableRowSorter;
 
 import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.business.TableAnchoManager;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.jasper.ProductoDTO;
 import ar.com.rollpaper.pricing.jasper.Reportes;
@@ -37,6 +38,8 @@ public class ListaPrecioXListaController
 			}
 		});
 
+		TableAnchoManager.registrarEvento(view.tableResultado, "tablaPrecioXLista");
+		
 		cargarLista();
 	}
 
@@ -140,14 +143,11 @@ public class ListaPrecioXListaController
 					stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
 					CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
 		}
-
-		sorterTablaResultado.sort();
+	
 
 		getView().tableResultado.adjustColumns();
-		getView().tableResultado.getColumnModel().getColumn(ListaPrecioXListaView.COL_DESC).setPreferredWidth(600);
-		getView().tableResultado.getColumnModel().getColumn(ListaPrecioXListaView.COL_DESC).setMinWidth(600);
-		getView().tableResultado.getColumnModel().getColumn(ListaPrecioXListaView.COL_DESC).setWidth(300);
 
+		sorterTablaResultado.sort();
 		setModoPantalla();
 	}
 

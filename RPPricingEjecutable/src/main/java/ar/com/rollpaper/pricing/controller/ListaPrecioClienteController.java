@@ -7,6 +7,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.TableModel;
@@ -15,6 +16,7 @@ import javax.swing.table.TableRowSorter;
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rollpaper.pricing.business.TableAnchoManager;
 import ar.com.rollpaper.pricing.business.TableColumnHider;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
@@ -22,6 +24,7 @@ import ar.com.rollpaper.pricing.jasper.ProductoDTO;
 import ar.com.rollpaper.pricing.jasper.Reportes;
 import ar.com.rollpaper.pricing.model.ListaPrecioClienteModel;
 import ar.com.rollpaper.pricing.ui.BuscarClienteDialog;
+import ar.com.rollpaper.pricing.ui.Dialog;
 import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
 import ar.com.rp.rpcutils.CSVExport;
@@ -113,8 +116,7 @@ public class ListaPrecioClienteController
 
 		hider = new TableColumnHider(view.tableResultado);
 
-		Integer[] colToIgnore = new Integer[] { ListaPrecioClienteView.COL_DESC };
-		view.tableResultado.setColToIgnorar(colToIgnore);
+		TableAnchoManager.registrarEvento(view.tableResultado, "tablaPrecioCliente");
 	}
 
 	private void evaluarColDinamica(String nombre_col, boolean seleccionada) {
@@ -264,7 +266,23 @@ public class ListaPrecioClienteController
 
 		if (accion.equals(ConstantesRP.PantListaPrecio.GENERAR_PDF.toString())) {
 			try {
-				Reportes.getReporteListaPrecios(getModel().getListaArticulosImpactadosReporte());
+				Boolean exportTodos = true;
+
+				if (getView().tableResultado.getSelectedRowCount() > 0) {
+					String[] op = { "Todos", "Solo Selección" };
+					exportTodos = Dialog.showConfirmDialogObject(
+							"¿Exportamos Todos los Registros o Solo los Seleccionados?", "Exportación",
+							JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, op, op[0]) == op[0];
+				}
+
+				if (exportTodos) {
+					Reportes.getReporteListaPrecios(
+							getModel().getListProductosReporte(getView().chkArticuloLista.isSelected(),
+									getView().chkArticuloEspecifico.isSelected(), getView().txtBusqueda.getText()));
+				} else {
+					Reportes.getReporteListaPrecios(getModel().getListProductosReporte(getView().tableResultado));
+				}
+
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al generar Reprote");
 			}
@@ -373,6 +391,7 @@ public class ListaPrecioClienteController
 		ajustarAnchoCol();
 
 		setModoPantalla();
+
 	}
 
 	private void ajustarAnchoCol() {

@@ -24,6 +24,7 @@ import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.FamiliaBusiness;
 import ar.com.rollpaper.pricing.business.PreciosEspecialesBusiness;
+import ar.com.rollpaper.pricing.business.TableAnchoManager;
 import ar.com.rollpaper.pricing.dao.CcobClieDAO;
 import ar.com.rollpaper.pricing.dao.SistMoneDAO;
 import ar.com.rollpaper.pricing.dao.SistUnimDAO;
@@ -90,6 +91,9 @@ public class BusquedaVencidoController
 				}
 			}
 		});
+		
+		TableAnchoManager.registrarEvento(view.tableDescEspecifico, "tablaBusquedaVencidosEspecifico");
+		TableAnchoManager.registrarEvento(view.tableDescFamilia, "tablaBusquedaVencidosFamilia");
 
 	}
 

@@ -8,7 +8,6 @@ import java.util.Hashtable;
 import java.util.Vector;
 
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -34,6 +33,15 @@ public class RPTable extends WebTable {
 	private Hashtable<Integer, RowColorDTO> listColor = new Hashtable<Integer, RowColorDTO>();
 	private TableColumnAdjuster tableAdjuster;
 	private RPTableEvent smsvTableEvent = null;
+	private int[] anchoFijo = null;
+
+	public int[] getAnchoFijo() {
+		return anchoFijo;
+	}
+
+	public void setAnchoFijo(int[] anchoFijo) {
+		this.anchoFijo = anchoFijo;
+	}
 
 	public RPTableEvent getSmsvTableEvent() {
 		return smsvTableEvent;
@@ -56,10 +64,10 @@ public class RPTable extends WebTable {
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 		Component c = super.prepareRenderer(renderer, row, column);
 
-		int selRow = this.getSelectedRow();
+		// int selRow = this.getSelectedRow();
 		int selCol = this.getSelectedColumn();
 
-		if ((selRow != row) || (getCellSelectionEnabled() && (column != selCol))) {
+		if (!isRowSelected(row) || (getCellSelectionEnabled() && (column != selCol))) {
 			if (row % 2 > 0) {
 				c.setBackground(Color.WHITE);
 			} else {
@@ -69,13 +77,16 @@ public class RPTable extends WebTable {
 
 		// Color
 		int rowModel = convertRowIndexToModel(row);
-		int selRowModel = selRow;
-		if (selRow > -1) {
-			selRowModel = convertRowIndexToModel(selRow);
-		}
-		if (rowModel != selRowModel) {
+		// int selRowModel = selRow;
+		// if (selRow > -1) {
+		// selRowModel = convertRowIndexToModel(selRow);
+		// }
+		// if (rowModel != selRowModel) {
+		if (!isRowSelected(row)) {
 			c.setForeground(Color.BLACK); // el setBackground lo estoy seteando con el gris
-			if ((rowModel != selRowModel) || (getCellSelectionEnabled() && (column != selCol))) {
+			// if ((rowModel != selRowModel) || (getCellSelectionEnabled() && (column !=
+			// selCol))) {
+			if (!getCellSelectionEnabled() || (column != selCol)) {
 				RowColorDTO colorToAplly = listColor.get(rowModel);
 				if (colorToAplly != null) {
 					if ((colorToAplly.getColorFondo() != null) && (colorToAplly.getColorFondo()[column] != null)) {
@@ -117,14 +128,29 @@ public class RPTable extends WebTable {
 	}
 
 	public void adjustColumns() {
-		int anchoTotal = tableAdjuster.adjustColumns();
 
-		int anchoMax = 0;
-		if (getParent() instanceof JViewport) {
-			anchoMax = (int) ((JViewport) getParent()).getSize().getWidth();
+		if (anchoFijo == null) {
+
+			int anchoTotal = tableAdjuster.adjustColumns();
+
+			int anchoMax = 0;
+			if (getParent() instanceof JViewport) {
+				anchoMax = (int) ((JViewport) getParent()).getSize().getWidth();
+			}
+
+			ajustarAncho(anchoTotal, anchoMax);
+		} else {
+			for (int nroColumn = 0; nroColumn < getColumnCount(); nroColumn++) {
+				TableColumn tableColumn = getColumnModel().getColumn(nroColumn);
+				if (anchoFijo[nroColumn] == 0) {
+					adjustColumn(nroColumn);
+				} else {
+					tableColumn.setPreferredWidth(anchoFijo[nroColumn]);
+					tableColumn.setWidth(anchoFijo[nroColumn]);
+				}
+			}
+
 		}
-		
-		ajustarAncho(anchoTotal, anchoMax);
 	}
 
 	private void ajustarAncho(int anchoTotal, int anchoMax) {
@@ -186,6 +212,7 @@ public class RPTable extends WebTable {
 				}
 			}
 		});
+
 	}
 
 	public void setDynamicAdjustment(boolean isDynamicAdjustment) {

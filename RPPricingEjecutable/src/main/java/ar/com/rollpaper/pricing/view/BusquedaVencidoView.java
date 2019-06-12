@@ -277,7 +277,6 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 
 		tableDescEspecifico.getColumnModel()
 				.removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
-
 		tableDescEspecifico.getColumnModel().getColumn(COL_1DESC_ESPECIFICO)
 				.setCellRenderer(tableDescEspecifico.getRigthRender());
 		tableDescEspecifico.getColumnModel().getColumn(COL_2DESC_ESPECIFICO)
@@ -289,7 +288,7 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		tableDescEspecifico.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO)
 				.setCellRenderer(tableDescEspecifico.getCenterRender());
 		tableDescEspecifico.getColumnModel().getColumn(COL_COMISION_ESPECIFICO)
-				.setCellRenderer(tableDescEspecifico.getRigthRender());
+				.setCellRenderer(tableDescEspecifico.getRigthRender());		
 		tableDescEspecifico.getColumnModel().getColumn(COL_DESDE_ESPECIFICO).setCellRenderer(new CellRenderFecha());
 		tableDescEspecifico.getColumnModel().getColumn(COL_HASTA_ESPECIFICO).setCellRenderer(new CellRenderFecha());
 		tableDescEspecifico.getColumnModel().getColumn(COL_ESTA_VIGENTE_ESPECIFICO)
@@ -311,7 +310,6 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		btnBuscar.setFont(Common.getStandarFont());
 		btnBuscar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_SEARCH));
 		pnlInferiorBotones.add(btnBuscar);
-
 	}
 
 	@Override

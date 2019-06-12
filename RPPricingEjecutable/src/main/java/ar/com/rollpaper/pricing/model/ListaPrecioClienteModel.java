@@ -12,6 +12,8 @@ import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.jasper.ListaPrecioReporteDTO;
 import ar.com.rollpaper.pricing.jasper.ProductoDTO;
 import ar.com.rollpaper.pricing.jasper.Reportes;
+import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
+import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseModel;
 
 public class ListaPrecioClienteModel extends BaseModel {
@@ -57,35 +59,32 @@ public class ListaPrecioClienteModel extends BaseModel {
 		return ListaBusiness.getListaToShow(getClienteCargado());
 	}
 
-	public ListaPrecioReporteDTO getListaArticulosImpactadosReporte() {
+	private ListaPrecioReporteDTO getListaArticulosImpactados() {
 		if (listaPrecioReporte == null) {
 			listaPrecioReporte = Reportes.getDatosReporte(getClienteCargado(), getListaCargada().getVentLipv());
-		}
 
-		return listaPrecioReporte;
-	}
+			List<ProductoDTO> listaProductoAux = listaPrecioReporte.getListaProductos();
 
-	private List<ProductoDTO> getListaArticulosImpactados(boolean extraData) {
-		List<ProductoDTO> retorno = getListaArticulosImpactadosReporte().getListaProductos();
+			if ((listaProductoAux.size() > 0) && (listaProductoAux.get(0).getDescuento1() == null)) {
+				// Cargo lo extra
+				// Me traigo todos los precios espciales de un saque
+				List<PreciosEspeciales> listPrecioEspecial = PreciosEspecialesDAO.getListaPrecioEspeciaByID(
+						getClienteCargado().getClieCliente(), getListaCargada().getVentLipv().getLipvListaPrecvta());
 
-		if (extraData && (retorno.size() > 0) && (retorno.get(0).getDescuento1() == null)) {
-			// Cargo lo extra
-			// Me traigo todos los precios espciales de un saque
-			List<PreciosEspeciales> listPrecioEspecial = PreciosEspecialesDAO.getListaPrecioEspeciaByID(
-					getClienteCargado().getClieCliente(), getListaCargada().getVentLipv().getLipvListaPrecvta());
+				for (ProductoDTO prod : listaProductoAux) {
+					PreciosEspeciales precioEspecial = getPrecioEspecia(prod, listPrecioEspecial);
 
-			for (ProductoDTO prod : retorno) {
-				PreciosEspeciales precioEspecial = getPrecioEspecia(prod, listPrecioEspecial);
-
-				if (precioEspecial != null) {
-					prod.cargarExtras(precioEspecial.getPricFechaDesde(), precioEspecial.getPricFechaHasta(),
-							precioEspecial.getPricComision(), precioEspecial.getPricReferencia(),
-							precioEspecial.getPricDescuento1(), precioEspecial.getPricDescuento2());
+					if (precioEspecial != null) {
+						prod.cargarExtras(precioEspecial.getPricFechaDesde(), precioEspecial.getPricFechaHasta(),
+								precioEspecial.getPricComision(), precioEspecial.getPricReferencia(),
+								precioEspecial.getPricDescuento1(), precioEspecial.getPricDescuento2());
+					}
 				}
+
+				listaPrecioReporte.setListaProductos(listaProductoAux);
 			}
 		}
-
-		return retorno;
+		return listaPrecioReporte;
 	}
 
 	private PreciosEspeciales getPrecioEspecia(ProductoDTO prod, List<PreciosEspeciales> listPrecioEspecial) {
@@ -99,9 +98,20 @@ public class ListaPrecioClienteModel extends BaseModel {
 
 	public List<ProductoDTO> getListProductos(boolean isArticuloLista, boolean isArticuloEspecifico,
 			String textoBusqueda) {
+
+		return getListProductosReporte(isArticuloLista, isArticuloEspecifico, textoBusqueda).getListaProductos();
+
+	}
+
+	public ListaPrecioReporteDTO getListProductosReporte(boolean isArticuloLista, boolean isArticuloEspecifico,
+			String textoBusqueda) {
+
 		textoBusqueda = textoBusqueda.toLowerCase();
-		List<ProductoDTO> retorno = new ArrayList<ProductoDTO>();
-		for (ProductoDTO prod : getListaArticulosImpactados(true)) { // TODO CAMBIAR EL TRUE
+		List<ProductoDTO> listaProductoAux = new ArrayList<ProductoDTO>();
+
+		ListaPrecioReporteDTO retorno = getListaArticulosImpactados().clone();
+
+		for (ProductoDTO prod : retorno.getListaProductos()) {
 			// Primero que pase el filto de lista o no lista
 			ProductoDTO prodCandidato = null;
 
@@ -123,11 +133,36 @@ public class ListaPrecioClienteModel extends BaseModel {
 			}
 
 			if (prodCandidato != null) {
-				retorno.add(prodCandidato);
+				listaProductoAux.add(prodCandidato);
 			}
 
 		}
+
+		retorno.setListaProductos(listaProductoAux);
 		return retorno;
+	}
+
+	public ListaPrecioReporteDTO getListProductosReporte(RPTable tableResultado) {
+		List<ProductoDTO> listaProductoAux = new ArrayList<ProductoDTO>();
+		ListaPrecioReporteDTO retorno = getListaArticulosImpactados().clone();
+
+		for (ProductoDTO prod : retorno.getListaProductos()) {
+			if (estaSeleccionado(prod, tableResultado)) {
+				listaProductoAux.add(prod);
+			}
+		}
+
+		retorno.setListaProductos(listaProductoAux);
+		return retorno;
+	}
+
+	private boolean estaSeleccionado(ProductoDTO prod, RPTable tableResultado) {
+		for (int i : tableResultado.getSelectedRows()) {
+			if (prod.getCodArticulo().equals(((String) tableResultado.getValueAt(i, ListaPrecioClienteView.COL_COD_ARTICULO)))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

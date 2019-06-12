@@ -12,7 +12,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowListener;
-import java.net.URL;
 
 import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
