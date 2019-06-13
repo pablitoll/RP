@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -307,6 +308,7 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		pnlInferiorBotones.add(btnLimpiar);
 
 		btnBuscar = new JButtonRP("Buscar");
+		btnBuscar.setMnemonic(KeyEvent.VK_ENTER);
 		btnBuscar.setFont(Common.getStandarFont());
 		btnBuscar.setIcon(Common.loadIconMenu(ConstantesRP.IMG_SEARCH));
 		pnlInferiorBotones.add(btnBuscar);

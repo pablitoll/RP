@@ -163,6 +163,7 @@ public class PantPrincipalView extends BasePantallaPrincipalView {
 
 		asignarBotonAccion(mnuCambiarSeparadorDecimal, ConstantesRP.Acciones.CAMBIAR_SEPARADOR_DECIMAL.toString());
 		asignarBotonAccion(mnuCambiarSeparadorMiles, ConstantesRP.Acciones.CAMBIAR_SEPARADOR_MILES.toString());
+		asignarBotonAccion(mnuVersion, ConstantesRP.Acciones.VERSION.toString());
 
 		asignarBotonAccion(btnClienteEsclavo, ConstantesRP.Acciones.CARGA_CLIENTE_ESCLAVO.toString());
 		asignarBotonAccion(btnCargaPrecio, ConstantesRP.Acciones.CARGA_PRECIO_CLIENTE.toString());

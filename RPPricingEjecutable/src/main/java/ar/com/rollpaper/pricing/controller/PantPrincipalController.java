@@ -3,6 +3,8 @@ package ar.com.rollpaper.pricing.controller;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import com.alee.laf.optionpane.WebOptionPane;
+
 import ar.com.rollpaper.pricing.business.ArchivoDePropiedadesBusiness;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
@@ -28,6 +30,7 @@ import ar.com.rp.ui.pantalla.VentanaCalculadora;
 
 public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipalView, PantPrincipalModel> {
 
+	private static final String VERSION_INFO = "Versión: %s.\nFecha de Liberación: %s";
 	private VentanaCalculadora calculadora = null;
 	private CargaPrecioController cargaPrecioControlador = null;
 	private CargaClienteEsclavoController clienteEsclavoControlador = null;
@@ -119,6 +122,11 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 
 		if (accion.equals(ConstantesRP.Acciones.GENERAR_PRECIOS.toString())) {
 			procesoPrecios();
+		}
+
+		if (accion.equals(ConstantesRP.Acciones.VERSION.toString())) {
+			Dialog.showMessageDialog(String.format(VERSION_INFO, "1.0.5", "13/06/2019"), "Version del Sistema",
+					WebOptionPane.INFORMATION_MESSAGE);
 		}
 
 		if (accion.equals(ConstantesRP.Acciones.LISTA_PRECIO_GENERALES.toString())) {

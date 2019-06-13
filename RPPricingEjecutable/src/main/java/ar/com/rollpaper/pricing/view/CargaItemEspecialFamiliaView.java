@@ -99,15 +99,15 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		btnCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
 		panel.add(btnCancelar);
 
-		JPanel panel_1 = new JPanel();
-		getContentPane().add(panel_1, BorderLayout.CENTER);
+		JPanel pnlPrincipal = new JPanel();
+		getContentPane().add(pnlPrincipal, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[] { 0, 0, 0, 268, 0, 0 };
 		gbl_panel_1.rowHeights = new int[] { 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel_1.columnWeights = new double[] { 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gbl_panel_1.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0,
 				Double.MIN_VALUE };
-		panel_1.setLayout(gbl_panel_1);
+		pnlPrincipal.setLayout(gbl_panel_1);
 
 		String[] headerDescFamilia = { "En Lista", "Codigo", "Nombre", "Descripcion" };
 		String[][] dataDesFamilia = { {} };
@@ -129,7 +129,9 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 
 			@Override
 			public void doubleClick(Integer fila, Integer columna) {
-				btnEliminar.doClick();
+				if (btnEliminar.isVisible()) {
+					btnEliminar.doClick();
+				}
 			}
 		});
 
@@ -142,7 +144,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_pnlID.fill = GridBagConstraints.BOTH;
 		gbc_pnlID.gridx = 0;
 		gbc_pnlID.gridy = 0;
-		panel_1.add(pnlID, gbc_pnlID);
+		pnlPrincipal.add(pnlID, gbc_pnlID);
 		pnlID.setLayout(new BorderLayout(0, 0));
 
 		txtArticuloID = new JTextField();
@@ -156,7 +158,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 1;
-		panel_1.add(scrollPane, gbc_scrollPane);
+		pnlPrincipal.add(scrollPane, gbc_scrollPane);
 
 		btnEliminar = new JButton("");
 		btnEliminar.setIcon(CommonUtils.loadIcon("com/alee/managers/notification/icons/types/minus.png", 15, 15));
@@ -166,7 +168,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
 		gbc_btnNewButton.gridx = 4;
 		gbc_btnNewButton.gridy = 1;
-		panel_1.add(btnEliminar, gbc_btnNewButton);
+		pnlPrincipal.add(btnEliminar, gbc_btnNewButton);
 
 		lblEstaEnLista = new WebLabel("lblEstaEnLista");
 		lblEstaEnLista.setFont(Common.getStandarFont());
@@ -176,7 +178,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_lblEstaEnLista.insets = new Insets(0, 0, 5, 0);
 		gbc_lblEstaEnLista.gridx = 3;
 		gbc_lblEstaEnLista.gridy = 2;
-		panel_1.add(lblEstaEnLista, gbc_lblEstaEnLista);
+		pnlPrincipal.add(lblEstaEnLista, gbc_lblEstaEnLista);
 
 		lblNombre = new JLabel("Nombre:");
 		lblNombre.setFont(Common.getStandarFont());
@@ -185,7 +187,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_lblNombre.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNombre.gridx = 1;
 		gbc_lblNombre.gridy = 3;
-		panel_1.add(lblNombre, gbc_lblNombre);
+		pnlPrincipal.add(lblNombre, gbc_lblNombre);
 
 		txtNombre = new WebTextArea("");
 		txtNombre.setFont(Common.getStandarFont());
@@ -198,7 +200,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_txtNombre.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtNombre.gridx = 3;
 		gbc_txtNombre.gridy = 3;
-		panel_1.add(txtNombre, gbc_txtNombre);
+		pnlPrincipal.add(txtNombre, gbc_txtNombre);
 
 		lblDescripcion = new JLabel("Descripcion: ");
 		lblDescripcion.setFont(Common.getStandarFont());
@@ -207,7 +209,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_lblDescripcion.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDescripcion.gridx = 1;
 		gbc_lblDescripcion.gridy = 4;
-		panel_1.add(lblDescripcion, gbc_lblDescripcion);
+		pnlPrincipal.add(lblDescripcion, gbc_lblDescripcion);
 
 		txtDescripcion = new WebTextArea("");
 		txtDescripcion.setWrapStyleWord(true);
@@ -221,7 +223,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_txtDescripcion.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtDescripcion.gridx = 3;
 		gbc_txtDescripcion.gridy = 4;
-		panel_1.add(txtDescripcion, gbc_txtDescripcion);
+		pnlPrincipal.add(txtDescripcion, gbc_txtDescripcion);
 
 		lblDesc1 = new JLabel("1er Descuento %:");
 		lblDesc1.setFont(Common.getStandarFont());
@@ -230,7 +232,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_3.gridx = 1;
 		gbc_lblNewLabel_3.gridy = 5;
-		panel_1.add(lblDesc1, gbc_lblNewLabel_3);
+		pnlPrincipal.add(lblDesc1, gbc_lblNewLabel_3);
 
 		txtDesc1 = new componenteNumerico();
 		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
@@ -239,7 +241,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_3.gridx = 3;
 		gbc_textField_3.gridy = 5;
-		panel_1.add(txtDesc1, gbc_textField_3);
+		pnlPrincipal.add(txtDesc1, gbc_textField_3);
 
 		lblDesc2 = new JLabel("2do Descuento%:");
 		lblDesc2.setFont(Common.getStandarFont());
@@ -248,7 +250,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_lblDesc2.insets = new Insets(0, 0, 5, 5);
 		gbc_lblDesc2.gridx = 1;
 		gbc_lblDesc2.gridy = 6;
-		panel_1.add(lblDesc2, gbc_lblDesc2);
+		pnlPrincipal.add(lblDesc2, gbc_lblDesc2);
 
 		txtDesc2 = new componenteNumerico();
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
@@ -257,7 +259,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_4.gridx = 3;
 		gbc_textField_4.gridy = 6;
-		panel_1.add(txtDesc2, gbc_textField_4);
+		pnlPrincipal.add(txtDesc2, gbc_textField_4);
 		txtDesc2.setColumns(10);
 
 		lblLabelMoneda = new JLabel("Moneda:");
@@ -267,7 +269,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_label_1.insets = new Insets(0, 0, 5, 5);
 		gbc_label_1.gridx = 1;
 		gbc_label_1.gridy = 7;
-		panel_1.add(lblLabelMoneda, gbc_label_1);
+		pnlPrincipal.add(lblLabelMoneda, gbc_label_1);
 
 		cbMoneda = new WebComboBox();
 		cbMoneda.setFont(Common.getStandarFont());
@@ -277,7 +279,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_5.gridx = 3;
 		gbc_textField_5.gridy = 7;
-		panel_1.add(cbMoneda, gbc_textField_5);
+		pnlPrincipal.add(cbMoneda, gbc_textField_5);
 
 		lblLabelPrecio = new JLabel("Precio:");
 		lblLabelPrecio.setFont(Common.getStandarFont());
@@ -286,7 +288,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_lblLblestaenlistaPrecio.insets = new Insets(0, 0, 5, 5);
 		gbc_lblLblestaenlistaPrecio.gridx = 1;
 		gbc_lblLblestaenlistaPrecio.gridy = 8;
-		panel_1.add(lblLabelPrecio, gbc_lblLblestaenlistaPrecio);
+		pnlPrincipal.add(lblLabelPrecio, gbc_lblLblestaenlistaPrecio);
 
 		txtPrecio = new componenteNumerico();
 		txtPrecio.setCantEnteros(8);
@@ -297,7 +299,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_6.gridx = 3;
 		gbc_textField_6.gridy = 8;
-		panel_1.add(txtPrecio, gbc_textField_6);
+		pnlPrincipal.add(txtPrecio, gbc_textField_6);
 		txtPrecio.setColumns(10);
 
 		JLabel label_3 = new JLabel("Fecha Desde:");
@@ -307,7 +309,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_label_3.insets = new Insets(0, 0, 5, 5);
 		gbc_label_3.gridx = 1;
 		gbc_label_3.gridy = 9;
-		panel_1.add(label_3, gbc_label_3);
+		pnlPrincipal.add(label_3, gbc_label_3);
 
 		dateFechaDesde = new WebDateField();
 		dateFechaDesde.setFont(Common.getStandarFont());
@@ -318,7 +320,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_lblNewLabel_4.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_4.gridx = 3;
 		gbc_lblNewLabel_4.gridy = 9;
-		panel_1.add(dateFechaDesde, gbc_lblNewLabel_4);
+		pnlPrincipal.add(dateFechaDesde, gbc_lblNewLabel_4);
 
 		JLabel label_4 = new JLabel("Fecha Hasta:");
 		label_4.setFont(Common.getStandarFont());
@@ -327,7 +329,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_label_4.insets = new Insets(0, 0, 5, 5);
 		gbc_label_4.gridx = 1;
 		gbc_label_4.gridy = 10;
-		panel_1.add(label_4, gbc_label_4);
+		pnlPrincipal.add(label_4, gbc_label_4);
 
 		dateFechaHasta = new WebDateField();
 		dateFechaHasta.setFont(Common.getStandarFont());
@@ -338,7 +340,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_5.gridx = 3;
 		gbc_lblNewLabel_5.gridy = 10;
-		panel_1.add(dateFechaHasta, gbc_lblNewLabel_5);
+		pnlPrincipal.add(dateFechaHasta, gbc_lblNewLabel_5);
 
 		label_1 = new JLabel("Comision %:");
 		label_1.setFont(Common.getStandarFont());
@@ -347,7 +349,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_label_comision.insets = new Insets(0, 0, 5, 5);
 		gbc_label_comision.gridx = 1;
 		gbc_label_comision.gridy = 11;
-		panel_1.add(label_1, gbc_label_comision);
+		pnlPrincipal.add(label_1, gbc_label_comision);
 
 		txtComision = new componenteNumerico();
 		GridBagConstraints gbc_txtComision = new GridBagConstraints();
@@ -356,7 +358,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_txtComision.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtComision.gridx = 3;
 		gbc_txtComision.gridy = 11;
-		panel_1.add(txtComision, gbc_txtComision);
+		pnlPrincipal.add(txtComision, gbc_txtComision);
 
 		JLabel label_5 = new JLabel("Referencia:");
 		label_5.setFont(Common.getStandarFont());
@@ -365,7 +367,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_label_5.insets = new Insets(0, 0, 0, 5);
 		gbc_label_5.gridx = 1;
 		gbc_label_5.gridy = 12;
-		panel_1.add(label_5, gbc_label_5);
+		pnlPrincipal.add(label_5, gbc_label_5);
 
 		txtReferencia = new WebTextArea();
 		txtReferencia.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
@@ -376,9 +378,9 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 		gbc_txtReferencia1.fill = GridBagConstraints.BOTH;
 		gbc_txtReferencia1.gridx = 3;
 		gbc_txtReferencia1.gridy = 12;
-		panel_1.add(txtReferencia, gbc_txtReferencia1);
+		pnlPrincipal.add(txtReferencia, gbc_txtReferencia1);
 		txtReferencia.setColumns(10);
-		panel_1.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { pnlID, txtArticuloID,
+		pnlPrincipal.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[] { pnlID, txtArticuloID,
 				lblEstaEnLista, lblNombre, txtNombre, lblDescripcion, txtDescripcion, lblDesc1, txtDesc1, lblDesc2,
 				txtDesc2, lblLabelMoneda, cbMoneda, lblLabelPrecio, txtPrecio, label_3, dateFechaDesde,
 				dateFechaDesde.getTrailingComponent(), label_4, dateFechaHasta, dateFechaHasta.getTrailingComponent(),
@@ -417,6 +419,7 @@ public class CargaItemEspecialFamiliaView extends BaseViewDialog {
 	public void setModeEdicion(boolean activar) {
 		txtArticuloID.setEditable(!activar);
 		pnlID.setVisible(!activar);
+		btnEliminar.setVisible(!activar);
 
 		lblDescripcion.setVisible(activar && cbMoneda.isVisible()); // la moneda esta visible solo cuando es producto
 		txtDescripcion.setVisible(activar && cbMoneda.isVisible());

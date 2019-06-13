@@ -75,7 +75,13 @@ public class BusquedaVencidoController
 
 			public void focusLost(FocusEvent evento) {
 				try {
-					perdioFocoComponenteBusqueda();
+					if (getView().txtVencidosAl.getDate() == null) {
+						Dialog.showMessageDialog("Debe haber una fecha valida en \"Vencidos Al\"",
+								"Error de parametros", JOptionPane.ERROR_MESSAGE);
+						getView().txtVencidosAl.requestFocus();
+					} else {
+						perdioFocoComponenteBusqueda();
+					}
 				} catch (Exception e1) {
 					ManejoDeError.showError(e1, "Error perder foco");
 				}
@@ -91,7 +97,7 @@ public class BusquedaVencidoController
 				}
 			}
 		});
-		
+
 		TableAnchoManager.registrarEvento(view.tableDescEspecifico, "tablaBusquedaVencidosEspecifico");
 		TableAnchoManager.registrarEvento(view.tableDescFamilia, "tablaBusquedaVencidosFamilia");
 
@@ -129,11 +135,7 @@ public class BusquedaVencidoController
 			}
 
 		}
-		if (getView().txtVencidosAl.getDate() == null) {
-			Dialog.showMessageDialog("Debe haber una fecha valida en \"Vencidos Al\"", "Error de parametros",
-					JOptionPane.ERROR_MESSAGE);
-			getView().txtVencidosAl.requestFocus();
-		} else {
+		if (getView().txtVencidosAl.getDate() != null) {
 			if (!FechaManagerUtil.fechaIguales(getView().txtVencidosAl.getDate(), getModel().getFechaVigenciaAl())) {
 				limpiar = true;
 				getModel().setFechaVigenciaAl(getView().txtVencidosAl.getDate());
@@ -295,17 +297,6 @@ public class BusquedaVencidoController
 	@Override
 	public boolean presionoTecla(KeyEvent ke) {
 		boolean retorno = super.presionoTecla(ke);
-
-		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_ENTER) && getView().txtNroCliente.hasFocus()) {
-			try {
-				retorno = true;
-				perdioFocoComponenteBusqueda();
-
-			} catch (Exception e) {
-				ManejoDeError.showError(e, "Error al cargar la busqueda de Cliente");
-			}
-		}
-
 		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F2) && getView().txtNroCliente.hasFocus()) {
 			retorno = true;
 			try {
@@ -334,7 +325,7 @@ public class BusquedaVencidoController
 	public void ejecutarAccion(String accion) {
 
 		if (accion.equals(ConstantesRP.PantBusquedaVencidos.BUSCAR.toString())) {
-			limpiarBusqueda();
+			perdioFocoComponenteBusqueda(); // para que refesque
 
 			busquedaProductos(getModel().getClienteID(), getModel().getFechaVigenciaAl(),
 					getModel().getFechaVigenciaDesde(), getModel().getBusqueda());

@@ -176,13 +176,15 @@ public class CargaItemEspecialFamilia extends
 
 		if (accion.equals(ConstantesRP.AccionesCargaItemFamilia.ELIMINAR_FAMILIA.toString())) {
 
-			getModel().deleteFamiliaCargado((String) getView().tableFalimia
-					.getValueAt(getView().tableFalimia.getSelectedRow(), 0));
+			getModel().deleteFamiliaCargado(
+					(String) getView().tableFalimia.getValueAt(getView().tableFalimia.getSelectedRow(), 0));
 
 			int modelRow = getView().tableFalimia.convertRowIndexToModel(getView().tableFalimia.getSelectedRow());
 
 			DefaultTableModel dm = (DefaultTableModel) getView().tableFalimia.getModel();
 			dm.removeRow(modelRow);
+
+			getView().tableFalimia.adjustColumns();
 		}
 	}
 
