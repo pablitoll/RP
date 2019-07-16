@@ -8,6 +8,7 @@ public class CargaClienteEsclavoModel extends BaseModel {
 
 	private CcobClie cliente;
 	private VentLipv listaCliente;
+	private boolean cambiosPendientes = false;;
 
 	public CcobClie getCliente() {
 		return cliente;
@@ -25,4 +26,13 @@ public class CargaClienteEsclavoModel extends BaseModel {
 	public VentLipv getListaCliente() {
 		return listaCliente;
 	}
+
+	public void setCambiosPendietes(boolean cambiosPendientes) {
+		this.cambiosPendientes = cambiosPendientes;
+	}
+
+	public boolean isCambiosPendientes() {
+		return cambiosPendientes;
+	}
+	
 }

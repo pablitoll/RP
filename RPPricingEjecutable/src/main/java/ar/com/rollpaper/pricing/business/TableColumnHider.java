@@ -1,5 +1,6 @@
 package ar.com.rollpaper.pricing.business;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,12 +11,12 @@ import javax.swing.table.TableColumnModel;
 public class TableColumnHider {
 	// private JTable table;
 	private TableColumnModel tcm;
-	private Map hiddenColumns;
+	private Map<String, Serializable> hiddenColumns;
 
 	public TableColumnHider(JTable table) {
 		// this.table = table;
 		tcm = table.getColumnModel();
-		hiddenColumns = new HashMap();
+		hiddenColumns = new HashMap<String, Serializable>();
 	}
 
 	public void hide(String columnName) {

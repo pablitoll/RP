@@ -109,7 +109,6 @@ public class Reportes {
 
 	public static ListaPrecioReporteDTO getDatosReporteFiltrado(CcobClie cliente, VentLipv lista,
 			List<ProductoDTO> listaProductos) {
-//TODO ACA
 		List<ProductoDTO> listaProductosToAdd = new ArrayList<ProductoDTO>();
 
 		for (ProductoDTO prod : listaProductos) {
@@ -120,7 +119,6 @@ public class Reportes {
 
 			ProductoDTO producto = new ProductoDTO(stock.getArtsArticulo(), stock.getArtsArticuloEmp(),
 					stock.getArtsNombre(), stock.getArtsDescripcion(), unidad.getUnimNombre(), moneda.getMoneNombre(),
-					// CommonPricing.formatearImporte(prod.getPrecioArticulo().doubleValue()),
 					prod.getPrecioArticulo(), stock.getArtsClasif1(), false);
 			listaProductosToAdd.add(producto);
 		}

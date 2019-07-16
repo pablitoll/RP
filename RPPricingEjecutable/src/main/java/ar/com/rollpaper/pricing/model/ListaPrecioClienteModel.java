@@ -7,6 +7,8 @@ import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.business.ListaBusiness;
+import ar.com.rollpaper.pricing.business.MaestroEsclavoBusinnes;
+import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
 import ar.com.rollpaper.pricing.jasper.ListaPrecioReporteDTO;
@@ -61,6 +63,7 @@ public class ListaPrecioClienteModel extends BaseModel {
 
 	private ListaPrecioReporteDTO getListaArticulosImpactados() {
 		if (listaPrecioReporte == null) {
+			// getDatosReporte debe trar t
 			listaPrecioReporte = Reportes.getDatosReporte(getClienteCargado(), getListaCargada().getVentLipv());
 
 			List<ProductoDTO> listaProductoAux = listaPrecioReporte.getListaProductos();
@@ -68,16 +71,36 @@ public class ListaPrecioClienteModel extends BaseModel {
 			if ((listaProductoAux.size() > 0) && (listaProductoAux.get(0).getDescuento1() == null)) {
 				// Cargo lo extra
 				// Me traigo todos los precios espciales de un saque
+				int idPadre =getClienteCargado().getClieCliente(); 
+				
+				if(getListaCargada().isListaHeredada()) {
+					idPadre = MaestroEsclavoBusinnes.getPadreId(getClienteCargado(), getListaCargada());
+				}
+				
 				List<PreciosEspeciales> listPrecioEspecial = PreciosEspecialesDAO.getListaPrecioEspeciaByID(
-						getClienteCargado().getClieCliente(), getListaCargada().getVentLipv().getLipvListaPrecvta());
+							idPadre, getListaCargada().getVentLipv().getLipvListaPrecvta());
+				
+				List<DescuentoXFamilias> ListaDescuentoxFamilia = DescuentoXFamiliasDAO.getListaDescuentoByID(getClienteCargado().getClieCliente(),  getListaCargada().getVentLipv().getLipvListaPrecvta());
+								
 
 				for (ProductoDTO prod : listaProductoAux) {
 					PreciosEspeciales precioEspecial = getPrecioEspecia(prod, listPrecioEspecial);
 
+					//Primero me fijo si es un producto especial
 					if (precioEspecial != null) {
 						prod.cargarExtras(precioEspecial.getPricFechaDesde(), precioEspecial.getPricFechaHasta(),
 								precioEspecial.getPricComision(), precioEspecial.getPricReferencia(),
 								precioEspecial.getPricDescuento1(), precioEspecial.getPricDescuento2());
+					} else {
+						// Segundo me fijo si es un producto dentro de una famialia con descunto
+						DescuentoXFamilias descuentoxFamilia = getDescuentoFamilia(prod, ListaDescuentoxFamilia);
+						
+						if(descuentoxFamilia != null) {
+							prod.cargarExtras(descuentoxFamilia.getPricFamiliaFechaDesde(), descuentoxFamilia.getPricFamiliaFechaHasta(),
+									descuentoxFamilia.getPricFamiliaComision(), descuentoxFamilia.getPricReferencia(),
+									descuentoxFamilia.getPricFamiliaDescuento1(), descuentoxFamilia.getPricFamiliaDescuento2());							
+						}
+						// Ultimo si no es nada es porque es de una lista heredada
 					}
 				}
 
@@ -85,6 +108,15 @@ public class ListaPrecioClienteModel extends BaseModel {
 			}
 		}
 		return listaPrecioReporte;
+	}
+
+	private DescuentoXFamilias getDescuentoFamilia(ProductoDTO prod, List<DescuentoXFamilias> listaDescuentoxFamilia) {
+		for (DescuentoXFamilias familia : listaDescuentoxFamilia) {
+			if (prod.getFamiliaCod().equalsIgnoreCase(familia.getPricCa01Clasif1())) {
+				return familia;
+			}
+		}
+		return null;
 	}
 
 	private PreciosEspeciales getPrecioEspecia(ProductoDTO prod, List<PreciosEspeciales> listPrecioEspecial) {
@@ -96,15 +128,9 @@ public class ListaPrecioClienteModel extends BaseModel {
 		return null;
 	}
 
-	public List<ProductoDTO> getListProductos(boolean isArticuloLista, boolean isArticuloEspecifico,
-			String textoBusqueda) {
-
-		return getListProductosReporte(isArticuloLista, isArticuloEspecifico, textoBusqueda).getListaProductos();
-
-	}
-
 	public ListaPrecioReporteDTO getListProductosReporte(boolean isArticuloLista, boolean isArticuloEspecifico,
-			String textoBusqueda) {
+			String textoBusqueda, boolean busquedaCodFamilia, boolean busquedaCodProducto,
+			boolean busquedaDescripcion) {
 
 		textoBusqueda = textoBusqueda.toLowerCase();
 		List<ProductoDTO> listaProductoAux = new ArrayList<ProductoDTO>();
@@ -124,8 +150,10 @@ public class ListaPrecioClienteModel extends BaseModel {
 			}
 
 			if ((prodCandidato != null) && !textoBusqueda.trim().equals("")) {
-				if (prod.getDescArticulo().toLowerCase().contains(textoBusqueda.trim())
-						|| prod.getCodArticulo().contains(textoBusqueda.trim())) {
+				String[] vecTextoBusqueda = textoBusqueda.trim().split(" ");
+				if ((busquedaDescripcion && contieneTexto(prod.getDescArticulo().toLowerCase(), vecTextoBusqueda))
+						|| (busquedaCodProducto && contieneTexto(prod.getCodArticulo().toLowerCase(), vecTextoBusqueda))
+						|| (busquedaCodFamilia && contieneTexto(prod.getFamiliaCod().toLowerCase(), vecTextoBusqueda))) {
 					prodCandidato = prod;
 				} else {
 					prodCandidato = null;
@@ -137,9 +165,17 @@ public class ListaPrecioClienteModel extends BaseModel {
 			}
 
 		}
-
 		retorno.setListaProductos(listaProductoAux);
 		return retorno;
+	}
+
+	private boolean contieneTexto(String codArticulo, String[] vecTextoBusqueda) {
+		for (String registro : vecTextoBusqueda) {
+			if (!codArticulo.contains(registro)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public ListaPrecioReporteDTO getListProductosReporte(RPTable tableResultado) {
@@ -158,7 +194,8 @@ public class ListaPrecioClienteModel extends BaseModel {
 
 	private boolean estaSeleccionado(ProductoDTO prod, RPTable tableResultado) {
 		for (int i : tableResultado.getSelectedRows()) {
-			if (prod.getCodArticulo().equals(((String) tableResultado.getValueAt(i, ListaPrecioClienteView.COL_COD_ARTICULO)))) {
+			if (prod.getCodArticulo()
+					.equals(((String) tableResultado.getValueAt(i, ListaPrecioClienteView.COL_COD_ARTICULO)))) {
 				return true;
 			}
 		}

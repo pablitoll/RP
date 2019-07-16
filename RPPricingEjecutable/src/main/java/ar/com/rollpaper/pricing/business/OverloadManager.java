@@ -41,7 +41,8 @@ import ar.com.rp.rpcutils.FechaManagerUtil;
 public class OverloadManager {
 
 	public static boolean isCase1(DescuentoXFamilias dateA, DescuentoXFamilias dateB) {
-		if (FechaManagerUtil.isMenor(dateA.getPricFamiliaFechaDesde(), dateB.getPricFamiliaFechaDesde())
+		if ((dateA.getPricFamiliaId() != dateB.getPricFamiliaId())
+				&& FechaManagerUtil.isMenor(dateA.getPricFamiliaFechaDesde(), dateB.getPricFamiliaFechaDesde())
 				&& isEnElMedio(dateA.getPricFamiliaFechaHasta(), dateB)) {
 			return true;
 		}
@@ -50,7 +51,8 @@ public class OverloadManager {
 	}
 
 	public static boolean isCase2(DescuentoXFamilias dateA, DescuentoXFamilias dateB) {
-		if (FechaManagerUtil.isMenor(dateB.getPricFamiliaFechaDesde(), dateA.getPricFamiliaFechaDesde())
+		if ((dateA.getPricFamiliaId() != dateB.getPricFamiliaId())
+				&& FechaManagerUtil.isMenor(dateB.getPricFamiliaFechaDesde(), dateA.getPricFamiliaFechaDesde())
 				&& isEnElMedio(dateB.getPricFamiliaFechaHasta(), dateA)) {
 			return true;
 		}
@@ -59,7 +61,8 @@ public class OverloadManager {
 	}
 
 	public static boolean isCase3(DescuentoXFamilias dateA, DescuentoXFamilias dateB) {
-		if (isEnElMedio(dateA.getPricFamiliaFechaDesde(), dateB)
+		if ((dateA.getPricFamiliaId() != dateB.getPricFamiliaId())
+				&& isEnElMedio(dateA.getPricFamiliaFechaDesde(), dateB)
 				&& isEnElMedio(dateA.getPricFamiliaFechaHasta(), dateB)) {
 			return true;
 		}
@@ -68,7 +71,8 @@ public class OverloadManager {
 	}
 
 	public static boolean isCase4(DescuentoXFamilias dateA, DescuentoXFamilias dateB) {
-		if (isEnElMedio(dateB.getPricFamiliaFechaDesde(), dateA)
+		if ((dateA.getPricFamiliaId() != dateB.getPricFamiliaId())
+				&& isEnElMedio(dateB.getPricFamiliaFechaDesde(), dateA)
 				&& isEnElMedio(dateB.getPricFamiliaFechaHasta(), dateA)) {
 			return true;
 		}
@@ -91,8 +95,9 @@ public class OverloadManager {
 	}
 
 	public static boolean isCase5(DescuentoXFamilias regTablaFamilia, DescuentoXFamilias registroNuevo) {
-		if (FechaManagerUtil.fechaIguales(regTablaFamilia.getPricFamiliaFechaDesde(),
-				registroNuevo.getPricFamiliaFechaDesde())
+		if ((regTablaFamilia.getPricFamiliaId() != registroNuevo.getPricFamiliaId())
+				&& FechaManagerUtil.fechaIguales(regTablaFamilia.getPricFamiliaFechaDesde(),
+						registroNuevo.getPricFamiliaFechaDesde())
 				&& FechaManagerUtil.fechaIguales(regTablaFamilia.getPricFamiliaFechaHasta(),
 						registroNuevo.getPricFamiliaFechaHasta())) {
 			return true;
@@ -102,8 +107,9 @@ public class OverloadManager {
 	}
 
 	public static boolean isCase6(DescuentoXFamilias regTablaFamilia, DescuentoXFamilias registroNuevo) {
-		if (FechaManagerUtil.fechaIguales(regTablaFamilia.getPricFamiliaFechaHasta(),
-				registroNuevo.getPricFamiliaFechaHasta())
+		if ((regTablaFamilia.getPricFamiliaId() != registroNuevo.getPricFamiliaId())
+				&& FechaManagerUtil.fechaIguales(regTablaFamilia.getPricFamiliaFechaHasta(),
+						registroNuevo.getPricFamiliaFechaHasta())
 				&& FechaManagerUtil.isMayor(regTablaFamilia.getPricFamiliaFechaDesde(),
 						registroNuevo.getPricFamiliaFechaDesde())) {
 			return true;
@@ -113,8 +119,9 @@ public class OverloadManager {
 	}
 
 	public static boolean isCase7(DescuentoXFamilias regTablaFamilia, DescuentoXFamilias registroNuevo) {
-		if (FechaManagerUtil.fechaIguales(regTablaFamilia.getPricFamiliaFechaDesde(),
-				registroNuevo.getPricFamiliaFechaDesde())
+		if ((regTablaFamilia.getPricFamiliaId() != registroNuevo.getPricFamiliaId())
+				&& FechaManagerUtil.fechaIguales(regTablaFamilia.getPricFamiliaFechaDesde(),
+						registroNuevo.getPricFamiliaFechaDesde())
 				&& FechaManagerUtil.isMenor(regTablaFamilia.getPricFamiliaFechaHasta(),
 						registroNuevo.getPricFamiliaFechaHasta())) {
 			return true;

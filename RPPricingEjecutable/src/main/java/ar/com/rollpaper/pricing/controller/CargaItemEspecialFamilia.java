@@ -66,7 +66,8 @@ public class CargaItemEspecialFamilia extends
 			StocCa01 nuevaFamilia = StocCa01DAO.findById(idFamilia);
 
 			if (!isFamiliaCarga(nuevaFamilia)) {
-				if (FamiliaBusiness.estaFamiliaEnLista(nuevaFamilia.getCa01Clasif1(), getModel().getListaID())) {
+				if ((nuevaFamilia == StocCa01DAO.stocCa01Todos)
+						|| FamiliaBusiness.estaFamiliaEnLista(nuevaFamilia.getCa01Clasif1(), getModel().getListaID())) {
 
 					getModel().addFamiliaCargado(nuevaFamilia);
 					getView().tableFalimia.addRow(
@@ -328,7 +329,6 @@ public class CargaItemEspecialFamilia extends
 		}
 
 		// Evaluo si hay overlap
-		// TODO VER EDICION
 		String msg = "";
 		for (DescuentoXFamilias descuento : getRegistro()) {
 
@@ -348,7 +348,6 @@ public class CargaItemEspecialFamilia extends
 								FechaManagerUtil.Date2String(regTablaFamilia.getPricFamiliaFechaDesde()),
 								FechaManagerUtil.Date2String(regTablaFamilia.getPricFamiliaFechaHasta()));
 					}
-
 				}
 			}
 

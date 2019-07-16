@@ -170,7 +170,6 @@ public class PreciosEspecialesDAO {
 				VentArpvId x = new VentArpvId(pe.getPricArticulo(), lista.getLipvListaPrecvta());
 				VentArpv y = VentArpvDAO.findById(x);
 				if (y == null) {
-					// if (y.getArpvListaPrecvta()==lista.getLipvListaPrecvta())
 					ListaPreciosEspecialesNoEnLista.add(pe);
 				}
 			}

@@ -1,7 +1,6 @@
 
 package ar.com.rollpaper.pricing.controller;
 
-import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
@@ -111,7 +110,7 @@ public class CargaPrecioController
 				filtroVigentes(getView().chkSoloVigentes.isSelected());
 			}
 		});
-		
+
 		TableAnchoManager.registrarEvento(view.tableDescFamilia, "tablaCargaPrecioFamilia");
 		TableAnchoManager.registrarEvento(view.tableDescEspecifico, "tablaCargaPrecioEspecifico");
 	}
@@ -292,10 +291,9 @@ public class CargaPrecioController
 		sorterTablaDesFamilia.setSortKeys(sortKeysFamilia);
 
 		sorterTablaDesFamilia.setComparator(CargaPrecioView.COL_DESDE_FAMILIA, new Comparator<Date>() {
-
 			@Override
 			public int compare(Date fecha1, Date fecha2) {
-				return (int) FechaManagerUtil.getDateDiff(fecha1, fecha2, TimeUnit.SECONDS);
+				return (int) FechaManagerUtil.getDateDiff(fecha1, fecha2, TimeUnit.DAYS);
 			}
 		});
 
@@ -318,8 +316,8 @@ public class CargaPrecioController
 
 		sorterTablaDesEspecifico.setComparator(CargaPrecioView.COL_DESDE_ESPECIFICO, new Comparator<Date>() {
 			@Override
-			public int compare(Date date1, Date date2) {
-				return (int) FechaManagerUtil.getDateDiff(date2, date1, TimeUnit.SECONDS);
+			public int compare(Date fecha1, Date fecha2) {
+				return (int) FechaManagerUtil.getDateDiff(fecha1, fecha2, TimeUnit.DAYS);
 			}
 		});
 
@@ -464,7 +462,7 @@ public class CargaPrecioController
 								setSorter(getView().tableDescFamilia);
 							}
 
-							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA,
+							posicionarEnRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA,
 									itemEspecialFamilia.getRegistro().get(0).getNombreFamilia(),
 									CargaPrecioView.COL_DESDE_FAMILIA,
 									itemEspecialFamilia.getRegistro().get(0).getPricFamiliaFechaDesde());
@@ -494,7 +492,7 @@ public class CargaPrecioController
 
 							sorterTablaDesEspecifico.sort();
 
-							buscarRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO,
+							posicionarEnRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO,
 									itemEspecialArticulo.getNombreItem(), CargaPrecioView.COL_DESDE_ESPECIFICO,
 									registro.getPricFechaDesde());
 
@@ -526,22 +524,21 @@ public class CargaPrecioController
 							DescuentoXFamilias registro = itemEspecialFamilia.getRegistro().get(0); // Como es
 																									 // edicion
 																									 // es uno solo
+							modificarRegistroATabla(getView().tableDescFamilia, registro, row);
 							getView().tableDescFamilia.setRowSorter(null);
 							try {
-
 								actualzarFechasCortesFamilia(registro, getView().tableDescFamilia,
 										CargaPrecioView.COL_REGISTRO_FAMILIA);
 
 								HibernateGeneric.attachDirty(registro);
-								agregoEditItem();
 
-								modificarRegistroATabla(getView().tableDescFamilia, registro, row);
+								agregoEditItem();
 
 							} finally {
 								setSorter(getView().tableDescFamilia);
 							}
 
-							buscarRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA,
+							posicionarEnRegisro(getView().tableDescFamilia, CargaPrecioView.COL_NOMBRE_FAMILIA,
 									registro.getNombreFamilia(), CargaPrecioView.COL_DESDE_FAMILIA,
 									registro.getPricFamiliaFechaDesde());
 
@@ -575,7 +572,7 @@ public class CargaPrecioController
 
 							sorterTablaDesEspecifico.sort();
 
-							buscarRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO,
+							posicionarEnRegisro(getView().tableDescEspecifico, CargaPrecioView.COL_NOMBRE_ESPECIFICO,
 									itemEspecialArticulo.getNombreItem(), CargaPrecioView.COL_DESDE_ESPECIFICO,
 									registro.getPricFechaDesde());
 
@@ -780,7 +777,8 @@ public class CargaPrecioController
 		perdioFocoCliente(idCliente);
 	}
 
-	private void buscarRegisro(RPTable tableActivo, int col_nombre, String nombre, int col_desde, Date fechaDesde) {
+	private void posicionarEnRegisro(RPTable tableActivo, int col_nombre, String nombre, int col_desde,
+			Date fechaDesde) {
 		String strDesde = FechaManagerUtil.Date2String(fechaDesde);
 
 		for (int i = 0; i < tableActivo.getRowCount(); i++) {
@@ -848,23 +846,8 @@ public class CargaPrecioController
 	private void agregarRegistroATablaArticulo(RPTable tabla, PreciosEspeciales registro, String id_Articulo,
 			String nombreItem, String descItem, String unidadItem, Boolean estaEnLista) {
 
-		Color[] colorFondo = new Color[tabla.getModel().getColumnCount()];
-		Color[] colorLetra = new Color[tabla.getModel().getColumnCount()];
-
-		colorFondo = rellenarColor(colorFondo, null);
-		colorLetra = rellenarColor(colorLetra, null);
-
 		Boolean estaVigente = estaVigente(registro.getPricFechaDesde(), registro.getPricFechaHasta());
-
-		if (!estaEnLista) {
-			colorFondo = rellenarColor(colorFondo, Color.YELLOW);
-		}
-
-		if (!estaVigente) {
-			colorLetra = rellenarColor(colorLetra, Color.RED);
-		}
-
-		tabla.addRowColor(new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
+		tabla.addRow(new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
 				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue())
 						: "",
 				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue())
@@ -875,7 +858,7 @@ public class CargaPrecioController
 						: "",
 				registro.getPricFechaDesde(), registro.getPricFechaHasta(),
 				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(),
-				(estaVigente ? "SI" : "NO"), (estaEnLista ? "SI" : "NO"), registro }, colorFondo, colorLetra);
+				(estaVigente ? "SI" : "NO"), (estaEnLista ? "SI" : "NO"), registro });
 
 		tabla.adjustColumns();
 	}
@@ -887,24 +870,10 @@ public class CargaPrecioController
 						TimeUnit.MINUTES) >= 0);
 	}
 
-	private Color[] rellenarColor(Color[] vector, Color color) {
-		for (int x = 0; x < vector.length; x++) {
-			vector[x] = color;
-		}
-		return vector;
-	}
-
 	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro) {
 		Boolean estaVigente = estaVigente(registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta());
 
-		Color[] colorFondo = new Color[tabla.getModel().getColumnCount()];
-		Color[] colorLetra = new Color[tabla.getModel().getColumnCount()];
-
-		if (!estaVigente) {
-			colorLetra = rellenarColor(colorLetra, Color.RED);
-		}
-		
-		tabla.addRowColor(new Object[] { registro.getPricCa01Clasif1(), registro.getNombreFamilia(),
+		tabla.addRow(new Object[] { registro.getPricCa01Clasif1(), registro.getNombreFamilia(),
 				registro.getPricFamiliaDescuento1() != null
 						? Common.double2String(registro.getPricFamiliaDescuento1().doubleValue())
 						: "",
@@ -913,7 +882,7 @@ public class CargaPrecioController
 						: "",
 				registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta(),
 				Common.double2String(registro.getPricFamiliaComision().doubleValue()), registro.getPricReferencia(),
-				(estaVigente ? "SI" : "NO"), registro }, colorFondo, colorLetra);
+				(estaVigente ? "SI" : "NO"), registro });
 
 		tabla.adjustColumns();
 	}

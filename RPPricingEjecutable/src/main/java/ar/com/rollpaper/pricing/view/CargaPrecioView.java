@@ -1,6 +1,8 @@
 package ar.com.rollpaper.pricing.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -15,6 +17,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.label.WebLabel;
@@ -234,7 +237,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_lblNombreLista.gridx = 4;
 		gbc_lblNombreLista.gridy = 2;
 		panelSuperior.add(lblNombreLista, gbc_lblNombreLista);
-		
+
 		chkSoloVigentes = new JCheckBox("Ver solo Vigentes");
 		chkSoloVigentes.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_chckbxNewCheckBox = new GridBagConstraints();
@@ -304,7 +307,36 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 				"% Comision", "Referencia", "Esta Vigente", "" };
 		String[][] dataDesFamilia = { {} };
 
-		tableDescFamilia = new RPTable();
+		tableDescFamilia = new RPTable() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+				Component c = super.prepareRenderer(renderer, row, column);
+
+				if (row > -1) {
+					boolean estaVigente = false;
+
+					Object objEstaVigente = getValueAt(row, COL_ESTA_VIGENTE_FAMILIA);
+					if (objEstaVigente != null) {
+						try {
+							estaVigente = CommonUtils.string2Boolean(String.valueOf(objEstaVigente));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+
+					if (!estaVigente && (row != getSelectedRow())) {
+						c.setForeground(Color.RED);
+					}
+				}
+				return c;
+			}
+		};
+
 		tableDescFamilia.setModel(new DefaultTableModel(dataDesFamilia, headerDescFamilia));
 		tableDescFamilia.setRowHeight(30);
 		tableDescFamilia.setEditable(false);
@@ -341,7 +373,49 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 				"Moneda", "Precio", "Desde", "Hasta", "% Comision", "Referencia", "Esta Vigente", "Esta en Lista", "" };
 		String[][] dataDesEspecifico = { {} };
 
-		tableDescEspecifico = new RPTable();
+		tableDescEspecifico = new RPTable() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+				Component c = super.prepareRenderer(renderer, row, column);
+
+				if (row > -1) {
+					boolean estaEnLista = false;
+					boolean estaVigente = false;
+
+					Object objEstaVigente = getValueAt(row, COL_ESTA_VIGENTE_ESPECIFICO);
+					if (objEstaVigente != null) {
+						try {
+							estaVigente = CommonUtils.string2Boolean(String.valueOf(objEstaVigente));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+
+					Object obkEstaEnLista = getValueAt(row, COL_ESTA_EN_LISTA_ESPECIFICO);
+					if (obkEstaEnLista != null) {
+						try {
+							estaEnLista = CommonUtils.string2Boolean(String.valueOf(obkEstaEnLista));
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+
+					if (!estaEnLista && (row != getSelectedRow())) {
+						c.setBackground(Color.YELLOW);
+					}
+
+					if (!estaVigente && (row != getSelectedRow())) {
+						c.setForeground(Color.RED);
+					}
+				}
+				return c;
+			}
+		};
 		tableDescEspecifico.setColToIgnorar(new Integer[] { COL_DESC_ESPECIFICO, COL_REGISTRO_ESPECIFICO });
 
 		tableDescEspecifico.setModel(new DefaultTableModel(dataDesEspecifico, headerDescEspecifico));

@@ -106,6 +106,7 @@ public class CargaClienteEsclavoController
 						}
 					} else {
 						getModel().setCliente(null);
+						getModel().setCambiosPendietes(false);
 						limpiarPantalla();
 					}
 				} finally {
@@ -115,6 +116,7 @@ public class CargaClienteEsclavoController
 				if (!msgError.equals("")) {
 					Dialog.showMessageDialog(msgError, "Carga de Clientes Esclavos", JOptionPane.ERROR_MESSAGE);
 					getModel().setCliente(null);
+					getModel().setCambiosPendietes(false);
 					limpiarPantalla();
 				}
 				setModoPantalla();
@@ -125,6 +127,7 @@ public class CargaClienteEsclavoController
 	}
 
 	private void cargarEsclavos(CcobClie cliente) throws Exception {
+		getView().tableEsclavo.clear();
 		for (MaestroEsclavo me : MaestroEsclavoDAO.getListaEsclavosByCliente(cliente)) {
 			agregarRegistro(me);
 		}
@@ -162,6 +165,18 @@ public class CargaClienteEsclavoController
 
 	}
 
+	@Override
+	protected String getNombrePantalla() {
+		return "Carga de Precio por Cliente";
+	}
+
+	@Override
+	protected void resetearPantalla() throws Exception {
+		if (getModel().getCliente() == null) {
+			limpiarPantalla();
+		}
+	}
+
 	private void setModoPantalla() {
 
 		Boolean tieneCli = getModel().getCliente() != null;
@@ -175,29 +190,11 @@ public class CargaClienteEsclavoController
 
 		getView().btnExpportar.setVisible(tieneCli);
 
-		if (tieneCli) {
-			if (!getView().btnTerminarCarga.isVisible() && !getView().btnCancelar.isVisible()) {
-				getView().setCerrarVisible(false);
-				getView().btnCancelar.setVisible(true);
-			}
-		}
-	}
-
-	@Override
-	protected String getNombrePantalla() {
-		return "Carga de Precio por Cliente";
-	}
-
-	@Override
-	protected void resetearPantalla() throws Exception {
-		if (getModel().getCliente() == null) {
-			limpiarPantalla();
-		}
-
-		getView().setCerrarVisible(true);
-		getView().btnTerminarCarga.setVisible(false);
-		getView().btnCancelar.setVisible(false);
-
+		getView().setCerrarVisible(!tieneCli);
+		getView().btnTerminarCarga.setVisible(getModel().isCambiosPendientes());
+		getView().btnCancelar.setVisible(tieneCli);
+		getView().btnCancelar.setEnabled(!getModel().isCambiosPendientes());
+		
 	}
 
 	protected void limpiarPantalla() throws Exception {
@@ -282,7 +279,7 @@ public class CargaClienteEsclavoController
 					Dialog.showMessageDialog("Se termino de aplicar los nuevos precios", "Aplicación de Precios",
 							JOptionPane.INFORMATION_MESSAGE);
 
-					ejecutarAccion(ConstantesRP.PantCarPrecio.CANCELAR.toString());
+					ejecutarAccion(ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString());
 				} catch (Exception e) {
 					ManejoDeError.showError(e, "Error al cancelar");
 				}
@@ -292,7 +289,8 @@ public class CargaClienteEsclavoController
 		if (accion.equals(ConstantesRP.PantCarClienteEsclabo.CANCELAR.toString())) {
 			try {
 				getModel().setCliente(null);
-				resetearPantalla();
+				getModel().setCambiosPendietes(false);
+				limpiarPantalla();
 			} catch (Exception e) {
 				ManejoDeError.showError(e, "Error al limpiar pantalla");
 			}
@@ -337,6 +335,7 @@ public class CargaClienteEsclavoController
 
 						DefaultTableModel dm = (DefaultTableModel) getView().tableEsclavo.getModel();
 						dm.removeRow(modelRow);
+						getView().tableEsclavo.adjustColumns();
 
 						HibernateGeneric.remove(me);
 						agregoEditItem();
@@ -420,7 +419,7 @@ public class CargaClienteEsclavoController
 						tableParaExportar.addRow(
 								new Object[] { maestroEsclavo.getPricMaestroCliente(), clientePadre.getClieNombre(),
 										clientePadre.getClieNombreLegal(), maestroEsclavo.getPricMEListaPrecvta(),
-										lista.getLipvNombre(), maestroEsclavo.getPricMaestroEsclavoId(),
+										lista.getLipvNombre(), clienteHijo.getClieCliente(),
 										clienteHijo.getClieNombre(), clienteHijo.getClieNombreLegal() });
 					}
 
@@ -461,25 +460,28 @@ public class CargaClienteEsclavoController
 			return false;
 		}
 
-		if (clienteNuevoTieneListaActual(cliEsclavo)) {
-			Dialog.showMessageDialog(String.format(
-					"El Cliente (%s) \"%s\" tiene asignada como Lista Principal \"%s\".\nNo se puede asignar como Esclavo",
-					cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre(),
-					getModel().getListaCliente().getLipvNombre()), "Esclavo no Valdio", JOptionPane.ERROR_MESSAGE);
-			return false;
-		}
+		// TODO REVISAR SAQUE ESATA VALIDACION
+		// if (clienteNuevoTieneListaActual(cliEsclavo)) {
+		// Dialog.showMessageDialog(String.format(
+		// "El Cliente (%s) \"%s\" tiene asignada como Lista Principal \"%s\".\nNo se
+		// puede asignar como Esclavo",
+		// cliEsclavo.getClieCliente(), cliEsclavo.getClieNombre(),
+		// getModel().getListaCliente().getLipvNombre()), "Esclavo no Valdio",
+		// JOptionPane.ERROR_MESSAGE);
+		// return false;
+		// }
 
 		return true;
 	}
 
-	private boolean clienteNuevoTieneListaActual(CcobClie cliEsclavo) {
-		for (VentCliv ventCliv : ListaBusiness.getListaPreciosByCliente(cliEsclavo)) {
-			if (ventCliv.getClivListaPrecvta().equals(getModel().getListaCliente().getLipvListaPrecvta())) {
-				return true;
-			}
-		}
-		return false;
-	}
+//	private boolean clienteNuevoTieneListaActual(CcobClie cliEsclavo) {
+//		for (VentCliv ventCliv : ListaBusiness.getListaPreciosByCliente(cliEsclavo)) {
+//			if (ventCliv.getClivListaPrecvta().equals(getModel().getListaCliente().getLipvListaPrecvta())) {
+//				return true;
+//			}
+//		}
+//		return false;
+//	}
 
 	private boolean esclavoTieneCargadoItems(CcobClie cliEsclavo, int idLista) {
 		return !DescuentoXFamiliasDAO.getListaDescuentoByID(cliEsclavo.getClieCliente(), idLista).isEmpty()
@@ -487,14 +489,13 @@ public class CargaClienteEsclavoController
 	}
 
 	private void agregoEditItem() {
-		getView().btnTerminarCarga.setVisible(true);
-		getView().setCerrarVisible(false);
-		getView().btnCancelar.setVisible(!getView().btnTerminarCarga.isVisible());
-
+		getModel().setCambiosPendietes(true);		
+		setModoPantalla();
 	}
 
 	public boolean isPendienteImpactar() {
-		return getView().btnTerminarCarga.isVisible();
+		return getModel().isCambiosPendientes();
+				
 	}
 
 }

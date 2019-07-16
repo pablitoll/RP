@@ -5,6 +5,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -43,6 +44,8 @@ public class ListaPrecioClienteController
 			ListaPrecioClienteModel model) throws Exception {
 		super(pantPrincipal, view, model, null);
 
+
+		
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
 
 			public void focusLost(FocusEvent evento) {
@@ -108,6 +111,49 @@ public class ListaPrecioClienteController
 
 		view.txtBusqueda.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent evento) {
+				if (getModel().getClienteCargado() != null) {
+					cargarProductos();
+				}
+			}
+		});
+
+		view.txtBusqueda.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					if (getModel().getClienteCargado() != null) {
+						cargarProductos();
+					}
+				}
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+			}
+		});
+
+		view.chkBusquedaCodFamilia.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (getModel().getClienteCargado() != null) {
+					cargarProductos();
+				}
+			}
+		});
+
+		view.chkBusquedaCodProducto.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (getModel().getClienteCargado() != null) {
+					cargarProductos();
+				}
+			}
+		});
+		view.chkBusquedaDescrip.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
 				if (getModel().getClienteCargado() != null) {
 					cargarProductos();
 				}
@@ -202,6 +248,10 @@ public class ListaPrecioClienteController
 			getView().lblNombreLista.setText("S/D");
 			getView().lblNombreLegal.setText("S/D");
 			getView().lblNombreCliente.setText("S/D");
+			
+			getView().chkBusquedaCodFamilia.setSelected(false);
+			getView().chkBusquedaCodProducto.setSelected(true);
+			getView().chkBusquedaDescrip.setSelected(true);
 
 			getModel().setClienteCargado(null);
 			getView().cbNroLista.removeAllItems();
@@ -276,9 +326,10 @@ public class ListaPrecioClienteController
 				}
 
 				if (exportTodos) {
-					Reportes.getReporteListaPrecios(
-							getModel().getListProductosReporte(getView().chkArticuloLista.isSelected(),
-									getView().chkArticuloEspecifico.isSelected(), getView().txtBusqueda.getText()));
+					Reportes.getReporteListaPrecios(getModel().getListProductosReporte(
+							getView().chkArticuloLista.isSelected(), getView().chkArticuloEspecifico.isSelected(),
+							getView().txtBusqueda.getText(), getView().chkBusquedaCodFamilia.isSelected(),
+							getView().chkBusquedaCodProducto.isSelected(), getView().chkBusquedaDescrip.isSelected()));
 				} else {
 					Reportes.getReporteListaPrecios(getModel().getListProductosReporte(getView().tableResultado));
 				}
@@ -303,7 +354,6 @@ public class ListaPrecioClienteController
 		CcobClie clienteCargado = getModel().getClienteCargado();
 		getModel().setClienteCargado(null);
 
-		resetearDatosDePantalla();
 		if (clienteCargado != null) {
 			getModel().setClienteCargado(clienteCargado);
 			getView().txtNroCliente.setText(String.valueOf(clienteCargado.getClieCliente()));
@@ -361,8 +411,10 @@ public class ListaPrecioClienteController
 	private void cargarProductos() {
 		resetearTabla();
 
-		for (ProductoDTO stock : getModel().getListProductos(getView().chkArticuloLista.isSelected(),
-				getView().chkArticuloEspecifico.isSelected(), getView().txtBusqueda.getText())) {
+		for (ProductoDTO stock : getModel().getListProductosReporte(getView().chkArticuloLista.isSelected(),
+				getView().chkArticuloEspecifico.isSelected(), getView().txtBusqueda.getText(),
+				getView().chkBusquedaCodFamilia.isSelected(), getView().chkBusquedaCodProducto.isSelected(),
+				getView().chkBusquedaDescrip.isSelected()).getListaProductos()) {
 
 			String fechaVigencia = "";
 			if (stock.getVigenciaDesde() != null) {

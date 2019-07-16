@@ -43,47 +43,52 @@ public class ListaBusiness {
 			if (listaClienteLista.getClivListaPrecvta() != null) {
 				lista = VentLipvDAO.findById(listaClienteLista.getClivListaPrecvta());
 				retorno.add(new ListaDTO(lista, true, false));
+
 			}
 		}
 
 		// Busco las lista que tenga en las otras tablas
-		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getByCliente(clienteCargado.getClieCliente())) {
-			lista = VentLipvDAO.findById(familia.getPricFamiliaListaPrecvta());
-			if (lista != null) {
-				if (!isInLista(retorno, lista)) {
-					retorno.add(new ListaDTO(lista, false, false));
-				}
-			}
-		}
-
-		for (PreciosEspeciales especial : PreciosEspecialesDAO.getByCliente(clienteCargado.getClieCliente())) {
-			lista = VentLipvDAO.findById(especial.getPricListaPrecvta());
-			if (lista != null) {
-				if (!isInLista(retorno, lista)) {
-					retorno.add(new ListaDTO(lista, false, false));
-				}
-			}
-		}
-
 		for (MaestroEsclavo maestro : MaestroEsclavoDAO.getListaEsclavosByEsclavo(clienteCargado)) {
 			lista = VentLipvDAO.findById(maestro.getPricMEListaPrecvta());
 			if (lista != null) {
-				if (!isInLista(retorno, lista)) {
+				ListaDTO aux = isInLista(retorno, lista);
+				if (aux == null) {
 					retorno.add(new ListaDTO(lista, false, true));
+				} else {
+					aux.setIsListaHeredada(true);
 				}
 			}
+
+			for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getByCliente(clienteCargado.getClieCliente())) {
+				lista = VentLipvDAO.findById(familia.getPricFamiliaListaPrecvta());
+				if (lista != null) {
+					if (isInLista(retorno, lista) == null) {
+						retorno.add(new ListaDTO(lista, false, false));
+					}
+				}
+			}
+
+			for (PreciosEspeciales especial : PreciosEspecialesDAO.getByCliente(clienteCargado.getClieCliente())) {
+				lista = VentLipvDAO.findById(especial.getPricListaPrecvta());
+				if (lista != null) {
+					if (isInLista(retorno, lista) == null) {
+						retorno.add(new ListaDTO(lista, false, false));
+					}
+				}
+			}
+
 		}
 
 		return retorno;
 	}
 
-	private static boolean isInLista(List<ListaDTO> lista, VentLipv registro) {
+	private static ListaDTO isInLista(List<ListaDTO> lista, VentLipv registro) {
 		for (ListaDTO aux : lista) {
 			if (aux.getVentLipv().getLipvListaPrecvta() == registro.getLipvListaPrecvta()) {
-				return true;
+				return aux;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	public static Boolean isArticuloEnLista(Integer idArticulo, Integer idLista) {

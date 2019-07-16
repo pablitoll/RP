@@ -10,6 +10,18 @@ public class HibernateGeneric {
 
 	private static final Log log = LogFactory.getLog(HibernateGeneric.class);
 
+	public static void merge(Object instance) {
+		log.debug("merging PricPreciosEspeciales instance");
+		Session session = HibernateUtil.getSession();
+		try {
+			session.merge(instance);
+			log.debug("merge successful");
+		} catch (RuntimeException re) {
+			log.error("merge failed", re);
+			throw re;
+		}
+	}
+
 	public static void persist(Object transientInstance) {
 		log.debug("persisting transientInstance instance");
 		Session session = HibernateUtil.getSession();
