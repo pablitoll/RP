@@ -54,6 +54,8 @@ public class CargaClienteEsclavoController
 				try {
 					perdioFocoCliente();
 				} catch (Exception e1) {
+					
+					
 					ManejoDeError.showError(e1, "Error al buscar cliente");
 				}
 			}

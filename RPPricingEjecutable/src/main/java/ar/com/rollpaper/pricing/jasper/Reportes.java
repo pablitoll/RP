@@ -162,7 +162,7 @@ public class Reportes {
 						stock.getArtsNombre(), stock.getArtsDescripcion().trim(), unidad.getUnimNombre(),
 						moneda.getMoneNombre(),
 						CommonPricing.formatearImporte(ventaBase.getArpvPrecioVta().doubleValue()),
-						stock.getArtsClasif1Cad1(), true);
+						stock.getArtsClasif1(), true);
 
 				listaProductos.add(producto);
 			} else {
