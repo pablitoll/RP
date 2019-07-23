@@ -421,16 +421,17 @@ public class ListaPrecioClienteController
 				fechaVigencia = String.format("%s - %s", FechaManagerUtil.Date2String(stock.getVigenciaDesde()).trim(),
 						FechaManagerUtil.Date2String(stock.getVigenciaHasta()).trim());
 			}
+			
 			String descuento = "";
-
 			if (stock.getDescuento1() != null) {
-				descuento = String.format("%s - %s", CommonUtils.round(stock.getDescuento1().doubleValue(), 3),
-						CommonUtils.round(stock.getDescuento2().doubleValue(), 3));
+				descuento = String.valueOf(CommonUtils.round(stock.getDescuento1().doubleValue(), 3)) + "%";
+				if (stock.getDescuento2() != null) {
+					descuento += " - " + String.valueOf(CommonUtils.round(stock.getDescuento2().doubleValue(), 3)) + "%";
+				}
 			}
 
 			String comision = stock.getComision() != null
-					? Common.double2String(CommonUtils.round(stock.getComision().doubleValue(), 3))
-					: "";
+					? Common.double2String(CommonUtils.round(stock.getComision().doubleValue(), 3))	: "";
 
 			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(),
 					stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
