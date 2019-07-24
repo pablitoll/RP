@@ -320,7 +320,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 				if (row > -1) {
 					boolean estaVigente = false;
 
-					Object objEstaVigente = getValueAt(row, COL_ESTA_VIGENTE_FAMILIA);
+					Object objEstaVigente = getValueAt(row, convertColumnIndexToView(COL_ESTA_VIGENTE_FAMILIA));
 					if (objEstaVigente != null) {
 						try {
 							estaVigente = CommonUtils.string2Boolean(String.valueOf(objEstaVigente));
@@ -387,7 +387,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 					boolean estaEnLista = false;
 					boolean estaVigente = false;
 
-					Object objEstaVigente = getValueAt(row, COL_ESTA_VIGENTE_ESPECIFICO);
+					Object objEstaVigente = getValueAt(row, convertColumnIndexToView(COL_ESTA_VIGENTE_ESPECIFICO));
 					if (objEstaVigente != null) {
 						try {
 							estaVigente = CommonUtils.string2Boolean(String.valueOf(objEstaVigente));
@@ -396,7 +396,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 						}
 					}
 
-					Object obkEstaEnLista = getValueAt(row, COL_ESTA_EN_LISTA_ESPECIFICO);
+					Object obkEstaEnLista = getValueAt(row, convertColumnIndexToView(COL_ESTA_EN_LISTA_ESPECIFICO));
 					if (obkEstaEnLista != null) {
 						try {
 							estaEnLista = CommonUtils.string2Boolean(String.valueOf(obkEstaEnLista));
@@ -423,10 +423,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		tableDescEspecifico.setEditable(false);
 		tableDescEspecifico.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-		// tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMaxWidth(0);
-		// tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setMinWidth(0);
-		// tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO).setPreferredWidth(0);
-		//
 		tableDescEspecifico.getColumnModel()
 				.removeColumn(tableDescEspecifico.getColumnModel().getColumn(COL_REGISTRO_ESPECIFICO));
 
