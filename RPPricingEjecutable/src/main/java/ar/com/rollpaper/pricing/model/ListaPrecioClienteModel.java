@@ -6,6 +6,7 @@ import java.util.List;
 import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
+import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rollpaper.pricing.business.MaestroEsclavoBusinnes;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
@@ -71,22 +72,22 @@ public class ListaPrecioClienteModel extends BaseModel {
 			if ((listaProductoAux.size() > 0) && (listaProductoAux.get(0).getDescuento1() == null)) {
 				// Cargo lo extra
 				// Me traigo todos los precios espciales de un saque
-				int idPadre =getClienteCargado().getClieCliente(); 
-				
-				if(getListaCargada().isListaHeredada()) {
+				int idPadre = getClienteCargado().getClieCliente();
+
+				if (getListaCargada().isListaHeredada()) {
 					idPadre = MaestroEsclavoBusinnes.getPadreId(getClienteCargado(), getListaCargada());
 				}
-				
-				List<PreciosEspeciales> listPrecioEspecial = PreciosEspecialesDAO.getListaPrecioEspeciaByID(
-							idPadre, getListaCargada().getVentLipv().getLipvListaPrecvta());
-				
-				List<DescuentoXFamilias> ListaDescuentoxFamilia = DescuentoXFamiliasDAO.getListaDescuentoByID(getClienteCargado().getClieCliente(),  getListaCargada().getVentLipv().getLipvListaPrecvta());
-								
+
+				List<PreciosEspeciales> listPrecioEspecial = PreciosEspecialesDAO.getListaPrecioEspeciaByID(idPadre,
+						getListaCargada().getVentLipv().getLipvListaPrecvta());
+
+				List<DescuentoXFamilias> ListaDescuentoxFamilia = DescuentoXFamiliasDAO.getListaDescuentoByID(
+						getClienteCargado().getClieCliente(), getListaCargada().getVentLipv().getLipvListaPrecvta());
 
 				for (ProductoDTO prod : listaProductoAux) {
 					PreciosEspeciales precioEspecial = getPrecioEspecia(prod, listPrecioEspecial);
 
-					//Primero me fijo si es un producto especial
+					// Primero me fijo si es un producto especial
 					if (precioEspecial != null) {
 						prod.cargarExtras(precioEspecial.getPricFechaDesde(), precioEspecial.getPricFechaHasta(),
 								precioEspecial.getPricComision(), precioEspecial.getPricReferencia(),
@@ -94,11 +95,13 @@ public class ListaPrecioClienteModel extends BaseModel {
 					} else {
 						// Segundo me fijo si es un producto dentro de una famialia con descunto
 						DescuentoXFamilias descuentoxFamilia = getDescuentoFamilia(prod, ListaDescuentoxFamilia);
-						
-						if(descuentoxFamilia != null) {
-							prod.cargarExtras(descuentoxFamilia.getPricFamiliaFechaDesde(), descuentoxFamilia.getPricFamiliaFechaHasta(),
+
+						if (descuentoxFamilia != null) {
+							prod.cargarExtras(descuentoxFamilia.getPricFamiliaFechaDesde(),
+									descuentoxFamilia.getPricFamiliaFechaHasta(),
 									descuentoxFamilia.getPricFamiliaComision(), descuentoxFamilia.getPricReferencia(),
-									descuentoxFamilia.getPricFamiliaDescuento1(), descuentoxFamilia.getPricFamiliaDescuento2());							
+									descuentoxFamilia.getPricFamiliaDescuento1(),
+									descuentoxFamilia.getPricFamiliaDescuento2());
 						}
 						// Ultimo si no es nada es porque es de una lista heredada
 					}
@@ -112,7 +115,8 @@ public class ListaPrecioClienteModel extends BaseModel {
 
 	private DescuentoXFamilias getDescuentoFamilia(ProductoDTO prod, List<DescuentoXFamilias> listaDescuentoxFamilia) {
 		for (DescuentoXFamilias familia : listaDescuentoxFamilia) {
-			if (prod.getFamiliaCod().equalsIgnoreCase(familia.getPricCa01Clasif1())) {
+			if (prod.getFamiliaCod().equalsIgnoreCase(familia.getPricCa01Clasif1()) && CommonPricing
+					.estaVigente(familia.getPricFamiliaFechaDesde(), familia.getPricFamiliaFechaHasta())) {
 				return familia;
 			}
 		}
@@ -121,7 +125,8 @@ public class ListaPrecioClienteModel extends BaseModel {
 
 	private PreciosEspeciales getPrecioEspecia(ProductoDTO prod, List<PreciosEspeciales> listPrecioEspecial) {
 		for (PreciosEspeciales precio : listPrecioEspecial) {
-			if (prod.getArtsArticulo() == precio.getPricArticulo()) {
+			if ((prod.getArtsArticulo() == precio.getPricArticulo())
+					&& CommonPricing.estaVigente(precio.getPricFechaDesde(), precio.getPricFechaHasta())) {
 				return precio;
 			}
 		}
@@ -153,7 +158,8 @@ public class ListaPrecioClienteModel extends BaseModel {
 				String[] vecTextoBusqueda = textoBusqueda.trim().split(" ");
 				if ((busquedaDescripcion && contieneTexto(prod.getDescArticulo().toLowerCase(), vecTextoBusqueda))
 						|| (busquedaCodProducto && contieneTexto(prod.getCodArticulo().toLowerCase(), vecTextoBusqueda))
-						|| (busquedaCodFamilia && contieneTexto(prod.getFamiliaCod().toLowerCase(), vecTextoBusqueda))) {
+						|| (busquedaCodFamilia
+								&& contieneTexto(prod.getFamiliaCod().toLowerCase(), vecTextoBusqueda))) {
 					prodCandidato = prod;
 				} else {
 					prodCandidato = null;

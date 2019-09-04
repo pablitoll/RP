@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
@@ -166,42 +167,71 @@ public class BusquedaVencidoController
 	}
 
 	private void busquedaProductos(String idCliente, Date fechaVencidosAl, Date fechaVencidosDesde, String busqueda) {
-		getView().tableDescFamilia.setRowSorter(null);
-		getView().tableDescEspecifico.setRowSorter(null);
+		PantPrincipalController.setCursorOcupado();
+		try {
 
-		getView().tableDescFamilia.clear();
-		getView().tableDescEspecifico.clear();
+			getView().tableDescFamilia.setRowSorter(null);
+			getView().tableDescEspecifico.setRowSorter(null);
 
-		Integer clienteID = null;
-		if ((idCliente != null) && !idCliente.equals("")) {
-			clienteID = Integer.valueOf(idCliente);
+			getView().tableDescFamilia.clear();
+			getView().tableDescEspecifico.clear();
+
+			Integer clienteID = null;
+			if ((idCliente != null) && !idCliente.equals("")) {
+				clienteID = Integer.valueOf(idCliente);
+			}
+
+			if (busqueda.equals("")) {
+				busqueda = null;
+			}
+			
+			
+			
+			List<CcobClie> listaAuxCliente = new ArrayList<CcobClie>();
+
+			for (DescuentoXFamilias familia : FamiliaBusiness.getListaDescuentoByFiltros(clienteID, fechaVencidosAl,
+					fechaVencidosDesde, busqueda)) {
+				
+				CcobClie cliente = buscarCliente(listaAuxCliente, familia.getPricFamiliaCliente());
+				
+				agregarRegistroATablaFamilia(getView().tableDescFamilia, familia, cliente);
+			}
+
+			for (PreciosEspecialesExDTO desc : PreciosEspecialesBusiness.getListaPrecioEspeciaByFiltros(clienteID,
+					fechaVencidosAl, fechaVencidosDesde, busqueda)) {
+				
+				CcobClie cliente = buscarCliente(listaAuxCliente, desc.getPrecioEspecial().getPricCliente());
+
+				SistUnim unidad = SistUnimDAO.findById(desc.getStockArts().getArtsUnimedStock());
+
+				agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc.getPrecioEspecial(),
+						desc.getStockArts().getArtsArticuloEmp(), desc.getStockArts().getArtsNombre(),
+						desc.getStockArts().getArtsDescripcion(), unidad.getUnimNombre(), cliente);
+			}
+
+			setSorter(getView().tableDescFamilia);
+			setSorter(getView().tableDescEspecifico);
+
+			sorterTablaDesEspecifico.sort();
+			sorterTablaDesFamilia.sort();
+		} finally {
+			PantPrincipalController.setRestoreCursor();
 		}
 
-		if (busqueda.equals("")) {
-			busqueda = null;
+	}
+
+	private CcobClie buscarCliente(List<CcobClie> listaAuxCliente, int idCliente) {
+		for (CcobClie cliente : listaAuxCliente) {
+			if (cliente.getClieCliente() == idCliente) {
+				return cliente;
+			}
 		}
 
-		for (DescuentoXFamilias familia : FamiliaBusiness.getListaDescuentoByFiltros(clienteID, fechaVencidosAl,
-				fechaVencidosDesde, busqueda)) {
-			agregarRegistroATablaFamilia(getView().tableDescFamilia, familia);
-		}
+		CcobClie nuevoCliente = CcobClieDAO.findById(idCliente);
 
-		for (PreciosEspecialesExDTO desc : PreciosEspecialesBusiness.getListaPrecioEspeciaByFiltros(clienteID,
-				fechaVencidosAl, fechaVencidosDesde, busqueda)) {
+		listaAuxCliente.add(nuevoCliente);
 
-			SistUnim unidad = SistUnimDAO.findById(desc.getStockArts().getArtsUnimedStock());
-
-			agregarRegistroATablaArticulo(getView().tableDescEspecifico, desc.getPrecioEspecial(),
-					desc.getStockArts().getArtsArticuloEmp(), desc.getStockArts().getArtsNombre(),
-					desc.getStockArts().getArtsDescripcion(), unidad.getUnimNombre());
-		}
-
-		setSorter(getView().tableDescFamilia);
-		setSorter(getView().tableDescEspecifico);
-
-		sorterTablaDesEspecifico.sort();
-		sorterTablaDesFamilia.sort();
-
+		return nuevoCliente;
 	}
 
 	private void limpiarBusqueda() {
@@ -337,7 +367,7 @@ public class BusquedaVencidoController
 	}
 
 	private void agregarRegistroATablaArticulo(RPTable tabla, PreciosEspeciales registro, String id_Articulo,
-			String nombreItem, String descItem, String unidadItem) {
+			String nombreItem, String descItem, String unidadItem, CcobClie cliente) {
 
 		Color[] colorFondo = new Color[tabla.getModel().getColumnCount()];
 		Color[] colorLetra = new Color[tabla.getModel().getColumnCount()];
@@ -347,7 +377,8 @@ public class BusquedaVencidoController
 
 		Boolean estaVigente = estaVigente(registro.getPricFechaDesde(), registro.getPricFechaHasta());
 
-		tabla.addRowColor(new Object[] { registro.getPricCliente(), id_Articulo, nombreItem, descItem, unidadItem,
+		tabla.addRowColor(new Object[] { registro.getPricCliente(), cliente.getClieNombre(), id_Articulo, nombreItem,
+				descItem, unidadItem,
 				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue())
 						: "",
 				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue())
@@ -377,11 +408,11 @@ public class BusquedaVencidoController
 		return vector;
 	}
 
-	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro) {
+	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro, CcobClie cliente) {
 		Boolean estaVigente = estaVigente(registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta());
 
-		tabla.addRow(new Object[] { registro.getPricFamiliaCliente(), registro.getPricCa01Clasif1(),
-				registro.getNombreFamilia(),
+		tabla.addRow(new Object[] { registro.getPricFamiliaCliente(), cliente.getClieNombre(),
+				registro.getPricCa01Clasif1(), registro.getNombreFamilia(),
 				registro.getPricFamiliaDescuento1() != null
 						? Common.double2String(registro.getPricFamiliaDescuento1().doubleValue())
 						: "",

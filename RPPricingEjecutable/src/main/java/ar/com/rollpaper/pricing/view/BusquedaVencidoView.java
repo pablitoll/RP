@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,6 +21,7 @@ import com.alee.laf.tabbedpane.WebTabbedPane;
 import com.alee.laf.text.WebFormattedTextField;
 
 import ar.com.rollpaper.pricing.business.ConstantesRP;
+import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
@@ -33,32 +35,34 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 	private static final long serialVersionUID = 1L;
 
 	public static final int COL_COD_CLIENTE_FAMILIA = 0;
-	public static final int COL_ID_FAMILIA = 1;
-	public static final int COL_NOMBRE_FAMILIA = 2;
-	public static final int COL_1DESC_FAMILIA = 3;
-	public static final int COL_2DESC_FAMILIA = 4;
-	public static final int COL_DESDE_FAMILIA = 5;
-	public static final int COL_HASTA_FAMILIA = 6;
-	public static final int COL_COMSISION_FAMILIA = 7;
-	public static final int COL_REFERENCIA_FAMILIA = 8;
-	public static final int COL_ESTA_VIGENTE_FAMILIA = 9;
-	public static final int COL_REGISTRO_FAMILIA = 10;
+	public static final int COL_NOMBRE_CLIENTE_FAMILIA = 1;
+	public static final int COL_ID_FAMILIA = 2;
+	public static final int COL_NOMBRE_FAMILIA = 3;
+	public static final int COL_1DESC_FAMILIA = 4;
+	public static final int COL_2DESC_FAMILIA = 5;
+	public static final int COL_DESDE_FAMILIA = 6;
+	public static final int COL_HASTA_FAMILIA = 7;
+	public static final int COL_COMSISION_FAMILIA = 8;
+	public static final int COL_REFERENCIA_FAMILIA = 9;
+	public static final int COL_ESTA_VIGENTE_FAMILIA = 10;
+	public static final int COL_REGISTRO_FAMILIA = 11;
 
 	public static final int COL_COD_CLIENTE_ESPECIFICO = 0;
-	public static final int COL_ID_ESPECIFICO = 1;
-	public static final int COL_NOMBRE_ESPECIFICO = 2;
-	public static final int COL_DESC_ESPECIFICO = 3;
-	public static final int COL_UNIDAD_ESPECIFICO = 4;
-	public static final int COL_1DESC_ESPECIFICO = 5;
-	public static final int COL_2DESC_ESPECIFICO = 6;
-	public static final int COL_MONEDA_ESPECIFICO = 7;
-	public static final int COL_PRECIO_ESPECIFICO = 8;
-	public static final int COL_DESDE_ESPECIFICO = 9;
-	public static final int COL_HASTA_ESPECIFICO = 10;
-	public static final int COL_COMISION_ESPECIFICO = 11;
-	public static final int COL_REFERENCIA_ESPECIFICO = 12;
-	public static final int COL_ESTA_VIGENTE_ESPECIFICO = 13;
-	public static final int COL_REGISTRO_ESPECIFICO = 14;
+	public static final int COL_NOMBRE_CLIENTE_ESPECIFICO = 1;
+	public static final int COL_ID_ESPECIFICO = 2;
+	public static final int COL_NOMBRE_ESPECIFICO = 3;
+	public static final int COL_DESC_ESPECIFICO = 4;
+	public static final int COL_UNIDAD_ESPECIFICO = 5;
+	public static final int COL_1DESC_ESPECIFICO = 6;
+	public static final int COL_2DESC_ESPECIFICO = 7;
+	public static final int COL_MONEDA_ESPECIFICO = 8;
+	public static final int COL_PRECIO_ESPECIFICO = 9;
+	public static final int COL_DESDE_ESPECIFICO = 10;
+	public static final int COL_HASTA_ESPECIFICO = 11;
+	public static final int COL_COMISION_ESPECIFICO = 12;
+	public static final int COL_REFERENCIA_ESPECIFICO = 13;
+	public static final int COL_ESTA_VIGENTE_ESPECIFICO = 14;
+	public static final int COL_REGISTRO_ESPECIFICO = 15;
 
 	public WebFormattedTextField txtNroCliente;
 	public RPTable tableDescEspecifico;
@@ -180,6 +184,7 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 
 		txtVencidosAl = new WebDateField();
 		txtVencidosAl.setFont(Common.getStandarFont());
+		txtVencidosAl.setDateFormat(new SimpleDateFormat(FechaManagerUtil.FORMATO_FECHA));
 		GridBagConstraints gbc_webFormattedTextField = new GridBagConstraints();
 		gbc_webFormattedTextField.insets = new Insets(0, 0, 0, 5);
 		gbc_webFormattedTextField.fill = GridBagConstraints.HORIZONTAL;
@@ -197,6 +202,7 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		panelSuperior.add(label_1, gbc_label_1);
 
 		txtVencidosDesde = new WebDateField();
+		txtVencidosDesde.setDateFormat(new SimpleDateFormat(FechaManagerUtil.FORMATO_FECHA));
 		txtVencidosDesde.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_webFormattedTextField_1 = new GridBagConstraints();
 		gbc_webFormattedTextField_1.insets = new Insets(0, 0, 0, 5);
@@ -236,7 +242,7 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		panelCentral.add(tabPanel);
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 
-		String[] headerDescFamilia = { "Cod. Cliente", "Codigo", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde",
+		String[] headerDescFamilia = { "Cod. Cliente", "Nombre Cliente", "Cod. Familia", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde",
 				"Hasta", "% Comision", "Referencia", "Esta Vigente", "" };
 		String[][] dataDesFamilia = { {} };
 
@@ -265,7 +271,7 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
 
-		String[] headerDescEspecifico = { "Cod. Cliente", "Articulo", "Nombre", "Descripcion", "Unidad", "% Dto. 1",
+		String[] headerDescEspecifico = { "Cod. Cliente", "Nombre Cliente", "Articulo", "Nombre Articulo", "Descripcion", "Unidad", "% Dto. 1",
 				"% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "% Comision", "Referencia", "Esta Vigente", "" };
 		String[][] dataDesEspecifico = { {} };
 

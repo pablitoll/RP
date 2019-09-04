@@ -802,7 +802,7 @@ public class CargaPrecioController
 				descMoneda = SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre();
 			}
 
-			Boolean estaVigente = estaVigente(registroPedido.getPricFechaDesde(), registroPedido.getPricFechaHasta());
+			Boolean estaVigente = CommonPricing.estaVigente(registroPedido.getPricFechaDesde(), registroPedido.getPricFechaHasta());
 
 			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null
 					? Common.double2String(registroPedido.getPricDescuento1().doubleValue())
@@ -846,7 +846,7 @@ public class CargaPrecioController
 			tableActivo.setValueAt(registroFamilia.getPricReferencia(), row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_REFERENCIA_FAMILIA));
 
-			Boolean estaVigente = estaVigente(registroFamilia.getPricFamiliaFechaDesde(),
+			Boolean estaVigente = CommonPricing.estaVigente(registroFamilia.getPricFamiliaFechaDesde(),
 					registroFamilia.getPricFamiliaFechaHasta());
 
 			tableActivo.setValueAt((estaVigente ? "SI" : "NO"), row,
@@ -857,7 +857,7 @@ public class CargaPrecioController
 	private void agregarRegistroATablaArticulo(RPTable tabla, PreciosEspeciales registro, String id_Articulo,
 			String nombreItem, String descItem, String unidadItem, Boolean estaEnLista) {
 
-		Boolean estaVigente = estaVigente(registro.getPricFechaDesde(), registro.getPricFechaHasta());
+		Boolean estaVigente = CommonPricing.estaVigente(registro.getPricFechaDesde(), registro.getPricFechaHasta());
 		tabla.addRow(new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
 				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue())
 						: "",
@@ -874,15 +874,8 @@ public class CargaPrecioController
 		tabla.adjustColumns();
 	}
 
-	private Boolean estaVigente(Date pricFechaDesde, Date pricFechaHasta) {
-		return (FechaManagerUtil.getDateDiff(pricFechaDesde, FechaManagerUtil.getDateTimeFromPC(),
-				TimeUnit.MINUTES) <= 0)
-				&& (FechaManagerUtil.getDateDiff(pricFechaHasta, FechaManagerUtil.getDateTimeFromPC(),
-						TimeUnit.MINUTES) >= 0);
-	}
-
 	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro) {
-		Boolean estaVigente = estaVigente(registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta());
+		Boolean estaVigente = CommonPricing.estaVigente(registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta());
 
 		tabla.addRow(new Object[] { registro.getPricCa01Clasif1(), registro.getNombreFamilia(),
 				registro.getPricFamiliaDescuento1() != null
