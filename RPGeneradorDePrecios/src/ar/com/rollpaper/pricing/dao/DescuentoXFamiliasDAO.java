@@ -114,13 +114,18 @@ public class DescuentoXFamiliasDAO {
 		return agregarDescripcion(listasVigentes);
 	}
 
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static List<DescuentoXFamilias> getAll() {
 		Session session = HibernateUtil.getSession();
 
-		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder()
-				.createQuery(DescuentoXFamilias.class);
-		List<DescuentoXFamilias> descuentos = session.createQuery(criteriaQuery).getResultList();
+//		CriteriaQuery<DescuentoXFamilias> criteriaQuery = session.getCriteriaBuilder()
+//				.createQuery(DescuentoXFamilias.class);
+//		List<DescuentoXFamilias> descuentos = session.createQuery(criteriaQuery).getResultList();
+		
+		Criteria criteria = session.createCriteria(DescuentoXFamilias.class);
+		List<DescuentoXFamilias> descuentos = criteria.list();
 
+		
 		return agregarDescripcion(descuentos);
 	}
 

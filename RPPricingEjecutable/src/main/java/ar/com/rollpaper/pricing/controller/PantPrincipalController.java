@@ -7,7 +7,6 @@ import com.alee.laf.optionpane.WebOptionPane;
 
 import ar.com.rollpaper.pricing.business.ArchivoDePropiedadesBusiness;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
-import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.business.LogBusiness;
 import ar.com.rollpaper.pricing.data.HibernateUtil;
 import ar.com.rollpaper.pricing.model.BusquedaVencidoModel;
@@ -24,6 +23,8 @@ import ar.com.rollpaper.pricing.view.CargaPrecioView;
 import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
 import ar.com.rollpaper.pricing.view.ListaPrecioXListaView;
 import ar.com.rollpaper.pricing.view.PantPrincipalView;
+import ar.com.rollpaper.pricing.workers.BarraDeProgreso;
+import ar.com.rollpaper.pricing.workers.WorkerProcesar;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.pantalla.BasePantallaPrincipal;
 import ar.com.rp.ui.pantalla.VentanaCalculadora;
@@ -125,7 +126,7 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		}
 
 		if (accion.equals(ConstantesRP.Acciones.VERSION.toString())) {
-			Dialog.showMessageDialog(String.format(VERSION_INFO, "1.0.9", "04/09/2019"), "Version del Sistema",
+			Dialog.showMessageDialog(String.format(VERSION_INFO, "1.0.10", "15/10/2019"), "Version del Sistema",
 					WebOptionPane.INFORMATION_MESSAGE);
 		}
 
@@ -229,14 +230,18 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 					"Confirmacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 			if (confirm == JOptionPane.YES_OPTION) {
-				PantPrincipalController.setCursorOcupado();
+//				PantPrincipalController.setCursorOcupado();
 				try {
-					GeneradorDePrecios.generarPrecios();
+//					GeneradorDePrecios.generarPrecios();
+					BarraDeProgreso pantalla = new BarraDeProgreso("");
+					WorkerProcesar wp = new WorkerProcesar(pantalla);
+					pantalla.setWorker(wp);
+					pantalla.inicializar();
 				} finally {
-					PantPrincipalController.setRestoreCursor();
+	//				PantPrincipalController.setRestoreCursor();
 				}
 
-				Dialog.showMessageDialog("Los precios fueron generados exitosamente.");
+		//		Dialog.showMessageDialog("Los precios fueron generados exitosamente.");
 			}
 		} catch (Exception e) {
 			ManejoDeError.showError(e, "Error al Generar Precios");

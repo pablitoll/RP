@@ -54,7 +54,7 @@ public class GeneradorDePrecios {
 
 	}
 
-	private static Map<String, ClienteLista> getAllClienteLista() {
+	public static Map<String, ClienteLista> getAllClienteLista() {
 
 		HashMap<String, ClienteLista> listaClienteLista = new HashMap<>();
 		List<PreciosEspeciales> preciosEspeciales = PreciosEspecialesDAO.getAll();

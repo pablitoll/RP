@@ -178,13 +178,19 @@ public class PreciosEspecialesDAO {
 		return ListaPreciosEspecialesNoEnLista;
 	}
 
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public static List<PreciosEspeciales> getAll() {
 		Session session = HibernateUtil.getSession();
-		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder()
-				.createQuery(PreciosEspeciales.class);
-		List<PreciosEspeciales> listaPrecios = session.createQuery(criteriaQuery).getResultList();// TODO Auto-generated
-																									// method stub
+
+		Criteria criteria = session.createCriteria(PreciosEspeciales.class);
+		List<PreciosEspeciales> listaPrecios = criteria.list();
 		return listaPrecios;
+
+		
+//		CriteriaQuery<PreciosEspeciales> criteriaQuery = session.getCriteriaBuilder()
+//				.createQuery(PreciosEspeciales.class);
+//		List<PreciosEspeciales> listaPrecios = session.createQuery(criteriaQuery).getResultList();// TODO Auto-generated
+																									// method stub
 	}
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
