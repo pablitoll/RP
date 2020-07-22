@@ -1,6 +1,8 @@
 package ar.com.rollpaper.pricing.business;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,16 +45,25 @@ public class GeneradorDePrecios {
 	 * 
 	 **/
 
-	public static void generarPrecios() {
-
-		// busco todas las combinaciones cliente - lista de la tabla precios especiales
-		Map<String,ClienteLista> listaClienteLista = getAllClienteLista();
-
-		for(Map.Entry<String,ClienteLista> entry : listaClienteLista.entrySet()) {
-			impactarPrecios(entry.getValue().getCliente(), entry.getValue().getLista());}
-		
-
-	}
+	// public static void generarPrecios() {
+	//
+	// // busco todas las combinaciones cliente - lista de la tabla precios
+	// especiales
+	// Map<String, ClienteLista> listaClienteLista = getAllClienteLista();
+	//
+	// for (Map.Entry<String, ClienteLista> entry : listaClienteLista.entrySet()) {
+	// ClienteFactor clienteFactor =
+	// ClienteFactorDAO.findById(entry.getValue().getCliente().getClieCliente());
+	//
+	// BigDecimal factor = null;
+	// if ((clienteFactor != null) && (clienteFactor.getPricFactor() != null)) {
+	// factor = new BigDecimal(clienteFactor.getPricFactor());
+	// }
+	// impactarPrecios(entry.getValue().getCliente(), entry.getValue().getLista(),
+	// factor);
+	// }
+	//
+	// }
 
 	public static Map<String, ClienteLista> getAllClienteLista() {
 
@@ -318,28 +329,35 @@ public class GeneradorDePrecios {
 	 * Busca todas las listas de Precios Activas y recopila en el objeto lista todos
 	 * los datos necesarios para el calculo
 	 * 
+	 * @param listaEspecial
+	 * 
 	 * @param sin
 	 *            parametros de entrada
 	 * @return an list of ListaPrecios
 	 */
-//	private static List<VentLipv> BuscarListasPrecios() {
-//
-//		return VentLipvDAO.getAllLists();
-//	}
+	// private static List<VentLipv> BuscarListasPrecios() {
+	//
+	// return VentLipvDAO.getAllLists();
+	// }
 
-	public static void impactarPrecios(CcobClie clienteCargado, VentLipv listaCargada) {
-		generarListaDePreciosResponse response = GeneradorDePrecios.generarListaPreciosPorClienteLista(clienteCargado,
-				listaCargada);
+	public static void impactarPrecios(CcobClie clienteCargado, VentLipv listaCargada, BigDecimal factor,
+			int listaEspecial) {
+		generarListaDePreciosResponse response = generarListaPreciosPorClienteLista(clienteCargado, listaCargada);
 
 		CcobClie c = clienteCargado;
+		VentLipv listaDuplicada = VentLipvDAO.findById(listaEspecial);
+		MathContext mc = new MathContext(4, RoundingMode.HALF_DOWN);
 
 		// borro los registros de la ventarpc
 		eliminarListaCustomizada(c, listaCargada);
+		eliminarListaCustomizada(c, listaDuplicada);
 
 		List<VentArpc> listaAInsertar = new ArrayList<>();
+
 		for (Entry<VentArpv, BigDecimal> entry : response.getListaDePrecios().entrySet()) {
 			VentArpv articulo = entry.getKey();
 			BigDecimal precio = entry.getValue();
+
 			// creo el registro a insertar
 			VentArpcId id = new VentArpcId(articulo.getId().getArpvArticulo(), articulo.getId().getArpvListaPrecvta(),
 					c.getClieCliente());
@@ -347,21 +365,50 @@ public class GeneradorDePrecios {
 					new Date());
 			listaAInsertar.add(registro);
 
+			// Solo se aplica sobre la lista 1
+			if ((factor != null) && (articulo.getId().getArpvListaPrecvta() == 1)) {
+
+				VentArpcId idDuplicado = new VentArpcId(articulo.getId().getArpvArticulo(), listaEspecial,
+						c.getClieCliente());
+
+				VentArpc registroDuplicado = new VentArpc(idDuplicado, c, precio.multiply(factor, mc),
+						articulo.getSistMoneByArpvMoneda().getMoneMoneda(), precio.multiply(factor, mc), new Date());
+
+				listaAInsertar.add(registroDuplicado);
+			}
 		}
 
 		// genero los registros para las familias
 		for (MaestroEsclavo slave : response.getListaDeEsclavos()) {
-			// CcobClie slaveClient = CcobClieDAO.findById(id)
+
 			eliminarListaCustomizada(CcobClieDAO.findById(slave.getPricEsclavoCliente()), listaCargada);
+			eliminarListaCustomizada(CcobClieDAO.findById(slave.getPricEsclavoCliente()), listaDuplicada);
+
 			for (Entry<VentArpv, BigDecimal> entry : response.getListaDePrecios().entrySet()) {
 				VentArpv articulo = entry.getKey();
 				BigDecimal precio = entry.getValue();
+
 				// creo el registro a insertar
 				VentArpcId id = new VentArpcId(articulo.getId().getArpvArticulo(),
 						articulo.getId().getArpvListaPrecvta(), slave.getPricEsclavoCliente());
+
 				VentArpc registro = new VentArpc(id, c, precio, articulo.getSistMoneByArpvMoneda().getMoneMoneda(),
 						precio, new Date());
+
 				listaAInsertar.add(registro);
+
+				// Solo se aplica sobre la lista 1
+				if ((factor != null) && (articulo.getId().getArpvListaPrecvta() == 1)) {
+
+					VentArpcId idDuplicado = new VentArpcId(articulo.getId().getArpvArticulo(), listaEspecial,
+							slave.getPricEsclavoCliente());
+
+					VentArpc registroDuplicado = new VentArpc(idDuplicado, c, precio.multiply(factor, mc),
+							articulo.getSistMoneByArpvMoneda().getMoneMoneda(), precio.multiply(factor, mc),
+							new Date());
+
+					listaAInsertar.add(registroDuplicado);
+				}
 
 			}
 		}

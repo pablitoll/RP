@@ -52,6 +52,8 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 	public WebFormattedTextField txtNroCliente;
 	private JLabel lblTitle;
 	public JButtonRP btnCancelar;
+	private JLabel label;
+	public JLabel lblMultiplicador;
 
 	public CargaClienteEsclavoView() throws Exception {
 		super();
@@ -74,7 +76,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		lblTitle.setFont(Common.getStandarFontBold(18));
 		GridBagConstraints gbc_lblTitle = new GridBagConstraints();
 		gbc_lblTitle.gridwidth = 6;
-		gbc_lblTitle.insets = new Insets(0, 0, 5, 5);
+		gbc_lblTitle.insets = new Insets(0, 0, 5, 0);
 		gbc_lblTitle.gridx = 0;
 		gbc_lblTitle.gridy = 0;
 		pnlSuperior.add(lblTitle, gbc_lblTitle);
@@ -158,7 +160,7 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNroListaShow.gridy = 2;
 		pnlSuperior.add(lblNroLista, gbc_lblNroListaShow);
 
-		lblNewLabel_2 = new JLabel("Nombre Lista");
+		lblNewLabel_2 = new JLabel("Nombre Lista:");
 		lblNewLabel_2.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.anchor = GridBagConstraints.EAST;
@@ -175,6 +177,23 @@ public class CargaClienteEsclavoView extends BaseViewMVCExtendida {
 		gbc_lblNombreLista.gridx = 3;
 		gbc_lblNombreLista.gridy = 2;
 		pnlSuperior.add(lblNombreLista, gbc_lblNombreLista);
+		
+		label = new JLabel("Multiplicador:");
+		label.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.anchor = GridBagConstraints.EAST;
+		gbc_label.insets = new Insets(0, 0, 0, 5);
+		gbc_label.gridx = 4;
+		gbc_label.gridy = 2;
+		pnlSuperior.add(label, gbc_label);
+		
+		lblMultiplicador = new JLabel("New label");
+		lblMultiplicador.setFont(Common.getStandarFontBold());
+		GridBagConstraints gbc_label_1 = new GridBagConstraints();
+		gbc_label_1.anchor = GridBagConstraints.WEST;
+		gbc_label_1.gridx = 5;
+		gbc_label_1.gridy = 2;
+		pnlSuperior.add(lblMultiplicador, gbc_label_1);
 
 		String[] header = { "Nro Cliente", "Nombre del Cliente", "Nombre de Fantasia", "" };
 		String[][] data = { {} };

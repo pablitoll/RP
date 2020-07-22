@@ -1,11 +1,14 @@
 
 package ar.com.rollpaper.pricing.controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -29,6 +32,7 @@ import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.beans.SistUnim;
 import ar.com.rollpaper.pricing.beans.StocArts;
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.ArchivoDePropiedadesBusiness;
 import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
@@ -111,8 +115,48 @@ public class CargaPrecioController
 			}
 		});
 
+		view.txtMultiplicador.addFocusListener(new FocusAdapter() {
+
+			public void focusLost(FocusEvent evento) {
+				try {
+					if (getView().txtMultiplicador.isEnabled()) {
+						Double valor = Common.String2Double(getView().txtMultiplicador.getText());
+						if ((valor <= 0.0) || (valor >= 1)) {
+							Dialog.showMessageDialog("El factor de multiplicación debe ser superior a 0 e inferior a 1",
+									"Valor Invalido", WebOptionPane.ERROR_MESSAGE);
+							getView().txtMultiplicador.requestFocus();
+						} else {
+							getModel().setFactor(valor);
+							agregoEditItem();
+						}
+					}
+				} catch (Exception e1) {
+					ManejoDeError.showError(e1, "Error al manejar multiplicador");
+				}
+			}
+		});
+
+		view.chkMultiplicador.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (getModel().isClienteCargado()) {
+					getView().txtMultiplicador.setEnabled(getView().chkMultiplicador.isSelected());
+
+					if (!getView().txtMultiplicador.isEnabled()) {
+						getView().txtMultiplicador.setNumero(0.0);
+						getModel().setFactor(null);
+						agregoEditItem();
+					} else {
+						getView().txtMultiplicador.requestFocus();
+					}
+				}
+			}
+		});
+
 		TableAnchoManager.registrarEvento(view.tableDescFamilia, "tablaCargaPrecioFamilia");
 		TableAnchoManager.registrarEvento(view.tableDescEspecifico, "tablaCargaPrecioEspecifico");
+
 	}
 
 	protected void perdioFocoNroLista() {
@@ -167,11 +211,24 @@ public class CargaPrecioController
 				cliente = CcobClieDAO.findById(Integer.valueOf(id));
 
 				if (cliente != null) {
+					getModel().setClienteCargado(cliente);
+
 					getView().lblNombreCliente.setText(cliente.getClieNombre());
 					getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-					getModel().setClienteCargado(cliente);
+					getView().chkSoloVigentes.setEnabled(true);
+
+					getView().chkMultiplicador.setEnabled(true);
+					getView().chkMultiplicador.setSelected(getModel().getFactor() != null);
+					getView().txtMultiplicador.setEnabled(getView().chkMultiplicador.isSelected());
+					if (getModel().getFactor() != null) {
+						getView().txtMultiplicador.setText(CommonPricing.formatearImporte(getModel().getFactor()));
+					}
+
 					cargarLista();
 					setModoPantalla();
+
+					getModel().setIsClienteCargado(true);
+					getView().tableDescFamilia.requestFocus();
 				} else {
 					resetearDatosDePantalla();
 				}
@@ -246,6 +303,7 @@ public class CargaPrecioController
 
 	protected void resetearDatosDePantalla() throws Exception {
 		if (getModel().getClienteCargado() == null) {
+			getModel().setIsClienteCargado(false);
 			getView().txtNroCliente.clear();
 
 			getView().lblNombreLista.setText("S/D");
@@ -267,6 +325,11 @@ public class CargaPrecioController
 			getView().btnCancelar.setVisible(false);
 
 			getView().chkSoloVigentes.setSelected(false);
+			getView().chkMultiplicador.setEnabled(false);
+			getView().chkMultiplicador.setSelected(false);
+			getView().txtMultiplicador.setEnabled(false);
+			getView().txtMultiplicador.setText("0");
+			getView().chkSoloVigentes.setEnabled(false);
 		}
 
 		setModoPantalla();
@@ -405,8 +468,13 @@ public class CargaPrecioController
 				PantPrincipalController.setCursorOcupado();
 				try {
 					try {
+						BigDecimal factor = null;
+						if (getModel().getFactor() != null) {
+							factor = new BigDecimal(getModel().getFactor());
+						}
 						for (ListaDTO lista : getModel().getListasToShow()) {
-							GeneradorDePrecios.impactarPrecios(getModel().getClienteCargado(), lista.getVentLipv());
+							GeneradorDePrecios.impactarPrecios(getModel().getClienteCargado(), lista.getVentLipv(),
+									factor, ArchivoDePropiedadesBusiness.getidListaEspecial());
 						}
 					} finally {
 						PantPrincipalController.setRestoreCursor();
@@ -424,7 +492,9 @@ public class CargaPrecioController
 			}
 		}
 
-		if (accion.equals(ConstantesRP.PantCarPrecio.CANCELAR.toString())) {
+		if (accion.equals(ConstantesRP.PantCarPrecio.CANCELAR.toString()))
+
+		{
 			try {
 				getModel().setClienteCargado(null); // Elimino el cliente actual y reseteo
 				resetearDatosDePantalla();
@@ -802,7 +872,8 @@ public class CargaPrecioController
 				descMoneda = SistMoneDAO.findById(registroPedido.getPricMoneda()).getMoneNombre();
 			}
 
-			Boolean estaVigente = CommonPricing.estaVigente(registroPedido.getPricFechaDesde(), registroPedido.getPricFechaHasta());
+			Boolean estaVigente = CommonPricing.estaVigente(registroPedido.getPricFechaDesde(),
+					registroPedido.getPricFechaHasta());
 
 			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null
 					? Common.double2String(registroPedido.getPricDescuento1().doubleValue())
@@ -875,7 +946,8 @@ public class CargaPrecioController
 	}
 
 	private void agregarRegistroATablaFamilia(RPTable tabla, DescuentoXFamilias registro) {
-		Boolean estaVigente = CommonPricing.estaVigente(registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta());
+		Boolean estaVigente = CommonPricing.estaVigente(registro.getPricFamiliaFechaDesde(),
+				registro.getPricFamiliaFechaHasta());
 
 		tabla.addRow(new Object[] { registro.getPricCa01Clasif1(), registro.getNombreFamilia(),
 				registro.getPricFamiliaDescuento1() != null

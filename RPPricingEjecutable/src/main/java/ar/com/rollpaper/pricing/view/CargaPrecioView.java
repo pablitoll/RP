@@ -3,6 +3,7 @@ package ar.com.rollpaper.pricing.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -75,7 +76,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public JButtonRP btnAgregar;
 	public JButtonRP btnEliminar;
 	public WebTabbedPane tabPanel;
-	private JPanel pnlCenter;
 	private JPanel panelCentral;
 	public WebLabel lblError;
 	public JButtonRP btnModificar;
@@ -92,160 +92,15 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	private JLabel lblTitle;
 	public JButtonRP btnCancelar;
 	public JCheckBox chkSoloVigentes;
+	public JCheckBox chkMultiplicador;
+	public componenteNumerico txtMultiplicador;
+	private JPanel pnlSupGrillas;
+	private JPanel pnlNorth;
+	private JPanel pnlFiltrosBusqueda;
 
 	public CargaPrecioView() throws Exception {
 		super();
-		lblTitle = new JLabel("lblTitle");
 		setTitle("Carga de Precio de Cliente");
-		lblTitle.setText(getTitle());
-
-		JPanel panelSuperior = new JPanel();
-		panelSuperior.setFocusable(false);
-		panelSuperior.setBorder(new EmptyBorder(5, 5, 5, 0));
-		getContentPane().add(panelSuperior, BorderLayout.NORTH);
-		GridBagLayout gbl_panelSuperior = new GridBagLayout();
-		gbl_panelSuperior.columnWidths = new int[] { 76, 100, 50, 46, 46, 50, 0, 0, 0 };
-		gbl_panelSuperior.rowHeights = new int[] { 0, 0, 0, 0 };
-		gbl_panelSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, Double.MIN_VALUE };
-		gbl_panelSuperior.rowWeights = new double[] { 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		panelSuperior.setLayout(gbl_panelSuperior);
-
-		lblTitle.setFont(Common.getStandarFontBold(18));
-		GridBagConstraints gbc_label = new GridBagConstraints();
-		gbc_label.gridwidth = 8;
-		gbc_label.insets = new Insets(0, 0, 5, 0);
-		gbc_label.gridx = 0;
-		gbc_label.gridy = 0;
-		panelSuperior.add(lblTitle, gbc_label);
-
-		JLabel lblcliente = new JLabel("Nro. de Cliente:");
-		lblcliente.setFont(Common.getStandarFont());
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel.gridx = 0;
-		gbc_lblNewLabel.gridy = 1;
-		panelSuperior.add(lblcliente, gbc_lblNewLabel);
-
-		txtNroCliente = new WebFormattedTextField();
-		txtNroCliente.setFont(Common.getStandarFont());
-		txtNroCliente.setInputPrompt("Ingrese nro. Cliente");
-		txtNroCliente.setInputPromptFont(Common.getStandarFontItalic());
-		txtNroCliente.setHorizontalAlignment(SwingConstants.RIGHT);
-		txtNroCliente.setColumns(10);
-		txtNroCliente.clear();
-		GridBagConstraints gbc_txtNroCliente = new GridBagConstraints();
-		gbc_txtNroCliente.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtNroCliente.anchor = GridBagConstraints.NORTH;
-		gbc_txtNroCliente.insets = new Insets(0, 0, 5, 5);
-		gbc_txtNroCliente.gridx = 1;
-		gbc_txtNroCliente.gridy = 1;
-		panelSuperior.add(txtNroCliente, gbc_txtNroCliente);
-		txtNroCliente.setColumns(10);
-
-		lblNombre_1 = new JLabel("Nombre:");
-		lblNombre_1.setFont(Common.getStandarFont());
-		GridBagConstraints gbc_lblNombre_1 = new GridBagConstraints();
-		gbc_lblNombre_1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNombre_1.gridx = 3;
-		gbc_lblNombre_1.gridy = 1;
-		panelSuperior.add(lblNombre_1, gbc_lblNombre_1);
-
-		lblNombreCliente = new JLabel("xxxxxxxxxxxxxxxxxxxx");
-		lblNombreCliente.setFont(Common.getStandarFontBold());
-		GridBagConstraints gbc_lblNombreCliente = new GridBagConstraints();
-		gbc_lblNombreCliente.anchor = GridBagConstraints.WEST;
-		gbc_lblNombreCliente.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNombreCliente.gridx = 4;
-		gbc_lblNombreCliente.gridy = 1;
-		panelSuperior.add(lblNombreCliente, gbc_lblNombreCliente);
-
-		lblNombreLegal_1 = new JLabel("Nombre Legal:");
-		lblNombreLegal_1.setFont(Common.getStandarFont());
-		GridBagConstraints gbc_lblNombreLegal_1 = new GridBagConstraints();
-		gbc_lblNombreLegal_1.anchor = GridBagConstraints.EAST;
-		gbc_lblNombreLegal_1.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNombreLegal_1.gridx = 5;
-		gbc_lblNombreLegal_1.gridy = 1;
-		panelSuperior.add(lblNombreLegal_1, gbc_lblNombreLegal_1);
-
-		lblNombreLegal = new JLabel("New label");
-		lblNombreLegal.setFont(Common.getStandarFontBold());
-		GridBagConstraints gbc_lblNombreLegal = new GridBagConstraints();
-		gbc_lblNombreLegal.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblNombreLegal.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNombreLegal.gridx = 6;
-		gbc_lblNombreLegal.gridy = 1;
-		panelSuperior.add(lblNombreLegal, gbc_lblNombreLegal);
-
-		JLabel lblNewLabel_1 = new JLabel("Nro de Lista de Precio");
-		lblNewLabel_1.setFont(Common.getStandarFont());
-		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
-		gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
-		gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNewLabel_1.gridx = 0;
-		gbc_lblNewLabel_1.gridy = 2;
-		panelSuperior.add(lblNewLabel_1, gbc_lblNewLabel_1);
-
-		cbNroLista = new WebComboBox();
-		cbNroLista.setFont(Common.getStandarFont());
-
-		GridBagConstraints gbc_txtNroLista = new GridBagConstraints();
-		gbc_txtNroLista.insets = new Insets(0, 0, 0, 5);
-		gbc_txtNroLista.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtNroLista.gridx = 1;
-		gbc_txtNroLista.gridy = 2;
-		panelSuperior.add(cbNroLista, gbc_txtNroLista);
-
-		btnAgregarLista = new JButtonRP("");
-		btnAgregarLista.setLeftRightSpacing(0);
-		btnAgregarLista.setToolTipText("Agregar Lista");
-		btnAgregarLista.setFont(Common.getStandarFont());
-		btnAgregarLista.setIcon(CommonUtils.loadIcon("com/alee/managers/notification/icons/types/plus.png", 15, 15));
-
-		btnEliminarLista = new JButtonRP("");
-		btnEliminarLista.setLeftRightSpacing(0);
-		btnEliminarLista.setToolTipText("Eliminar Lista");
-		btnEliminarLista.setFont(Common.getStandarFont());
-		btnEliminarLista.setIcon(CommonUtils.loadIcon("com/alee/managers/notification/icons/types/minus.png", 15, 15));
-
-		pnlBotonLista = new JPanel();
-		FlowLayout fl_pnlBotonLista = new FlowLayout(FlowLayout.CENTER, 0, 0);
-		pnlBotonLista.setLayout(fl_pnlBotonLista);
-		pnlBotonLista.add(btnAgregarLista);
-		pnlBotonLista.add(btnEliminarLista);
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.insets = new Insets(0, 0, 0, 5);
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 2;
-		gbc_panel.gridy = 2;
-		panelSuperior.add(pnlBotonLista, gbc_panel);
-
-		lbl_1 = new JLabel("Nombre Lista ");
-		lbl_1.setFont(Common.getStandarFont());
-		GridBagConstraints gbc_lbl_1 = new GridBagConstraints();
-		gbc_lbl_1.insets = new Insets(0, 0, 0, 5);
-		gbc_lbl_1.gridx = 3;
-		gbc_lbl_1.gridy = 2;
-		panelSuperior.add(lbl_1, gbc_lbl_1);
-
-		lblNombreLista = new JLabel("New label");
-		lblNombreLista.setFont(Common.getStandarFontBold());
-		GridBagConstraints gbc_lblNombreLista = new GridBagConstraints();
-		gbc_lblNombreLista.anchor = GridBagConstraints.WEST;
-		gbc_lblNombreLista.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNombreLista.gridx = 4;
-		gbc_lblNombreLista.gridy = 2;
-		panelSuperior.add(lblNombreLista, gbc_lblNombreLista);
-
-		chkSoloVigentes = new JCheckBox("Ver solo Vigentes");
-		chkSoloVigentes.setFont(Common.getStandarFont());
-		GridBagConstraints gbc_chckbxNewCheckBox = new GridBagConstraints();
-		gbc_chckbxNewCheckBox.anchor = GridBagConstraints.EAST;
-		gbc_chckbxNewCheckBox.insets = new Insets(0, 0, 0, 5);
-		gbc_chckbxNewCheckBox.gridx = 6;
-		gbc_chckbxNewCheckBox.gridy = 2;
-		panelSuperior.add(chkSoloVigentes, gbc_chckbxNewCheckBox);
 
 		pnlBotonesTabla = new JPanel();
 		getContentPane().add(pnlBotonesTabla, BorderLayout.EAST);
@@ -291,8 +146,194 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_buttonRP_1.gridy = 2;
 		pnlBotonesTabla.add(btnEliminar, gbc_buttonRP_1);
 
-		pnlCenter = new JPanel();
-		getContentPane().add(pnlCenter, BorderLayout.WEST);
+		pnlNorth = new JPanel();
+		getContentPane().add(pnlNorth, BorderLayout.NORTH);
+		pnlNorth.setLayout(new BorderLayout(0, 0));
+		lblTitle = new JLabel("lblTitle");
+		lblTitle.setText(getTitle());
+
+		JPanel panelSuperior = new JPanel();
+		pnlNorth.add(panelSuperior, BorderLayout.NORTH);
+		panelSuperior.setFocusable(false);
+		panelSuperior.setBorder(new EmptyBorder(5, 5, 5, 0));
+		GridBagLayout gbl_panelSuperior = new GridBagLayout();
+		gbl_panelSuperior.columnWidths = new int[] { 76, 100, 50, 46, 46, 50, 0, 0, 0, 0, 0 };
+		gbl_panelSuperior.rowHeights = new int[] { 0, 0, 0, 0 };
+		gbl_panelSuperior.columnWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0,
+				Double.MIN_VALUE };
+		gbl_panelSuperior.rowWeights = new double[] { 0.0, 1.0, 1.0, Double.MIN_VALUE };
+		panelSuperior.setLayout(gbl_panelSuperior);
+
+		lblTitle.setFont(Common.getStandarFontBold(18));
+		GridBagConstraints gbc_label = new GridBagConstraints();
+		gbc_label.gridwidth = 10;
+		gbc_label.insets = new Insets(0, 0, 5, 0);
+		gbc_label.gridx = 0;
+		gbc_label.gridy = 0;
+		panelSuperior.add(lblTitle, gbc_label);
+
+		JLabel lblcliente = new JLabel("Nro. de Cliente:");
+		lblcliente.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.anchor = GridBagConstraints.WEST;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 1;
+		panelSuperior.add(lblcliente, gbc_lblNewLabel);
+
+		txtNroCliente = new WebFormattedTextField();
+		txtNroCliente.setFont(Common.getStandarFont());
+		txtNroCliente.setInputPrompt("Ingrese nro. Cliente");
+		txtNroCliente.setInputPromptFont(Common.getStandarFontItalic());
+		txtNroCliente.setHorizontalAlignment(SwingConstants.RIGHT);
+		txtNroCliente.setColumns(10);
+		txtNroCliente.clear();
+		GridBagConstraints gbc_txtNroCliente = new GridBagConstraints();
+		gbc_txtNroCliente.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtNroCliente.anchor = GridBagConstraints.NORTH;
+		gbc_txtNroCliente.insets = new Insets(0, 0, 5, 5);
+		gbc_txtNroCliente.gridx = 1;
+		gbc_txtNroCliente.gridy = 1;
+		panelSuperior.add(txtNroCliente, gbc_txtNroCliente);
+		txtNroCliente.setColumns(10);
+
+		lblNombre_1 = new JLabel("Nombre:");
+		lblNombre_1.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lblNombre_1 = new GridBagConstraints();
+		gbc_lblNombre_1.anchor = GridBagConstraints.EAST;
+		gbc_lblNombre_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombre_1.gridx = 3;
+		gbc_lblNombre_1.gridy = 1;
+		panelSuperior.add(lblNombre_1, gbc_lblNombre_1);
+
+		lblNombreCliente = new JLabel("xxxxxxxxxxxxxxxxxxxx");
+		lblNombreCliente.setFont(Common.getStandarFontBold());
+		GridBagConstraints gbc_lblNombreCliente = new GridBagConstraints();
+		gbc_lblNombreCliente.anchor = GridBagConstraints.WEST;
+		gbc_lblNombreCliente.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombreCliente.gridx = 4;
+		gbc_lblNombreCliente.gridy = 1;
+		panelSuperior.add(lblNombreCliente, gbc_lblNombreCliente);
+
+		lblNombreLegal_1 = new JLabel("Nombre Legal:");
+		lblNombreLegal_1.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lblNombreLegal_1 = new GridBagConstraints();
+		gbc_lblNombreLegal_1.anchor = GridBagConstraints.EAST;
+		gbc_lblNombreLegal_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombreLegal_1.gridx = 5;
+		gbc_lblNombreLegal_1.gridy = 1;
+		panelSuperior.add(lblNombreLegal_1, gbc_lblNombreLegal_1);
+
+		lblNombreLegal = new JLabel("New label");
+		lblNombreLegal.setFont(Common.getStandarFontBold());
+		GridBagConstraints gbc_lblNombreLegal = new GridBagConstraints();
+		gbc_lblNombreLegal.anchor = GridBagConstraints.WEST;
+		gbc_lblNombreLegal.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombreLegal.gridx = 6;
+		gbc_lblNombreLegal.gridy = 1;
+		panelSuperior.add(lblNombreLegal, gbc_lblNombreLegal);
+
+		pnlSupGrillas = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.insets = new Insets(0, 0, 5, 5);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 7;
+		gbc_panel.gridy = 1;
+		panelSuperior.add(pnlSupGrillas, gbc_panel);
+
+		JLabel lblNewLabel_1 = new JLabel("Nro de Lista de Precio");
+		lblNewLabel_1.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+		gbc_lblNewLabel_1.anchor = GridBagConstraints.EAST;
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel_1.gridx = 0;
+		gbc_lblNewLabel_1.gridy = 2;
+		panelSuperior.add(lblNewLabel_1, gbc_lblNewLabel_1);
+
+		cbNroLista = new WebComboBox();
+		cbNroLista.setFont(Common.getStandarFont());
+
+		GridBagConstraints gbc_txtNroLista = new GridBagConstraints();
+		gbc_txtNroLista.insets = new Insets(0, 0, 0, 5);
+		gbc_txtNroLista.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtNroLista.gridx = 1;
+		gbc_txtNroLista.gridy = 2;
+		panelSuperior.add(cbNroLista, gbc_txtNroLista);
+
+		btnAgregarLista = new JButtonRP("");
+		btnAgregarLista.setLeftRightSpacing(0);
+		btnAgregarLista.setToolTipText("Agregar Lista");
+		btnAgregarLista.setFont(Common.getStandarFont());
+		btnAgregarLista.setIcon(CommonUtils.loadIcon("com/alee/managers/notification/icons/types/plus.png", 15, 15));
+
+		btnEliminarLista = new JButtonRP("");
+		btnEliminarLista.setLeftRightSpacing(0);
+		btnEliminarLista.setToolTipText("Eliminar Lista");
+		btnEliminarLista.setFont(Common.getStandarFont());
+		btnEliminarLista.setIcon(CommonUtils.loadIcon("com/alee/managers/notification/icons/types/minus.png", 15, 15));
+
+		pnlBotonLista = new JPanel();
+		FlowLayout fl_pnlBotonLista = new FlowLayout(FlowLayout.CENTER, 0, 0);
+		pnlBotonLista.setLayout(fl_pnlBotonLista);
+		pnlBotonLista.add(btnAgregarLista);
+		pnlBotonLista.add(btnEliminarLista);
+		GridBagConstraints gbcpnlBotonLista = new GridBagConstraints();
+		gbcpnlBotonLista.insets = new Insets(0, 0, 0, 5);
+		gbcpnlBotonLista.fill = GridBagConstraints.BOTH;
+		gbcpnlBotonLista.gridx = 2;
+		gbcpnlBotonLista.gridy = 2;
+		panelSuperior.add(pnlBotonLista, gbcpnlBotonLista);
+
+		lbl_1 = new JLabel("Nombre Lista ");
+		lbl_1.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_lbl_1 = new GridBagConstraints();
+		gbc_lbl_1.insets = new Insets(0, 0, 0, 5);
+		gbc_lbl_1.gridx = 3;
+		gbc_lbl_1.gridy = 2;
+		panelSuperior.add(lbl_1, gbc_lbl_1);
+
+		lblNombreLista = new JLabel("New label");
+		lblNombreLista.setFont(Common.getStandarFontBold());
+		GridBagConstraints gbc_lblNombreLista = new GridBagConstraints();
+		gbc_lblNombreLista.anchor = GridBagConstraints.WEST;
+		gbc_lblNombreLista.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNombreLista.gridx = 4;
+		gbc_lblNombreLista.gridy = 2;
+		panelSuperior.add(lblNombreLista, gbc_lblNombreLista);
+
+		chkMultiplicador = new JCheckBox("Habilitar Multiplicador");
+		chkMultiplicador.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_chckbxFactorDeCorrecion = new GridBagConstraints();
+		gbc_chckbxFactorDeCorrecion.anchor = GridBagConstraints.EAST;
+		gbc_chckbxFactorDeCorrecion.insets = new Insets(0, 0, 0, 5);
+		gbc_chckbxFactorDeCorrecion.gridx = 5;
+		gbc_chckbxFactorDeCorrecion.gridy = 2;
+		panelSuperior.add(chkMultiplicador, gbc_chckbxFactorDeCorrecion);
+
+		txtMultiplicador = new componenteNumerico();
+		txtMultiplicador.setMinimumSize(new Dimension(70, 29));
+		txtMultiplicador.setMinimumWidth(70);
+		txtMultiplicador.setFont(Common.getStandarFont());
+		txtMultiplicador.setCantEnteros(1);
+		txtMultiplicador.setCantDecimales(2);
+		txtMultiplicador.setColumns(5);
+		GridBagConstraints gbc_webFormattedTextField = new GridBagConstraints();
+		gbc_webFormattedTextField.anchor = GridBagConstraints.WEST;
+		gbc_webFormattedTextField.insets = new Insets(0, 0, 0, 5);
+		gbc_webFormattedTextField.gridx = 6;
+		gbc_webFormattedTextField.gridy = 2;
+		panelSuperior.add(txtMultiplicador, gbc_webFormattedTextField);
+
+		chkSoloVigentes = new JCheckBox("Ver solo Vigentes");
+		chkSoloVigentes.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_chckbxNewCheckBox = new GridBagConstraints();
+		gbc_chckbxNewCheckBox.insets = new Insets(0, 0, 0, 5);
+		gbc_chckbxNewCheckBox.gridx = 8;
+		gbc_chckbxNewCheckBox.gridy = 2;
+		panelSuperior.add(chkSoloVigentes, gbc_chckbxNewCheckBox);
+
+		pnlFiltrosBusqueda = new JPanel();
+		pnlNorth.add(pnlFiltrosBusqueda, BorderLayout.SOUTH);
 
 		panelCentral = new JPanel();
 		panelCentral.setLayout(new BorderLayout(0, 0));

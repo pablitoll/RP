@@ -53,7 +53,9 @@ public class componenteNumerico extends WebTextField {
 					try {
 						String decimales = getDecimales(getText());
 						String entero = getEnteros(getText());
-						setText(CommonPricing.formatearImporte(entero + Common.getGeneralSettings().getSeparadorDecimal() + (decimales + "00000").substring(0, cantDecimales)));
+						setText(CommonPricing
+								.formatearImporte(entero + Common.getGeneralSettings().getSeparadorDecimal()
+										+ (decimales + "00000").substring(0, cantDecimales)));
 
 					} catch (Exception e2) {
 						ManejoDeError.showError(e2, "Error al perder Focus");
@@ -71,7 +73,8 @@ public class componenteNumerico extends WebTextField {
 						String parteDecimal = "";
 
 						if (!decimales.equals("")) {
-							parteDecimal = Common.getGeneralSettings().getSeparadorDecimal() + String.valueOf(Integer.valueOf(decimales)); // saco los ceros
+							parteDecimal = Common.getGeneralSettings().getSeparadorDecimal()
+									+ String.valueOf(Integer.valueOf(decimales)); // saco los ceros
 						}
 						setText(entero + parteDecimal);
 					} catch (Exception e2) {
@@ -88,7 +91,8 @@ public class componenteNumerico extends WebTextField {
 			public void insertString(int off, String str, AttributeSet attr) throws BadLocationException {
 
 				String valorOrginal = getText(0, getLength());
-				String numeroConCaracteres = valorOrginal.substring(0, off) + str + valorOrginal.substring(off, valorOrginal.length()); // inserto el instrin
+				String numeroConCaracteres = valorOrginal.substring(0, off) + str
+						+ valorOrginal.substring(off, valorOrginal.length()); // inserto el instrin
 
 				if (numeroValido(numeroConCaracteres)) {
 					super.remove(0, getLength());
@@ -131,8 +135,7 @@ public class componenteNumerico extends WebTextField {
 			if (!numero.equals("")) {
 
 				// Double.valueOf(numero); // Que sea un double valido
-				Common.String2Double(numero);
-
+				// Common.String2Double(numero);
 				if (getEnteros(numero).length() > cantEnteros) {
 					return false;
 				}

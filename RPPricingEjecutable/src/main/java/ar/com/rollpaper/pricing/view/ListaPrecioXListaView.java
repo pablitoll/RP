@@ -94,7 +94,7 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 		panel.add(label_6, gbc_label_6);
 
 		lblNombreLista = new JLabel("lblNombreLista");
-		lblNombreLista.setFont(Common.getStandarFont());
+		lblNombreLista.setFont(Common.getStandarFontBold());
 		GridBagConstraints gbc_label_7 = new GridBagConstraints();
 		gbc_label_7.anchor = GridBagConstraints.WEST;
 		gbc_label_7.insets = new Insets(0, 0, 0, 5);

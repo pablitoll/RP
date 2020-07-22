@@ -32,5 +32,6 @@
 		<mapping  resource="ar/com/rollpaper/pricing/beans/VentLipv.hbm.xml" />
 		<mapping  resource="ar/com/rollpaper/pricing/beans/SistUnim.hbm.xml" />
 		<mapping  resource="ar/com/rollpaper/pricing/beans/VentArpv.hbm.xml" />
+		<mapping  resource="ar/com/rollpaper/pricing/beans/ClienteFactor.hbm.xml" />
 	</session-factory>
 </hibernate-configuration>

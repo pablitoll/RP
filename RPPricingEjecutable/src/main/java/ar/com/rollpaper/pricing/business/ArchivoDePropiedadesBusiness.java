@@ -23,7 +23,7 @@ public class ArchivoDePropiedadesBusiness {
 	}
 
 	public enum propiedades {
-		conecctionString, pass, usr, separadorDecimal, separadorMiles
+		conecctionString, pass, usr, separadorDecimal, separadorMiles, idListaEspecial
 	};
 
 	public static String getConecctionString() throws Exception {
@@ -83,6 +83,10 @@ public class ArchivoDePropiedadesBusiness {
 
 	public static void recargar() {
 		pPropiedades = null;
+	}
+
+	public static Integer getidListaEspecial() throws Exception {
+		return Integer.valueOf(getPropiedades().getPropiedad(propiedades.idListaEspecial));
 	}
 
 	public static int[] getAnchoTabla(String nombreTabla) throws Exception {

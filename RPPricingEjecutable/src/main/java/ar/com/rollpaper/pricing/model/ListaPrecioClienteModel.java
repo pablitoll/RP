@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
+import ar.com.rollpaper.pricing.beans.ClienteFactor;
 import ar.com.rollpaper.pricing.beans.DescuentoXFamilias;
 import ar.com.rollpaper.pricing.beans.PreciosEspeciales;
 import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ListaBusiness;
 import ar.com.rollpaper.pricing.business.MaestroEsclavoBusinnes;
+import ar.com.rollpaper.pricing.dao.ClienteFactorDAO;
 import ar.com.rollpaper.pricing.dao.DescuentoXFamiliasDAO;
 import ar.com.rollpaper.pricing.dao.PreciosEspecialesDAO;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
@@ -24,6 +26,7 @@ public class ListaPrecioClienteModel extends BaseModel {
 	private CcobClie clienteCargado;
 	private ListaDTO listaCargada;
 	private ListaPrecioReporteDTO listaPrecioReporte = null;
+	private ClienteFactor factor = null;
 
 	public CcobClie getClienteCargado() {
 		return clienteCargado;
@@ -33,6 +36,19 @@ public class ListaPrecioClienteModel extends BaseModel {
 		this.clienteCargado = clienteCargado;
 		listaCargada = null;
 		listaPrecioReporte = null;
+		if (clienteCargado != null) {
+			factor = ClienteFactorDAO.findById(clienteCargado.getClieCliente());
+		} else {
+			factor = null;
+		}
+	}
+
+	public Double getFactor() {
+		if (factor != null) {
+			return factor.getPricFactor();
+		}
+
+		return null;
 	}
 
 	public PreciosEspeciales getRegistroArticuloEmpty() {

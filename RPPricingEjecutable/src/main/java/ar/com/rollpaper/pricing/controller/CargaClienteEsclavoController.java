@@ -19,6 +19,7 @@ import ar.com.rollpaper.pricing.beans.CcobClie;
 import ar.com.rollpaper.pricing.beans.MaestroEsclavo;
 import ar.com.rollpaper.pricing.beans.VentCliv;
 import ar.com.rollpaper.pricing.beans.VentLipv;
+import ar.com.rollpaper.pricing.business.ArchivoDePropiedadesBusiness;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.GeneradorDePrecios;
 import ar.com.rollpaper.pricing.business.ListaBusiness;
@@ -37,6 +38,7 @@ import ar.com.rollpaper.pricing.view.CargaClienteEsclavoView;
 import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
@@ -54,8 +56,7 @@ public class CargaClienteEsclavoController
 				try {
 					perdioFocoCliente();
 				} catch (Exception e1) {
-					
-					
+
 					ManejoDeError.showError(e1, "Error al buscar cliente");
 				}
 			}
@@ -83,6 +84,12 @@ public class CargaClienteEsclavoController
 								getModel().setCliente(cliente);
 								getView().lblNombreCliente.setText(cliente.getClieNombre());
 								getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
+
+								String factor = "Sin Multiplicador";
+								if (getModel().getFator() != null) {
+									factor = Common.double2String(getModel().getFator());
+								}
+								getView().lblMultiplicador.setText(factor);
 
 								cargarListaPrecios(cliente);
 								// cargo los esclavos de ese cliente
@@ -196,7 +203,7 @@ public class CargaClienteEsclavoController
 		getView().btnTerminarCarga.setVisible(getModel().isCambiosPendientes());
 		getView().btnCancelar.setVisible(tieneCli);
 		getView().btnCancelar.setEnabled(!getModel().isCambiosPendientes());
-		
+
 	}
 
 	protected void limpiarPantalla() throws Exception {
@@ -206,6 +213,7 @@ public class CargaClienteEsclavoController
 
 		getView().lblNombreLegal.setText("S/D");
 		getView().lblNombreCliente.setText("S/D");
+		getView().lblMultiplicador.setText("S/D");
 
 		getView().txtNroCliente.clear();
 		getView().tableEsclavo.clear();
@@ -273,7 +281,8 @@ public class CargaClienteEsclavoController
 
 					PantPrincipalController.setCursorOcupado();
 					try {
-						GeneradorDePrecios.impactarPrecios(getModel().getCliente(), getModel().getListaCliente());
+						GeneradorDePrecios.impactarPrecios(getModel().getCliente(), getModel().getListaCliente(),
+								getModel().getFatorBig(), ArchivoDePropiedadesBusiness.getidListaEspecial());
 					} finally {
 						PantPrincipalController.setRestoreCursor();
 					}
@@ -476,14 +485,17 @@ public class CargaClienteEsclavoController
 		return true;
 	}
 
-//	private boolean clienteNuevoTieneListaActual(CcobClie cliEsclavo) {
-//		for (VentCliv ventCliv : ListaBusiness.getListaPreciosByCliente(cliEsclavo)) {
-//			if (ventCliv.getClivListaPrecvta().equals(getModel().getListaCliente().getLipvListaPrecvta())) {
-//				return true;
-//			}
-//		}
-//		return false;
-//	}
+	// private boolean clienteNuevoTieneListaActual(CcobClie cliEsclavo) {
+	// for (VentCliv ventCliv : ListaBusiness.getListaPreciosByCliente(cliEsclavo))
+	// {
+	// if
+	// (ventCliv.getClivListaPrecvta().equals(getModel().getListaCliente().getLipvListaPrecvta()))
+	// {
+	// return true;
+	// }
+	// }
+	// return false;
+	// }
 
 	private boolean esclavoTieneCargadoItems(CcobClie cliEsclavo, int idLista) {
 		return !DescuentoXFamiliasDAO.getListaDescuentoByID(cliEsclavo.getClieCliente(), idLista).isEmpty()
@@ -491,13 +503,13 @@ public class CargaClienteEsclavoController
 	}
 
 	private void agregoEditItem() {
-		getModel().setCambiosPendietes(true);		
+		getModel().setCambiosPendietes(true);
 		setModoPantalla();
 	}
 
 	public boolean isPendienteImpactar() {
 		return getModel().isCambiosPendientes();
-				
+
 	}
 
 }

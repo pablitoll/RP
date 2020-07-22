@@ -44,8 +44,6 @@ public class ListaPrecioClienteController
 			ListaPrecioClienteModel model) throws Exception {
 		super(pantPrincipal, view, model, null);
 
-
-		
 		view.txtNroCliente.addFocusListener(new FocusAdapter() {
 
 			public void focusLost(FocusEvent evento) {
@@ -180,9 +178,15 @@ public class ListaPrecioClienteController
 			CcobClie cliente = CcobClieDAO.findById(Integer.valueOf(id));
 
 			if (cliente != null) {
+				getModel().setClienteCargado(cliente);
 				getView().lblNombreCliente.setText(cliente.getClieNombre());
 				getView().lblNombreLegal.setText(cliente.getClieNombreLegal());
-				getModel().setClienteCargado(cliente);
+
+				String factor = "Sin Multiplicador";
+				if (getModel().getFactor() != null) {
+					factor = Common.double2String(getModel().getFactor());
+				}
+				getView().lblFactor.setText(factor);
 				cargarLista();
 				setModoPantalla();
 
@@ -248,7 +252,8 @@ public class ListaPrecioClienteController
 			getView().lblNombreLista.setText("S/D");
 			getView().lblNombreLegal.setText("S/D");
 			getView().lblNombreCliente.setText("S/D");
-			
+			getView().lblFactor.setText("S/D");
+
 			getView().chkBusquedaCodFamilia.setSelected(false);
 			getView().chkBusquedaCodProducto.setSelected(true);
 			getView().chkBusquedaDescrip.setSelected(true);
@@ -421,17 +426,19 @@ public class ListaPrecioClienteController
 				fechaVigencia = String.format("%s - %s", FechaManagerUtil.Date2String(stock.getVigenciaDesde()).trim(),
 						FechaManagerUtil.Date2String(stock.getVigenciaHasta()).trim());
 			}
-			
+
 			String descuento = "";
 			if (stock.getDescuento1() != null) {
 				descuento = String.valueOf(CommonUtils.round(stock.getDescuento1().doubleValue(), 3)) + "%";
 				if (stock.getDescuento2() != null) {
-					descuento += " - " + String.valueOf(CommonUtils.round(stock.getDescuento2().doubleValue(), 3)) + "%";
+					descuento += " - " + String.valueOf(CommonUtils.round(stock.getDescuento2().doubleValue(), 3))
+							+ "%";
 				}
 			}
 
 			String comision = stock.getComision() != null
-					? Common.double2String(CommonUtils.round(stock.getComision().doubleValue(), 3))	: "";
+					? Common.double2String(CommonUtils.round(stock.getComision().doubleValue(), 3))
+					: "";
 
 			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(),
 					stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),

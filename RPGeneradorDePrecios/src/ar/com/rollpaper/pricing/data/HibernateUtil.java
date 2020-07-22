@@ -22,15 +22,25 @@ public class HibernateUtil {
 
 	public static void getSessionFactory(String ConecctionString, String getUsr, String getPass) throws Exception {
 		if (session == null) {
-			Configuration cfg = new Configuration().addResource("ar/com/rollpaper/pricing/beans/CcobClie.hbm.xml").addResource("ar/com/rollpaper/pricing/beans/StocArts.hbm.xml")
-					.addResource("ar/com/rollpaper/pricing/beans/StocCa01.hbm.xml").addResource("ar/com/rollpaper/pricing/beans/VentArpc.hbm.xml")
-					.addResource("ar/com/rollpaper/pricing/beans/VentCliv.hbm.xml").addResource("ar/com/rollpaper/pricing/beans/PreciosEspeciales.hbm.xml")
-					.addResource("ar/com/rollpaper/pricing/beans/DescuentoXFamilias.hbm.xml").addResource("ar/com/rollpaper/pricing/beans/MaestroEsclavo.hbm.xml")
-					.addResource("ar/com/rollpaper/pricing/beans/SistMone.hbm.xml").addResource("ar/com/rollpaper/pricing/beans/VentCliv.hbm.xml")
-					.addResource("ar/com/rollpaper/pricing/beans/VentLipv.hbm.xml").addResource("ar/com/rollpaper/pricing/beans/SistUnim.hbm.xml")
-					.addResource("ar/com/rollpaper/pricing/beans/VentArpv.hbm.xml").setProperty("hibernate.connection.driver_class", "com.microsoft.sqlserver.jdbc.SQLServerDriver")
-					.setProperty("hibernate.connection.url", ConecctionString).setProperty("hibernate.connection.username", getUsr)
-					.setProperty("hibernate.connection.password", getPass).setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServer2012Dialect")
+			Configuration cfg = new Configuration().addResource("ar/com/rollpaper/pricing/beans/CcobClie.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/StocArts.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/StocCa01.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/VentArpc.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/VentCliv.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/PreciosEspeciales.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/DescuentoXFamilias.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/MaestroEsclavo.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/SistMone.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/VentCliv.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/VentLipv.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/SistUnim.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/VentArpv.hbm.xml")
+					.addResource("ar/com/rollpaper/pricing/beans/ClienteFactor.hbm.xml")
+					.setProperty("hibernate.connection.driver_class", "com.microsoft.sqlserver.jdbc.SQLServerDriver")
+					.setProperty("hibernate.connection.url", ConecctionString)
+					.setProperty("hibernate.connection.username", getUsr)
+					.setProperty("hibernate.connection.password", getPass)
+					.setProperty("hibernate.dialect", "org.hibernate.dialect.SQLServer2012Dialect")
 					.setProperty("hibernate.show_sql", "true");
 
 			session = cfg.buildSessionFactory().openSession();
