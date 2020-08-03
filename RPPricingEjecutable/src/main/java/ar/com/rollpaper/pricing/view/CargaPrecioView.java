@@ -10,13 +10,17 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
@@ -96,7 +100,19 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 	public componenteNumerico txtMultiplicador;
 	private JPanel pnlSupGrillas;
 	private JPanel pnlNorth;
-	private JPanel pnlFiltrosBusqueda;
+	private JPanel sur;
+	private JPanel pnlTexto;
+	private JPanel panel_1;
+	public JCheckBox chkBusquedaCodArticulo;
+	public JCheckBox chkBusquedaCodNombre;
+	public JCheckBox chkBusquedaDescrip;
+	private JPanel panel_2;
+	public JTextField txtBusqueda;
+	private JPanel panel;
+	public JRadioButton rdArticuloLista;
+	public JRadioButton rbTodos;
+	public JRadioButton rdArticuloEspecifico;
+	public JButtonRP btnExportar;
 
 	public CargaPrecioView() throws Exception {
 		super();
@@ -145,6 +161,15 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_buttonRP_1.gridx = 0;
 		gbc_buttonRP_1.gridy = 2;
 		pnlBotonesTabla.add(btnEliminar, gbc_buttonRP_1);
+
+		btnExportar = new JButtonRP("Exportar a Excel");
+		btnExportar.setIcon(CommonUtils.loadIcon(ConstantesRP.IMG_EXCEL, 15, 15));
+		btnExportar.setFont(Common.getStandarFont());
+
+		GridBagConstraints gbc_buttonRP = new GridBagConstraints();
+		gbc_buttonRP.gridx = 0;
+		gbc_buttonRP.gridy = 3;
+		pnlBotonesTabla.add(btnExportar, gbc_buttonRP);
 
 		pnlNorth = new JPanel();
 		getContentPane().add(pnlNorth, BorderLayout.NORTH);
@@ -332,9 +357,6 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		gbc_chckbxNewCheckBox.gridy = 2;
 		panelSuperior.add(chkSoloVigentes, gbc_chckbxNewCheckBox);
 
-		pnlFiltrosBusqueda = new JPanel();
-		pnlNorth.add(pnlFiltrosBusqueda, BorderLayout.SOUTH);
-
 		panelCentral = new JPanel();
 		panelCentral.setLayout(new BorderLayout(0, 0));
 		tabPanel = new WebTabbedPane();
@@ -495,9 +517,81 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 			}
 		});
 
-		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
-		tabPanel.addTab("Descuentos y Precios Especificos", spDescEspecifico);
+		panel = new JPanel();
+		panel.setLayout(new BorderLayout(0, 0));
 
+		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
+		tabPanel.addTab("Descuentos y Precios Especificos", panel);
+		panel.add(spDescEspecifico);
+
+		sur = new JPanel();
+		panel.add(sur, BorderLayout.NORTH);
+		GridBagLayout gbl_sur = new GridBagLayout();
+		gbl_sur.columnWidths = new int[] { 250, 0, 0, 0, 0 };
+		gbl_sur.rowHeights = new int[] { 0, 0 };
+		gbl_sur.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gbl_sur.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
+		sur.setLayout(gbl_sur);
+
+		pnlTexto = new JPanel();
+		pnlTexto.setBorder(
+				new TitledBorder(null, "Filtro por Texto", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_pnlTexto = new GridBagConstraints();
+		gbc_pnlTexto.insets = new Insets(0, 0, 0, 5);
+		gbc_pnlTexto.fill = GridBagConstraints.HORIZONTAL;
+		gbc_pnlTexto.gridx = 0;
+		gbc_pnlTexto.gridy = 0;
+		sur.add(pnlTexto, gbc_pnlTexto);
+		pnlTexto.setLayout(new BorderLayout(0, 0));
+
+		txtBusqueda = new JTextField();
+		pnlTexto.add(txtBusqueda);
+		txtBusqueda.setColumns(10);
+
+		panel_1 = new JPanel();
+		panel_1.setBorder(
+				new TitledBorder(null, "Campos Filtro por Texto", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
+		gbc_panel_1.insets = new Insets(0, 0, 0, 5);
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
+		gbc_panel_1.gridx = 1;
+		gbc_panel_1.gridy = 0;
+		sur.add(panel_1, gbc_panel_1);
+
+		chkBusquedaCodArticulo = new JCheckBox("Cod. Art.");
+		chkBusquedaCodArticulo.setFont(Common.getStandarFont());
+		panel_1.add(chkBusquedaCodArticulo);
+
+		chkBusquedaCodNombre = new JCheckBox("Nombre");
+		chkBusquedaCodNombre.setFont(Common.getStandarFont());
+		panel_1.add(chkBusquedaCodNombre);
+
+		chkBusquedaDescrip = new JCheckBox("Descrip.");
+		chkBusquedaDescrip.setFont(Common.getStandarFont());
+		panel_1.add(chkBusquedaDescrip);
+
+		panel_2 = new JPanel();
+		ButtonGroup br = new ButtonGroup();
+
+		panel_2.setFont(Common.getStandarFont());
+		panel_2.setBorder(new TitledBorder(null, "Filtros", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+
+		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
+		gbc_panel_2.fill = GridBagConstraints.BOTH;
+		sur.add(panel_2, gbc_panel_2);
+		panel_2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+		rbTodos = new JRadioButton("Ambos");
+		br.add(rbTodos);
+		panel_2.add(rbTodos);
+
+		rdArticuloLista = new JRadioButton("Articulos de Lista");
+		br.add(rdArticuloLista);
+		panel_2.add(rdArticuloLista);
+
+		rdArticuloEspecifico = new JRadioButton("Articulos Específicos");
+		br.add(rdArticuloEspecifico);
+		panel_2.add(rdArticuloEspecifico);
 		lblError = new WebLabel("");
 		lblError.setFont(Common.getStandarFontBold());
 		panelCentral.add(lblError, BorderLayout.NORTH);
@@ -526,6 +620,7 @@ public class CargaPrecioView extends BaseViewMVCExtendida {
 		asignarBotonAccion(btnEliminarLista, ConstantesRP.PantCarPrecio.ELIMINAR_LISTA.toString());
 		asignarBotonAccion(btnImpactarPrecios, ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString());
 		asignarBotonAccion(btnCancelar, ConstantesRP.PantCarPrecio.CANCELAR.toString());
+		asignarBotonAccion(btnExportar, ConstantesRP.PantCarPrecio.EXPORTAR_EXCEL.toString());
 	}
 
 	public void setCerrarVisible(Boolean visible) {

@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
@@ -58,6 +59,7 @@ import ar.com.rollpaper.pricing.ui.ManejoDeError;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialArticuloView;
 import ar.com.rollpaper.pricing.view.CargaItemEspecialFamiliaView;
 import ar.com.rollpaper.pricing.view.CargaPrecioView;
+import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
@@ -67,6 +69,7 @@ import ar.com.rp.ui.pantalla.BaseControllerMVC;
 public class CargaPrecioController
 		extends BaseControllerMVC<PantPrincipalController, CargaPrecioView, CargaPrecioModel> {
 
+	private static final String RE_LIKE = "\\w*(?i)%s\\w*";
 	private CargaItemEspecialArticuloModel itemEspecialArticuloModel = new CargaItemEspecialArticuloModel();
 	private CargaItemEspecialArticuloView itemEspecialArticuloView = new CargaItemEspecialArticuloView();
 	private CargaItemEspecialArticulo itemEspecialArticulo = new CargaItemEspecialArticulo(
@@ -111,10 +114,51 @@ public class CargaPrecioController
 
 		view.chkSoloVigentes.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				filtroVigentes(getView().chkSoloVigentes.isSelected());
+				setFiltros();
 			}
 		});
 
+		view.rbTodos.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				setFiltros();
+			}
+		});
+
+		view.rdArticuloLista.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				setFiltros();
+			}
+		});
+
+		view.rdArticuloEspecifico.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				setFiltros();
+			}
+		});
+
+		view.chkBusquedaCodArticulo.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				setFiltros();
+			}
+		});
+
+		view.chkBusquedaCodNombre.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				setFiltros();
+			}
+		});
+
+		view.chkBusquedaDescrip.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				setFiltros();
+			}
+		});
+
+		view.txtBusqueda.addFocusListener(new FocusAdapter() {
+			public void focusLost(FocusEvent evento) {
+				setFiltros();
+			}
+		});
 		view.txtMultiplicador.addFocusListener(new FocusAdapter() {
 
 			public void focusLost(FocusEvent evento) {
@@ -279,9 +323,19 @@ public class CargaPrecioController
 		getView().btnAgregar.setEnabled(tieneCli && !isListaHeredada);
 		getView().btnModificar.setEnabled(tieneCli && !isListaHeredada);
 		getView().btnEliminar.setEnabled(tieneCli && !isListaHeredada);
+		getView().btnExportar.setEnabled(tieneCli);
 
 		getView().btnEliminarLista.setEnabled(habilitaEliminar);
 		getView().btnAgregarLista.setEnabled(tieneCli);
+
+		getView().txtBusqueda.setEnabled(tieneCli);
+		getView().chkBusquedaCodArticulo.setEnabled(tieneCli);
+		getView().chkBusquedaCodNombre.setEnabled(tieneCli);
+		getView().chkBusquedaDescrip.setEnabled(tieneCli);
+
+		getView().rdArticuloLista.setEnabled(tieneCli);
+		getView().rdArticuloEspecifico.setEnabled(tieneCli);
+		getView().rbTodos.setEnabled(tieneCli);
 
 		if (tieneCli) {
 			if (!getView().btnImpactarPrecios.isVisible() && !getView().btnCancelar.isVisible()) {
@@ -330,6 +384,14 @@ public class CargaPrecioController
 			getView().txtMultiplicador.setEnabled(false);
 			getView().txtMultiplicador.setText("0");
 			getView().chkSoloVigentes.setEnabled(false);
+
+			getView().txtBusqueda.setText("");
+			getView().chkBusquedaCodArticulo.setSelected(false);
+			getView().chkBusquedaCodNombre.setSelected(false);
+			getView().chkBusquedaDescrip.setSelected(false);
+			getView().rdArticuloLista.setSelected(false);
+			getView().rdArticuloEspecifico.setSelected(false);
+			getView().rbTodos.setSelected(true);
 		}
 
 		setModoPantalla();
@@ -384,12 +446,9 @@ public class CargaPrecioController
 			}
 		});
 
-		if (getView().chkSoloVigentes.isSelected()) {
-			sorterTablaDesEspecifico
-					.setRowFilter(RowFilter.regexFilter("SI", CargaPrecioView.COL_ESTA_VIGENTE_ESPECIFICO));
-		}
-
 		sorterTablaDesEspecifico.setSortKeys(sortKeys);
+
+		setFiltros();
 	}
 
 	@Override
@@ -457,6 +516,36 @@ public class CargaPrecioController
 
 	@Override
 	public void ejecutarAccion(String accion) {
+		if (accion.equals(ConstantesRP.PantCarPrecio.EXPORTAR_EXCEL.toString())) {
+			try {
+				if (isPanelActivoFamilia()) {
+					if (getView().tableDescFamilia.getRowCount() > 0) {
+
+						String nombreArchivo = String.format("Precio_Descuento_X_Familia_%s_%s",
+								getModel().getListaCargada().getVentLipv().getLipvListaPrecvta(), FechaManagerUtil
+										.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
+
+						CSVExport.exportToExcel(getView().tableDescFamilia, nombreArchivo, null);
+					} else {
+						Dialog.showMessageDialog("No hay registros para Exportar");
+					}
+				} else {
+					if (getView().tableDescEspecifico.getRowCount() > 0) {
+
+						String nombreArchivo = String.format("Precio_Descuento_Precio_Especifico_%s_%s",
+								getModel().getListaCargada().getVentLipv().getLipvListaPrecvta(), FechaManagerUtil
+										.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), "yyyyMMdd_HHmmss"));
+
+						CSVExport.exportToExcel(getView().tableDescEspecifico, nombreArchivo, null);
+					} else {
+						Dialog.showMessageDialog("No hay registros para Exportar");
+					}
+				}
+
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al exportar");
+			}
+		}
 
 		if (accion.equals(ConstantesRP.PantCarPrecio.IMPACTAR_PRECIOS.toString())) {
 			if (Dialog.showConfirmDialog(
@@ -971,18 +1060,69 @@ public class CargaPrecioController
 		return getView().btnImpactarPrecios.isVisible();
 	}
 
-	protected void filtroVigentes(boolean selected) {
+	protected void setFiltros() {
+		boolean soloVigentes = getView().chkSoloVigentes.isSelected();
+		boolean articuloEspescifico = getView().rdArticuloEspecifico.isSelected();
+		boolean articuloLista = getView().rdArticuloLista.isSelected();
 
-		if (selected) {
-			sorterTablaDesEspecifico.setRowFilter(RowFilter.regexFilter("SI", getView().tableDescEspecifico
+		boolean chkBusquedaCodArticulo = getView().chkBusquedaCodArticulo.isSelected();
+		boolean chkBusquedaCodNombre = getView().chkBusquedaCodNombre.isSelected();
+		boolean chkBusquedaDescrip = getView().chkBusquedaDescrip.isSelected();
+		String txtBusqueda = getView().txtBusqueda.getText().trim();
+
+		RowFilter<Object, Object> af = null;
+		List<RowFilter<Object, Object>> rfs = new ArrayList<RowFilter<Object, Object>>();
+
+		if (soloVigentes) {
+
+			rfs.add(RowFilter.regexFilter("SI", getView().tableDescEspecifico
 					.convertColumnIndexToView(CargaPrecioView.COL_ESTA_VIGENTE_ESPECIFICO)));
+
+			// familia
 			sorterTablaDesFamilia.setRowFilter(RowFilter.regexFilter("SI",
 					getView().tableDescFamilia.convertColumnIndexToView(CargaPrecioView.COL_ESTA_VIGENTE_FAMILIA)));
-
 		} else {
-			sorterTablaDesEspecifico.setRowFilter(null);
 			sorterTablaDesFamilia.setRowFilter(null);
 		}
+
+		if (articuloEspescifico || articuloLista) {
+
+			String filtro = "NO";
+			if (articuloLista) {
+				filtro = "SI";
+			}
+			rfs.add(RowFilter.regexFilter(filtro, getView().tableDescEspecifico
+					.convertColumnIndexToView(CargaPrecioView.COL_ESTA_EN_LISTA_ESPECIFICO)));
+		}
+
+		if ((chkBusquedaCodArticulo || chkBusquedaCodNombre || chkBusquedaDescrip) && !txtBusqueda.equals("")) {
+
+			List<RowFilter<Object, Object>> filterBusqueda = new ArrayList<RowFilter<Object, Object>>();
+			String filtro = String.format(RE_LIKE, txtBusqueda.trim());
+
+			if (chkBusquedaCodArticulo) {
+				filterBusqueda.add(RowFilter.regexFilter(filtro,
+						getView().tableDescEspecifico.convertColumnIndexToView(CargaPrecioView.COL_ID_ESPECIFICO)));
+			}
+
+			if (chkBusquedaCodNombre) {
+				filterBusqueda.add(RowFilter.regexFilter(filtro,
+						getView().tableDescEspecifico.convertColumnIndexToView(CargaPrecioView.COL_NOMBRE_ESPECIFICO)));
+			}
+
+			if (chkBusquedaDescrip) {
+				filterBusqueda.add(RowFilter.regexFilter(filtro,
+						getView().tableDescEspecifico.convertColumnIndexToView(CargaPrecioView.COL_DESC_ESPECIFICO)));
+			}
+
+			rfs.add(RowFilter.orFilter(filterBusqueda));
+		}
+
+		if (rfs.size() > 0) {
+			af = RowFilter.andFilter(rfs);
+		}
+
+		sorterTablaDesEspecifico.setRowFilter(af);
 
 	}
 
