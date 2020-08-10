@@ -25,12 +25,15 @@ public class PreciosEspeciales implements java.io.Serializable {
 	private Date pricFechaHasta;
 	private BigDecimal pricComision;
 	private String pricReferencia;
+	private Double pricValorTC;
 
 	public PreciosEspeciales() {
 	}
 
-	public PreciosEspeciales(int pricPreciosEspecialesId, int pricCliente, int pricListaPrecvta, int pricArticulo, BigDecimal pricDescuento1, BigDecimal pricDescuento2,
-			String pricMoneda, BigDecimal pricPrecio, Date pricFechaDesde, Date pricFechaHasta, BigDecimal pricComision, String pricReferencia) {
+	public PreciosEspeciales(int pricPreciosEspecialesId, int pricCliente, int pricListaPrecvta, int pricArticulo,
+			BigDecimal pricDescuento1, BigDecimal pricDescuento2, String pricMoneda, BigDecimal pricPrecio,
+			Date pricFechaDesde, Date pricFechaHasta, BigDecimal pricComision, String pricReferencia,
+			Double pricValorTC) {
 		super();
 		this.pricPreciosEspecialesId = pricPreciosEspecialesId;
 		this.pricCliente = pricCliente;
@@ -44,6 +47,7 @@ public class PreciosEspeciales implements java.io.Serializable {
 		this.pricFechaHasta = pricFechaHasta;
 		this.pricComision = pricComision;
 		this.pricReferencia = pricReferencia;
+		this.pricValorTC = pricValorTC;
 	}
 
 	public int getPricPreciosEspecialesId() {
@@ -64,6 +68,14 @@ public class PreciosEspeciales implements java.io.Serializable {
 
 	public int getPricListaPrecvta() {
 		return pricListaPrecvta;
+	}
+
+	public Double getPricValorTC() {
+		return pricValorTC;
+	}
+
+	public void setPricValorTC(Double pricValorTC) {
+		this.pricValorTC = pricValorTC;
 	}
 
 	public void setPricListaPrecvta(int pricListaPrecvta) {

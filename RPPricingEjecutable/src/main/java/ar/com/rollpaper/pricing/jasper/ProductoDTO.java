@@ -25,6 +25,7 @@ public class ProductoDTO implements Serializable {
 	private String referencia;
 	private BigDecimal descuento1;
 	private BigDecimal descuento2;
+	private Double pricValorTC;
 
 	public ProductoDTO(int artsArticulo, String codArticulo, String nomArticulo, String descArticulo,
 			String unidadArticulo, String monedaArticulo, String precioArticulo, String familiaCod,
@@ -46,13 +47,22 @@ public class ProductoDTO implements Serializable {
 	}
 
 	public void cargarExtras(Date vigenciaDesde, Date vigenciaHasta, BigDecimal comision, String referencia,
-			BigDecimal descuento1, BigDecimal descuento2) {
+			BigDecimal descuento1, BigDecimal descuento2, Double pricValorTC) {
 		this.vigenciaDesde = vigenciaDesde;
 		this.vigenciaHasta = vigenciaHasta;
 		this.comision = comision;
 		this.referencia = referencia;
 		this.descuento1 = descuento1;
 		this.descuento2 = descuento2;
+		this.pricValorTC = pricValorTC;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public Double getPricValorTC() {
+		return pricValorTC;
 	}
 
 	public Date getVigenciaDesde() {

@@ -107,6 +107,12 @@ public class ListaPrecioClienteController
 			}
 		});
 
+		view.chkTC.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				evaluarColDinamica(ListaPrecioClienteView.COL_DES_TC, view.chkTC.isSelected());
+			}
+		});
+
 		view.txtBusqueda.addFocusListener(new FocusAdapter() {
 			public void focusLost(FocusEvent evento) {
 				if (getModel().getClienteCargado() != null) {
@@ -246,6 +252,8 @@ public class ListaPrecioClienteController
 			evaluarColDinamica(ListaPrecioClienteView.COL_DES_FECHA_VIGENCIA, false);
 			getView().chkReferencia.setSelected(false);
 			evaluarColDinamica(ListaPrecioClienteView.COL_DES_REFERENCIA, false);
+			getView().chkTC.setSelected(false);
+			evaluarColDinamica(ListaPrecioClienteView.COL_DES_TC, false);
 
 			getView().txtNroCliente.clear();
 
@@ -440,9 +448,14 @@ public class ListaPrecioClienteController
 					? Common.double2String(CommonUtils.round(stock.getComision().doubleValue(), 3))
 					: "";
 
+			String tc = "";
+			if (stock.getPricValorTC() != null) {
+				tc = CommonPricing.formatearImporte(stock.getPricValorTC(), 2);
+			}
+			
 			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(),
 					stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
-					CommonPricing.formatearImporte(stock.getPrecioArticulo()), fechaVigencia, descuento, comision,
+					CommonPricing.formatearImporte(stock.getPrecioArticulo()), fechaVigencia, descuento, comision, tc,
 					stock.getReferencia() == null ? "" : stock.getReferencia().trim() });
 		}
 

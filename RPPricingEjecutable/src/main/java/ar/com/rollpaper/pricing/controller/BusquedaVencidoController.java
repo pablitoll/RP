@@ -72,6 +72,7 @@ public class BusquedaVencidoController
 				}
 			}
 		});
+
 		view.txtVencidosAl.addFocusListener(new FocusAdapter() {
 
 			public void focusLost(FocusEvent evento) {
@@ -99,12 +100,33 @@ public class BusquedaVencidoController
 			}
 		});
 
+		view.txtTCMayor.addFocusListener(new FocusAdapter() {
+
+			public void focusLost(FocusEvent evento) {
+				try {
+					perdioFocoComponenteBusqueda();
+				} catch (Exception e1) {
+					ManejoDeError.showError(e1, "Error perder foco");
+				}
+			}
+		});
+
+		view.txtTCMenor.addFocusListener(new FocusAdapter() {
+
+			public void focusLost(FocusEvent evento) {
+				try {
+					perdioFocoComponenteBusqueda();
+				} catch (Exception e1) {
+					ManejoDeError.showError(e1, "Error perder foco");
+				}
+			}
+		});
 		TableAnchoManager.registrarEvento(view.tableDescEspecifico, "tablaBusquedaVencidosEspecifico");
 		TableAnchoManager.registrarEvento(view.tableDescFamilia, "tablaBusquedaVencidosFamilia");
 
 	}
 
-	protected void perdioFocoComponenteBusqueda() {
+	protected void perdioFocoComponenteBusqueda() throws Exception {
 		boolean limpiar = false;
 
 		// cliente
@@ -160,13 +182,38 @@ public class BusquedaVencidoController
 			limpiar = true;
 		}
 
+		// TCMayot
+		if (getView().txtTCMayor.getText().equals("") && (getModel().getTcDesde() != null)) {
+			getModel().setTcDesde(null);
+			limpiar = true;
+		}
+
+		if (!getView().txtTCMayor.getText().equals("")
+				&& !Common.String2Double(getView().txtTCMayor.getText()).equals(getModel().getTcDesde())) {
+			getModel().setTcDesde(Common.String2Double(getView().txtTCMayor.getText()));
+			limpiar = true;
+		}
+
+		// TC Menor
+		if (getView().txtTCMenor.getText().equals("") && (getModel().getTcHasta() != null)) {
+			getModel().setTcHasta(null);
+			limpiar = true;
+		}
+
+		if (!getView().txtTCMenor.getText().equals("")
+				&& !Common.String2Double(getView().txtTCMenor.getText()).equals(getModel().getTcHasta())) {
+			getModel().setTcHasta(Common.String2Double(getView().txtTCMenor.getText()));
+			limpiar = true;
+		}
+
 		if (limpiar) {
 			limpiarBusqueda();
 		}
 
 	}
 
-	private void busquedaProductos(String idCliente, Date fechaVencidosAl, Date fechaVencidosDesde, String busqueda) {
+	private void busquedaProductos(String idCliente, Date fechaVencidosAl, Date fechaVencidosDesde, String busqueda,
+			Double tcDesde, Double tcHasta) {
 		PantPrincipalController.setCursorOcupado();
 		try {
 
@@ -184,22 +231,20 @@ public class BusquedaVencidoController
 			if (busqueda.equals("")) {
 				busqueda = null;
 			}
-			
-			
-			
+
 			List<CcobClie> listaAuxCliente = new ArrayList<CcobClie>();
 
 			for (DescuentoXFamilias familia : FamiliaBusiness.getListaDescuentoByFiltros(clienteID, fechaVencidosAl,
 					fechaVencidosDesde, busqueda)) {
-				
+
 				CcobClie cliente = buscarCliente(listaAuxCliente, familia.getPricFamiliaCliente());
-				
+
 				agregarRegistroATablaFamilia(getView().tableDescFamilia, familia, cliente);
 			}
 
 			for (PreciosEspecialesExDTO desc : PreciosEspecialesBusiness.getListaPrecioEspeciaByFiltros(clienteID,
-					fechaVencidosAl, fechaVencidosDesde, busqueda)) {
-				
+					fechaVencidosAl, fechaVencidosDesde, busqueda, tcDesde, tcHasta)) {
+
 				CcobClie cliente = buscarCliente(listaAuxCliente, desc.getPrecioEspecial().getPricCliente());
 
 				SistUnim unidad = SistUnimDAO.findById(desc.getStockArts().getArtsUnimedStock());
@@ -269,6 +314,12 @@ public class BusquedaVencidoController
 
 		getView().txtVencidosDesde.setDate(null);
 		getModel().setFechaVigenciaDesde(null);
+
+		getView().txtTCMayor.clear();
+		getModel().setTcDesde(null);
+
+		getView().txtTCMenor.clear();
+		getModel().setTcHasta(null);
 
 		limpiarBusqueda();
 
@@ -355,10 +406,15 @@ public class BusquedaVencidoController
 	public void ejecutarAccion(String accion) {
 
 		if (accion.equals(ConstantesRP.PantBusquedaVencidos.BUSCAR.toString())) {
-			perdioFocoComponenteBusqueda(); // para que refesque
+			try {
+				perdioFocoComponenteBusqueda();
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al perder foco componente");
+			} // para que refesque
 
 			busquedaProductos(getModel().getClienteID(), getModel().getFechaVigenciaAl(),
-					getModel().getFechaVigenciaDesde(), getModel().getBusqueda());
+					getModel().getFechaVigenciaDesde(), getModel().getBusqueda(), getModel().getTcDesde(),
+					getModel().getTcHasta());
 		}
 		if (accion.equals(ConstantesRP.PantBusquedaVencidos.LIMPIAR.toString())) {
 			resetearDatosDePantalla();
@@ -389,6 +445,8 @@ public class BusquedaVencidoController
 						: "",
 				registro.getPricFechaDesde(), registro.getPricFechaHasta(),
 				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(),
+				registro.getPricValorTC() != null ? CommonPricing.formatearImporte(registro.getPricValorTC(), 2) : "",
+
 				(estaVigente ? "SI" : "NO"), registro }, colorFondo, colorLetra);
 
 		tabla.adjustColumns();

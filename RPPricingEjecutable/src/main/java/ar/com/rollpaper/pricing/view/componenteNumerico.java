@@ -55,7 +55,7 @@ public class componenteNumerico extends WebTextField {
 						String entero = getEnteros(getText());
 						setText(CommonPricing
 								.formatearImporte(entero + Common.getGeneralSettings().getSeparadorDecimal()
-										+ (decimales + "00000").substring(0, cantDecimales)));
+										+ (decimales + "00000").substring(0, cantDecimales), cantDecimales));
 
 					} catch (Exception e2) {
 						ManejoDeError.showError(e2, "Error al perder Focus");

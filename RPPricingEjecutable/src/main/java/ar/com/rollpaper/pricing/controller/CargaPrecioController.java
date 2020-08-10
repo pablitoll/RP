@@ -724,7 +724,7 @@ public class CargaPrecioController
 
 							PreciosEspeciales registro = itemEspecialArticulo.getRegistro();
 
-							PreciosEspecialesDAO.merge(registro);
+							HibernateGeneric.attachDirty(registro);
 							agregoEditItem();
 
 							modificarRegistroATabla(getView().tableDescEspecifico, registro, row);
@@ -984,6 +984,11 @@ public class CargaPrecioController
 					: "", row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_COMISION_ESPECIFICO));
 			tableActivo.setValueAt(registroPedido.getPricReferencia(), row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_REFERENCIA_ESPECIFICO));
+			tableActivo.setValueAt(
+					registroPedido.getPricValorTC() != null
+							? CommonPricing.formatearImporte(registroPedido.getPricValorTC(), 2)
+							: "",
+					row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_TC_ESPECIFICO));
 
 			tableActivo.setValueAt((estaVigente ? "SI" : "NO"), row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_ESTA_VIGENTE_ESPECIFICO));
@@ -1029,6 +1034,7 @@ public class CargaPrecioController
 						: "",
 				registro.getPricFechaDesde(), registro.getPricFechaHasta(),
 				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(),
+				registro.getPricValorTC() != null ? CommonPricing.formatearImporte(registro.getPricValorTC(), 2) : "",
 				(estaVigente ? "SI" : "NO"), (estaEnLista ? "SI" : "NO"), registro });
 
 		tabla.adjustColumns();

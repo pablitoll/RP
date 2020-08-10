@@ -26,6 +26,7 @@ import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.componentes.RPTable;
 import ar.com.rp.ui.pantalla.BaseViewMVCExtendida;
+import java.awt.FlowLayout;
 
 public class BusquedaVencidoView extends BaseViewMVCExtendida {
 
@@ -61,8 +62,9 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 	public static final int COL_HASTA_ESPECIFICO = 11;
 	public static final int COL_COMISION_ESPECIFICO = 12;
 	public static final int COL_REFERENCIA_ESPECIFICO = 13;
-	public static final int COL_ESTA_VIGENTE_ESPECIFICO = 14;
-	public static final int COL_REGISTRO_ESPECIFICO = 15;
+	public static final int COL_TC_ESPECIFICO = 14;
+	public static final int COL_ESTA_VIGENTE_ESPECIFICO = 15;
+	public static final int COL_REGISTRO_ESPECIFICO = 16;
 
 	public WebFormattedTextField txtNroCliente;
 	public RPTable tableDescEspecifico;
@@ -84,6 +86,12 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 	public WebDateField txtVencidosDesde;
 	public WebFormattedTextField txtBusqueda;
 	private JButtonRP btnLimpiar;
+	private JPanel panel;
+	private JPanel pnlSuperiorDescuentoEspecifico;
+	private JLabel lblTcMayorA;
+	public componenteNumerico txtTCMayor;
+	private JLabel lblTcMenorA;
+	public componenteNumerico txtTCMenor;
 
 	public BusquedaVencidoView() throws Exception {
 		super();
@@ -242,8 +250,8 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		panelCentral.add(tabPanel);
 		getContentPane().add(panelCentral, BorderLayout.CENTER);
 
-		String[] headerDescFamilia = { "Cod. Cliente", "Nombre Cliente", "Cod. Familia", "Nombre Familia", "% Dto. 1", "% Dto. 2", "Desde",
-				"Hasta", "% Comision", "Referencia", "Esta Vigente", "" };
+		String[] headerDescFamilia = { "Cod. Cliente", "Nombre Cliente", "Cod. Familia", "Nombre Familia", "% Dto. 1",
+				"% Dto. 2", "Desde", "Hasta", "% Comision", "Referencia", "Esta Vigente", "" };
 		String[][] dataDesFamilia = { {} };
 
 		tableDescFamilia = new RPTable();
@@ -271,8 +279,9 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 
 		tabPanel.addTab("Descuento por Familia", spDescLista);
 
-		String[] headerDescEspecifico = { "Cod. Cliente", "Nombre Cliente", "Articulo", "Nombre Articulo", "Descripcion", "Unidad", "% Dto. 1",
-				"% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "% Comision", "Referencia", "Esta Vigente", "" };
+		String[] headerDescEspecifico = { "Cod. Cliente", "Nombre Cliente", "Articulo", "Nombre Articulo",
+				"Descripcion", "Unidad", "% Dto. 1", "% Dto. 2", "Moneda", "Precio", "Desde", "Hasta", "% Comision",
+				"Referencia", "TC", "Esta Vigente", "" };
 		String[][] dataDesEspecifico = { {} };
 
 		tableDescEspecifico = new RPTable();
@@ -295,14 +304,46 @@ public class BusquedaVencidoView extends BaseViewMVCExtendida {
 		tableDescEspecifico.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO)
 				.setCellRenderer(tableDescEspecifico.getCenterRender());
 		tableDescEspecifico.getColumnModel().getColumn(COL_COMISION_ESPECIFICO)
-				.setCellRenderer(tableDescEspecifico.getRigthRender());		
+				.setCellRenderer(tableDescEspecifico.getRigthRender());
 		tableDescEspecifico.getColumnModel().getColumn(COL_DESDE_ESPECIFICO).setCellRenderer(new CellRenderFecha());
 		tableDescEspecifico.getColumnModel().getColumn(COL_HASTA_ESPECIFICO).setCellRenderer(new CellRenderFecha());
 		tableDescEspecifico.getColumnModel().getColumn(COL_ESTA_VIGENTE_ESPECIFICO)
 				.setCellRenderer(tableDescEspecifico.getCenterRender());
+		tableDescEspecifico.getColumnModel().getColumn(COL_TC_ESPECIFICO)
+				.setCellRenderer(tableDescEspecifico.getRigthRender());
 
 		WebScrollPane spDescEspecifico = new WebScrollPane(tableDescEspecifico);
-		tabPanel.addTab("Descuentos y Precios Especificos", spDescEspecifico);
+
+		panel = new JPanel();
+		tabPanel.addTab("Descuentos y Precios Especificos", panel);
+		panel.setLayout(new BorderLayout(0, 0));
+
+		pnlSuperiorDescuentoEspecifico = new JPanel();
+		panel.add(pnlSuperiorDescuentoEspecifico, BorderLayout.NORTH);
+		pnlSuperiorDescuentoEspecifico.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+
+		lblTcMayorA = new JLabel("TC Mayor a:");
+		lblTcMayorA.setFont(Common.getStandarFont());
+		pnlSuperiorDescuentoEspecifico.add(lblTcMayorA);
+
+		txtTCMayor = new componenteNumerico();
+		pnlSuperiorDescuentoEspecifico.add(txtTCMayor);
+		txtTCMayor.setCantEnteros(4);
+		txtTCMayor.setCantDecimales(2);
+		txtTCMayor.setColumns(10);
+
+		lblTcMenorA = new JLabel("TC Menor a:");
+		lblTcMenorA.setFont(Common.getStandarFont());
+
+		pnlSuperiorDescuentoEspecifico.add(lblTcMenorA);
+
+		txtTCMenor = new componenteNumerico();
+		pnlSuperiorDescuentoEspecifico.add(txtTCMenor);
+		txtTCMenor.setCantEnteros(4);
+		txtTCMenor.setCantDecimales(2);
+		txtTCMenor.setColumns(10);
+
+		panel.add(spDescEspecifico, BorderLayout.CENTER);
 
 		lblError = new WebLabel("");
 		lblError.setFont(Common.getStandarFontBold());

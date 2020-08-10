@@ -27,6 +27,7 @@ import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.pantalla.BaseViewDialog;
+import java.awt.Font;
 
 public class CargaItemEspecialArticuloView extends BaseViewDialog {
 
@@ -58,6 +59,8 @@ public class CargaItemEspecialArticuloView extends BaseViewDialog {
 	public WebLabel lblEstaEnLista;
 	public JLabel lblDesc1;
 	public JLabel lblDesc2;
+	private JLabel label;
+	public componenteNumerico txtTC;
 
 	public CargaItemEspecialArticuloView() throws Exception {
 		super();
@@ -87,9 +90,10 @@ public class CargaItemEspecialArticuloView extends BaseViewDialog {
 		getContentPane().add(panel_1, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[] { 0, 0, 0, 0, 0 };
-		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+		gbl_panel_1.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gbl_panel_1.columnWeights = new double[] { 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
+		gbl_panel_1.rowWeights = new double[] { 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+				Double.MIN_VALUE };
 		panel_1.setLayout(gbl_panel_1);
 
 		lblLabelArticulo = new JLabel("Articulo ID:");
@@ -302,7 +306,7 @@ public class CargaItemEspecialArticuloView extends BaseViewDialog {
 		label_5.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_label_5 = new GridBagConstraints();
 		gbc_label_5.anchor = GridBagConstraints.EAST;
-		gbc_label_5.insets = new Insets(0, 0, 0, 5);
+		gbc_label_5.insets = new Insets(0, 0, 5, 5);
 		gbc_label_5.gridx = 1;
 		gbc_label_5.gridy = 11;
 		panel_1.add(label_5, gbc_label_5);
@@ -312,11 +316,31 @@ public class CargaItemEspecialArticuloView extends BaseViewDialog {
 		txtReferencia.setLineWrap(true);
 		txtReferencia.setFont(Common.getStandarFont());
 		GridBagConstraints gbc_txtReferencia1 = new GridBagConstraints();
+		gbc_txtReferencia1.insets = new Insets(0, 0, 5, 0);
 		gbc_txtReferencia1.fill = GridBagConstraints.BOTH;
 		gbc_txtReferencia1.gridx = 3;
 		gbc_txtReferencia1.gridy = 11;
 		panel_1.add(txtReferencia, gbc_txtReferencia1);
 		txtReferencia.setColumns(10);
+
+		label = new JLabel("Valor TC:");
+		label.setFont(Common.getStandarFont());
+		GridBagConstraints gbc_labelTC = new GridBagConstraints();
+		gbc_labelTC.anchor = GridBagConstraints.EAST;
+		gbc_labelTC.insets = new Insets(0, 0, 0, 5);
+		gbc_labelTC.gridx = 1;
+		gbc_labelTC.gridy = 12;
+		panel_1.add(label, gbc_labelTC);
+
+		txtTC = new componenteNumerico();
+		txtTC.setCantEnteros(4);
+		txtTC.setCantDecimales(2);
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField.gridx = 3;
+		gbc_textField.gridy = 12;
+		panel_1.add(txtTC, gbc_textField);
+		txtTC.setColumns(10);
 
 		this.addWindowListener(new WindowAdapter() {
 			@Override

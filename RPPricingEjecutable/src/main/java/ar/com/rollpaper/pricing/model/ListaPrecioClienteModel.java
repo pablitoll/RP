@@ -107,7 +107,8 @@ public class ListaPrecioClienteModel extends BaseModel {
 					if (precioEspecial != null) {
 						prod.cargarExtras(precioEspecial.getPricFechaDesde(), precioEspecial.getPricFechaHasta(),
 								precioEspecial.getPricComision(), precioEspecial.getPricReferencia(),
-								precioEspecial.getPricDescuento1(), precioEspecial.getPricDescuento2());
+								precioEspecial.getPricDescuento1(), precioEspecial.getPricDescuento2(),
+								precioEspecial.getPricValorTC());
 					} else {
 						// Segundo me fijo si es un producto dentro de una famialia con descunto
 						DescuentoXFamilias descuentoxFamilia = getDescuentoFamilia(prod, ListaDescuentoxFamilia);
@@ -117,7 +118,7 @@ public class ListaPrecioClienteModel extends BaseModel {
 									descuentoxFamilia.getPricFamiliaFechaHasta(),
 									descuentoxFamilia.getPricFamiliaComision(), descuentoxFamilia.getPricReferencia(),
 									descuentoxFamilia.getPricFamiliaDescuento1(),
-									descuentoxFamilia.getPricFamiliaDescuento2());
+									descuentoxFamilia.getPricFamiliaDescuento2(), null);
 						}
 						// Ultimo si no es nada es porque es de una lista heredada
 					}

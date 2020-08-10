@@ -10,6 +10,24 @@ public class BusquedaVencidoModel extends BaseModel {
 	private Date fechaVigenciaAl;
 	private Date fechaVigenciaDesde;
 	private String busqueda = "";
+	private Double tcDesde = null;
+	private Double tcHasta = null;
+
+	public Double getTcDesde() {
+		return tcDesde;
+	}
+
+	public void setTcDesde(Double tcDesde) {
+		this.tcDesde = tcDesde;
+	}
+
+	public Double getTcHasta() {
+		return tcHasta;
+	}
+
+	public void setTcHasta(Double tcHasta) {
+		this.tcHasta = tcHasta;
+	}
 
 	public String getClienteID() {
 		return clienteID;

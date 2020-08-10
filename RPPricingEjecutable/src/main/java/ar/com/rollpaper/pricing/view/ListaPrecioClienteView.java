@@ -39,12 +39,14 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 	public static final int COL_FECHA_VIGENCIA = 6;
 	public static final int COL_DESCUENTOS = 7;
 	public static final int COL_COMISION = 8;
+	public static final int COL_TC = 9;
 
 	public static final Integer COL_DESC = 2;
 	public static final String COL_DES_FECHA_VIGENCIA = "Fecha Vigencia";
 	public static final String COL_DES_COMISION = "% Comision";
 	public static final String COL_DES_REFERENCIA = "Referencia";
 	public static final String COL_DES_DESCUENTOS = "Dtos. Aplicados";
+	public static final String COL_DES_TC = "Tipo Cambio";
 	public RPTable tableResultado;
 	public JButtonRP btnGenerarPDF;
 	public JButtonRP btnExportarExcel;
@@ -70,6 +72,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 	public JCheckBox chkBusquedaCodFamilia;
 	public JCheckBox chkBusquedaCodProducto;
 	public JCheckBox chkBusquedaDescrip;
+	public JCheckBox chkTC;
 	private JPanel panel_4;
 	private JPanel norte;
 	private JPanel sur;
@@ -234,7 +237,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 
 		panel_3 = new JPanel();
 		GridBagConstraints gbc_panel_3 = new GridBagConstraints();
-		gbc_panel_3.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel_3.fill = GridBagConstraints.BOTH;
 		gbc_panel_3.insets = new Insets(0, 0, 0, 5);
 		gbc_panel_3.gridx = 0;
 		gbc_panel_3.gridy = 0;
@@ -244,18 +247,13 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		panel_3.setLayout(new BorderLayout(0, 0));
 
 		txtBusqueda = new JTextField();
-		panel_3.add(txtBusqueda);
+		panel_3.add(txtBusqueda, BorderLayout.CENTER);
 		txtBusqueda.setColumns(10);
 
 		pnlFiltroCamposFiltroTexto = new JPanel();
-		GridBagConstraints gbc_pnlFiltroCamposFiltroTexto = new GridBagConstraints();
-		gbc_pnlFiltroCamposFiltroTexto.fill = GridBagConstraints.BOTH;
-		gbc_pnlFiltroCamposFiltroTexto.insets = new Insets(0, 0, 0, 5);
-		gbc_pnlFiltroCamposFiltroTexto.gridx = 1;
-		gbc_pnlFiltroCamposFiltroTexto.gridy = 0;
-		sur.add(pnlFiltroCamposFiltroTexto, gbc_pnlFiltroCamposFiltroTexto);
-		pnlFiltroCamposFiltroTexto.setBorder(
-				new TitledBorder(null, "Campos Filtro por Texto", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_3.add(pnlFiltroCamposFiltroTexto, BorderLayout.EAST);
+		pnlFiltroCamposFiltroTexto.setBorder(null);
+		pnlFiltroCamposFiltroTexto.setLayout(new GridLayout(3, 1, 0, 0));
 
 		chkBusquedaCodFamilia = new JCheckBox("Fam.");
 		chkBusquedaCodFamilia.setFont(Common.getStandarFont());
@@ -271,9 +269,10 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 
 		panel_1 = new JPanel();
 		GridBagConstraints gbc_panel_1 = new GridBagConstraints();
-		gbc_panel_1.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel_1.gridwidth = 2;
+		gbc_panel_1.fill = GridBagConstraints.BOTH;
 		gbc_panel_1.insets = new Insets(0, 0, 0, 5);
-		gbc_panel_1.gridx = 2;
+		gbc_panel_1.gridx = 1;
 		gbc_panel_1.gridy = 0;
 		sur.add(panel_1, gbc_panel_1);
 		panel_1.setFont(Common.getStandarFont());
@@ -291,7 +290,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 
 		panel_2 = new JPanel();
 		GridBagConstraints gbc_panel_2 = new GridBagConstraints();
-		gbc_panel_2.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel_2.fill = GridBagConstraints.BOTH;
 		gbc_panel_2.gridx = 3;
 		gbc_panel_2.gridy = 0;
 		sur.add(panel_2, gbc_panel_2);
@@ -317,8 +316,12 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		chkDtoAplicados.setFont(Common.getStandarFont());
 		panel_2.add(chkDtoAplicados);
 
+		chkTC = new JCheckBox("Tipo Cambio Limite");
+		chkTC.setFont(Common.getStandarFont());
+		panel_2.add(chkTC);
+
 		String[] headerTabla = { "Codigo Familia", "Codigo Articulo", "Descripcion", "Unidad", "Moneda", "Precio Venta",
-				COL_DES_FECHA_VIGENCIA, COL_DES_DESCUENTOS, COL_DES_COMISION, COL_DES_REFERENCIA };
+				COL_DES_FECHA_VIGENCIA, COL_DES_DESCUENTOS, COL_DES_COMISION, COL_DES_TC, COL_DES_REFERENCIA };
 		String[][] dataTabla = { {} };
 
 		tableResultado = new RPTable();
@@ -336,6 +339,7 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		tableResultado.getColumnModel().getColumn(COL_FECHA_VIGENCIA).setCellRenderer(tableResultado.getCenterRender());
 		tableResultado.getColumnModel().getColumn(COL_DESCUENTOS).setCellRenderer(tableResultado.getCenterRender());
 		tableResultado.getColumnModel().getColumn(COL_COMISION).setCellRenderer(tableResultado.getRigthRender());
+		tableResultado.getColumnModel().getColumn(COL_TC).setCellRenderer(tableResultado.getRigthRender());
 		tableResultado.getColumnModel().getColumn(COL_FECHA_VIGENCIA).setCellRenderer(tableResultado.getCenterRender());
 
 		WebScrollPane webScrollPane = new WebScrollPane(tableResultado);

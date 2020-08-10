@@ -29,7 +29,8 @@ import ar.com.rp.ui.error.popUpError;
 import ar.com.rp.ui.interfaces.PermisosInterface;
 import ar.com.rp.ui.pantalla.BaseControllerDialog;
 
-public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipalController, CargaItemEspecialArticuloView, CargaItemEspecialArticuloModel> {
+public class CargaItemEspecialArticulo extends
+		BaseControllerDialog<PantPrincipalController, CargaItemEspecialArticuloView, CargaItemEspecialArticuloModel> {
 
 	public PreciosEspeciales getRegistro() throws Exception {
 
@@ -38,13 +39,15 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		registro.setPricArticulo(getModel().getArticuloID());
 
 		if (getView().txtDesc1.isVisible() && !getView().txtDesc1.getText().equals("")) {
-			registro.setPricDescuento1(new BigDecimal(Common.String2Double(getView().txtDesc1.getText()), MathContext.DECIMAL64));
+			registro.setPricDescuento1(
+					new BigDecimal(Common.String2Double(getView().txtDesc1.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricDescuento1(null);
 		}
 
 		if (getView().txtDesc2.isVisible() && !getView().txtDesc2.getText().equals("")) {
-			registro.setPricDescuento2(new BigDecimal(Common.String2Double(getView().txtDesc2.getText()), MathContext.DECIMAL64));
+			registro.setPricDescuento2(
+					new BigDecimal(Common.String2Double(getView().txtDesc2.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricDescuento2(null);
 		}
@@ -54,7 +57,8 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		if (getView().cbMoneda.getSelectedIndex() > 0) {
 			registro.setPricMoneda(((SistMone) getView().cbMoneda.getSelectedItem()).getMoneMoneda());
-			registro.setPricPrecio(new BigDecimal(Common.String2Double(getView().txtPrecio.getText()), MathContext.DECIMAL64));
+			registro.setPricPrecio(
+					new BigDecimal(Common.String2Double(getView().txtPrecio.getText()), MathContext.DECIMAL64));
 		} else {
 			registro.setPricMoneda(null);
 			registro.setPricPrecio(null);
@@ -66,6 +70,12 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		registro.setPricComision(new BigDecimal(comision, MathContext.DECIMAL64));
 
 		registro.setPricReferencia(getView().txtReferencia.getText());
+
+		if (!getView().txtTC.getText().equals("")) {
+			registro.setPricValorTC(Common.String2Double(getView().txtTC.getText()));
+		} else {
+			registro.setPricValorTC(null);
+		}
 
 		return registro;
 
@@ -81,8 +91,8 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 	}
 
 	@SuppressWarnings("unchecked")
-	public CargaItemEspecialArticulo(PantPrincipalController pantPrincipal, CargaItemEspecialArticuloView view, CargaItemEspecialArticuloModel model, PermisosInterface permisos)
-			throws Exception {
+	public CargaItemEspecialArticulo(PantPrincipalController pantPrincipal, CargaItemEspecialArticuloView view,
+			CargaItemEspecialArticuloModel model, PermisosInterface permisos) throws Exception {
 		super(pantPrincipal, view, model, permisos);
 		view.lblLabelArticulo.setText("Articulo ID:");
 		view.txtArticuloID.addFocusListener(new FocusListener() {
@@ -185,16 +195,21 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		getView().txtComision.setText("");
 		getView().cbMoneda.setSelectedIndex(0);
 		getView().lblEstaEnLista.setText("");
+		getView().txtTC.setText("");
 
 		if (getModel().isEdicion()) {
 
 			getView().lblArticuloID.setText(getModel().getArticuloIDEmp());
 
-			if ((getModel().getRegistro().getPricDescuento1() != null) && (getModel().getRegistro().getPricDescuento1().doubleValue() > 0.0)) {
-				getView().txtDesc1.setText(Common.double2String(getModel().getRegistro().getPricDescuento1().doubleValue()));
+			if ((getModel().getRegistro().getPricDescuento1() != null)
+					&& (getModel().getRegistro().getPricDescuento1().doubleValue() > 0.0)) {
+				getView().txtDesc1
+						.setText(Common.double2String(getModel().getRegistro().getPricDescuento1().doubleValue()));
 			}
-			if ((getModel().getRegistro().getPricDescuento2() != null) && (getModel().getRegistro().getPricDescuento2().doubleValue() > 0.0)) {
-				getView().txtDesc2.setText(Common.double2String(getModel().getRegistro().getPricDescuento2().doubleValue()));
+			if ((getModel().getRegistro().getPricDescuento2() != null)
+					&& (getModel().getRegistro().getPricDescuento2().doubleValue() > 0.0)) {
+				getView().txtDesc2
+						.setText(Common.double2String(getModel().getRegistro().getPricDescuento2().doubleValue()));
 			}
 
 			if (getModel().getRegistro().getPricMoneda() != null) {
@@ -212,10 +227,15 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 				getView().dateFechaHasta.setDate(getModel().getRegistro().getPricFechaHasta());
 			}
 
-			getView().txtComision.setText(Common.double2String(getModel().getRegistro().getPricComision().doubleValue()));
+			getView().txtComision
+					.setText(Common.double2String(getModel().getRegistro().getPricComision().doubleValue()));
 
 			if (getModel().getRegistro().getPricReferencia() != null) {
 				getView().txtReferencia.setText(getModel().getRegistro().getPricReferencia());
+			}
+
+			if (getModel().getRegistro().getPricValorTC() != null) {
+				getView().txtTC.setText(Common.double2String(getModel().getRegistro().getPricValorTC()));
 			}
 		}
 
@@ -294,7 +314,8 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		}
 
 		if (!getModel().isArticuloEnLista() && !getView().txtDesc1.getText().equals("")) {
-			popUpError.showError(getView().txtDesc1, "El articulo no esta en la lista, el descuento es solo por precio");
+			popUpError.showError(getView().txtDesc1,
+					"El articulo no esta en la lista, el descuento es solo por precio");
 			getView().txtDesc1.requestFocus();
 			return false;
 		}
@@ -322,35 +343,47 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 
 		// Valido si el rango de fecha ya esta cargado
 		for (int i = 0; i < getModel().getTableModel().getRowCount(); i++) {
-			PreciosEspeciales registroTabla = (PreciosEspeciales) getModel().getTableModel().getValueAt(i, CargaPrecioView.COL_REGISTRO_ESPECIFICO);
+			PreciosEspeciales registroTabla = (PreciosEspeciales) getModel().getTableModel().getValueAt(i,
+					CargaPrecioView.COL_REGISTRO_ESPECIFICO);
 
 			if (getModel().getArticuloID() == registroTabla.getPricArticulo()) {
 
-				if (registroTabla.getPricPreciosEspecialesId() != getModel().getRegistro().getPricPreciosEspecialesId()) {
+				if (registroTabla.getPricPreciosEspecialesId() != getModel().getRegistro()
+						.getPricPreciosEspecialesId()) {
 					// Si el desde que cargo esta entre las dos fecha del registro
-					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaDesde(), TimeUnit.DAYS) >= 0)
-							&& (FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) <= 0)) {
+					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(),
+							registroTabla.getPricFechaDesde(), TimeUnit.DAYS) >= 0)
+							&& (FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(),
+									registroTabla.getPricFechaHasta(), TimeUnit.DAYS) <= 0)) {
 						popUpError.showError(getView().dateFechaDesde,
-								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaDesde.getDate()));
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia "
+										+ FechaManagerUtil.Date2String(getView().dateFechaDesde.getDate()));
 						getView().dateFechaHasta.requestFocus();
 						return false;
 					}
 
 					// Si el hasta que cargo esta entre las dos fecha del registro
-					if ((FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFechaDesde(), TimeUnit.DAYS) >= 0)
-							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) <= 0)) {
+					if ((FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(),
+							registroTabla.getPricFechaDesde(), TimeUnit.DAYS) >= 0)
+							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(),
+									registroTabla.getPricFechaHasta(), TimeUnit.DAYS) <= 0)) {
 						popUpError.showError(getView().dateFechaDesde,
-								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia " + FechaManagerUtil.Date2String(getView().dateFechaHasta.getDate()));
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el dia "
+										+ FechaManagerUtil.Date2String(getView().dateFechaHasta.getDate()));
 						getView().dateFechaDesde.requestFocus();
 						return false;
 					}
 
 					// Si el desde que cargo esta antes que el desde del registro y el hasta que
 					// cargo es mayor que el del registro
-					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(), registroTabla.getPricFechaDesde(), TimeUnit.DAYS) <= 0)
-							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(), registroTabla.getPricFechaHasta(), TimeUnit.DAYS) >= 0)) {
-						popUpError.showError(getView().dateFechaDesde, "Hay solapamiento de Rango de Fecha.\nYa esta carga el rango "
-								+ FechaManagerUtil.Date2String(registroTabla.getPricFechaDesde()) + " - " + FechaManagerUtil.Date2String(registroTabla.getPricFechaHasta()));
+					if ((FechaManagerUtil.getDateDiff(getView().dateFechaDesde.getDate(),
+							registroTabla.getPricFechaDesde(), TimeUnit.DAYS) <= 0)
+							&& (FechaManagerUtil.getDateDiff(getView().dateFechaHasta.getDate(),
+									registroTabla.getPricFechaHasta(), TimeUnit.DAYS) >= 0)) {
+						popUpError.showError(getView().dateFechaDesde,
+								"Hay solapamiento de Rango de Fecha.\nYa esta carga el rango "
+										+ FechaManagerUtil.Date2String(registroTabla.getPricFechaDesde()) + " - "
+										+ FechaManagerUtil.Date2String(registroTabla.getPricFechaHasta()));
 						getView().dateFechaDesde.requestFocus();
 						return false;
 					}
@@ -429,7 +462,8 @@ public class CargaItemEspecialArticulo extends BaseControllerDialog<PantPrincipa
 		}
 
 		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F3) && getView().dateFechaDesde.hasFocus()) {
-			getView().dateFechaDesde.setText(FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(), FechaManagerUtil.FORMATO_FECHA));
+			getView().dateFechaDesde.setText(FechaManagerUtil.Date2StringGenerica(FechaManagerUtil.getDateTimeFromPC(),
+					FechaManagerUtil.FORMATO_FECHA));
 		}
 
 		if (!retorno && (ke.getKeyCode() == KeyEvent.VK_F3) && getView().dateFechaHasta.hasFocus()) {

@@ -10,11 +10,19 @@ import ar.com.rp.ui.componentes.RPImporte;
 public class CommonPricing {
 
 	public static String formatearImporte(double valor) {
-		 return RPImporte.formatearImporte(Common.double2String(valor), true, 4);
+		return RPImporte.formatearImporte(Common.double2String(valor), true, 4);
 	}
-	
+
+	public static String formatearImporte(double valor, int cantDecmales) {
+		return RPImporte.formatearImporte(Common.double2String(valor), true, cantDecmales);
+	}
+
 	public static String formatearImporte(String valor) {
-		 return RPImporte.formatearImporte(valor, true, 4);
+		return RPImporte.formatearImporte(valor, true, 4);
+	}
+
+	public static String formatearImporte(String valor, int cantDecmales) {
+		return RPImporte.formatearImporte(valor, true, cantDecmales);
 	}
 
 	public static Boolean estaVigente(Date pricFechaDesde, Date pricFechaHasta) {
@@ -22,5 +30,5 @@ public class CommonPricing {
 				TimeUnit.MINUTES) <= 0)
 				&& (FechaManagerUtil.getDateDiff(pricFechaHasta, FechaManagerUtil.getDateTimeFromPC(),
 						TimeUnit.MINUTES) >= 0);
-	}	
+	}
 }
