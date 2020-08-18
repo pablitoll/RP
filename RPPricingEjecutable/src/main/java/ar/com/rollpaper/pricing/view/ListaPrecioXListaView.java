@@ -113,7 +113,8 @@ public class ListaPrecioXListaView extends BaseViewMVCExtendida {
 
 		tableResultado.getColumnModel().getColumn(COL_UNIDAD).setCellRenderer(tableResultado.getCenterRender());
 		tableResultado.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO).setCellRenderer(tableResultado.getCenterRender());
-		tableResultado.getColumnModel().getColumn(COL_PRECIO).setCellRenderer(tableResultado.getRigthRender());
+		tableResultado.getColumnModel().getColumn(COL_PRECIO).setCellRenderer(new CellRenderImporte());
+
 
 		WebScrollPane webScrollPane = new WebScrollPane(tableResultado);
 		getContentPane().add(webScrollPane, BorderLayout.CENTER);

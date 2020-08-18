@@ -964,30 +964,29 @@ public class CargaPrecioController
 			Boolean estaVigente = CommonPricing.estaVigente(registroPedido.getPricFechaDesde(),
 					registroPedido.getPricFechaHasta());
 
-			tableActivo.setValueAt(registroPedido.getPricDescuento1() != null
-					? Common.double2String(registroPedido.getPricDescuento1().doubleValue())
-					: "", row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_1DESC_ESPECIFICO));
-			tableActivo.setValueAt(registroPedido.getPricDescuento2() != null
-					? Common.double2String(registroPedido.getPricDescuento2().doubleValue())
-					: "", row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_2DESC_ESPECIFICO));
+			tableActivo.setValueAt(
+					registroPedido.getPricDescuento1() != null ? registroPedido.getPricDescuento1().doubleValue()
+							: null,
+					row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_1DESC_ESPECIFICO));
+			tableActivo.setValueAt(
+					registroPedido.getPricDescuento2() != null ? registroPedido.getPricDescuento2().doubleValue()
+							: null,
+					row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_2DESC_ESPECIFICO));
 			tableActivo.setValueAt(descMoneda, row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_MONEDA_ESPECIFICO));
-			tableActivo.setValueAt(registroPedido.getPricPrecio() != null
-					? CommonPricing.formatearImporte(registroPedido.getPricPrecio().doubleValue())
-					: "", row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_PRECIO_ESPECIFICO));
+			tableActivo.setValueAt(
+					registroPedido.getPricPrecio() != null ? registroPedido.getPricPrecio().doubleValue() : null, row,
+					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_PRECIO_ESPECIFICO));
 			tableActivo.setValueAt(registroPedido.getPricFechaDesde(), row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_DESDE_ESPECIFICO));
 			tableActivo.setValueAt(registroPedido.getPricFechaHasta(), row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_HASTA_ESPECIFICO));
-			tableActivo.setValueAt(registroPedido.getPricComision() != null
-					? Common.double2String(registroPedido.getPricComision().doubleValue())
-					: "", row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_COMISION_ESPECIFICO));
+			tableActivo.setValueAt(
+					registroPedido.getPricComision() != null ? registroPedido.getPricComision().doubleValue() : null,
+					row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_COMISION_ESPECIFICO));
 			tableActivo.setValueAt(registroPedido.getPricReferencia(), row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_REFERENCIA_ESPECIFICO));
-			tableActivo.setValueAt(
-					registroPedido.getPricValorTC() != null
-							? CommonPricing.formatearImporte(registroPedido.getPricValorTC(), 2)
-							: "",
+			tableActivo.setValueAt(registroPedido.getPricValorTC() != null ? registroPedido.getPricValorTC() : null,
 					row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_TC_ESPECIFICO));
 
 			tableActivo.setValueAt((estaVigente ? "SI" : "NO"), row,
@@ -996,18 +995,18 @@ public class CargaPrecioController
 			DescuentoXFamilias registroFamilia = (DescuentoXFamilias) registro;
 
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento1() != null
-					? Common.double2String(registroFamilia.getPricFamiliaDescuento1().doubleValue())
-					: "", row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_1DESC_FAMILIA));
+					? registroFamilia.getPricFamiliaDescuento1().doubleValue()
+					: null, row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_1DESC_FAMILIA));
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaDescuento2() != null
-					? Common.double2String(registroFamilia.getPricFamiliaDescuento2().doubleValue())
-					: "", row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_2DESC_FAMILIA));
+					? registroFamilia.getPricFamiliaDescuento2().doubleValue()
+					: null, row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_2DESC_FAMILIA));
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaDesde(), row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_DESDE_FAMILIA));
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaFechaHasta(), row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_HASTA_FAMILIA));
 			tableActivo.setValueAt(registroFamilia.getPricFamiliaComision() != null
-					? Common.double2String(registroFamilia.getPricFamiliaComision().doubleValue())
-					: "", row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_COMSISION_FAMILIA));
+					? registroFamilia.getPricFamiliaComision().doubleValue()
+					: null, row, tableActivo.convertColumnIndexToView(CargaPrecioView.COL_COMSISION_FAMILIA));
 			tableActivo.setValueAt(registroFamilia.getPricReferencia(), row,
 					tableActivo.convertColumnIndexToView(CargaPrecioView.COL_REFERENCIA_FAMILIA));
 
@@ -1024,17 +1023,12 @@ public class CargaPrecioController
 
 		Boolean estaVigente = CommonPricing.estaVigente(registro.getPricFechaDesde(), registro.getPricFechaHasta());
 		tabla.addRow(new Object[] { id_Articulo, nombreItem, descItem, unidadItem,
-				registro.getPricDescuento1() != null ? Common.double2String(registro.getPricDescuento1().doubleValue())
-						: "",
-				registro.getPricDescuento2() != null ? Common.double2String(registro.getPricDescuento2().doubleValue())
-						: "",
+				registro.getPricDescuento1() != null ? registro.getPricDescuento1().doubleValue() : null,
+				registro.getPricDescuento2() != null ? registro.getPricDescuento2().doubleValue() : null,
 				registro.getPricMoneda() != null ? SistMoneDAO.findById(registro.getPricMoneda()).getMoneNombre() : "",
-				registro.getPricPrecio() != null
-						? CommonPricing.formatearImporte(registro.getPricPrecio().doubleValue())
-						: "",
-				registro.getPricFechaDesde(), registro.getPricFechaHasta(),
-				Common.double2String(registro.getPricComision().doubleValue()), registro.getPricReferencia(),
-				registro.getPricValorTC() != null ? CommonPricing.formatearImporte(registro.getPricValorTC(), 2) : "",
+				registro.getPricPrecio() != null ? registro.getPricPrecio().doubleValue() : null,
+				registro.getPricFechaDesde(), registro.getPricFechaHasta(), registro.getPricComision().doubleValue(),
+				registro.getPricReferencia(), registro.getPricValorTC() != null ? registro.getPricValorTC() : null,
 				(estaVigente ? "SI" : "NO"), (estaEnLista ? "SI" : "NO"), registro });
 
 		tabla.adjustColumns();
@@ -1045,14 +1039,10 @@ public class CargaPrecioController
 				registro.getPricFamiliaFechaHasta());
 
 		tabla.addRow(new Object[] { registro.getPricCa01Clasif1(), registro.getNombreFamilia(),
-				registro.getPricFamiliaDescuento1() != null
-						? Common.double2String(registro.getPricFamiliaDescuento1().doubleValue())
-						: "",
-				registro.getPricFamiliaDescuento2() != null
-						? Common.double2String(registro.getPricFamiliaDescuento2().doubleValue())
-						: "",
+				registro.getPricFamiliaDescuento1() != null ? registro.getPricFamiliaDescuento1().doubleValue() : null,
+				registro.getPricFamiliaDescuento2() != null ? registro.getPricFamiliaDescuento2().doubleValue() : null,
 				registro.getPricFamiliaFechaDesde(), registro.getPricFamiliaFechaHasta(),
-				Common.double2String(registro.getPricFamiliaComision().doubleValue()), registro.getPricReferencia(),
+				registro.getPricFamiliaComision().doubleValue(), registro.getPricReferencia(),
 				(estaVigente ? "SI" : "NO"), registro });
 
 		tabla.adjustColumns();

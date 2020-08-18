@@ -334,12 +334,12 @@ public class ListaPrecioClienteView extends BaseViewMVCExtendida {
 		tableResultado.getColumnModel().getColumn(COL_UNIDAD).setCellRenderer(tableResultado.getCenterRender());
 		tableResultado.getColumnModel().getColumn(COL_MONEDA_ESPECIFICO)
 				.setCellRenderer(tableResultado.getCenterRender());
-		tableResultado.getColumnModel().getColumn(COL_PRECIO).setCellRenderer(tableResultado.getRigthRender());
+		tableResultado.getColumnModel().getColumn(COL_PRECIO).setCellRenderer(new CellRenderImporte());
 
 		tableResultado.getColumnModel().getColumn(COL_FECHA_VIGENCIA).setCellRenderer(tableResultado.getCenterRender());
 		tableResultado.getColumnModel().getColumn(COL_DESCUENTOS).setCellRenderer(tableResultado.getCenterRender());
-		tableResultado.getColumnModel().getColumn(COL_COMISION).setCellRenderer(tableResultado.getRigthRender());
-		tableResultado.getColumnModel().getColumn(COL_TC).setCellRenderer(tableResultado.getRigthRender());
+		tableResultado.getColumnModel().getColumn(COL_COMISION).setCellRenderer(new CellRenderImporte());
+		tableResultado.getColumnModel().getColumn(COL_TC).setCellRenderer(new CellRenderImporte(2));
 		tableResultado.getColumnModel().getColumn(COL_FECHA_VIGENCIA).setCellRenderer(tableResultado.getCenterRender());
 
 		WebScrollPane webScrollPane = new WebScrollPane(tableResultado);

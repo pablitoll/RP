@@ -32,6 +32,7 @@ import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
+import ar.com.rp.ui.common.CommonRP;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class ListaPrecioClienteController
@@ -444,19 +445,15 @@ public class ListaPrecioClienteController
 				}
 			}
 
-			String comision = stock.getComision() != null
-					? Common.double2String(CommonUtils.round(stock.getComision().doubleValue(), 3))
-					: "";
-
-			String tc = "";
-			if (stock.getPricValorTC() != null) {
-				tc = CommonPricing.formatearImporte(stock.getPricValorTC(), 2);
+			try {
+				getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(),
+						stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
+						Common.String2Double(stock.getPrecioArticulo()), fechaVigencia, descuento,
+						stock.getComision() != null ? stock.getComision().doubleValue() : null, stock.getPricValorTC(),
+						stock.getReferencia() == null ? "" : stock.getReferencia().trim() });
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al cargar Tabla");
 			}
-			
-			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(),
-					stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
-					CommonPricing.formatearImporte(stock.getPrecioArticulo()), fechaVigencia, descuento, comision, tc,
-					stock.getReferencia() == null ? "" : stock.getReferencia().trim() });
 		}
 
 		sorterTablaResultado.sort();

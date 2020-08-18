@@ -58,19 +58,18 @@ public class CSVExport {
 					Object valor = tabla.getValueAt(i, c);
 					String strValor = "";
 					if (valor != null) {
-						valor.getClass();
 						if (valor instanceof Double) {
 							strValor = CommonUtils.double2String((Double) valor, ".", ",");
 						} else {
-							String separador = "";
+							String separador = "'";
 
 							if ((vectorClases != null) && (vectorClases.length > c) && (vectorClases[c] != null)) {
 								if (vectorClases[c] == String.class) {
-									separador = " ";
+									separador = "'";
 								}
 							}
 
-							strValor = separador + valor.toString().replaceAll("(\\r|\\n|\\t)", " ");
+							strValor = separador + String.valueOf(valor).replaceAll("(\\r|\\n|\\t)", " ");
 						}
 					}
 

@@ -9,7 +9,6 @@ import javax.swing.SortOrder;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.TableAnchoManager;
 import ar.com.rollpaper.pricing.dto.ListaDTO;
@@ -21,6 +20,7 @@ import ar.com.rollpaper.pricing.view.ListaPrecioClienteView;
 import ar.com.rollpaper.pricing.view.ListaPrecioXListaView;
 import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.FechaManagerUtil;
+import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class ListaPrecioXListaController
@@ -39,7 +39,7 @@ public class ListaPrecioXListaController
 		});
 
 		TableAnchoManager.registrarEvento(view.tableResultado, "tablaPrecioXLista");
-		
+
 		cargarLista();
 	}
 
@@ -139,11 +139,14 @@ public class ListaPrecioXListaController
 		resetearTabla();
 
 		for (ProductoDTO stock : getModel().getListaArticulosImpactados().getListaProductos()) {
-			getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(),
-					stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
-					CommonPricing.formatearImporte(stock.getPrecioArticulo()) });
+			try {
+				getView().tableResultado.addRow(new Object[] { stock.getFamiliaCod(), stock.getCodArticulo(),
+						stock.getDescArticulo(), stock.getUnidadArticulo(), stock.getMonedaArticulo(),
+						Common.String2Double(stock.getPrecioArticulo()) });
+			} catch (Exception e) {
+				ManejoDeError.showError(e, "Error al cargar Tabla");
+			}
 		}
-	
 
 		getView().tableResultado.adjustColumns();
 
