@@ -126,7 +126,7 @@ public class PantPrincipalController extends BasePantallaPrincipal<PantPrincipal
 		}
 
 		if (accion.equals(ConstantesRP.Acciones.VERSION.toString())) {
-			Dialog.showMessageDialog(String.format(VERSION_INFO, "1.0.12", "10/08/2020"), "Version del Sistema",
+			Dialog.showMessageDialog(String.format(VERSION_INFO, "1.0.13", "18/08/2020"), "Version del Sistema",
 					WebOptionPane.INFORMATION_MESSAGE);
 		}
 
