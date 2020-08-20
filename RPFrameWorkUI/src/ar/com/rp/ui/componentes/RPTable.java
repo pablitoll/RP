@@ -113,6 +113,11 @@ public class RPTable extends WebTable {
 		tableModel.addRow(row);
 	}
 
+	public void addFirst(Object[] row) {
+		DefaultTableModel tableModel = (DefaultTableModel) getModel();
+		tableModel.insertRow(0, row);
+	}
+
 	public void addRowColor(Object[] row, Color[] colorFondo, Color[] colorLetra) {
 		addRow(row);
 		listColor.put(getRowCount() - 1, new RowColorDTO(colorFondo, colorLetra));
@@ -120,7 +125,8 @@ public class RPTable extends WebTable {
 
 	public void clear() {
 		DefaultTableModel tableModel = (DefaultTableModel) getModel();
-		tableModel.getDataVector().removeAllElements();
+		// tableModel.getDataVector().removeAllElements();
+		tableModel.setRowCount(0);
 		setRowSorter(new TableRowSorter<DefaultTableModel>(tableModel));
 		if (listColor != null) {
 			listColor.clear();

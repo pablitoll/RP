@@ -199,6 +199,15 @@ public class FechaManagerUtil {
 		cal.set(Calendar.MILLISECOND, 0);
 		return cal.getTime();
 	}
+	
+	public static Date getTime(Date fecha) throws Exception {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fecha);
+		cal.set(Calendar.DAY_OF_MONTH, 0);
+		cal.set(Calendar.MONTH, 0);
+		cal.set(Calendar.YEAR, 0);
+		return cal.getTime();
+	}
 
 	public static int getMaximunDay(Date fecha) {
 		Calendar cal = Calendar.getInstance();

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="49e54468-441e-45e9-9d53-dc14e70b3085">
+	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\dfc4085\\git\\RP\\RPPricingEjecutable\\src\\main\\resources\\reporte\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SIMPLE_DATA" class="java.util.HashMap"/>
+	<field name="codCliente" class="java.lang.String"/>
+	<field name="nomCliente" class="java.lang.String"/>
+	<field name="nomLegal" class="java.lang.String"/>
+	<field name="idTC" class="java.lang.String"/>
+	<field name="listaProductos" class="java.lang.String"/>
+	<field name="leyendaFechaValida" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String" incrementType="Report"/>
+	<title>
+		<band height="59" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="32" uuid="ea90c104-b46f-4e89-9380-ac7b283d3aff"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Roll Paper - Lista de Precios Original]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="93" y="32" width="368" height="27" uuid="1878a87b-f367-4aa8-9eb5-1d2f82fb648f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{leyendaFechaValida}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="40" uuid="e19b4aac-7c2a-4c26-bcef-6c97b90eb911"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="13" y="0" width="157" height="40" uuid="0481afbe-f035-4fa5-b2c4-3c2d25bf4c61"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lista de Productos:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="170" y="0" width="385" height="40" uuid="99ebfac5-d9da-4cd7-96b6-b9060745281d"/>
+				<textElement verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{listaProductos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="555" height="12" uuid="3168a23d-7dd4-435c-a7d1-19f38d570135"/>
+				<dataSourceExpression><![CDATA[$P{SIMPLE_DATA}.get($F{idTC})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SIMPLE_DATA}.get("SubReportPath") + "detalle.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20">
+			<textField>
+				<reportElement x="358" y="0" width="197" height="20" uuid="e3f30844-8fd9-4359-9d4b-c0ef9bfa8e44"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Pagina "+$V{PAGE_NUMBER}+" de "+$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="8b103c2c-933f-4fcf-b470-bd6f704f128d"/>
+			</line>
+		</band>
+	</pageFooter>
+</jasperReport>
