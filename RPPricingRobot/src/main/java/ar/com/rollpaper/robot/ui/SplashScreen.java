@@ -15,11 +15,8 @@ import javax.swing.Timer;
 import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
 
-import ar.com.rollpaper.pricing.data.HibernateUtil;
-import ar.com.rollpaper.robot.ArchivoDePropiedadesBusiness;
+import ar.com.rollpaper.robot.ConstantesRP;
 import ar.com.rollpaper.robot.Main;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.util.JRLoader;
 
 public class SplashScreen extends JWindow {
 
@@ -45,9 +42,9 @@ public class SplashScreen extends JWindow {
 		container.add(panel);
 
 		WebImage webImage3 = new WebImage(
-				Toolkit.getDefaultToolkit().getImage(SplashScreen.class.getResource("/images/rpLogo.PNG")));
+				Toolkit.getDefaultToolkit().getImage(SplashScreen.class.getResource(ConstantesRP.IMG_RP)));
 		webImage3.setDisplayType(DisplayType.fitComponent);
-		webImage3.setImage(Toolkit.getDefaultToolkit().getImage(SplashScreen.class.getResource("/images/rpLogo.PNG")));
+		webImage3.setImage(Toolkit.getDefaultToolkit().getImage(SplashScreen.class.getResource(ConstantesRP.IMG_RP)));
 		webImage3.setBounds(0, 0, 525, 312);
 		panel.add(webImage3);
 
@@ -70,21 +67,14 @@ public class SplashScreen extends JWindow {
 
 				if (count == 20) {
 					try {
-						// font
-						Main.inicializarFont();
-
-						ArchivoDePropiedadesBusiness.setPathToConfig(
-								Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
-
+						Main.cargaFont();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 				if (count == 50) {
 					try {
-						// inicializo coneccion a la BD local
-						HibernateUtil.getSessionFactory(ArchivoDePropiedadesBusiness.getConecctionString(),
-								ArchivoDePropiedadesBusiness.getUsr(), ArchivoDePropiedadesBusiness.getPass());
+						Main.cargarHibernate();
 
 					} catch (Exception e) {
 						e.printStackTrace();

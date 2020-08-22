@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
+import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,7 @@ import ar.com.rollpaper.robot.ui.ConsolaControler;
 import ar.com.rollpaper.robot.ui.ConsolaModel;
 import ar.com.rollpaper.robot.ui.ConsolaView;
 import ar.com.rollpaper.robot.ui.Dialog;
+import ar.com.rollpaper.robot.ui.SplashScreen;
 import ar.com.rollpaper.robot.worker.WorkerProcesar;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.main.MainFramework;
@@ -27,6 +29,15 @@ public class Main extends MainFramework {
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				try {
+					cargaFont();
+					cargarHibernate();
+
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+
 				inicio();
 			}
 		});
@@ -39,7 +50,7 @@ public class Main extends MainFramework {
 
 				// get the SystemTray instance
 				SystemTray tray = SystemTray.getSystemTray();
-				Image image = Common.loadIconMenu(ConstantesRP.IMG_RP).getImage();
+				Image image = Toolkit.getDefaultToolkit().getImage(SplashScreen.class.getResource(ConstantesRP.IMG_RP));
 
 				ActionListener liSalir = new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -103,6 +114,22 @@ public class Main extends MainFramework {
 
 	private static void abrirConsola() {
 		consola.show();
+	}
+
+	public static void cargarHibernate() throws Exception {
+		// inicializo coneccion a la BD local
+		HibernateUtil.getSessionFactory(ArchivoDePropiedadesBusiness.getConecctionString(),
+				ArchivoDePropiedadesBusiness.getUsr(), ArchivoDePropiedadesBusiness.getPass());
+
+	}
+
+	public static void cargaFont() throws Exception {
+		// font
+		Main.inicializarFont();
+
+		ArchivoDePropiedadesBusiness
+				.setPathToConfig(Main.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
+
 	}
 
 }
