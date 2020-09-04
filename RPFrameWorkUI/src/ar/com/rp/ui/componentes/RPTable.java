@@ -125,12 +125,14 @@ public class RPTable extends WebTable {
 
 	public void clear() {
 		DefaultTableModel tableModel = (DefaultTableModel) getModel();
-		// tableModel.getDataVector().removeAllElements();
-		tableModel.setRowCount(0);
+		
 		setRowSorter(new TableRowSorter<DefaultTableModel>(tableModel));
 		if (listColor != null) {
 			listColor.clear();
 		}
+
+		// tableModel.getDataVector().removeAllElements();
+		tableModel.setRowCount(0);
 	}
 
 	public void adjustColumns() {

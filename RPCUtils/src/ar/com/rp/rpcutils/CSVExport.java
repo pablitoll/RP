@@ -59,7 +59,7 @@ public class CSVExport {
 					String strValor = "";
 					if (valor != null) {
 						if (valor instanceof Double) {
-							strValor = CommonUtils.double2String((Double) valor, ".", ",");
+							strValor = CommonUtils.double2String((Double) valor, ",", ".");
 						} else {
 							String separador = "'";
 

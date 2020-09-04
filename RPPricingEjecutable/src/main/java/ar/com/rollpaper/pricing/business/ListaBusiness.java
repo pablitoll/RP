@@ -58,25 +58,24 @@ public class ListaBusiness {
 					aux.setIsListaHeredada(true);
 				}
 			}
-
-			for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getByCliente(clienteCargado.getClieCliente())) {
-				lista = VentLipvDAO.findById(familia.getPricFamiliaListaPrecvta());
-				if (lista != null) {
-					if (isInLista(retorno, lista) == null) {
-						retorno.add(new ListaDTO(lista, false, false));
-					}
+		}
+		
+		for (DescuentoXFamilias familia : DescuentoXFamiliasDAO.getByCliente(clienteCargado.getClieCliente())) {
+			lista = VentLipvDAO.findById(familia.getPricFamiliaListaPrecvta());
+			if (lista != null) {
+				if (isInLista(retorno, lista) == null) {
+					retorno.add(new ListaDTO(lista, false, false));
 				}
 			}
+		}
 
-			for (PreciosEspeciales especial : PreciosEspecialesDAO.getByCliente(clienteCargado.getClieCliente())) {
-				lista = VentLipvDAO.findById(especial.getPricListaPrecvta());
-				if (lista != null) {
-					if (isInLista(retorno, lista) == null) {
-						retorno.add(new ListaDTO(lista, false, false));
-					}
+		for (PreciosEspeciales especial : PreciosEspecialesDAO.getByCliente(clienteCargado.getClieCliente())) {
+			lista = VentLipvDAO.findById(especial.getPricListaPrecvta());
+			if (lista != null) {
+				if (isInLista(retorno, lista) == null) {
+					retorno.add(new ListaDTO(lista, false, false));
 				}
 			}
-
 		}
 
 		return retorno;

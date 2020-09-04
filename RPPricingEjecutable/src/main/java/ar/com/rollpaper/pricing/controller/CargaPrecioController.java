@@ -297,9 +297,18 @@ public class CargaPrecioController
 
 	@SuppressWarnings("unchecked")
 	private void cargarLista() throws Exception {
+		int indiceCarga = 0;
 		getView().cbNroLista.removeAllItems();
 		for (ListaDTO lista : getModel().getListasToShow()) {
 			getView().cbNroLista.addItem(lista);
+			if (lista.getVentLipv().getLipvListaPrecvta() == 1) {
+				indiceCarga = getView().cbNroLista.getItemCount() - 1;
+			}
+		}
+
+		// Busco La principal para hacer foco
+		if (getView().cbNroLista.getItemCount() > 0) {
+			getView().cbNroLista.setSelectedIndex(indiceCarga);
 		}
 
 		setModoPantalla();
