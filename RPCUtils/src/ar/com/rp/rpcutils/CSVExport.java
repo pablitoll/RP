@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JTable;
@@ -61,15 +62,19 @@ public class CSVExport {
 						if (valor instanceof Double) {
 							strValor = CommonUtils.double2String((Double) valor, ",", ".");
 						} else {
-							String separador = "'";
+							if (valor instanceof Date) {
+								strValor = FechaManagerUtil.Date2String((Date) valor);
+							} else {
+								String separador = "'";
 
-							if ((vectorClases != null) && (vectorClases.length > c) && (vectorClases[c] != null)) {
-								if (vectorClases[c] == String.class) {
-									separador = "'";
+								if ((vectorClases != null) && (vectorClases.length > c) && (vectorClases[c] != null)) {
+									if (vectorClases[c] == String.class) {
+										separador = "'";
+									}
 								}
-							}
 
-							strValor = separador + String.valueOf(valor).replaceAll("(\\r|\\n|\\t)", " ");
+								strValor = separador + String.valueOf(valor).replaceAll("(\\r|\\n|\\t)", " ");
+							}
 						}
 					}
 

@@ -15,7 +15,6 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import ar.com.rollpaper.pricing.beans.CcobClie;
-import ar.com.rollpaper.pricing.business.CommonPricing;
 import ar.com.rollpaper.pricing.business.ConstantesRP;
 import ar.com.rollpaper.pricing.business.TableAnchoManager;
 import ar.com.rollpaper.pricing.business.TableColumnHider;
@@ -32,7 +31,6 @@ import ar.com.rp.rpcutils.CSVExport;
 import ar.com.rp.rpcutils.CommonUtils;
 import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
-import ar.com.rp.ui.common.CommonRP;
 import ar.com.rp.ui.pantalla.BaseControllerMVC;
 
 public class ListaPrecioClienteController
@@ -208,9 +206,18 @@ public class ListaPrecioClienteController
 
 	@SuppressWarnings("unchecked")
 	private void cargarLista() throws Exception {
+		int indiceCarga = 0;
 		getView().cbNroLista.removeAllItems();
 		for (ListaDTO lista : getModel().getListasToShow()) {
 			getView().cbNroLista.addItem(lista);
+			if (lista.getVentLipv().getLipvListaPrecvta() == 1) {
+				indiceCarga = getView().cbNroLista.getItemCount() - 1;
+			}
+		}
+
+		// Busco La principal para hacer foco
+		if (getView().cbNroLista.getItemCount() > 0) {
+			getView().cbNroLista.setSelectedIndex(indiceCarga);
 		}
 
 		setModoPantalla();

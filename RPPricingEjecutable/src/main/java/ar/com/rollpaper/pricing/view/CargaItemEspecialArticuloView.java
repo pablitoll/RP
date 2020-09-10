@@ -27,7 +27,6 @@ import ar.com.rp.rpcutils.FechaManagerUtil;
 import ar.com.rp.ui.common.Common;
 import ar.com.rp.ui.componentes.JButtonRP;
 import ar.com.rp.ui.pantalla.BaseViewDialog;
-import java.awt.Font;
 
 public class CargaItemEspecialArticuloView extends BaseViewDialog {
 
